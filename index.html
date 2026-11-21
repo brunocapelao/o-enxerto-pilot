@@ -333,6 +333,8 @@ button:disabled{opacity:.4;cursor:not-allowed}
         </div>
       </div>
 
+      <div id="enemy-anatomy" style="margin-top:6px;padding:5px 8px;border-radius:8px;background:#16251e;border-left:3px solid var(--warn);font-size:.73rem;color:#fde68a"></div>
+
       <div class="organs-title">
         <span id="enemy-organs-label">Órgãos da Presa (Quebre a Postura para arrancar!)</span>
       </div>
@@ -344,7 +346,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
       <div class="creature-header">
         <div class="creature-title">
           <h2 id="player-title">Sua Quimera</h2>
-          <small>Encaixe órgãos roubados na Garra (Ataque) ou na Carapaça (Defesa)</small>
+          <small id="metabolic-hint">Adaptação Metabólica: 1 troca Garra ↔ Carapaça grátis por turno</small>
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap" id="player-statuses"></div>
       </div>
@@ -452,9 +454,12 @@ button:disabled{opacity:.4;cursor:not-allowed}
 </div>
 
 <script>
-/* O Enxerto (New Genome) · Motor v0.8 "Bio-Visceral Pivot"
- * Combate tático de caça e enxerto biológico com transformações reais,
- * mutações emergentes, Enxerto de Assalto (rouba + age na hora!) e Atlas Genético. */
+/* O Enxerto (New Genome) · Motor v0.9 "Tactical Bio-Hunt"
+ * Desenvolvido com /balance-check + /team-combat:
+ * - Anatomias e Gatilhos de Postura distintos por presa (elimina spam cego de ataque!)
+ * - Limite Metabólico (1 adaptação Garra <-> Carapaça grátis por turno; extra custa 2 PV)
+ * - Janela de Exposição de 1 turno (se não roubar, a presa recupera a postura!)
+ * - Contra-jogos biológicos reais (Espinhos destrói Escudo/Bobina ou pune Golpe Duplo; Vampiro purifica Veneno; Impulso evade Golpe Letal). */
 (function (root, factory) {
   const api = factory();
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -462,10 +467,8 @@ button:disabled{opacity:.4;cursor:not-allowed}
 })(typeof globalThis !== 'undefined' ? globalThis : this, () => {
   'use strict';
 
-  const VERSION = '0.8.0';
+  const VERSION = '0.9.0';
 
-  // Catálogo Biológico: cada gene tem função tática distinta e muda seu comportamento
-  // quando ligado na GARRA (ofensivo) ou na CARAPAÇA (defensivo).
   const GENES = {
     TOX: {
       id: 'TOX',
@@ -473,169 +476,176 @@ button:disabled{opacity:.4;cursor:not-allowed}
       short: 'Toxina',
       color: '#a3e635',
       tag: 'VENENO',
-      summary: 'Aplica Veneno que derrete PV todo turno e ignora escudo.',
-      onAttack: 'Corte Peçonhento: causa dano + aplica 3 de Veneno (ignora escudo).',
-      onDefense: 'Nuvem Ácida: ganha escudo + aplica 2 de Veneno em quem te atacar.',
-      enemyEffect: 'Ataques dele aplicam +2 de Veneno em você.',
+      summary: 'Aplica Veneno que ignora escudo e derrete PV em todo fim de turno.',
+      onAttack: 'Corte Peçonhento: aplica +4 de Veneno (ignora escudo e corrói todo turno).',
+      onDefense: 'Nuvem Ácida: ganha escudo + aplica +3 de Veneno em quem te atacar.',
+      enemyEffect: 'Ataques dele injetam +3 de Veneno em você.',
     },
     SPI: {
       id: 'SPI',
       name: 'Espinhos Ósseos',
       short: 'Espinhos',
       color: '#fb923c',
-      tag: 'RETALIAÇÃO',
-      summary: 'Perfura armaduras no ataque ou devolve dano automático na defesa.',
-      onAttack: 'Estocada Perfurante: +2 de dano e IGNORA todo o escudo inimigo.',
-      onDefense: 'Barreira Espinhosa: devolve 4 de dano em cada golpe que o inimigo der.',
-      enemyEffect: 'Cada ataque seu contra ele devolve 2 de dano de espinhos em você.',
+      tag: 'PERFURAÇÃO / RETORNO',
+      summary: 'Na Garra: DESTRÓI todo Escudo inimigo! Na Carapaça: fere o inimigo em cada golpe dele.',
+      onAttack: 'Estocada Perfurante: +2 dano, DESTRÓI 100% do Escudo inimigo e +1 quebra de Postura contra escudos!',
+      onDefense: 'Barreira Espinhosa: devolve 4 de dano em CADA golpe recebido (e quebra Postura de atacantes velozes!).',
+      enemyEffect: 'Enquanto ele tiver Espinhos, atacar de frente fere você em 3 de dano!',
     },
     VAM: {
       id: 'VAM',
       name: 'Presa Vampírica',
       short: 'Vampiro',
       color: '#f43f5e',
-      tag: 'DRENO / CURA',
-      summary: 'Drena sangue para curar seus PV ao atacar ou regenera ao defender.',
-      onAttack: 'Mordida Sanguessuga: rouba vida igual a 50% do dano causado (mín. +2 PV).',
-      onDefense: 'Sangue Frio: cura +3 PV imediatamente e remove todo Veneno de você.',
-      enemyEffect: 'Quando ele te fere, ele se cura em +2 PV.',
+      tag: 'DRENO / PURIFICAÇÃO',
+      summary: 'Drena sangue ao atacar ou cura +4 PV e limpa todo Veneno ao defender.',
+      onAttack: 'Mordida Sanguessuga: recupera PV igual a 50% do dano causado na carne (mín. +3 PV).',
+      onDefense: 'Sangue Puro: regenera +4 PV na hora e PURIFICA 100% do seu Veneno!',
+      enemyEffect: 'Sempre que um golpe dele ferir seus PV (passar do seu escudo), ele se cura em +4 PV!',
     },
     IMP: {
       id: 'IMP',
       name: 'Tendão de Impulso',
       short: 'Rajada 2×',
       color: '#38bdf8',
-      tag: 'VELOCIDADE',
-      summary: 'Transforma seu ataque em 2 golpes rápidos (quebra postura 2× mais rápido!).',
-      onAttack: 'Investida Dupla: ataca 2 vezes seguidas (2×3) e tira 2 de Postura!',
-      onDefense: 'Reflexo Evasivo: reduz o próximo ataque inimigo pela metade + ganha +4 Escudo.',
-      enemyEffect: 'Ele ataca com golpe duplo (2×).',
+      tag: 'GOLPE DUPLO / EVASÃO',
+      summary: 'Ataca 2 vezes por turno (quebra postura evasiva) ou corta golpe pesado pela metade.',
+      onAttack: 'Investida Dupla: ataca 2 vezes seguidas (2×) e tira 2 de Postura!',
+      onDefense: 'Reflexo Evasivo: +3 Escudo e reduz o dano de qualquer ataque inimigo neste turno em 50%!',
+      enemyEffect: 'Dá ataques duplos rápidos (2×).',
     },
     ELE: {
       id: 'ELE',
       name: 'Nervo Elétrico',
       short: 'Choque',
       color: '#facc15',
-      tag: 'CHOQUE / STUN',
-      summary: 'Quebra a postura inimiga ou interrompe ataques carregados.',
-      onAttack: 'Garra Voltaica: +1 dano e destrói +1 Postura extra (excelente para expor genes!).',
-      onDefense: 'Campo Estático: se o inimigo te atacar neste turno, o ataque seguinte dele perde 4 de dano.',
-      enemyEffect: 'Seus golpes elétricos causam +2 de dano se você não tiver escudo.',
+      tag: 'CHOQUE / CURTO-CIRCUITO',
+      summary: 'Sobrecarga de postura no ataque ou enfraquece o ataque inimigo em -5 na defesa.',
+      onAttack: 'Garra Voltaica: +2 dano e causa +1 dano extra de Postura em qualquer presa!',
+      onDefense: 'Pulso Eletromagnético: reduz o ataque inimigo deste turno em -5 de dano total e tira 1 Postura!',
+      enemyEffect: 'Causa +4 de dano elétrico extra se você não usar Carapaça no turno!',
     },
     CAT: {
       id: 'CAT',
       name: 'Núcleo Catalisador',
       short: 'Catalisador',
       color: '#c084fc',
-      tag: 'RARO · INVERSÃO',
-      summary: 'Gene Raro: explode todo o Veneno do inimigo de uma vez ou converte seu Escudo em ataque!',
-      onAttack: 'Detonação Bioquímica: causa dano normal + EXPLODE o Veneno do inimigo causando 2× o Veneno na hora!',
-      onDefense: 'Conversão Cinética: ganha +5 Escudo; o escudo que sobrar vira BÔNUS de dano no seu próximo ataque!',
-      enemyEffect: 'Amplifica os golpes do predador em +3 de dano bruto.',
+      tag: 'RARO · DETONAÇÃO',
+      summary: 'Explode o Veneno do inimigo em dano imediato (2×) ou converte Escudo em ataque!',
+      onAttack: 'Detonação Bioquímica: além do ataque, EXPLODE o Veneno no inimigo causando 2× o Veneno na hora (sem apagar o veneno)!',
+      onDefense: 'Conversão Cinética: +5 Escudo; todo escudo que sobrar vira BÔNUS de dano na sua próxima Garra!',
+      enemyEffect: 'Amplifica todos os golpes do Boss em +3 de dano.',
     },
   };
 
-  // Mutações Emergentes: quando você equipa certos pares ao mesmo tempo no organismo!
   const MUTATIONS = [
     {
       id: 'MUT_PECONHA_FRENETICA',
       genes: ['TOX', 'IMP'],
       name: 'Mutação: Frenesi Peçonhento',
-      desc: 'Cada golpe da sua Investida Dupla aplica Veneno (+2 Veneno extra por turno)!',
+      desc: 'Seus ataques aplicam +3 de Veneno extra por turno!',
     },
     {
       id: 'MUT_CARAPACA_VAMPIRICA',
       genes: ['SPI', 'VAM'],
       name: 'Mutação: Espinhos Sanguessugas',
-      desc: 'Sempre que seus Espinhos ferem o inimigo, você se cura em +2 PV!',
+      desc: 'Cada vez que seus Espinhos ferem o inimigo, você drena +2 PV!',
     },
     {
       id: 'MUT_TEMPESTADE_TOXICA',
       genes: ['TOX', 'ELE'],
       name: 'Mutação: Sinapse Corrosiva',
-      desc: 'O Veneno no inimigo também reduz o dano dos ataques dele em -2!',
+      desc: 'Inimigos envenenados causam -3 de dano em cada golpe e perdem +1 Postura ao atacar sua Carapaça!',
     },
     {
       id: 'MUT_PREDADOR_APEX',
       genes: ['IMP', 'ELE'],
       name: 'Mutação: Sobrecarga Relâmpago',
-      desc: 'Seus ataques quebram a postura inimiga instantaneamente e ganham +2 de dano total!',
+      desc: 'Cada golpe da sua Garra ganha +2 de dano e ignora esquiva de postura!',
     },
     {
       id: 'MUT_BOMBA_BIOLOGICA',
       genes: ['TOX', 'CAT'],
       name: 'Mutação: Bomba Biológica',
-      desc: 'Qualquer aplicação de Veneno aplica +2 extra e Detonação não consome o Veneno!',
+      desc: 'Qualquer aplicação de Veneno aplica +3 extra e a Detonação causa 3× o Veneno!',
     },
     {
-      id: 'MUT_ couraca_REATIVA',
+      id: 'MUT_COURACA_REATIVA',
       genes: ['SPI', 'CAT'],
       name: 'Mutação: Couraça Reativa',
-      desc: 'Ao defender, seus Espinhos causam o dobro de dano (8 de retorno)!',
+      desc: 'Seus Espinhos na Carapaça devolvem o dobro de dano (8 por golpe)!',
     },
   ];
 
-  // Campanha de 4 Encontros Distintos (Escalada de Caça)
+  // 4 Presas Táticas com Anatomias de Postura e Intenções que exigem contra-jogo real
   const ENCOUNTERS = [
     {
       id: 'escorpiao',
       stage: 1,
       name: 'Escorpião de Lodo',
-      subtitle: 'Encontro 1 de 4 · Presa Ácida',
-      hp: 20,
-      maxStagger: 1, // Quebra no 1º golpe ou defesa para ensinar a mecânica na hora!
+      subtitle: 'Presa 1 de 4 · Encouraçado Ácido',
+      hp: 22,
+      maxStagger: 2,
+      staggerRule: 'guard_bonus',
+      staggerRuleText: 'Anatomia: Atacar tira 1 Postura (mas você leva 3 de dano dos Espinhos dele!). Defender com Carapaça tira 2 Postura de uma vez e expõe os órgãos sem se espetar!',
       genes: ['TOX', 'SPI'],
       intents: [
-        { name: 'Ferrão Ácido', hits: [5], type: 'attack', desc: 'Golpe de 5 + aplica Veneno se tiver Glândula Tóxica.' },
-        { name: 'Chicote de Cauda', hits: [3, 3], type: 'attack', desc: '2 golpes de 3.' },
-        { name: 'Enrolar Carapaça', shield: 5, type: 'defend', desc: 'Ganha 5 de Escudo.' },
+        { name: 'Ferrão Ácido', hits: [6], type: 'attack', desc: '6 de dano + injeta 3 de Veneno.' },
+        { name: 'Pinça Dupla', hits: [4, 4], type: 'attack', desc: '2 golpes de 4 + injeta Veneno.' },
+        { name: 'Enrolar Casco', shield: 6, type: 'defend', desc: 'Ganha +6 de Escudo.' },
       ],
-      tip: 'Ataque ou Defenda 1 vez para QUEBRAR A POSTURA dele e arrancar a Glândula Tóxica ou os Espinhos!',
+      tip: 'Ele tem Espinhos (atacar de cara te machuca em 3!). Use CARAPAÇA no Turno 1 para bloquear o Ferrão e quebrar as 2 Posturas dele de uma vez!',
     },
     {
       id: 'louva_deus',
       stage: 2,
       name: 'Louva-a-Deus Sanguinário',
-      subtitle: 'Encontro 2 de 4 · Caçador Veloz',
-      hp: 26,
+      subtitle: 'Presa 2 de 4 · Assassino Evasivo',
+      hp: 28,
       maxStagger: 2,
+      staggerRule: 'evasive',
+      staggerRuleText: 'Anatomia Evasiva: Golpes simples (1×) NÃO tiram Postura dele! Quebre a postura devolvendo dano com ESPINHOS na Carapaça contra a Foice Dupla, ou com Veneno ≥ 4!',
       genes: ['IMP', 'VAM'],
       intents: [
-        { name: 'Foice Dupla', hits: [4, 4], type: 'attack', desc: '2 golpes rápidos de 4 (drena sangue se tiver Presa Vampírica).' },
-        { name: 'Bote Voraz', hits: [7], type: 'attack', desc: 'Golpe pesado de 7.' },
-        { name: 'Foice Dupla', hits: [4, 4], type: 'attack', desc: '2 golpes rápidos de 4.' },
+        { name: 'Foice Dupla Voraz', hits: [5, 5], type: 'attack', desc: '2 golpes de 5. Se ferir seus PV, ele drena +4 PV por golpe!' },
+        { name: 'Salto Guilhotina', hits: [9], type: 'attack', desc: 'Golpe pesado de 9 (drena +4 PV se ferir sua carne).' },
+        { name: 'Foice Dupla Voraz', hits: [5, 5], type: 'attack', desc: '2 golpes de 5 com dreno de sangue.' },
       ],
-      tip: 'Ele bate 2 vezes e se cura! Use Espinhos na defesa para punir o golpe duplo ou roube a Presa Vampírica dele.',
+      tip: 'Ele esquiva de golpes simples e se cura se ferir você! Mova seus ESPINHOS para a CARAPAÇA e defenda a Foice Dupla: ele se espeta 2× (8 de dano) e quebra a postura na hora!',
     },
     {
       id: 'enguia',
       stage: 3,
       name: 'Enguia Voltaica',
-      subtitle: 'Encontro 3 de 4 · Predador de Choque',
-      hp: 30,
+      subtitle: 'Presa 3 de 4 · Bobina de Alta Tensão',
+      hp: 34,
       maxStagger: 2,
+      staggerRule: 'shield_coil',
+      staggerRuleText: 'Anatomia de Bobina: Enquanto ela tiver Escudo, sua Postura é IMUNE! Quebre o escudo com Espinhos na Garra (Perfuração) ou ataque duplo/elétrico para cancelar a Descarga Letal!',
       genes: ['ELE', 'TOX'],
       intents: [
-        { name: 'Pulso de Alta Tensão', hits: [6], type: 'attack', desc: '6 de dano (+2 se você estiver sem escudo).' },
-        { name: 'Carregar Bobina', shield: 6, type: 'defend', desc: 'Ganha 6 de Escudo e prepara sobrecarga.' },
-        { name: 'Descarga Letal', hits: [5, 5], type: 'attack', desc: '2 golpes elétricos de 5!' },
+        { name: 'Sobrecarga de Bobina', shield: 10, hits: [4], type: 'coil_charge', desc: 'Ganha +10 Escudo, bate 4 e carrega a DESCARGA LETAL (16 dano) para o próximo turno!' },
+        { name: 'DESCARGA LETAL', hits: [8, 8], type: 'attack', isCharged: true, desc: '16 de dano elétrico (+4 se você não defender)! Quebre a Postura/Escudo dela antes para cancelar!' },
+        { name: 'Choque Residual', hits: [6], type: 'attack', desc: '6 de dano elétrico.' },
       ],
-      tip: 'Arranque o Nervo Elétrico antes da Descarga Letal ou combine Toxina + Impulso para derretê-la!',
+      tip: 'Ela começa com +10 Escudo preparando a DESCARGA LETAL! Coloque ESPINHOS na GARRA (destrói 100% do escudo e tira 2 Postura!) para expor e arrancar o Nervo Elétrico antes da Descarga!',
     },
     {
       id: 'behemoth',
       stage: 4,
       name: 'Quimera Catalisadora (Boss)',
-      subtitle: 'Encontro Final 4 de 4 · Organismo Alfa',
-      hp: 34,
-      maxStagger: 2,
+      subtitle: 'Presa Final 4 de 4 · Predador Alfa',
+      hp: 46,
+      maxStagger: 3,
+      staggerRule: 'apex',
+      staggerRuleText: 'Anatomia Alfa: Postura 3. Perde Postura ao sofrer Golpes Duplos/Perfurantes, Espinhos na Defesa ou quando tem ≥ 6 de Veneno acumulado.',
       genes: ['CAT', 'SPI', 'VAM'],
       intents: [
-        { name: 'Esmagamento Alfa', hits: [5], type: 'attack', desc: 'Golpe brutal amplificado pelo Catalisador.' },
-        { name: 'Muralha Viva', shield: 6, type: 'defend', desc: 'Ganha 6 de Escudo com Espinhos.' },
-        { name: 'Fúria Quimérica', hits: [4, 4], type: 'attack', desc: '2 golpes devastadores que drenam vida.' },
+        { name: 'Fúria Quimérica', hits: [5, 5], type: 'attack', desc: '2 golpes brutos amplificados pelo Catalisador (+dreno se ferir sua carne).' },
+        { name: 'Muralha Espinhosa', shield: 10, type: 'defend', desc: 'Ganha +10 Escudo e reflete ataques se ainda tiver Espinhos.' },
+        { name: 'Cataclismo Alfa', hits: [14], type: 'attack', desc: 'Golpe colossal de 14! Use Reflexo Evasivo (Impulso na Carapaça) ou Pulso Elétrico na Carapaça!' },
       ],
-      tip: 'Roube o Núcleo Catalisador Raro para enfraquecer o Boss e ativar uma Mutação devastadora no seu corpo!',
+      tip: 'O Boss exige maestria: use Espinhos/Impulso/Elétrico na Carapaça quando ele atacar forte, e passe Espinhos/Toxina para a Garra quando ele erguer a Muralha de 10 Escudo!',
     },
   ];
 
@@ -665,13 +675,12 @@ button:disabled{opacity:.4;cursor:not-allowed}
       stageIndex,
       encounterId: enc.id,
       turn: 0,
+      swapsUsedThisTurn: 0,
       playerHp,
       playerMaxHp: maxHp,
       playerShield: 0,
       playerPoison: 0,
       kineticBonus: 0,
-      halfNextEnemyAttack: false,
-      weakenNextEnemyAttack: 0,
       enemyHp: enc.hp,
       enemyMaxHp: enc.hp,
       enemyShield: 0,
@@ -683,7 +692,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
       slots,
       reserve,
       atlas: [...atlas],
-      outcome: 'ongoing', // 'ongoing' | 'win' | 'loss'
+      outcome: 'ongoing',
       lastEvents: [],
     };
   }
@@ -698,36 +707,33 @@ button:disabled{opacity:.4;cursor:not-allowed}
         ...base,
         hits: [],
         shield: base.shield,
-        activeGenes: [...state.enemyGenes],
+        thorns: hasGene('SPI') ? 3 : 0,
       };
     }
 
     let hits = [...base.hits];
-    // Se o inimigo perdeu IMP, ataque duplo vira golpe único!
-    if (hits.length > 1 && !enc.genes.includes('IMP')) {
-      // mantém golpes naturais se o encontro não dependia de IMP
-    } else if (hits.length > 1 && enc.genes.includes('IMP') && !hasGene('IMP')) {
+    // Se arrancou IMP do Louva-a-Deus, golpe duplo vira golpe único!
+    if (hits.length > 1 && enc.genes.includes('IMP') && !hasGene('IMP')) {
       hits = [hits[0]];
     }
-    // Se tem CAT, cada golpe ganha +3 (se só 1 golpe) ou +2
+    // Se arrancou ELE da Enguia, a Descarga Letal perde metade da força!
+    if (base.isCharged && !hasGene('ELE')) {
+      hits = [4];
+    }
+    // Se o Boss tem CAT, soma +2 em cada golpe
     if (hasGene('CAT')) {
-      hits = hits.map(h => h + (hits.length === 1 ? 3 : 2));
-    }
-    if (state.weakenNextEnemyAttack > 0) {
-      hits = hits.map(h => Math.max(1, h - state.weakenNextEnemyAttack));
-    }
-    if (state.halfNextEnemyAttack) {
-      hits = hits.map(h => Math.max(1, Math.floor(h / 2)));
+      hits = hits.map(h => h + 2);
     }
 
     return {
       ...base,
       hits,
+      shield: base.shield || 0,
       totalRaw: hits.reduce((a, b) => a + b, 0),
-      appliesPoison: hasGene('TOX') ? 2 : 0,
-      lifesteal: hasGene('VAM') ? 2 : 0,
-      elecBonus: hasGene('ELE') ? 2 : 0,
-      thorns: hasGene('SPI') ? 2 : 0,
+      appliesPoison: hasGene('TOX') ? 3 : 0,
+      lifesteal: hasGene('VAM') ? 4 : 0,
+      elecBonus: hasGene('ELE') ? 4 : 0,
+      thorns: hasGene('SPI') ? 3 : 0,
     };
   }
 
@@ -737,7 +743,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
     const muts = detectMutations(state.slots);
     const hasMut = id => muts.some(m => m.id === id);
 
-    // Calcula ataque da Garra
     const hasImp = atkGenes.includes('IMP');
     const hasSpi = atkGenes.includes('SPI');
     const hasTox = atkGenes.includes('TOX');
@@ -747,31 +752,30 @@ button:disabled{opacity:.4;cursor:not-allowed}
 
     let baseHit = hasImp ? 3 : 4;
     if (hasSpi) baseHit += 2;
-    if (hasEle) baseHit += 1;
-    if (hasMut('MUT_PREDADOR_APEX')) baseHit += 1;
+    if (hasEle) baseHit += 2;
+    if (hasMut('MUT_PREDADOR_APEX')) baseHit += 2;
 
     const hitCount = hasImp ? 2 : 1;
     const hits = Array.from({ length: hitCount }, () => baseHit);
     if (state.kineticBonus > 0) hits[0] += state.kineticBonus;
 
-    let poisonApplied = hasTox ? (hasImp && hasMut('MUT_PECONHA_FRENETICA') ? 5 : 3) : 0;
-    if (poisonApplied > 0 && hasMut('MUT_BOMBA_BIOLOGICA')) poisonApplied += 2;
-
-    const staggerDmg = (hasImp ? 2 : 1) + (hasEle ? 1 : 0) + (hasMut('MUT_PREDADOR_APEX') ? 1 : 0);
+    let poisonApplied = hasTox ? 4 : 0;
+    if (poisonApplied > 0 && hasMut('MUT_PECONHA_FRENETICA')) poisonApplied += 3;
+    if (poisonApplied > 0 && hasMut('MUT_BOMBA_BIOLOGICA')) poisonApplied += 3;
 
     const attackTitleParts = ['Garra'];
     if (atkGenes.length) attackTitleParts.push('+ ' + atkGenes.map(g => GENES[g].short).join(' + '));
 
-    // Calcula defesa da Carapaça
+    // Defesa da Carapaça
     let shieldGain = 6;
-    if (defGenes.includes('IMP')) shieldGain += 4;
+    if (defGenes.includes('IMP')) shieldGain += 3;
     if (defGenes.includes('CAT')) shieldGain += 5;
 
-    const thorns = defGenes.includes('SPI') ? (hasMut('MUT_ couraca_REATIVA') ? 8 : 4) : 0;
-    const defHeal = defGenes.includes('VAM') ? 3 : 0;
-    const defPoison = defGenes.includes('TOX') ? 2 : 0;
+    const thorns = defGenes.includes('SPI') ? (hasMut('MUT_COURACA_REATIVA') ? 8 : 4) : 0;
+    const defHeal = defGenes.includes('VAM') ? 4 : 0;
+    const defPoison = defGenes.includes('TOX') ? (hasMut('MUT_BOMBA_BIOLOGICA') ? 5 : 3) : 0;
     const defHalf = defGenes.includes('IMP');
-    const defWeaken = defGenes.includes('ELE') ? 4 : 0;
+    const defWeaken = defGenes.includes('ELE') ? 5 : 0;
     const defKinetic = defGenes.includes('CAT');
 
     const defenseTitleParts = ['Carapaça'];
@@ -783,12 +787,14 @@ button:disabled{opacity:.4;cursor:not-allowed}
         title: attackTitleParts.join(' '),
         hits,
         totalRaw: hits.reduce((a, b) => a + b, 0),
-        pierceShield: hasSpi,
+        shatterShield: hasSpi,
         poisonApplied,
         lifesteal: hasVam,
-        staggerDmg,
+        hasImp,
+        hasEle,
+        ignoreEvasive: hasImp || hasEle || hasMut('MUT_PREDADOR_APEX'),
         detonatePoison: hasCat,
-        keepPoisonOnDetonate: hasMut('MUT_BOMBA_BIOLOGICA'),
+        detonateMult: hasMut('MUT_BOMBA_BIOLOGICA') ? 3 : 2,
       },
       defense: {
         title: defenseTitleParts.join(' '),
@@ -798,8 +804,9 @@ button:disabled{opacity:.4;cursor:not-allowed}
         heal: defHeal,
         cleanse: defGenes.includes('VAM'),
         poisonCounter: defPoison,
-        halfNext: defHalf,
-        weakenNext: defWeaken,
+        halfDamage: defHalf,
+        weakenDamage: defWeaken,
+        empStagger: defGenes.includes('ELE') ? 1 : 0,
         kineticConvert: defKinetic,
       },
     };
@@ -815,14 +822,27 @@ button:disabled{opacity:.4;cursor:not-allowed}
       },
       reserve: [...state.reserve],
       atlas: [...state.atlas],
-      lastEvents: [],
+      lastEvents: [...(state.lastEvents || [])],
     };
   }
 
-  // Equipa ou move um gene entre reserva e slots (sem gastar turno!)
-  function equipGene(state, geneId, targetGroup, slotIndex) {
+  // Equipa ou alterna um órgão entre Garra, Carapaça e Reserva.
+  // 1ª adaptação do turno é GRÁTIS; adaptações extras no mesmo turno custam 2 PV (Estresse Metabólico),
+  // a menos que freeOverride = true (usado pelo Enxerto de Assalto).
+  function equipGene(state, geneId, targetGroup, slotIndex, { freeOverride = false } = {}) {
     const s = cloneState(state);
-    // Remove geneId se já estava em algum slot ou na reserva
+    if (!freeOverride && s.swapsUsedThisTurn >= 1) {
+      if (s.playerHp <= 2) {
+        throw new Error('PV insuficiente para Estresse Metabólico (2ª troca no mesmo turno custa 2 PV).');
+      }
+      s.playerHp -= 2;
+      s.lastEvents = [
+        { type: 'metabolic_cost', text: `⚠️ Estresse Metabólico: 2ª reconfiguração no mesmo turno custou -2 PV.` },
+        ...s.lastEvents,
+      ];
+    }
+    if (!freeOverride) s.swapsUsedThisTurn += 1;
+
     for (const grp of ['attack', 'defense']) {
       s.slots[grp] = s.slots[grp].map(g => (g === geneId ? null : g));
     }
@@ -843,27 +863,55 @@ button:disabled{opacity:.4;cursor:not-allowed}
     return s;
   }
 
-  // Executa 1 turno completo (ou Enxerto de Assalto: arranca o gene, instala e JÁ ataca/defende na mesma hora!)
+  // Calcula quanta Postura o inimigo perde com base na Anatomia específica da presa!
+  function applyStaggerDamage(s, delta, reasonText, events) {
+    if (s.enemyHp <= 0 || s.enemyExposed || s.enemyGenes.length === 0 || delta <= 0) return;
+    const enc = ENCOUNTERS[s.stageIndex];
+    // Regra da Bobina (Enguia): enquanto tiver Escudo > 0, a postura é imune!
+    if (enc.staggerRule === 'shield_coil' && s.enemyShield > 0) {
+      events.push({ type: 'stagger_immune', text: `⚡ A Bobina de Escudo (${s.enemyShield}) protegeu a Postura da Enguia! Destrua o escudo primeiro!` });
+      return;
+    }
+    s.enemyStagger = Math.max(0, s.enemyStagger - delta);
+    if (s.enemyStagger === 0) {
+      s.enemyExposed = true;
+      events.push({
+        type: 'expose',
+        text: `🔓 POSTURA QUEBRADA (${reasonText})! Os órgãos inimigos estão EXPOSTOS neste turno — toque neles para arrancar!`,
+      });
+    } else {
+      events.push({
+        type: 'stagger_hit',
+        text: `🎯 ${reasonText}: -${delta} Postura inimiga (resta ${s.enemyStagger}/${s.enemyMaxStagger}).`,
+      });
+    }
+  }
+
   function step(state, action) {
     if (state.outcome !== 'ongoing') return state;
     let s = cloneState(state);
+    const enc = ENCOUNTERS[s.stageIndex];
     const events = [];
+    const wasExposedAtTurnStart = s.enemyExposed;
 
-    // 1. Se for ENXERTO DE ASSALTO: arranca o gene do inimigo, encaixa no slot escolhido e enfraquece o inimigo NA HORA!
+    // 1. ENXERTO DE ASSALTO: arranca órgão exposto, ganha +4 Escudo de Impacto e JÁ executa o golpe/defesa!
     if (action.kind === 'graft_strike') {
       const { geneId, targetGroup, slotIndex = 0 } = action;
       if (!s.enemyExposed || !s.enemyGenes.includes(geneId)) {
-        throw new Error('Gene não está exposto para enxerto.');
+        throw new Error('Órgão não está exposto para enxerto.');
       }
       s.enemyGenes = s.enemyGenes.filter(g => g !== geneId);
-      s = equipGene(s, geneId, targetGroup, slotIndex);
+      s = equipGene(s, geneId, targetGroup, slotIndex, { freeOverride: true });
       s.enemyExposed = false;
       s.enemyStagger = s.enemyMaxStagger;
-      // Atordoamento cirúrgico: arrancar um órgão do inimigo concede +5 de Escudo de Impacto imediato!
-      s.playerShield += 5;
+      s.playerShield += 4;
+      // Se arrancou ELE ou quebrou a bobina da Enguia, remove também o escudo residual da bobina
+      if (enc.id === 'enguia' && geneId === 'ELE') {
+        s.enemyShield = 0;
+      }
       events.push({
         type: 'graft',
-        text: `⚡ ENXERTO! Você arrancou ${GENES[geneId].name}, ganhou +5 Escudo de Impacto e instalou na sua ${targetGroup === 'attack' ? 'Garra' : 'Carapaça'}!`,
+        text: `⚡ ENXERTO CIRÚRGICO! Você arrancou ${GENES[geneId].name} da presa (+4 Escudo de Impacto) e conectou na sua ${targetGroup === 'attack' ? 'Garra' : 'Carapaça'}!`,
       });
     }
 
@@ -871,14 +919,10 @@ button:disabled{opacity:.4;cursor:not-allowed}
     const mutIds = new Set(acts.mutations.map(m => m.id));
     const eIntent = getEnemyIntent(s);
 
-    // Limpa buffs temporários de 1 turno após ler a intenção inimiga
-    s.halfNextEnemyAttack = false;
-    s.weakenNextEnemyAttack = 0;
-
-    // Se o inimigo vai defender no turno, ergue o escudo dele antes do impacto
-    if (eIntent.type === 'defend') {
+    // Se a intenção do inimigo inclui ganhar escudo (defend ou coil_charge), o escudo dele sobe no início do turno
+    if (eIntent.shield > 0) {
       s.enemyShield += eIntent.shield;
-      events.push({ type: 'enemy_defend', text: `🛡️ Inimigo usa ${eIntent.name} (+${eIntent.shield} Escudo).` });
+      events.push({ type: 'enemy_defend', text: `🛡️ ${enc.name} ativa ${eIntent.name} (+${eIntent.shield} Escudo).` });
     }
 
     const mode = action.kind === 'defend' || (action.kind === 'graft_strike' && action.targetGroup === 'defense')
@@ -888,18 +932,28 @@ button:disabled{opacity:.4;cursor:not-allowed}
     let activeThorns = 0;
     let activeThornsHeal = 0;
     let activePoisonCounter = 0;
+    let activeHalfDamage = false;
+    let activeWeakenDamage = 0;
     let activeKinetic = false;
 
-    // 2. Ação do Jogador (Atacar ou Defender — inclusive disparada automaticamente pelo Enxerto!)
+    // 2. Ação do Jogador
     if (mode === 'attack') {
       const atk = acts.attack;
       s.kineticBonus = 0;
       let totalDealt = 0;
+      let shatteredShield = false;
+
+      // Estocada Perfurante (Espinhos na Garra): DESTRÓI 100% do Escudo inimigo antes do golpe!
+      if (atk.shatterShield && s.enemyShield > 0) {
+        events.push({ type: 'shatter', text: `🦔 PERFURAÇÃO ÓSSEA! Seus Espinhos na Garra estilhaçam os ${s.enemyShield} de Escudo inimigo!` });
+        s.enemyShield = 0;
+        shatteredShield = true;
+      }
 
       for (const raw of atk.hits) {
         if (s.enemyHp <= 0) break;
         let dmg = raw;
-        if (!atk.pierceShield && s.enemyShield > 0) {
+        if (s.enemyShield > 0) {
           const abs = Math.min(s.enemyShield, dmg);
           s.enemyShield -= abs;
           dmg -= abs;
@@ -908,57 +962,60 @@ button:disabled{opacity:.4;cursor:not-allowed}
         s.enemyHp -= dealt;
         totalDealt += dealt;
 
-        // Espinhos do inimigo (se ele ainda tiver SPI)
+        // Espinhos do inimigo (se ele ainda tiver SPI) punem ataques diretos!
         if (s.enemyHp > 0 && s.enemyGenes.includes('SPI')) {
-          const thornDmg = 2;
+          const thornDmg = 3;
           const abs = Math.min(s.playerShield, thornDmg);
           s.playerShield -= abs;
-          s.playerHp = Math.max(0, s.playerHp - (thornDmg - abs));
-          events.push({ type: 'enemy_thorns', text: `🦔 Espinhos do inimigo ferem você em ${thornDmg}!` });
+          const netThorn = thornDmg - abs;
+          s.playerHp = Math.max(0, s.playerHp - netThorn);
+          events.push({ type: 'enemy_thorns', text: `🦔 Você atacou os Espinhos da presa e sofreu ${netThorn} de dano de retorno!` });
         }
       }
 
       events.push({
         type: 'player_attack',
-        text: `🐾 ${atk.title} causa ${totalDealt} de dano${atk.pierceShield ? ' (perfurou escudo!)' : ''}!`,
+        text: `🐾 ${atk.title} causa ${totalDealt} de dano na presa!`,
       });
 
       if (atk.poisonApplied > 0 && s.enemyHp > 0) {
         s.enemyPoison += atk.poisonApplied;
-        events.push({ type: 'poison_apply', text: `☠️ Aplicou +${atk.poisonApplied} de Veneno (total: ${s.enemyPoison}).` });
+        events.push({ type: 'poison_apply', text: `☠️ Aplicou +${atk.poisonApplied} de Veneno (acumulado: ${s.enemyPoison}).` });
       }
 
       if (atk.detonatePoison && s.enemyPoison > 0 && s.enemyHp > 0) {
-        const mult = atk.keepPoisonOnDetonate ? 3 : 2;
-        const burst = s.enemyPoison * mult;
+        const burst = s.enemyPoison * atk.detonateMult;
         s.enemyHp = Math.max(0, s.enemyHp - burst);
-        events.push({ type: 'detonate', text: `💥 DETONAÇÃO CATALISADORA! O Veneno explode causando +${burst} de dano direto!` });
+        events.push({ type: 'detonate', text: `💥 DETONAÇÃO CATALISADORA! O Veneno explode causando +${burst} de dano imediato!` });
       }
 
       if (atk.lifesteal && totalDealt > 0 && s.playerHp > 0) {
-        const heal = Math.max(2, Math.floor(totalDealt / 2));
+        const heal = Math.max(3, Math.floor(totalDealt / 2));
         s.playerHp = Math.min(s.playerMaxHp, s.playerHp + heal);
-        events.push({ type: 'heal', text: `🩸 Presa Vampírica drena +${heal} PV para você!` });
+        events.push({ type: 'heal', text: `🩸 Presa Vampírica drena +${heal} PV!` });
       }
 
-      // Reduz postura do inimigo
-      if (s.enemyHp > 0 && !s.enemyExposed && s.enemyGenes.length > 0) {
-        s.enemyStagger = Math.max(0, s.enemyStagger - atk.staggerDmg);
-        if (s.enemyStagger === 0) {
-          s.enemyExposed = true;
+      // Cálculo de Postura no Ataque conforme a Anatomia da Presa
+      if (s.enemyHp > 0 && !s.enemyExposed) {
+        if (enc.staggerRule === 'evasive' && !atk.ignoreEvasive) {
           events.push({
-            type: 'expose',
-            text: `🔓 POSTURA QUEBRADA! Os genes do inimigo estão EXPOSTOS — clique neles para arrancar e enxertar!`,
+            type: 'evade',
+            text: `💨 ${enc.name} esquivou da pressão do golpe único! Use Espinhos na Carapaça, Golpe Duplo (Impulso) ou Choque (Elétrico) para quebrar a Postura dele!`,
           });
+        } else {
+          let stg = (atk.hasImp ? 2 : 1) + (atk.hasEle ? 1 : 0) + (shatteredShield ? 1 : 0);
+          applyStaggerDamage(s, stg, shatteredShield ? 'Escudo Estilhaçado' : 'Pressão de Ataque', events);
         }
       }
     } else {
-      // Modo Defesa
+      // Modo Defesa (Carapaça)
       const def = acts.defense;
       s.playerShield += def.shieldGain;
       activeThorns = def.thorns;
       activeThornsHeal = def.thornsHeal;
       activePoisonCounter = def.poisonCounter;
+      activeHalfDamage = def.halfDamage;
+      activeWeakenDamage = def.weakenDamage;
       activeKinetic = def.kineticConvert;
 
       if (def.heal > 0) {
@@ -966,82 +1023,131 @@ button:disabled{opacity:.4;cursor:not-allowed}
       }
       if (def.cleanse && s.playerPoison > 0) {
         s.playerPoison = 0;
+        events.push({ type: 'cleanse', text: `🩸 Sangue Puro purificou 100% do seu Veneno e regenerou +${def.heal} PV!` });
       }
-      if (def.halfNext) s.halfNextEnemyAttack = true;
-      if (def.weakenNext > 0) s.weakenNextEnemyAttack = def.weakenNext;
 
       events.push({
         type: 'player_defend',
-        text: `🛡️ ${def.title}: +${def.shieldGain} Escudo${def.heal ? `, +${def.heal} PV` : ''}${def.thorns ? `, Espinhos (${def.thorns})` : ''}!`,
+        text: `🛡️ ${def.title}: +${def.shieldGain} Escudo${def.thorns ? ` · Espinhos (${def.thorns}/golpe)` : ''}${def.halfDamage ? ' · Evasão 50%' : ''}${def.weakenDamage ? ` · Pulso -${def.weakenDamage}` : ''}!`,
       });
 
-      // Defender um ataque também reduz 1 de Postura do inimigo!
-      if (eIntent.type === 'attack' && s.enemyHp > 0 && !s.enemyExposed && s.enemyGenes.length > 0) {
-        s.enemyStagger = Math.max(0, s.enemyStagger - 1);
-        if (s.enemyStagger === 0) {
-          s.enemyExposed = true;
-          events.push({
-            type: 'expose',
-            text: `🔓 BLOQUEIO TÁTICO! Os genes do inimigo ficaram EXPOSTOS para roubo!`,
-          });
-        }
+      if (def.empStagger > 0 && s.enemyHp > 0) {
+        applyStaggerDamage(s, def.empStagger, 'Pulso Eletromagnético', events);
       }
     }
 
-    // 3. Veneno no Inimigo queima no fim da ação do jogador
+    // 3. Veneno no Inimigo queima (ignora escudo!) e corrói Postura se >= 4
     if (s.enemyHp > 0 && s.enemyPoison > 0) {
       const pDmg = Math.min(s.enemyHp, s.enemyPoison);
       s.enemyHp -= pDmg;
-      events.push({ type: 'poison_tick', text: `☠️ Veneno corrói ${pDmg} PV do inimigo (ignora escudo)!` });
+      events.push({ type: 'poison_tick', text: `☠️ Veneno derrete ${pDmg} PV da presa (ignora escudo)!` });
+      if (s.enemyHp > 0 && s.enemyPoison >= 4 && !s.enemyExposed) {
+        applyStaggerDamage(s, 1, 'Corrosão Tóxica (Veneno ≥ 4)', events);
+      }
     }
 
-    // 4. Resposta do Inimigo (se estiver vivo e a intenção for ataque)
-    if (s.enemyHp > 0 && s.playerHp > 0 && eIntent.type === 'attack') {
-      const reduceFromToxicSynapse = (s.enemyPoison > 0 && mutIds.has('MUT_TEMPESTADE_TOXICA')) ? 2 : 0;
+    // 4. Resposta do Inimigo (ataque ou coil_charge)
+    if (s.enemyHp > 0 && s.playerHp > 0 && eIntent.hits && eIntent.hits.length > 0) {
+      const reduceFromSynapse = (s.enemyPoison > 0 && mutIds.has('MUT_TEMPESTADE_TOXICA')) ? 3 : 0;
       let totalTaken = 0;
+      let hitsBlockedOrParried = 0;
+      let thornsTriggeredCount = 0;
 
-      for (const rawHit of eIntent.hits) {
+      for (let i = 0; i < eIntent.hits.length; i++) {
         if (s.playerHp <= 0 || s.enemyHp <= 0) break;
-        let hit = Math.max(1, rawHit - reduceFromToxicSynapse);
-        if (eIntent.elecBonus > 0 && s.playerShield === 0) hit += eIntent.elecBonus;
+        let hit = Math.max(1, eIntent.hits[i] - reduceFromSynapse);
+        // Nervo Elétrico inimigo pune jogador que NÃO defendeu neste turno
+        if (eIntent.elecBonus > 0 && mode !== 'defend' && i === 0) {
+          hit += eIntent.elecBonus;
+          events.push({ type: 'elec_punish', text: `⚡ Sem Carapaça ativa! O choque elétrico causa +${eIntent.elecBonus} de dano extra!` });
+        }
+        // Pulso Eletromagnético na Carapaça reduz o ataque
+        if (activeWeakenDamage > 0) {
+          const red = Math.min(hit - 1, activeWeakenDamage);
+          hit -= red;
+          activeWeakenDamage = Math.max(0, activeWeakenDamage - red);
+        }
+        // Reflexo Evasivo (Impulso na Carapaça) corta cada golpe pela metade
+        if (activeHalfDamage) {
+          hit = Math.max(1, Math.floor(hit / 2));
+        }
 
         const abs = Math.min(s.playerShield, hit);
         s.playerShield -= abs;
         const net = hit - abs;
         s.playerHp = Math.max(0, s.playerHp - net);
         totalTaken += net;
+        if (abs > 0) hitsBlockedOrParried += 1;
 
-        if (activeThorns > 0 && s.enemyHp > 0) {
+        // Retaliação de Espinhos da Carapaça do Jogador
+        if (mode === 'defend' && activeThorns > 0 && s.enemyHp > 0) {
           const tDealt = Math.min(s.enemyHp, activeThorns);
           s.enemyHp -= tDealt;
-          events.push({ type: 'thorns_hit', text: `🦔 Seus Espinhos perfuram o atacante causando ${tDealt} de dano!` });
+          thornsTriggeredCount += 1;
+          events.push({ type: 'thorns_hit', text: `🦔 Seus Espinhos perfuram a presa em ${tDealt} de dano!` });
           if (activeThornsHeal > 0 && s.playerHp > 0) {
             s.playerHp = Math.min(s.playerMaxHp, s.playerHp + activeThornsHeal);
-            events.push({ type: 'heal', text: `🩸 Espinhos Sanguessugas curam +${activeThornsHeal} PV!` });
+            events.push({ type: 'heal', text: `🩸 Espinhos Sanguessugas drenam +${activeThornsHeal} PV!` });
           }
+        }
+
+        // Presa Vampírica do inimigo: só cura se ferir a carne (net > 0)!
+        if (eIntent.lifesteal > 0 && net > 0 && s.enemyHp > 0) {
+          s.enemyHp = Math.min(s.enemyMaxHp, s.enemyHp + eIntent.lifesteal);
+          events.push({ type: 'enemy_heal', text: `🩸 ${enc.name} fere sua carne e drena +${eIntent.lifesteal} PV!` });
         }
       }
 
-      if (activePoisonCounter > 0 && s.enemyHp > 0) {
+      if (mode === 'defend' && activePoisonCounter > 0 && s.enemyHp > 0) {
         s.enemyPoison += activePoisonCounter;
         events.push({ type: 'poison_apply', text: `☠️ Nuvem Ácida intoxica o atacante (+${activePoisonCounter} Veneno)!` });
       }
 
+      // Veneno do inimigo: se você bloqueou 100% do ataque com a Carapaça, bloqueia metade do veneno!
       if (eIntent.appliesPoison > 0 && s.playerHp > 0 && s.enemyHp > 0) {
-        s.playerPoison += eIntent.appliesPoison;
-        events.push({ type: 'enemy_poison', text: `☠️ O ataque inimigo injeta +${eIntent.appliesPoison} de Veneno em você!` });
-      }
-
-      if (eIntent.lifesteal > 0 && totalTaken > 0 && s.enemyHp > 0) {
-        s.enemyHp = Math.min(s.enemyMaxHp, s.enemyHp + eIntent.lifesteal);
-        events.push({ type: 'enemy_heal', text: `🩸 Inimigo drena +${eIntent.lifesteal} PV de você!` });
+        const pApplied = (mode === 'defend' && totalTaken === 0) ? 1 : eIntent.appliesPoison;
+        s.playerPoison += pApplied;
+        events.push({
+          type: 'enemy_poison',
+          text: mode === 'defend' && totalTaken === 0
+            ? `🛡️ Sua Carapaça conteve quase todo o ácido (+1 Veneno apenas).`
+            : `☠️ O ataque inimigo injeta +${pApplied} de Veneno em você!`,
+        });
       }
 
       events.push({
         type: 'enemy_attack',
         text: totalTaken > 0
-          ? `💥 ${eIntent.name} atinge você causando ${totalTaken} de dano líquido.`
-          : `🛡️ Você bloqueou 100% de ${eIntent.name}!`,
+          ? `💥 ${eIntent.name} causa ${totalTaken} de dano líquido em você.`
+          : `🛡️ BLOQUEIO PERFEITO! Sua Carapaça absorveu 100% de ${eIntent.name}!`,
+      });
+
+      // Quebra de Postura pela Defesa Tática!
+      if (mode === 'defend' && s.enemyHp > 0 && !s.enemyExposed) {
+        let defStagger = 0;
+        if (enc.staggerRule === 'guard_bonus' && hitsBlockedOrParried > 0) {
+          defStagger = 2; // Escorpião perde 2 Postura de uma vez ao bater na Carapaça!
+        } else if (thornsTriggeredCount > 0) {
+          defStagger = thornsTriggeredCount; // Louva-a-Deus perde 2 Postura ao se espetar 2x na Foice Dupla!
+        } else if (hitsBlockedOrParried > 0 && enc.staggerRule !== 'evasive') {
+          defStagger = 1;
+        }
+        if (s.enemyPoison > 0 && mutIds.has('MUT_TEMPESTADE_TOXICA')) {
+          defStagger += 1;
+        }
+        if (defStagger > 0) {
+          applyStaggerDamage(s, defStagger, thornsTriggeredCount > 0 ? 'Contra-Golpe de Espinhos' : 'Bloqueio Tático', events);
+        }
+      }
+    }
+
+    // Se a janela de exposição já estava aberta no início do turno e o jogador NÃO roubou, ela fecha!
+    if (wasExposedAtTurnStart && action.kind !== 'graft_strike' && s.enemyHp > 0) {
+      s.enemyExposed = false;
+      s.enemyStagger = s.enemyMaxStagger;
+      events.push({
+        type: 'window_closed',
+        text: `🔒 Você não arrancou o órgão a tempo — ${enc.name} recompôs a Postura!`,
       });
     }
 
@@ -1051,7 +1157,6 @@ button:disabled{opacity:.4;cursor:not-allowed}
       events.push({ type: 'kinetic', text: `🔮 Conversão Cinética: +${s.kineticBonus} de dano carregado para sua próxima Garra!` });
     }
 
-    // Escudo do jogador dura 1 turno; veneno no jogador queima 1x e reduz em 1
     s.playerShield = 0;
     if (s.playerHp > 0 && s.enemyHp > 0 && s.playerPoison > 0) {
       s.playerHp = Math.max(0, s.playerHp - s.playerPoison);
@@ -1060,9 +1165,11 @@ button:disabled{opacity:.4;cursor:not-allowed}
     }
 
     s.turn += 1;
+    s.swapsUsedThisTurn = 0;
+
     if (s.enemyHp <= 0) {
       s.outcome = 'win';
-      events.push({ type: 'win', text: `🏆 Criatura derrotada!` });
+      events.push({ type: 'win', text: `🏆 Presa abatida!` });
     } else if (s.playerHp <= 0) {
       s.outcome = 'loss';
       events.push({ type: 'loss', text: `💀 Seu organismo tombou.` });
@@ -1246,6 +1353,7 @@ button:disabled{opacity:.4;cursor:not-allowed}
     }
 
     by('enemy-svg').innerHTML = renderCreatureSvg(state.enemyGenes, true);
+    by('enemy-anatomy').textContent = `🔬 ${enc.staggerRuleText}`;
 
     const itTitle = by('enemy-intent-title');
     const itDesc = by('enemy-intent-desc');
@@ -1377,6 +1485,15 @@ button:disabled{opacity:.4;cursor:not-allowed}
     by('player-hp-text').textContent = `${state.playerHp} / ${state.playerMaxHp}`;
     by('player-hp-bar').style.width = `${Math.max(0, Math.round((state.playerHp / state.playerMaxHp) * 100))}%`;
     by('player-svg').innerHTML = renderCreatureSvg(equippedGenes, false);
+
+    const mHint = by('metabolic-hint');
+    if (state.swapsUsedThisTurn === 0) {
+      mHint.textContent = '⚡ Adaptação Metabólica: 1 troca (Garra ↔ Carapaça) GRÁTIS neste turno';
+      mHint.style.color = '#6ee7b7';
+    } else {
+      mHint.textContent = '⚠️ Troca grátis usada · Nova troca neste turno custa -2 PV (Estresse Metabólico)';
+      mHint.style.color = '#fbbf24';
+    }
 
     // Mutações Ativas
     const mutStrip = by('mutation-strip');
@@ -1518,7 +1635,8 @@ button:disabled{opacity:.4;cursor:not-allowed}
       const titleRow = el('div', '', 's-title');
       const left = el('span', g.name);
       left.style.color = g.color;
-      const swapHint = el('span', `⇄ Mover p/ ${otherGroup === 'attack' ? 'Garra' : 'Carapaça'}`, 'organ-tag');
+      const costLbl = state.swapsUsedThisTurn === 0 ? 'GRÁTIS' : '-2 PV';
+      const swapHint = el('span', `⇄ ${otherGroup === 'attack' ? 'Garra' : 'Carapaça'} (${costLbl})`, 'organ-tag');
       titleRow.append(left, swapHint);
 
       const eff = el('div', groupName === 'attack' ? g.onAttack : g.onDefense, 's-effect');
@@ -1526,9 +1644,14 @@ button:disabled{opacity:.4;cursor:not-allowed}
 
       slot.onclick = () => {
         if (state.outcome !== 'ongoing') return;
-        const targetIdx = state.slots[otherGroup][0] === null ? 0 : state.slots[otherGroup][1] === null ? 1 : 0;
-        state = B.equipGene(state, gId, otherGroup, targetIdx);
-        render();
+        try {
+          const targetIdx = state.slots[otherGroup][0] === null ? 0 : state.slots[otherGroup][1] === null ? 1 : 0;
+          state = B.equipGene(state, gId, otherGroup, targetIdx);
+          render();
+        } catch (err) {
+          state.lastEvents = [{ type: 'warn', text: `⚠️ ${err.message}` }, ...state.lastEvents];
+          render();
+        }
       };
       container.append(slot);
     });
