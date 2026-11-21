@@ -3,18 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>O Enxerto · Caça Biológica v0.8</title>
+<title>O Enxerto · Circuito Biológico v1.0</title>
 <style>
 :root{
   color-scheme:dark;
-  --bg:#09100e;
-  --panel:#121e19;
-  --panel-hi:#182922;
-  --well:#0c1512;
-  --edge:#2b4237;
-  --edge-hi:#517a65;
-  --text:#f1f7f2;
-  --muted:#a5bdb0;
+  --bg:#070c0a;
+  --panel:#101a16;
+  --panel-hi:#162620;
+  --well:#0a120f;
+  --edge:#263c32;
+  --edge-hi:#4a7560;
+  --text:#f0f7f2;
+  --muted:#9fb8aa;
   --accent:#bef264;
   --accent-ink:#0b140d;
   --good:#34d399;
@@ -24,207 +24,152 @@
   --purple:#c084fc;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:radial-gradient(circle at 50% 0%,#1a3328 0%,var(--bg) 65%);color:var(--text);font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:radial-gradient(circle at 50% 0%,#183025 0%,var(--bg) 68%);color:var(--text);font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
 body{min-height:100dvh}
-button{font:inherit;color:var(--text);background:#1b2e26;border:1.5px solid var(--edge);border-radius:10px;min-height:42px;padding:6px 12px;cursor:pointer;font-weight:700;transition:transform .08s,border-color .15s,background .15s,box-shadow .15s}
+button{font:inherit;color:var(--text);background:#172921;border:1.5px solid var(--edge);border-radius:10px;min-height:40px;padding:6px 11px;cursor:pointer;font-weight:700;transition:transform .08s,border-color .15s,background .15s,box-shadow .15s}
 button:hover:not(:disabled){border-color:var(--accent)}
 button:active:not(:disabled){transform:scale(.97)}
-button:disabled{opacity:.4;cursor:not-allowed}
+button:disabled{opacity:.38;cursor:not-allowed}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.btn-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:850}
 .btn-good{background:#123828;border-color:var(--good);color:#d1fae5}
 .btn-warn{background:#3d2a0d;border-color:var(--warn);color:#fef3c7}
 .btn-danger{background:#471622;border-color:var(--danger);color:#ffe4e6}
 .btn-ghost{background:transparent;border-color:var(--edge);color:var(--muted)}
-.btn-sm{min-height:32px;padding:3px 9px;font-size:.76rem;border-radius:8px}
+.btn-sm{min-height:30px;padding:3px 8px;font-size:.75rem;border-radius:8px}
 
-.app{max-width:960px;margin:0 auto;padding:8px 10px 14px;display:flex;flex-direction:column;gap:8px}
+.app{max-width:1020px;margin:0 auto;padding:8px 10px 16px;display:flex;flex-direction:column;gap:8px}
 
-/* Barra superior + Progresso da Caçada */
+/* Topbar */
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:8px}
-.brand h1{margin:0;font-size:1.08rem;letter-spacing:-.02em;color:var(--accent)}
+.brand h1{margin:0;font-size:1.05rem;letter-spacing:-.02em;color:var(--accent)}
 .stage-track{display:flex;gap:4px;align-items:center}
-.stage-dot{padding:2px 7px;border-radius:999px;font-size:.7rem;font-weight:800;background:var(--well);border:1px solid var(--edge);color:var(--muted)}
+.stage-dot{padding:2px 7px;border-radius:999px;font-size:.69rem;font-weight:800;background:var(--well);border:1px solid var(--edge);color:var(--muted)}
 .stage-dot.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .stage-dot.done{background:#143828;color:var(--good);border-color:var(--good)}
 .top-actions{display:flex;gap:5px;align-items:center}
 
-/* Banner Narrativo / Guia de Caça */
-.hunt-banner{
-  background:linear-gradient(90deg,#182e23,#122119);
-  border:1.5px solid var(--edge-hi);
-  border-radius:11px;
-  padding:7px 11px;
-  font-size:.82rem;
+/* Mesa de Enxerto Quente (quando você amputa um membro inimigo!) */
+.loot-tray{
+  background:linear-gradient(90deg,#362508,#1e1708);
+  border:2px solid var(--warn);
+  border-radius:12px;
+  padding:8px 11px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:8px;
+  flex-wrap:wrap;
+  animation:pulseGlow 1.3s infinite;
 }
-.hunt-banner b{color:var(--accent)}
-.hunt-banner.exposed-alert{
-  background:linear-gradient(90deg,#3d280a,#261907);
-  border-color:var(--warn);
-  animation:glowPulse 1.3s infinite;
-}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,.4)}50%{box-shadow:0 0 0 6px rgba(251,191,36,0)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,.4)}50%{box-shadow:0 0 0 6px rgba(251,191,36,0)}}
+.loot-tray b{color:var(--warn);font-size:.84rem}
 
-/* Arena: 1 coluna mobile / 2 colunas desktop */
-.arena{display:grid;grid-template-columns:1fr;gap:8px}
-@media(min-width:780px){
-  .app{padding:14px 18px 24px;gap:10px}
-  .arena{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;gap:12px}
-}
-.card{background:var(--panel);border:1.5px solid var(--edge);border-radius:14px;padding:10px 12px;position:relative;overflow:hidden}
+.card{background:var(--panel);border:1.5px solid var(--edge);border-radius:14px;padding:10px 12px}
 
-/* CRIATURA INIMIGA */
-.creature-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.creature-title h2{margin:0;font-size:1.02rem}
-.creature-title small{color:var(--muted);font-size:.73rem;display:block}
-.vitals-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px}
-.bar-wrap{flex:1;min-width:130px;background:var(--well);border:1px solid var(--edge);border-radius:8px;padding:4px 7px}
-.bar-label{display:flex;justify-content:space-between;font-size:.74rem;font-weight:800;margin-bottom:3px}
-.bar-track{height:8px;background:#1c2822;border-radius:99px;overflow:hidden}
-.bar-fill{height:100%;background:linear-gradient(90deg,#ef4444,#f97316);transition:width .25s ease}
-.bar-fill.player{background:linear-gradient(90deg,#10b981,#84cc16)}
-.bar-fill.stagger{background:linear-gradient(90deg,#f59e0b,#fde047)}
-.status-tag{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:7px;font-size:.74rem;font-weight:800;background:var(--well);border:1px solid var(--edge)}
-.status-tag.poison{border-color:#a3e635;color:#bef264;background:#1d2e10}
-.status-tag.shield{border-color:var(--info);color:#bae6fd;background:#0e2938}
-.status-tag.kinetic{border-color:var(--purple);color:#e9d5ff;background:#2a143d}
+/* SEÇÃO 1: ANATOMIA DA PRESA (NÚCLEO + PARTES MIRÁVEIS) */
+.enemy-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.enemy-title h2{margin:0;font-size:1.02rem}
+.enemy-title small{color:var(--muted);font-size:.73rem}
+.status-row{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.stag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:7px;font-size:.74rem;font-weight:800;background:var(--well);border:1px solid var(--edge)}
+.stag.poison{border-color:#a3e635;color:#bef264;background:#1b2c0e}
+.stag.shield{border-color:var(--info);color:#bae6fd;background:#0d2838}
+.stag.thorns{border-color:#fb923c;color:#fed7aa;background:#361a0c}
 
-/* Palco Visual da Criatura (SVG + Intenção) */
-.creature-stage{
-  margin-top:7px;
-  background:radial-gradient(ellipse at 50% 60%,#1c3329 0%,var(--well) 75%);
-  border:1px solid var(--edge);
-  border-radius:11px;
-  padding:8px 10px;
-  display:grid;
-  grid-template-columns:96px 1fr;
-  align-items:center;
-  gap:10px;
-}
-.creature-svg-box{width:96px;height:78px;display:flex;align-items:center;justify-content:center}
-.creature-svg-box svg{width:100%;height:100%;overflow:visible}
-.intent-box{display:flex;flex-direction:column;gap:3px}
-.intent-badge{display:inline-flex;align-items:center;gap:5px;font-size:.86rem;font-weight:800;color:var(--warn)}
-.intent-badge.defend{color:var(--info)}
-.intent-desc{font-size:.75rem;color:var(--muted)}
+.core-bar-wrap{margin-top:6px;background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:5px 8px}
+.bar-head{display:flex;justify-content:space-between;font-size:.75rem;font-weight:800;margin-bottom:3px}
+.bar-track{height:8px;background:#1b2822;border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,#ef4444,#f97316);transition:width .22s ease}
+.bar-fill.part-hp{background:linear-gradient(90deg,#f59e0b,#fde047)}
+.bar-fill.player-hp{background:linear-gradient(90deg,#10b981,#84cc16)}
 
-/* Órgãos / Genes do Inimigo (Clicáveis quando EXPOSTOS!) */
-.organs-title{margin-top:8px;font-size:.73rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
-.enemy-organs{margin-top:5px;display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px}
-.organ-card{
+.parts-header{margin-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:.74rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.parts-grid{margin-top:5px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+.part-card{
   background:var(--well);
-  border:1.5px solid var(--edge);
-  border-radius:10px;
-  padding:7px 9px;
-  text-align:left;
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-  position:relative;
-  transition:transform .12s,border-color .15s,box-shadow .15s;
-}
-.organ-head{display:flex;align-items:center;justify-content:space-between;gap:4px}
-.organ-name{font-size:.82rem;font-weight:850;display:flex;align-items:center;gap:5px}
-.organ-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
-.organ-tag{font-size:.63rem;font-weight:900;padding:1px 5px;border-radius:4px;background:#192821;color:var(--muted)}
-.organ-desc{font-size:.72rem;color:var(--muted);line-height:1.25}
-.organ-card.exposed{
-  background:linear-gradient(135deg,#38260c,#1f1709);
-  border:2px solid var(--warn);
-  cursor:pointer;
-  animation:glowPulse 1.3s infinite;
-}
-.organ-card.exposed .organ-tag{background:var(--warn);color:#140e03}
-.organ-card.selected-graft{
-  background:linear-gradient(135deg,#253d12,#15240b);
-  border:2.5px solid var(--accent);
-  box-shadow:0 0 14px rgba(190,242,100,.35);
-  animation:none;
-}
-
-/* SEU ORGANISMO (GARRA + CARAPAÇA + MUTAÇÕES) */
-.Bio-sockets{margin-top:8px;display:grid;gap:8px}
-.socket-group{
-  background:var(--well);
-  border:1.5px solid var(--edge);
-  border-radius:11px;
-  padding:8px 10px;
-}
-.socket-group.attack-group{border-left:4px solid #fb923c}
-.socket-group.defense-group{border-left:4px solid #38bdf8}
-.socket-header{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px}
-.socket-header b{font-size:.86rem}
-.socket-header small{font-size:.72rem;color:var(--muted)}
-.socket-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.socket-slot{
-  min-height:56px;
-  border-radius:9px;
-  border:1.5px dashed var(--edge-hi);
-  background:#111d18;
-  padding:6px 8px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  text-align:left;
-  position:relative;
-}
-.socket-slot.filled{border-style:solid;background:#162720}
-.socket-slot .s-title{font-size:.78rem;font-weight:850;display:flex;align-items:center;justify-content:space-between;gap:4px}
-.socket-slot .s-effect{font-size:.68rem;color:var(--muted);margin-top:2px;line-height:1.2}
-.socket-slot.graft-target{
-  border:2px solid var(--accent);
-  background:#1f3618;
-  cursor:pointer;
-  animation:coachBounce 1.1s infinite;
-}
-@keyframes coachBounce{0%,100%{box-shadow:0 0 0 0 rgba(190,242,100,.45)}50%{box-shadow:0 0 0 5px rgba(190,242,100,0)}}
-
-/* Banner de Mutação Ativa */
-.mutation-strip{margin-top:7px;display:grid;gap:5px}
-.mutation-pill{
-  background:linear-gradient(90deg,#2e1442,#1c112b);
-  border:1.5px solid var(--purple);
-  border-radius:9px;
-  padding:5px 9px;
-  font-size:.75rem;
-  color:#f3e8ff;
-}
-.mutation-pill b{color:#d8b4fe;display:block}
-
-/* Reserva de Genes */
-.reserve-strip{margin-top:7px;display:flex;gap:5px;flex-wrap:wrap;align-items:center}
-.reserve-strip small{font-size:.73rem;color:var(--muted)}
-
-/* Barra de Ações Principais (Grandes, Viscerais e com Previsão Exata) */
-.combat-actions{margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.act-btn{
-  min-height:60px;
+  border:2px solid var(--edge);
   border-radius:12px;
   padding:8px 10px;
   display:flex;
   flex-direction:column;
-  align-items:flex-start;
-  justify-content:center;
-  gap:3px;
-  text-align:left;
+  gap:5px;
+  cursor:pointer;
+  position:relative;
+  transition:border-color .15s,box-shadow .15s,transform .08s;
 }
-.act-btn.attack-btn{
-  background:linear-gradient(135deg,#3b1d12,#24130d);
-  border:2px solid #fb923c;
+.part-card.aimed{
+  border-color:var(--danger);
+  background:linear-gradient(145deg,#2a1319,#131815);
+  box-shadow:0 0 0 2px rgba(251,113,133,.28);
 }
-.act-btn.defend-btn{
-  background:linear-gradient(135deg,#102c3d,#0c1d29);
-  border:2px solid #38bdf8;
+.part-card.severed{
+  opacity:.48;
+  border-style:dashed;
+  cursor:default;
+  background:#0a0f0d;
 }
-.act-btn .act-title{font-size:.9rem;font-weight:900;color:#fff}
-.act-btn .act-sub{font-size:.72rem;color:#e2e8f0;font-weight:600;line-height:1.2}
+.part-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.part-name{font-size:.86rem;font-weight:900;display:flex;align-items:center;gap:5px}
+.aim-badge{font-size:.66rem;font-weight:900;padding:2px 6px;border-radius:5px;background:#26382f;color:var(--muted)}
+.part-card.aimed .aim-badge{background:var(--danger);color:#fff}
+.part-intent{font-size:.78rem;font-weight:750;color:var(--warn);background:#15201b;border-radius:7px;padding:4px 7px}
+.part-intent.defend{color:var(--info)}
+.part-drop{font-size:.71rem;color:#bef264}
 
-/* Feed do Turno (Feedback de Combate) */
+/* SEÇÃO 2: SEU CIRCUITO BIOLÓGICO (3 ATP + TRILHA DE 4 SLOTS EM CADEIA!) */
+.player-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.atp-box{display:flex;align-items:center;gap:6px;background:#172b1c;border:1.5px solid var(--accent);border-radius:999px;padding:4px 11px;font-weight:900;font-size:.84rem;color:var(--accent)}
+.atp-pips{display:flex;gap:4px}
+.atp-pip{width:12px;height:12px;border-radius:50%;background:#26382c;border:1px solid var(--edge-hi)}
+.atp-pip.on{background:var(--accent);box-shadow:0 0 6px var(--accent)}
+
+.circuit-banner{margin-top:6px;display:grid;gap:4px}
+.circuit-pill{background:linear-gradient(90deg,#2e1442,#1b1029);border:1.5px solid var(--purple);border-radius:8px;padding:4px 9px;font-size:.74rem;color:#f3e8ff}
+.circuit-pill b{color:#d8b4fe}
+
+/* Trilha de 4 Slots [Slot 1] -> [Slot 2] -> [Slot 3] -> [Slot 4] */
+.circuit-track{
+  margin-top:8px;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  align-items:stretch;
+}
+@media(max-width:740px){
+  .circuit-track{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+}
+.slot-card{
+  background:var(--well);
+  border:2px solid var(--edge);
+  border-radius:12px;
+  padding:8px 9px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:6px;
+  position:relative;
+}
+.slot-card.energized{
+  border-color:var(--accent);
+  box-shadow:0 0 12px rgba(190,242,100,.25);
+  background:linear-gradient(160deg,#1a2f1c,#0e1813);
+}
+.slot-card.empty{border-style:dashed;opacity:.75;justify-content:center;align-items:center;text-align:center;min-height:125px}
+.slot-num{font-size:.66rem;font-weight:900;color:var(--muted);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.cost-pill{padding:1px 6px;border-radius:99px;font-size:.7rem;font-weight:900;background:#1c3024;color:var(--accent);border:1px solid var(--edge-hi)}
+.cost-pill.free{background:var(--accent);color:var(--accent-ink)}
+.slot-title{font-size:.84rem;font-weight:900}
+.slot-desc{font-size:.72rem;color:#d6e4dc;line-height:1.25}
+.slot-synapse{font-size:.68rem;color:var(--warn);background:#16221c;border-left:2.5px solid var(--warn);padding:3px 6px;border-radius:4px;line-height:1.2}
+.slot-actions{display:flex;gap:4px;margin-top:2px}
+.slot-actions .fire-btn{flex:1;min-height:36px;padding:4px 6px;font-size:.78rem}
+
+/* Barra de Fim de Turno e Reserva */
+.turn-footer{margin-top:8px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.end-turn-btn{min-height:46px;padding:8px 18px;font-size:.9rem;border-radius:11px}
+
 .event-feed{
   margin-top:8px;
   background:var(--well);
@@ -232,56 +177,18 @@ button:disabled{opacity:.4;cursor:not-allowed}
   border-radius:10px;
   padding:7px 9px;
   display:grid;
-  gap:4px;
-  font-size:.77rem;
+  gap:3px;
+  font-size:.76rem;
+  max-height:150px;
+  overflow-y:auto;
 }
 .event-item{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.event-item:last-child{border-bottom:none}
 
-/* Animações Viscerais de Impacto / Enxerto */
-@keyframes shakeHit{
-  0%,100%{transform:translateX(0)}
-  20%{transform:translateX(-7px) rotate(-1deg)}
-  40%{transform:translateX(7px) rotate(1deg)}
-  60%{transform:translateX(-4px)}
-  80%{transform:translateX(4px)}
-}
-.shake{animation:shakeHit .35s ease}
-
-/* Modais (Enxerto Instantâneo, Atlas Genético, Como Jogar) */
-.modal-backdrop{position:fixed;inset:0;background:rgba(4,9,7,.82);display:flex;align-items:center;justify-content:center;padding:12px;z-index:60}
+/* Modais */
+.modal-backdrop{position:fixed;inset:0;background:rgba(4,9,7,.84);display:flex;align-items:center;justify-content:center;padding:12px;z-index:60}
 .modal-card{background:var(--panel);border:2px solid var(--edge-hi);border-radius:16px;padding:14px;max-width:460px;width:100%;display:grid;gap:10px;max-height:92dvh;overflow-y:auto}
 .modal-card h3{margin:0;font-size:1.05rem;color:var(--accent)}
-.graft-choice-grid{display:grid;gap:8px}
-.graft-choice-btn{
-  padding:10px 12px;
-  border-radius:11px;
-  text-align:left;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-.graft-choice-btn.atk{background:#361c12;border:2px solid #fb923c}
-.graft-choice-btn.def{background:#102938;border:2px solid #38bdf8}
-.graft-choice-btn b{font-size:.88rem;color:#fff}
-.graft-choice-btn span{font-size:.76rem;color:#e2e8f0;font-weight:500}
-.graft-choice-btn small{font-size:.72rem;color:var(--accent)}
-
-.atlas-grid{display:grid;gap:7px;font-size:.8rem}
-.atlas-item{background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:7px 9px}
-.atlas-item.locked{opacity:.48;border-style:dashed}
-
-@media(max-width:779px){
-  .app{padding:5px 7px 10px;gap:5px}
-  .brand h1{font-size:.96rem}
-  .hunt-banner{padding:5px 8px;font-size:.75rem}
-  .card{padding:8px 9px;border-radius:11px}
-  .creature-stage{grid-template-columns:76px 1fr;padding:6px 8px;gap:8px}
-  .creature-svg-box{width:76px;height:62px}
-  .act-btn{min-height:54px;padding:6px 8px}
-  .act-btn .act-title{font-size:.83rem}
-  .act-btn .act-sub{font-size:.68rem}
-}
+.slot-pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -289,8 +196,8 @@ button:disabled{opacity:.4;cursor:not-allowed}
 <div class="app">
   <header class="topbar">
     <div class="brand">
-      <h1>🧬 O Enxerto</h1>
-      <div class="stage-track" id="stage-track" aria-label="Progresso da Caçada"></div>
+      <h1>🧬 O Enxerto · Circuito v1.0</h1>
+      <div class="stage-track" id="stage-track"></div>
     </div>
     <div class="top-actions">
       <button type="button" class="btn-sm btn-good" id="btn-atlas">📖 Atlas (<span id="atlas-count">0</span>)</button>
@@ -299,130 +206,92 @@ button:disabled{opacity:.4;cursor:not-allowed}
     </div>
   </header>
 
-  <div class="hunt-banner" id="hunt-banner" role="status" aria-live="polite">
-    <div id="hunt-text"></div>
+  <!-- BANNER DE ÓRGÃO AMPUTADO NA MESA (APARECE QUANDO VOCÊ AMPUTA UMA PARTE!) -->
+  <div class="loot-tray" id="loot-tray" hidden>
+    <div>
+      <b>🩸 ÓRGÃO AMPUTADO NA MESA!</b>
+      <div id="loot-desc" style="font-size:.76rem;color:#fef3c7">Enxerte agora no seu Circuito para ganhar +1 ATP e +4 Escudo na hora!</div>
+    </div>
+    <div id="loot-buttons" style="display:flex;gap:6px;flex-wrap:wrap"></div>
   </div>
 
-  <main class="arena">
-    <!-- COLUNA 1: PRESA / INIMIGO -->
-    <section class="card" id="enemy-card" aria-labelledby="enemy-name">
-      <div class="creature-header">
-        <div class="creature-title">
-          <h2 id="enemy-name">Escorpião de Lodo</h2>
-          <small id="enemy-sub">Encontro 1 de 4 · Presa Ácida</small>
-        </div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap" id="enemy-statuses"></div>
+  <!-- SEÇÃO 1: ANATOMIA DA PRESA (MIRE NAS PARTES PARA AMPUTAR!) -->
+  <section class="card" id="enemy-card" aria-labelledby="enemy-name">
+    <div class="enemy-top">
+      <div class="enemy-title">
+        <h2 id="enemy-name">Escorpião de Lodo</h2>
+        <small id="enemy-sub">Caçada 1 de 4</small>
       </div>
+      <div class="status-row" id="enemy-statuses"></div>
+    </div>
 
-      <div class="vitals-row">
-        <div class="bar-wrap">
-          <div class="bar-label"><span>PV da Presa</span><span id="enemy-hp-text">20 / 20</span></div>
-          <div class="bar-track"><div class="bar-fill" id="enemy-hp-bar" style="width:100%"></div></div>
-        </div>
-        <div class="bar-wrap">
-          <div class="bar-label"><span id="stagger-label">Postura (Quebre p/ Roubar)</span><span id="enemy-stagger-text">1 / 1</span></div>
-          <div class="bar-track"><div class="bar-fill stagger" id="enemy-stagger-bar" style="width:100%"></div></div>
-        </div>
-      </div>
+    <div class="core-bar-wrap">
+      <div class="bar-head"><span>PV Total da Presa</span><span id="enemy-core-text">22 / 22</span></div>
+      <div class="bar-track"><div class="bar-fill" id="enemy-core-bar" style="width:100%"></div></div>
+    </div>
 
-      <div class="creature-stage">
-        <div class="creature-svg-box" id="enemy-svg"></div>
-        <div class="intent-box">
-          <div class="intent-badge" id="enemy-intent-title"></div>
-          <div class="intent-desc" id="enemy-intent-desc"></div>
-        </div>
-      </div>
+    <div class="parts-header">
+      <span>🎯 Partes Vivas da Presa (Toque para MIRAR · Zere o PV da parte para AMPUTAR e roubar o órgão!)</span>
+    </div>
+    <div class="parts-grid" id="parts-grid"></div>
+  </section>
 
-      <div id="enemy-anatomy" style="margin-top:6px;padding:5px 8px;border-radius:8px;background:#16251e;border-left:3px solid var(--warn);font-size:.73rem;color:#fde68a"></div>
-
-      <div class="organs-title">
-        <span id="enemy-organs-label">Órgãos da Presa (Quebre a Postura para arrancar!)</span>
-      </div>
-      <div class="enemy-organs" id="enemy-organs"></div>
-    </section>
-
-    <!-- COLUNA 2: SEU ORGANISMO QUIMÉRICO + AÇÕES -->
-    <section class="card" id="player-card" aria-labelledby="player-title">
-      <div class="creature-header">
-        <div class="creature-title">
-          <h2 id="player-title">Sua Quimera</h2>
-          <small id="metabolic-hint">Adaptação Metabólica: 1 troca Garra ↔ Carapaça grátis por turno</small>
-        </div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap" id="player-statuses"></div>
-      </div>
-
-      <div class="vitals-row">
-        <div class="bar-wrap">
-          <div class="bar-label"><span>Seus PV</span><span id="player-hp-text">28 / 28</span></div>
-          <div class="bar-track"><div class="bar-fill player" id="player-hp-bar" style="width:100%"></div></div>
-        </div>
-        <div class="creature-svg-box" id="player-svg" style="width:74px;height:54px"></div>
-      </div>
-
-      <div class="mutation-strip" id="mutation-strip" hidden></div>
-
-      <div class="Bio-sockets">
-        <div class="socket-group attack-group">
-          <div class="socket-header">
-            <b>🐾 Órgão de Ataque: Garra Predadora</b>
-            <small id="atk-summary-tag">2 encaixes</small>
-          </div>
-          <div class="socket-row" id="attack-sockets"></div>
-        </div>
-
-        <div class="socket-group defense-group">
-          <div class="socket-header">
-            <b>🛡️ Órgão de Defesa: Carapaça Viva</b>
-            <small id="def-summary-tag">2 encaixes</small>
-          </div>
-          <div class="socket-row" id="defense-sockets"></div>
+  <!-- SEÇÃO 2: SEU CIRCUITO DE SINAPSE [SLOT 1 -> SLOT 2 -> SLOT 3 -> SLOT 4] -->
+  <section class="card" id="player-card" aria-labelledby="player-title">
+    <div class="player-top">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 id="player-title" style="margin:0;font-size:1rem">Seu Circuito Biológico</h2>
+        <div class="atp-box" aria-label="Energia Biológica ATP">
+          <span>⚡ Energia: <span id="atp-text">3 / 3</span> ATP</span>
+          <div class="atp-pips" id="atp-pips"></div>
         </div>
       </div>
+      <div class="status-row" id="player-statuses"></div>
+    </div>
 
-      <div class="reserve-strip" id="reserve-strip" hidden></div>
+    <div class="core-bar-wrap">
+      <div class="bar-head"><span>Seus PV</span><span id="player-hp-text">32 / 32</span></div>
+      <div class="bar-track"><div class="bar-fill player-hp" id="player-hp-bar" style="width:100%"></div></div>
+    </div>
 
-      <!-- BOTÕES DE COMBATE -->
-      <div class="combat-actions" id="combat-actions">
-        <button type="button" class="act-btn attack-btn" id="btn-attack">
-          <span class="act-title" id="btn-attack-title">🐾 Atacar com Garra</span>
-          <span class="act-sub" id="btn-attack-sub">4 de dano · Tira 1 de Postura</span>
-        </button>
-        <button type="button" class="act-btn defend-btn" id="btn-defend">
-          <span class="act-title" id="btn-defend-title">🛡️ Erguer Carapaça</span>
-          <span class="act-sub" id="btn-defend-sub">+6 Escudo · Tira 1 de Postura</span>
-        </button>
-      </div>
+    <div class="circuit-banner" id="circuit-banner" hidden></div>
 
-      <!-- PAINEL DE VITÓRIA / DERROTA -->
-      <div id="outcome-panel" style="margin-top:10px" hidden></div>
+    <div class="parts-header">
+      <span>🔗 Trilha de Sinapse (Dispare da Esquerda → Direita para encadear bônus! Use ⇄ para trocar posições grátis)</span>
+    </div>
+    <div class="circuit-track" id="circuit-track"></div>
 
-      <!-- FEED DO TURNO -->
-      <div class="event-feed" id="event-feed" aria-live="polite"></div>
-    </section>
-  </main>
+    <div class="turn-footer" id="turn-footer">
+      <div id="reserve-bar" style="display:flex;gap:5px;flex-wrap:wrap;align-items:center"></div>
+      <button type="button" class="btn-warn end-turn-btn" id="btn-end-turn">⏭️ Encerrar Turno (Inimigo Age)</button>
+    </div>
+
+    <div id="outcome-bar" style="margin-top:10px" hidden></div>
+
+    <div class="event-feed" id="event-feed" aria-live="polite"></div>
+  </section>
 </div>
 
-<!-- MODAL DE ENXERTO DE ASSALTO (1 TOQUE: ESCOLHA ONDE ENXERTAR E JÁ AGE NA HORA!) -->
-<div class="modal-backdrop" id="graft-modal" role="dialog" aria-modal="true" aria-labelledby="graft-modal-title" hidden>
+<!-- MODAL: ESCOLHER EM QUAL SLOT (1..4) INSTALAR UM ÓRGÃO -->
+<div class="modal-backdrop" id="install-modal" role="dialog" aria-modal="true" aria-labelledby="install-title" hidden>
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 id="graft-modal-title">⚡ Enxerto de Assalto!</h3>
-      <button type="button" class="btn-sm btn-ghost" id="btn-close-graft">Voltar</button>
+      <h3 id="install-title">🧬 Onde conectar este órgão?</h3>
+      <button type="button" class="btn-sm btn-ghost" id="btn-close-install">Cancelar</button>
     </div>
-    <p id="graft-modal-desc" style="margin:0;font-size:.82rem;color:var(--muted)"></p>
-    <div class="graft-choice-grid" id="graft-choices"></div>
+    <p id="install-desc" style="margin:0;font-size:.8rem;color:var(--muted)"></p>
+    <div class="slot-pick-grid" id="slot-pick-grid"></div>
   </div>
 </div>
 
-<!-- MODAL: ATLAS GENÉTICO (POKÉDEX DE GENES E MUTAÇÕES) -->
+<!-- MODAL: ATLAS DE CIRCUITOS -->
 <div class="modal-backdrop" id="atlas-modal" role="dialog" aria-modal="true" aria-labelledby="atlas-title" hidden>
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 id="atlas-title">📖 Atlas Genético (Suas Descobertas)</h3>
+      <h3 id="atlas-title">📖 Atlas de Órgãos e Circuitos</h3>
       <button type="button" class="btn-sm btn-ghost" id="btn-close-atlas">Fechar</button>
     </div>
-    <p style="margin:0;font-size:.78rem;color:var(--muted)">Cada órgão funciona de um jeito na <b>Garra</b> e de outro na <b>Carapaça</b>. Combinar pares específicos desperta <b>Mutações</b>!</p>
-    <div class="atlas-grid" id="atlas-list"></div>
+    <div id="atlas-list" style="display:grid;gap:7px;font-size:.79rem"></div>
   </div>
 </div>
 
@@ -430,793 +299,874 @@ button:disabled{opacity:.4;cursor:not-allowed}
 <div class="modal-backdrop" id="how-modal" role="dialog" aria-modal="true" aria-labelledby="how-title" hidden>
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 id="how-title">Como funciona a Caça Biológica</h3>
+      <h3 id="how-title">Como dominar o Circuito Biológico</h3>
       <button type="button" class="btn-sm btn-ghost" id="btn-close-how">Fechar</button>
     </div>
-    <div class="atlas-grid">
-      <div class="atlas-item">
-        <b style="color:var(--accent)">1. Quebre a Postura da Presa atacando ou defendendo</b>
-        Cada vez que você usa sua <b>Garra</b> ou bloqueia com sua <b>Carapaça</b>, a barra amarela de <b>Postura</b> do inimigo cai. Quando ela zera, os órgãos dele ficam <b>EXPOSTOS</b>!
+    <div style="display:grid;gap:8px;font-size:.81rem">
+      <div style="background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:8px">
+        <b style="color:var(--danger);display:block">1. Mire nas Partes do Inimigo e AMPUTE!</b>
+        O inimigo ataca com membros reais (ex.: <b>Cauda de Ferrão</b> e <b>Pinça Esmagadora</b>). Toque na parte que você quer focar. Quando o PV daquela parte chega a 0, você <b>AMPUTA o membro</b>: o ataque que ele ia dar naquele turno é <b>CANCELADO na hora</b> e o órgão cai na mesa para você enxertar!
       </div>
-      <div class="atlas-item">
-        <b style="color:var(--warn)">2. Enxerto de Assalto (Roube + Use no mesmo turno!)</b>
-        Toque num órgão <b>EXPOSTO</b> do inimigo para arrancá-lo na hora! O inimigo perde aquele poder imediatamente e você escolhe:
-        <br>• <b>Enxertar na Garra e JÁ ATACAR</b> com o poder novo; ou
-        <br>• <b>Enxertar na Carapaça e JÁ DEFENDER</b> com o poder novo!
+      <div style="background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:8px">
+        <b style="color:var(--accent);display:block">2. Você tem 3 ATP por turno para criar COMBOS!</b>
+        Cada órgão no seu corpo é uma habilidade ativa que custa ATP. Você pode disparar <b>vários órgãos no mesmo turno</b> antes de clicar em <b>Encerrar Turno</b>.
       </div>
-      <div class="atlas-item">
-        <b style="color:var(--purple)">3. Descubra Mutações e Troque Livremente</b>
-        Você pode tocar em qualquer órgão instalado no seu corpo para passá-lo da <b>Garra ↔ Carapaça</b> sem gastar turno. Combine pares (ex.: <i>Toxina + Impulso</i> ou <i>Espinhos + Vampiro</i>) para despertar <b>Mutações</b>!
+      <div style="background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:8px">
+        <b style="color:var(--warn);display:block">3. Reação em Cadeia (Slot 1 → Slot 2 → Slot 3 → Slot 4)</b>
+        Sempre que você ativa um órgão, ele envia um <b>Pulso de Sinapse para o slot à direita</b> (dando +poder, reduzindo o custo para 0 ATP ou disparando o vizinho de graça!). Use o botão <b>⇄</b> para reordenar seus órgãos e descobrir <b>Circuitos</b>!
       </div>
     </div>
-    <button type="button" class="btn-primary" id="btn-ok-how">Vamos caçar!</button>
+    <button type="button" class="btn-primary" id="btn-ok-how">Entendi, vamos caçar!</button>
   </div>
 </div>
 
 <script>
-/* O Enxerto (New Genome) · Motor v0.9 "Tactical Bio-Hunt"
- * Desenvolvido com /balance-check + /team-combat:
- * - Anatomias e Gatilhos de Postura distintos por presa (elimina spam cego de ataque!)
- * - Limite Metabólico (1 adaptação Garra <-> Carapaça grátis por turno; extra custa 2 PV)
- * - Janela de Exposição de 1 turno (se não roubar, a presa recupera a postura!)
- * - Contra-jogos biológicos reais (Espinhos destrói Escudo/Bobina ou pune Golpe Duplo; Vampiro purifica Veneno; Impulso evade Golpe Letal). */
+/* O Enxerto (New Genome) · Motor v1.0 "Bio-Circuit & Part-Severing Engine"
+ * As 3 engrenagens de profundidade real:
+ * 1) MULTI-AÇÃO POR TURNO (3 ATP): cada órgão instalado é uma HABILIDADE ATIVA que você dispara na ordem que quiser.
+ * 2) MIRA ANATÔMICA E AMPUTAÇÃO: inimigos são compostos por PARTES VIVAS (com PV próprio e ação própria).
+ *    Você escolhe em qual parte mirar! Quebrar o PV de uma parte AMPUTA o membro: cancela o golpe que aquela parte
+ *    ia dar NESTE TURNO e joga o órgão na mesa para você enxertar imediatamente!
+ * 3) CIRCUITO DE SINAPSE (REAÇÃO EM CADEIA): seu corpo tem uma trilha de 4 Slots em cadeia [Slot 1 -> Slot 2 -> Slot 3 -> Slot 4].
+ *    Cada órgão tem um EFEITO DE PULSO (Synapse Trigger): quando ativado, ele envia um pulso para o órgão à direita
+ *    (ex.: reduz custo para 0 ATP, dispara o próximo órgão de graça a 50%, dobra veneno ou converte escudo em dano!). */
 (function (root, factory) {
   const api = factory();
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
-  if (root) root.BioEngine = api;
+  if (root) root.BioCircuit = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this, () => {
   'use strict';
 
-  const VERSION = '0.9.0';
+  const VERSION = '1.0.0';
+  const MAX_ATP = 3;
+  const SLOT_COUNT = 4;
 
-  const GENES = {
-    TOX: {
-      id: 'TOX',
-      name: 'Glândula Tóxica',
-      short: 'Toxina',
-      color: '#a3e635',
-      tag: 'VENENO',
-      summary: 'Aplica Veneno que ignora escudo e derrete PV em todo fim de turno.',
-      onAttack: 'Corte Peçonhento: aplica +4 de Veneno (ignora escudo e corrói todo turno).',
-      onDefense: 'Nuvem Ácida: ganha escudo + aplica +3 de Veneno em quem te atacar.',
-      enemyEffect: 'Ataques dele injetam +3 de Veneno em você.',
-    },
-    SPI: {
-      id: 'SPI',
-      name: 'Espinhos Ósseos',
-      short: 'Espinhos',
+  // Catálogo de Órgãos Ativos (Cada órgão é uma habilidade com Custo de ATP + Efeito Principal + Sinapse para o Slot à Direita!)
+  const ORGANS = {
+    GARRA: {
+      id: 'GARRA',
+      name: 'Garra Predadora',
+      tag: 'CORTE · INICIAL',
       color: '#fb923c',
-      tag: 'PERFURAÇÃO / RETORNO',
-      summary: 'Na Garra: DESTRÓI todo Escudo inimigo! Na Carapaça: fere o inimigo em cada golpe dele.',
-      onAttack: 'Estocada Perfurante: +2 dano, DESTRÓI 100% do Escudo inimigo e +1 quebra de Postura contra escudos!',
-      onDefense: 'Barreira Espinhosa: devolve 4 de dano em CADA golpe recebido (e quebra Postura de atacantes velozes!).',
-      enemyEffect: 'Enquanto ele tiver Espinhos, atacar de frente fere você em 3 de dano!',
+      cost: 1,
+      targetType: 'part', // exige mirar numa parte inimiga
+      desc: 'Causa 4 de dano na parte inimiga escolhida.',
+      synapseDesc: '⚡ Sinapse → Direita: o órgão no slot à direita ganha +2 de poder neste turno!',
     },
-    VAM: {
-      id: 'VAM',
-      name: 'Presa Vampírica',
-      short: 'Vampiro',
-      color: '#f43f5e',
-      tag: 'DRENO / PURIFICAÇÃO',
-      summary: 'Drena sangue ao atacar ou cura +4 PV e limpa todo Veneno ao defender.',
-      onAttack: 'Mordida Sanguessuga: recupera PV igual a 50% do dano causado na carne (mín. +3 PV).',
-      onDefense: 'Sangue Puro: regenera +4 PV na hora e PURIFICA 100% do seu Veneno!',
-      enemyEffect: 'Sempre que um golpe dele ferir seus PV (passar do seu escudo), ele se cura em +4 PV!',
-    },
-    IMP: {
-      id: 'IMP',
-      name: 'Tendão de Impulso',
-      short: 'Rajada 2×',
+    CARAPACA: {
+      id: 'CARAPACA',
+      name: 'Carapaça Viva',
+      tag: 'ESCUDO · INICIAL',
       color: '#38bdf8',
-      tag: 'GOLPE DUPLO / EVASÃO',
-      summary: 'Ataca 2 vezes por turno (quebra postura evasiva) ou corta golpe pesado pela metade.',
-      onAttack: 'Investida Dupla: ataca 2 vezes seguidas (2×) e tira 2 de Postura!',
-      onDefense: 'Reflexo Evasivo: +3 Escudo e reduz o dano de qualquer ataque inimigo neste turno em 50%!',
-      enemyEffect: 'Dá ataques duplos rápidos (2×).',
+      cost: 1,
+      targetType: 'self',
+      desc: 'Ganha +5 de Escudo para bloquear os ataques das partes inimigas.',
+      synapseDesc: '⚡ Sinapse → Direita: se o órgão à direita for usado neste turno, você ganha +3 de Escudo extra!',
     },
-    ELE: {
-      id: 'ELE',
-      name: 'Nervo Elétrico',
-      short: 'Choque',
+    FERRAO: {
+      id: 'FERRAO',
+      name: 'Ferrão Peçonhento',
+      tag: 'VENENO · CATALISADOR',
+      color: '#a3e635',
+      cost: 1,
+      targetType: 'part',
+      desc: 'Causa 3 de dano na parte escolhida + injeta 4 de Veneno no corpo inimigo (ignora escudo!).',
+      synapseDesc: '⚡ Sinapse → Direita: se o inimigo estiver Envenenado, o órgão à direita custa -1 ATP (mín. 0) neste turno!',
+    },
+    PINCA: {
+      id: 'PINCA',
+      name: 'Pinça Esmagadora',
+      tag: 'ESMAGAMENTO · ESPINHOS',
+      color: '#f97316',
+      cost: 2,
+      targetType: 'part',
+      desc: 'Golpe pesado: causa 8 de dano na parte escolhida (+4 extra se você tiver Escudo ativo!) e dá +3 Espinhos.',
+      synapseDesc: '⚡ Sinapse → Direita: ao amputar uma parte, dispara o órgão à direita AUTOMATICAMENTE de graça!',
+    },
+    FOICE: {
+      id: 'FOICE',
+      name: 'Asa-Foice Veloz',
+      tag: 'GOLPE DUPLO · CONDUTOR',
+      color: '#22d3ee',
+      cost: 1,
+      targetType: 'part',
+      desc: 'Corta 2 vezes (2×3 = 6 de dano) na parte escolhida.',
+      synapseDesc: '⚡ Sinapse → Direita: reduz o custo do órgão à direita em -1 ATP neste turno!',
+    },
+    PRESA_VAMP: {
+      id: 'PRESA_VAMP',
+      name: 'Mandíbula Vampírica',
+      tag: 'DRENO · PURIFICAÇÃO',
+      color: '#f43f5e',
+      cost: 1,
+      targetType: 'part',
+      desc: 'Morde a parte escolhida causando 5 de dano, cura +4 PV seus e limpa seu Veneno.',
+      synapseDesc: '⚡ Sinapse → Direita: sempre que você se curar, o órgão à direita ganha +3 de poder neste turno!',
+    },
+    BOBINA: {
+      id: 'BOBINA',
+      name: 'Bobina Voltaica',
+      tag: 'CHOQUE · PARALISIA',
       color: '#facc15',
-      tag: 'CHOQUE / CURTO-CIRCUITO',
-      summary: 'Sobrecarga de postura no ataque ou enfraquece o ataque inimigo em -5 na defesa.',
-      onAttack: 'Garra Voltaica: +2 dano e causa +1 dano extra de Postura em qualquer presa!',
-      onDefense: 'Pulso Eletromagnético: reduz o ataque inimigo deste turno em -5 de dano total e tira 1 Postura!',
-      enemyEffect: 'Causa +4 de dano elétrico extra se você não usar Carapaça no turno!',
+      cost: 1,
+      targetType: 'part',
+      desc: 'Choque de 4 de dano na parte escolhida e ENFRAQUECE aquela parte em -4 de dano neste turno!',
+      synapseDesc: '⚡ Sinapse → Direita: dispara um pulso que duplica o efeito de Sinapse ou dá +3 de poder ao órgão à direita!',
     },
-    CAT: {
-      id: 'CAT',
-      name: 'Núcleo Catalisador',
-      short: 'Catalisador',
-      color: '#c084fc',
+    CATALISADOR: {
+      id: 'CATALISADOR',
+      name: 'Núcleo Quimérico Alfa',
       tag: 'RARO · DETONAÇÃO',
-      summary: 'Explode o Veneno do inimigo em dano imediato (2×) ou converte Escudo em ataque!',
-      onAttack: 'Detonação Bioquímica: além do ataque, EXPLODE o Veneno no inimigo causando 2× o Veneno na hora (sem apagar o veneno)!',
-      onDefense: 'Conversão Cinética: +5 Escudo; todo escudo que sobrar vira BÔNUS de dano na sua próxima Garra!',
-      enemyEffect: 'Amplifica todos os golpes do Boss em +3 de dano.',
+      color: '#c084fc',
+      cost: 1,
+      targetType: 'part',
+      desc: 'Causa 4 de dano + EXPLODE o Veneno do inimigo causando 2× o Veneno na parte mirado (sem apagar o veneno)!',
+      synapseDesc: '⚡ Sinapse → Direita: recupera +1 ATP imediatamente quando ativado!',
     },
   };
 
-  const MUTATIONS = [
+  // Mutações de Circuito (ativam automaticamente quando pares estão conectados lado a lado [Slot i -> Slot i+1])
+  const CIRCUIT_MUTATIONS = [
     {
-      id: 'MUT_PECONHA_FRENETICA',
-      genes: ['TOX', 'IMP'],
-      name: 'Mutação: Frenesi Peçonhento',
-      desc: 'Seus ataques aplicam +3 de Veneno extra por turno!',
+      id: 'CM_INJECAO_PRESSURIZADA',
+      pair: ['FERRAO', 'GARRA'],
+      name: 'Circuito: Injeção Pressurizada',
+      desc: 'Ferrão → Garra: a Garra custa 0 ATP após o Ferrão e aplica +2 de Veneno ao cortar!',
     },
     {
-      id: 'MUT_CARAPACA_VAMPIRICA',
-      genes: ['SPI', 'VAM'],
-      name: 'Mutação: Espinhos Sanguessugas',
-      desc: 'Cada vez que seus Espinhos ferem o inimigo, você drena +2 PV!',
+      id: 'CM_CONTRA_IMPACTO',
+      pair: ['CARAPACA', 'PINCA'],
+      name: 'Circuito: Ariete Blindado',
+      desc: 'Carapaça → Pinça: usar a Carapaça reduz o custo da Pinça de 2 para 1 ATP e soma seu Escudo ao dano!',
     },
     {
-      id: 'MUT_TEMPESTADE_TOXICA',
-      genes: ['TOX', 'ELE'],
-      name: 'Mutação: Sinapse Corrosiva',
-      desc: 'Inimigos envenenados causam -3 de dano em cada golpe e perdem +1 Postura ao atacar sua Carapaça!',
+      id: 'CM_FRENESI_SANGUINARIO',
+      pair: ['FOICE', 'PRESA_VAMP'],
+      name: 'Circuito: Frenesi Sanguinário',
+      desc: 'Asa-Foice → Mandíbula: a Mandíbula custa 0 ATP após a Asa-Foice e morde 2 vezes!',
     },
     {
-      id: 'MUT_PREDADOR_APEX',
-      genes: ['IMP', 'ELE'],
-      name: 'Mutação: Sobrecarga Relâmpago',
-      desc: 'Cada golpe da sua Garra ganha +2 de dano e ignora esquiva de postura!',
+      id: 'CM_SOBRECARGA_TOXICA',
+      pair: ['BOBINA', 'FERRAO'],
+      name: 'Circuito: Bio-Eletrólise',
+      desc: 'Bobina → Ferrão: o choque abre os poros da presa e faz o Ferrão aplicar o DOBRO de Veneno (+8)!',
     },
     {
-      id: 'MUT_BOMBA_BIOLOGICA',
-      genes: ['TOX', 'CAT'],
-      name: 'Mutação: Bomba Biológica',
-      desc: 'Qualquer aplicação de Veneno aplica +3 extra e a Detonação causa 3× o Veneno!',
-    },
-    {
-      id: 'MUT_COURACA_REATIVA',
-      genes: ['SPI', 'CAT'],
-      name: 'Mutação: Couraça Reativa',
-      desc: 'Seus Espinhos na Carapaça devolvem o dobro de dano (8 por golpe)!',
+      id: 'CM_REATOR_QUIMERICO',
+      pair: ['FERRAO', 'CATALISADOR'],
+      name: 'Circuito: Reator Quimérico',
+      desc: 'Ferrão → Núcleo Alfa: o Núcleo Alfa custa 0 ATP e detona 3× o Veneno!',
     },
   ];
 
-  // 4 Presas Táticas com Anatomias de Postura e Intenções que exigem contra-jogo real
+  // Encontros com Anatomia Multi-Partes!
+  // Cada parte tem PV próprio, intenção própria no turno e dropa um órgão real ao ser amputada!
   const ENCOUNTERS = [
     {
       id: 'escorpiao',
       stage: 1,
       name: 'Escorpião de Lodo',
-      subtitle: 'Presa 1 de 4 · Encouraçado Ácido',
-      hp: 22,
-      maxStagger: 2,
-      staggerRule: 'guard_bonus',
-      staggerRuleText: 'Anatomia: Atacar tira 1 Postura (mas você leva 3 de dano dos Espinhos dele!). Defender com Carapaça tira 2 Postura de uma vez e expõe os órgãos sem se espetar!',
-      genes: ['TOX', 'SPI'],
-      intents: [
-        { name: 'Ferrão Ácido', hits: [6], type: 'attack', desc: '6 de dano + injeta 3 de Veneno.' },
-        { name: 'Pinça Dupla', hits: [4, 4], type: 'attack', desc: '2 golpes de 4 + injeta Veneno.' },
-        { name: 'Enrolar Casco', shield: 6, type: 'defend', desc: 'Ganha +6 de Escudo.' },
+      subtitle: 'Caçada 1 de 4 · Aracnídeo Biológico',
+      coreHp: 22,
+      parts: [
+        {
+          id: 'cauda_ferrao',
+          name: 'Cauda de Ferrão',
+          organId: 'FERRAO',
+          maxHp: 8,
+          intents: [
+            { type: 'attack', name: 'Aguilhão Tóxico', dmg: 5, poison: 3 },
+            { type: 'attack', name: 'Aguilhão Tóxico', dmg: 5, poison: 3 },
+            { type: 'buff', name: 'Destilar Veneno', poison: 4, dmg: 2 },
+          ],
+        },
+        {
+          id: 'pinca_blindada',
+          name: 'Pinça Esmagadora',
+          organId: 'PINCA',
+          maxHp: 11,
+          intents: [
+            { type: 'defend', name: 'Guarda de Quitina', shield: 4, thorns: 2 },
+            { type: 'attack', name: 'Tenaz Brutal', dmg: 7 },
+            { type: 'attack', name: 'Tenaz Brutal', dmg: 7 },
+          ],
+        },
       ],
-      tip: 'Ele tem Espinhos (atacar de cara te machuca em 3!). Use CARAPAÇA no Turno 1 para bloquear o Ferrão e quebrar as 2 Posturas dele de uma vez!',
     },
     {
       id: 'louva_deus',
       stage: 2,
       name: 'Louva-a-Deus Sanguinário',
-      subtitle: 'Presa 2 de 4 · Assassino Evasivo',
-      hp: 28,
-      maxStagger: 2,
-      staggerRule: 'evasive',
-      staggerRuleText: 'Anatomia Evasiva: Golpes simples (1×) NÃO tiram Postura dele! Quebre a postura devolvendo dano com ESPINHOS na Carapaça contra a Foice Dupla, ou com Veneno ≥ 4!',
-      genes: ['IMP', 'VAM'],
-      intents: [
-        { name: 'Foice Dupla Voraz', hits: [5, 5], type: 'attack', desc: '2 golpes de 5. Se ferir seus PV, ele drena +4 PV por golpe!' },
-        { name: 'Salto Guilhotina', hits: [9], type: 'attack', desc: 'Golpe pesado de 9 (drena +4 PV se ferir sua carne).' },
-        { name: 'Foice Dupla Voraz', hits: [5, 5], type: 'attack', desc: '2 golpes de 5 com dreno de sangue.' },
+      subtitle: 'Caçada 2 de 4 · Predador de Emboscada',
+      coreHp: 28,
+      parts: [
+        {
+          id: 'asa_foice',
+          name: 'Asas-Foice Duplas',
+          organId: 'FOICE',
+          maxHp: 11,
+          intents: [
+            { type: 'attack', name: 'Rajada Cortante', dmg: 4, hits: 2 },
+            { type: 'attack', name: 'Vendaval de Lâminas', dmg: 5, hits: 2 },
+            { type: 'attack', name: 'Rajada Cortante', dmg: 4, hits: 2 },
+          ],
+        },
+        {
+          id: 'mandibula_vamp',
+          name: 'Mandíbula Vampírica',
+          organId: 'PRESA_VAMP',
+          maxHp: 12,
+          intents: [
+            { type: 'attack', name: 'Mordida Drenante', dmg: 5, lifesteal: 4 },
+            { type: 'defend', name: 'Regeneração Voraz', shield: 5, heal: 4 },
+            { type: 'attack', name: 'Rasgo de Artéria', dmg: 7, lifesteal: 5 },
+          ],
+        },
       ],
-      tip: 'Ele esquiva de golpes simples e se cura se ferir você! Mova seus ESPINHOS para a CARAPAÇA e defenda a Foice Dupla: ele se espeta 2× (8 de dano) e quebra a postura na hora!',
     },
     {
       id: 'enguia',
       stage: 3,
-      name: 'Enguia Voltaica',
-      subtitle: 'Presa 3 de 4 · Bobina de Alta Tensão',
-      hp: 34,
-      maxStagger: 2,
-      staggerRule: 'shield_coil',
-      staggerRuleText: 'Anatomia de Bobina: Enquanto ela tiver Escudo, sua Postura é IMUNE! Quebre o escudo com Espinhos na Garra (Perfuração) ou ataque duplo/elétrico para cancelar a Descarga Letal!',
-      genes: ['ELE', 'TOX'],
-      intents: [
-        { name: 'Sobrecarga de Bobina', shield: 10, hits: [4], type: 'coil_charge', desc: 'Ganha +10 Escudo, bate 4 e carrega a DESCARGA LETAL (16 dano) para o próximo turno!' },
-        { name: 'DESCARGA LETAL', hits: [8, 8], type: 'attack', isCharged: true, desc: '16 de dano elétrico (+4 se você não defender)! Quebre a Postura/Escudo dela antes para cancelar!' },
-        { name: 'Choque Residual', hits: [6], type: 'attack', desc: '6 de dano elétrico.' },
+      name: 'Enguia de Alta Tensão',
+      subtitle: 'Caçada 3 de 4 · Condutor Abissal',
+      coreHp: 34,
+      parts: [
+        {
+          id: 'bobina_voltaica',
+          name: 'Bobina Dorsal',
+          organId: 'BOBINA',
+          maxHp: 13,
+          intents: [
+            { type: 'defend', name: 'Campo Magnético', shield: 7, dmg: 4 },
+            { type: 'attack', name: 'DESCARGA DE PLASMA', dmg: 12 },
+            { type: 'attack', name: 'Arco Voltaico', dmg: 7 },
+          ],
+        },
+        {
+          id: 'glandula_abissal',
+          name: 'Saco Peçonhento',
+          organId: 'FERRAO',
+          maxHp: 11,
+          intents: [
+            { type: 'attack', name: 'Jato Corrosivo', dmg: 4, poison: 3 },
+            { type: 'attack', name: 'Mordida Ácida', dmg: 5, poison: 3 },
+            { type: 'defend', name: 'Névoa Tóxica', shield: 5, poison: 3 },
+          ],
+        },
       ],
-      tip: 'Ela começa com +10 Escudo preparando a DESCARGA LETAL! Coloque ESPINHOS na GARRA (destrói 100% do escudo e tira 2 Postura!) para expor e arrancar o Nervo Elétrico antes da Descarga!',
     },
     {
-      id: 'behemoth',
+      id: 'quimera_alfa',
       stage: 4,
-      name: 'Quimera Catalisadora (Boss)',
-      subtitle: 'Presa Final 4 de 4 · Predador Alfa',
-      hp: 46,
-      maxStagger: 3,
-      staggerRule: 'apex',
-      staggerRuleText: 'Anatomia Alfa: Postura 3. Perde Postura ao sofrer Golpes Duplos/Perfurantes, Espinhos na Defesa ou quando tem ≥ 6 de Veneno acumulado.',
-      genes: ['CAT', 'SPI', 'VAM'],
-      intents: [
-        { name: 'Fúria Quimérica', hits: [5, 5], type: 'attack', desc: '2 golpes brutos amplificados pelo Catalisador (+dreno se ferir sua carne).' },
-        { name: 'Muralha Espinhosa', shield: 10, type: 'defend', desc: 'Ganha +10 Escudo e reflete ataques se ainda tiver Espinhos.' },
-        { name: 'Cataclismo Alfa', hits: [14], type: 'attack', desc: 'Golpe colossal de 14! Use Reflexo Evasivo (Impulso na Carapaça) ou Pulso Elétrico na Carapaça!' },
+      name: 'Quimera Catalisadora (Boss Alfa)',
+      subtitle: 'Caçada Final 4 de 4 · Apex Genético',
+      coreHp: 46,
+      parts: [
+        {
+          id: 'nucleo_alfa',
+          name: 'Núcleo Catalisador',
+          organId: 'CATALISADOR',
+          maxHp: 14,
+          intents: [
+            { type: 'attack', name: 'Pulso Catalítico', dmg: 6, poison: 2 },
+            { type: 'attack', name: 'DETONAÇÃO ALFA', dmg: 13 },
+            { type: 'defend', name: 'Reator Blindado', shield: 8, heal: 4 },
+          ],
+        },
+        {
+          id: 'garra_abissal',
+          name: 'Tenaz Vampírica',
+          organId: 'PRESA_VAMP',
+          maxHp: 14,
+          intents: [
+            { type: 'attack', name: 'Ceifa Dupla', dmg: 4, hits: 2, lifesteal: 3 },
+            { type: 'defend', name: 'Couraça de Espinhos', shield: 6, thorns: 3 },
+            { type: 'attack', name: 'Execução Quimérica', dmg: 9, lifesteal: 5 },
+          ],
+        },
       ],
-      tip: 'O Boss exige maestria: use Espinhos/Impulso/Elétrico na Carapaça quando ele atacar forte, e passe Espinhos/Toxina para a Garra quando ele erguer a Muralha de 10 Escudo!',
     },
   ];
 
-  function detectMutations(slots) {
-    const equipped = new Set([
-      ...slots.attack.filter(Boolean),
-      ...slots.defense.filter(Boolean),
-    ]);
-    return MUTATIONS.filter(m => m.genes.every(g => equipped.has(g)));
+  function detectActiveCircuits(slots) {
+    const found = [];
+    for (let i = 0; i < slots.length - 1; i++) {
+      const a = slots[i];
+      const b = slots[i + 1];
+      if (!a || !b) continue;
+      for (const cm of CIRCUIT_MUTATIONS) {
+        if (cm.pair[0] === a && cm.pair[1] === b) {
+          found.push({ ...cm, fromSlot: i, toSlot: i + 1 });
+        }
+      }
+    }
+    return found;
+  }
+
+  function createPartState(partSpec, turn = 0) {
+    const intent = partSpec.intents[turn % partSpec.intents.length];
+    return {
+      id: partSpec.id,
+      name: partSpec.name,
+      organId: partSpec.organId,
+      hp: partSpec.maxHp,
+      maxHp: partSpec.maxHp,
+      severed: false,
+      harvested: false,
+      weakenThisTurn: 0,
+      intent: { ...intent },
+    };
   }
 
   function createRunState(stageIndex = 0, carry = null) {
     const enc = ENCOUNTERS[stageIndex];
     const slots = carry?.slots
-      ? { attack: [...carry.slots.attack], defense: [...carry.slots.defense] }
-      : { attack: [null, null], defense: [null, null] };
+      ? [...carry.slots]
+      : ['GARRA', 'CARAPACA', null, null];
     const reserve = carry?.reserve ? [...carry.reserve] : [];
-    const atlas = carry?.atlas ? new Set(carry.atlas) : new Set();
-    for (const g of enc.genes) atlas.add(`GENE:${g}`);
-    for (const m of detectMutations(slots)) atlas.add(`MUT:${m.id}`);
+    const atlas = carry?.atlas ? new Set(carry.atlas) : new Set(['ORGAN:GARRA', 'ORGAN:CARAPACA']);
 
-    const maxHp = 30;
+    for (const p of enc.parts) atlas.add(`ORGAN:${p.organId}`);
+    for (const cm of detectActiveCircuits(slots)) atlas.add(`CIRCUIT:${cm.id}`);
+
+    const maxHp = 32;
     const playerHp = carry?.playerHp ? Math.min(maxHp, carry.playerHp + 10) : maxHp;
+    const parts = enc.parts.map(p => createPartState(p, 0));
+
+    // O inimigo já começa com eventual escudo/espinhos de partes que abrem em modo defend
+    let initEnemyShield = 0;
+    let initEnemyThorns = 0;
+    for (const p of parts) {
+      if (p.intent.type === 'defend') {
+        initEnemyShield += p.intent.shield || 0;
+        initEnemyThorns += p.intent.thorns || 0;
+      }
+    }
 
     return {
       version: VERSION,
       stageIndex,
       encounterId: enc.id,
       turn: 0,
-      swapsUsedThisTurn: 0,
+      atp: MAX_ATP,
+      maxAtp: MAX_ATP,
       playerHp,
       playerMaxHp: maxHp,
       playerShield: 0,
       playerPoison: 0,
-      kineticBonus: 0,
-      enemyHp: enc.hp,
-      enemyMaxHp: enc.hp,
-      enemyShield: 0,
+      playerThorns: 0,
+      enemyCoreHp: enc.coreHp,
+      enemyMaxCoreHp: enc.coreHp,
+      enemyShield: initEnemyShield,
+      enemyThorns: initEnemyThorns,
       enemyPoison: 0,
-      enemyStagger: enc.maxStagger,
-      enemyMaxStagger: enc.maxStagger,
-      enemyExposed: false,
-      enemyGenes: [...enc.genes],
+      parts,
+      selectedTarget: parts[0].id, // mira padrão na 1ª parte viva
       slots,
+      slotMod: Array.from({ length: SLOT_COUNT }, () => ({ costDelta: 0, powerBonus: 0, usedThisTurn: 0 })),
       reserve,
+      looseOrgans: [], // órgãos amputados no chão prontos para enxertar grátis!
       atlas: [...atlas],
       outcome: 'ongoing',
-      lastEvents: [],
+      turnLog: [
+        `🎯 Caçada iniciada contra ${enc.name}! Mire em uma parte viva para amputá-la e roubar seu órgão.`,
+      ],
     };
   }
 
-  function getEnemyIntent(state) {
-    const enc = ENCOUNTERS[state.stageIndex];
-    const base = enc.intents[state.turn % enc.intents.length];
-    const hasGene = id => state.enemyGenes.includes(id);
-
-    if (base.type === 'defend') {
-      return {
-        ...base,
-        hits: [],
-        shield: base.shield,
-        thorns: hasGene('SPI') ? 3 : 0,
-      };
-    }
-
-    let hits = [...base.hits];
-    // Se arrancou IMP do Louva-a-Deus, golpe duplo vira golpe único!
-    if (hits.length > 1 && enc.genes.includes('IMP') && !hasGene('IMP')) {
-      hits = [hits[0]];
-    }
-    // Se arrancou ELE da Enguia, a Descarga Letal perde metade da força!
-    if (base.isCharged && !hasGene('ELE')) {
-      hits = [4];
-    }
-    // Se o Boss tem CAT, soma +2 em cada golpe
-    if (hasGene('CAT')) {
-      hits = hits.map(h => h + 2);
-    }
-
+  function cloneState(s) {
     return {
-      ...base,
-      hits,
-      shield: base.shield || 0,
-      totalRaw: hits.reduce((a, b) => a + b, 0),
-      appliesPoison: hasGene('TOX') ? 3 : 0,
-      lifesteal: hasGene('VAM') ? 4 : 0,
-      elecBonus: hasGene('ELE') ? 4 : 0,
-      thorns: hasGene('SPI') ? 3 : 0,
+      ...s,
+      parts: s.parts.map(p => ({ ...p, intent: { ...p.intent } })),
+      slots: [...s.slots],
+      slotMod: s.slotMod.map(m => ({ ...m })),
+      reserve: [...s.reserve],
+      looseOrgans: [...s.looseOrgans],
+      atlas: [...s.atlas],
+      turnLog: [...s.turnLog],
     };
   }
 
-  function describePlayerActions(state) {
-    const atkGenes = state.slots.attack.filter(Boolean);
-    const defGenes = state.slots.defense.filter(Boolean);
-    const muts = detectMutations(state.slots);
-    const hasMut = id => muts.some(m => m.id === id);
+  // Calcula o custo real de ATP e o poder efetivo do órgão no slotIndex considerando Sinapses e Circuitos!
+  function getSlotEffectiveStats(state, slotIndex) {
+    const organId = state.slots[slotIndex];
+    if (!organId) return null;
+    const def = ORGANS[organId];
+    const mod = state.slotMod[slotIndex] || { costDelta: 0, powerBonus: 0, usedThisTurn: 0 };
+    const circuits = detectActiveCircuits(state.slots);
+    const incomingCircuit = circuits.find(c => c.toSlot === slotIndex);
 
-    const hasImp = atkGenes.includes('IMP');
-    const hasSpi = atkGenes.includes('SPI');
-    const hasTox = atkGenes.includes('TOX');
-    const hasVam = atkGenes.includes('VAM');
-    const hasEle = atkGenes.includes('ELE');
-    const hasCat = atkGenes.includes('CAT');
+    let cost = Math.max(0, def.cost + mod.costDelta);
+    let powerBonus = mod.powerBonus;
+    let extraNotes = [];
 
-    let baseHit = hasImp ? 3 : 4;
-    if (hasSpi) baseHit += 2;
-    if (hasEle) baseHit += 2;
-    if (hasMut('MUT_PREDADOR_APEX')) baseHit += 2;
-
-    const hitCount = hasImp ? 2 : 1;
-    const hits = Array.from({ length: hitCount }, () => baseHit);
-    if (state.kineticBonus > 0) hits[0] += state.kineticBonus;
-
-    let poisonApplied = hasTox ? 4 : 0;
-    if (poisonApplied > 0 && hasMut('MUT_PECONHA_FRENETICA')) poisonApplied += 3;
-    if (poisonApplied > 0 && hasMut('MUT_BOMBA_BIOLOGICA')) poisonApplied += 3;
-
-    const attackTitleParts = ['Garra'];
-    if (atkGenes.length) attackTitleParts.push('+ ' + atkGenes.map(g => GENES[g].short).join(' + '));
-
-    // Defesa da Carapaça
-    let shieldGain = 6;
-    if (defGenes.includes('IMP')) shieldGain += 3;
-    if (defGenes.includes('CAT')) shieldGain += 5;
-
-    const thorns = defGenes.includes('SPI') ? (hasMut('MUT_COURACA_REATIVA') ? 8 : 4) : 0;
-    const defHeal = defGenes.includes('VAM') ? 4 : 0;
-    const defPoison = defGenes.includes('TOX') ? (hasMut('MUT_BOMBA_BIOLOGICA') ? 5 : 3) : 0;
-    const defHalf = defGenes.includes('IMP');
-    const defWeaken = defGenes.includes('ELE') ? 5 : 0;
-    const defKinetic = defGenes.includes('CAT');
-
-    const defenseTitleParts = ['Carapaça'];
-    if (defGenes.length) defenseTitleParts.push('+ ' + defGenes.map(g => GENES[g].short).join(' + '));
-
-    return {
-      mutations: muts,
-      attack: {
-        title: attackTitleParts.join(' '),
-        hits,
-        totalRaw: hits.reduce((a, b) => a + b, 0),
-        shatterShield: hasSpi,
-        poisonApplied,
-        lifesteal: hasVam,
-        hasImp,
-        hasEle,
-        ignoreEvasive: hasImp || hasEle || hasMut('MUT_PREDADOR_APEX'),
-        detonatePoison: hasCat,
-        detonateMult: hasMut('MUT_BOMBA_BIOLOGICA') ? 3 : 2,
-      },
-      defense: {
-        title: defenseTitleParts.join(' '),
-        shieldGain,
-        thorns,
-        thornsHeal: hasMut('MUT_CARAPACA_VAMPIRICA') ? 2 : 0,
-        heal: defHeal,
-        cleanse: defGenes.includes('VAM'),
-        poisonCounter: defPoison,
-        halfDamage: defHalf,
-        weakenDamage: defWeaken,
-        empStagger: defGenes.includes('ELE') ? 1 : 0,
-        kineticConvert: defKinetic,
-      },
-    };
-  }
-
-  function cloneState(state) {
-    return {
-      ...state,
-      enemyGenes: [...state.enemyGenes],
-      slots: {
-        attack: [...state.slots.attack],
-        defense: [...state.slots.defense],
-      },
-      reserve: [...state.reserve],
-      atlas: [...state.atlas],
-      lastEvents: [...(state.lastEvents || [])],
-    };
-  }
-
-  // Equipa ou alterna um órgão entre Garra, Carapaça e Reserva.
-  // 1ª adaptação do turno é GRÁTIS; adaptações extras no mesmo turno custam 2 PV (Estresse Metabólico),
-  // a menos que freeOverride = true (usado pelo Enxerto de Assalto).
-  function equipGene(state, geneId, targetGroup, slotIndex, { freeOverride = false } = {}) {
-    const s = cloneState(state);
-    if (!freeOverride && s.swapsUsedThisTurn >= 1) {
-      if (s.playerHp <= 2) {
-        throw new Error('PV insuficiente para Estresse Metabólico (2ª troca no mesmo turno custa 2 PV).');
+    if (incomingCircuit) {
+      const leftMod = state.slotMod[slotIndex - 1];
+      if (leftMod && leftMod.usedThisTurn > 0) {
+        if (incomingCircuit.id === 'CM_INJECAO_PRESSURIZADA') {
+          cost = 0;
+          extraNotes.push('Circuito: 0 ATP +2 Veneno!');
+        } else if (incomingCircuit.id === 'CM_CONTRA_IMPACTO') {
+          cost = Math.max(0, cost - 1);
+          powerBonus += state.playerShield;
+          extraNotes.push(`Circuito: -1 ATP e +${state.playerShield} dano do Escudo!`);
+        } else if (incomingCircuit.id === 'CM_FRENESI_SANGUINARIO') {
+          cost = 0;
+          extraNotes.push('Circuito: 0 ATP e Morde 2×!');
+        } else if (incomingCircuit.id === 'CM_SOBRECARGA_TOXICA') {
+          extraNotes.push('Circuito: Aplica DOBRO de Veneno (+8)!');
+        } else if (incomingCircuit.id === 'CM_REATOR_QUIMERICO') {
+          cost = 0;
+          extraNotes.push('Circuito: 0 ATP e Detona 3× Veneno!');
+        }
       }
-      s.playerHp -= 2;
-      s.lastEvents = [
-        { type: 'metabolic_cost', text: `⚠️ Estresse Metabólico: 2ª reconfiguração no mesmo turno custou -2 PV.` },
-        ...s.lastEvents,
-      ];
     }
-    if (!freeOverride) s.swapsUsedThisTurn += 1;
 
-    for (const grp of ['attack', 'defense']) {
-      s.slots[grp] = s.slots[grp].map(g => (g === geneId ? null : g));
-    }
-    s.reserve = s.reserve.filter(g => g !== geneId);
+    return {
+      slotIndex,
+      organId,
+      def,
+      cost,
+      powerBonus,
+      usedThisTurn: mod.usedThisTurn,
+      canAfford: state.atp >= cost && state.outcome === 'ongoing',
+      incomingCircuit,
+      extraNotes,
+    };
+  }
 
-    if (targetGroup === 'reserve') {
-      s.reserve.push(geneId);
+  function selectTarget(state, targetId) {
+    const s = cloneState(state);
+    s.selectedTarget = targetId;
+    return s;
+  }
+
+  // Reorganiza ou enxerta um órgão (da mesa `looseOrgans`, da `reserve` ou trocando slots)
+  function installOrgan(state, organId, targetSlotIndex) {
+    const s = cloneState(state);
+    const fromLoose = s.looseOrgans.includes(organId);
+    s.looseOrgans = s.looseOrgans.filter(id => id !== organId);
+    s.reserve = s.reserve.filter(id => id !== organId);
+
+    // Se o órgão já estava em outro slot, faz swap limpo!
+    const existingIdx = s.slots.indexOf(organId);
+    const displaced = s.slots[targetSlotIndex];
+
+    if (existingIdx !== -1 && existingIdx !== targetSlotIndex) {
+      s.slots[existingIdx] = displaced;
+      s.slots[targetSlotIndex] = organId;
+      // Também troca os modificadores de pulso
+      const tmpMod = s.slotMod[existingIdx];
+      s.slotMod[existingIdx] = s.slotMod[targetSlotIndex];
+      s.slotMod[targetSlotIndex] = tmpMod;
     } else {
-      const displaced = s.slots[targetGroup][slotIndex];
-      if (displaced && displaced !== geneId) s.reserve.push(displaced);
-      s.slots[targetGroup][slotIndex] = geneId;
+      if (displaced && displaced !== organId) {
+        s.reserve.push(displaced);
+      }
+      s.slots[targetSlotIndex] = organId;
+    }
+
+    // Bônus de Enxerto Fresco: enxertar um órgão recém-amputado da mesa dá +4 Escudo e +1 ATP na hora!
+    if (fromLoose) {
+      s.playerShield += 4;
+      s.atp = Math.min(s.maxAtp + 1, s.atp + 1);
+      s.turnLog.unshift(`🧬 ENXERTO QUENTE! Você instalou ${ORGANS[organId].name} no Slot ${targetSlotIndex + 1} e ganhou +1 ATP e +4 Escudo!`);
+    } else {
+      s.turnLog.unshift(`🔄 Circuito reorganizado: ${ORGANS[organId].name} no Slot ${targetSlotIndex + 1}.`);
     }
 
     const atlasSet = new Set(s.atlas);
-    atlasSet.add(`GENE:${geneId}`);
-    for (const m of detectMutations(s.slots)) atlasSet.add(`MUT:${m.id}`);
+    atlasSet.add(`ORGAN:${organId}`);
+    for (const cm of detectActiveCircuits(s.slots)) atlasSet.add(`CIRCUIT:${cm.id}`);
     s.atlas = [...atlasSet];
     return s;
   }
 
-  // Calcula quanta Postura o inimigo perde com base na Anatomia específica da presa!
-  function applyStaggerDamage(s, delta, reasonText, events) {
-    if (s.enemyHp <= 0 || s.enemyExposed || s.enemyGenes.length === 0 || delta <= 0) return;
-    const enc = ENCOUNTERS[s.stageIndex];
-    // Regra da Bobina (Enguia): enquanto tiver Escudo > 0, a postura é imune!
-    if (enc.staggerRule === 'shield_coil' && s.enemyShield > 0) {
-      events.push({ type: 'stagger_immune', text: `⚡ A Bobina de Escudo (${s.enemyShield}) protegeu a Postura da Enguia! Destrua o escudo primeiro!` });
-      return;
+  // Causa dano na Parte escolhida (e no Core HP do inimigo!). Se a parte chegar a 0 PV, AMPUTA!
+  function applyDamageToEnemyTarget(s, targetId, rawDamage, events, { ignoreShield = false } = {}) {
+    if (s.enemyCoreHp <= 0 || rawDamage <= 0) return { dealt: 0, severedNow: null };
+    let dmg = rawDamage;
+
+    if (!ignoreShield && s.enemyShield > 0) {
+      const abs = Math.min(s.enemyShield, dmg);
+      s.enemyShield -= abs;
+      dmg -= abs;
+      if (abs > 0) events.push(`🛡️ O Escudo inimigo absorveu ${abs} de dano.`);
     }
-    s.enemyStagger = Math.max(0, s.enemyStagger - delta);
-    if (s.enemyStagger === 0) {
-      s.enemyExposed = true;
-      events.push({
-        type: 'expose',
-        text: `🔓 POSTURA QUEBRADA (${reasonText})! Os órgãos inimigos estão EXPOSTOS neste turno — toque neles para arrancar!`,
-      });
+
+    if (dmg <= 0) return { dealt: 0, severedNow: null };
+
+    const part = s.parts.find(p => p.id === targetId && !p.severed);
+    let severedNow = null;
+
+    if (part) {
+      const pDealt = Math.min(part.hp, dmg);
+      part.hp -= pDealt;
+      s.enemyCoreHp = Math.max(0, s.enemyCoreHp - dmg);
+      if (part.hp <= 0 && !part.severed) {
+        part.severed = true;
+        severedNow = part;
+        // Amputar uma parte que estava dando escudo/espinhos remove os espinhos dela!
+        if (part.intent.type === 'defend' && part.intent.thorns) {
+          s.enemyThorns = Math.max(0, s.enemyThorns - part.intent.thorns);
+        }
+        // Dropa o órgão na mesa para enxertar grátis (se você ainda não tiver 2 cópias)
+        s.looseOrgans.push(part.organId);
+        events.push(
+          `🩸 AMPUTAÇÃO! Você destruiu ${part.name}! A ação "${part.intent.name}" foi CANCELADA e o órgão [${ORGANS[part.organId].name}] caiu na mesa para enxerto!`
+        );
+        // Muda a mira automaticamente para outra parte viva (ou para o núcleo)
+        const nextAlive = s.parts.find(p => !p.severed);
+        s.selectedTarget = nextAlive ? nextAlive.id : 'core';
+      }
     } else {
-      events.push({
-        type: 'stagger_hit',
-        text: `🎯 ${reasonText}: -${delta} Postura inimiga (resta ${s.enemyStagger}/${s.enemyMaxStagger}).`,
-      });
+      // Dano direto no Núcleo Expulso
+      s.enemyCoreHp = Math.max(0, s.enemyCoreHp - dmg);
     }
+
+    // Se o inimigo tem Espinhos ativos, fere o atacante
+    if (s.enemyCoreHp > 0 && s.enemyThorns > 0 && !ignoreShield) {
+      const t = s.enemyThorns;
+      const abs = Math.min(s.playerShield, t);
+      s.playerShield -= abs;
+      s.playerHp = Math.max(0, s.playerHp - (t - abs));
+      events.push(`🦔 Espinhos da presa ferem você em ${t} de dano!`);
+    }
+
+    return { dealt: dmg, severedNow };
   }
 
-  function step(state, action) {
+  // Dispara o órgão instalado em slotIndex!
+  function useOrganSlot(state, slotIndex, targetOverride = null, { isFreeChain = false } = {}) {
     if (state.outcome !== 'ongoing') return state;
     let s = cloneState(state);
-    const enc = ENCOUNTERS[s.stageIndex];
+    const stats = getSlotEffectiveStats(s, slotIndex);
+    if (!stats) return s;
+    if (!isFreeChain && s.atp < stats.cost) {
+      throw new Error('ATP insuficiente para ativar este órgão.');
+    }
+
+    if (!isFreeChain) s.atp -= stats.cost;
+    s.slotMod[slotIndex].usedThisTurn += 1;
+
+    const targetId = targetOverride || s.selectedTarget;
     const events = [];
-    const wasExposedAtTurnStart = s.enemyExposed;
+    const pwr = stats.powerBonus;
+    const rightIdx = slotIndex + 1 < SLOT_COUNT ? slotIndex + 1 : null;
+    const circuit = stats.incomingCircuit;
+    const leftUsed = slotIndex > 0 && s.slotMod[slotIndex - 1].usedThisTurn > 0;
 
-    // 1. ENXERTO DE ASSALTO: arranca órgão exposto, ganha +4 Escudo de Impacto e JÁ executa o golpe/defesa!
-    if (action.kind === 'graft_strike') {
-      const { geneId, targetGroup, slotIndex = 0 } = action;
-      if (!s.enemyExposed || !s.enemyGenes.includes(geneId)) {
-        throw new Error('Órgão não está exposto para enxerto.');
-      }
-      s.enemyGenes = s.enemyGenes.filter(g => g !== geneId);
-      s = equipGene(s, geneId, targetGroup, slotIndex, { freeOverride: true });
-      s.enemyExposed = false;
-      s.enemyStagger = s.enemyMaxStagger;
-      s.playerShield += 4;
-      // Se arrancou ELE ou quebrou a bobina da Enguia, remove também o escudo residual da bobina
-      if (enc.id === 'enguia' && geneId === 'ELE') {
-        s.enemyShield = 0;
-      }
-      events.push({
-        type: 'graft',
-        text: `⚡ ENXERTO CIRÚRGICO! Você arrancou ${GENES[geneId].name} da presa (+4 Escudo de Impacto) e conectou na sua ${targetGroup === 'attack' ? 'Garra' : 'Carapaça'}!`,
-      });
-    }
+    let severedAny = null;
 
-    const acts = describePlayerActions(s);
-    const mutIds = new Set(acts.mutations.map(m => m.id));
-    const eIntent = getEnemyIntent(s);
-
-    // Se a intenção do inimigo inclui ganhar escudo (defend ou coil_charge), o escudo dele sobe no início do turno
-    if (eIntent.shield > 0) {
-      s.enemyShield += eIntent.shield;
-      events.push({ type: 'enemy_defend', text: `🛡️ ${enc.name} ativa ${eIntent.name} (+${eIntent.shield} Escudo).` });
-    }
-
-    const mode = action.kind === 'defend' || (action.kind === 'graft_strike' && action.targetGroup === 'defense')
-      ? 'defend'
-      : 'attack';
-
-    let activeThorns = 0;
-    let activeThornsHeal = 0;
-    let activePoisonCounter = 0;
-    let activeHalfDamage = false;
-    let activeWeakenDamage = 0;
-    let activeKinetic = false;
-
-    // 2. Ação do Jogador
-    if (mode === 'attack') {
-      const atk = acts.attack;
-      s.kineticBonus = 0;
-      let totalDealt = 0;
-      let shatteredShield = false;
-
-      // Estocada Perfurante (Espinhos na Garra): DESTRÓI 100% do Escudo inimigo antes do golpe!
-      if (atk.shatterShield && s.enemyShield > 0) {
-        events.push({ type: 'shatter', text: `🦔 PERFURAÇÃO ÓSSEA! Seus Espinhos na Garra estilhaçam os ${s.enemyShield} de Escudo inimigo!` });
-        s.enemyShield = 0;
-        shatteredShield = true;
-      }
-
-      for (const raw of atk.hits) {
-        if (s.enemyHp <= 0) break;
-        let dmg = raw;
-        if (s.enemyShield > 0) {
-          const abs = Math.min(s.enemyShield, dmg);
-          s.enemyShield -= abs;
-          dmg -= abs;
+    switch (stats.organId) {
+      case 'GARRA': {
+        const dmg = 4 + pwr;
+        const r = applyDamageToEnemyTarget(s, targetId, dmg, events);
+        severedAny = r.severedNow;
+        events.unshift(`🐾 [Slot ${slotIndex + 1}] Garra Predadora corta causando ${dmg} de dano!`);
+        if (circuit?.id === 'CM_INJECAO_PRESSURIZADA' && leftUsed && s.enemyCoreHp > 0) {
+          s.enemyPoison += 2;
+          events.push(`🧪 Circuito Injeção Pressurizada: +2 Veneno injetado!`);
         }
-        const dealt = Math.min(s.enemyHp, dmg);
-        s.enemyHp -= dealt;
-        totalDealt += dealt;
-
-        // Espinhos do inimigo (se ele ainda tiver SPI) punem ataques diretos!
-        if (s.enemyHp > 0 && s.enemyGenes.includes('SPI')) {
-          const thornDmg = 3;
-          const abs = Math.min(s.playerShield, thornDmg);
-          s.playerShield -= abs;
-          const netThorn = thornDmg - abs;
-          s.playerHp = Math.max(0, s.playerHp - netThorn);
-          events.push({ type: 'enemy_thorns', text: `🦔 Você atacou os Espinhos da presa e sofreu ${netThorn} de dano de retorno!` });
+        if (rightIdx !== null) {
+          s.slotMod[rightIdx].powerBonus += 2;
+          events.push(`⚡ Sinapse (Slot ${slotIndex + 1} → ${rightIdx + 1}): Slot ${rightIdx + 1} ganha +2 de poder!`);
         }
+        break;
       }
 
-      events.push({
-        type: 'player_attack',
-        text: `🐾 ${atk.title} causa ${totalDealt} de dano na presa!`,
-      });
-
-      if (atk.poisonApplied > 0 && s.enemyHp > 0) {
-        s.enemyPoison += atk.poisonApplied;
-        events.push({ type: 'poison_apply', text: `☠️ Aplicou +${atk.poisonApplied} de Veneno (acumulado: ${s.enemyPoison}).` });
-      }
-
-      if (atk.detonatePoison && s.enemyPoison > 0 && s.enemyHp > 0) {
-        const burst = s.enemyPoison * atk.detonateMult;
-        s.enemyHp = Math.max(0, s.enemyHp - burst);
-        events.push({ type: 'detonate', text: `💥 DETONAÇÃO CATALISADORA! O Veneno explode causando +${burst} de dano imediato!` });
-      }
-
-      if (atk.lifesteal && totalDealt > 0 && s.playerHp > 0) {
-        const heal = Math.max(3, Math.floor(totalDealt / 2));
-        s.playerHp = Math.min(s.playerMaxHp, s.playerHp + heal);
-        events.push({ type: 'heal', text: `🩸 Presa Vampírica drena +${heal} PV!` });
-      }
-
-      // Cálculo de Postura no Ataque conforme a Anatomia da Presa
-      if (s.enemyHp > 0 && !s.enemyExposed) {
-        if (enc.staggerRule === 'evasive' && !atk.ignoreEvasive) {
-          events.push({
-            type: 'evade',
-            text: `💨 ${enc.name} esquivou da pressão do golpe único! Use Espinhos na Carapaça, Golpe Duplo (Impulso) ou Choque (Elétrico) para quebrar a Postura dele!`,
-          });
-        } else {
-          let stg = (atk.hasImp ? 2 : 1) + (atk.hasEle ? 1 : 0) + (shatteredShield ? 1 : 0);
-          applyStaggerDamage(s, stg, shatteredShield ? 'Escudo Estilhaçado' : 'Pressão de Ataque', events);
+      case 'CARAPACA': {
+        const gain = 5 + pwr;
+        s.playerShield += gain;
+        events.unshift(`🛡️ [Slot ${slotIndex + 1}] Carapaça Viva gera +${gain} de Escudo (total: ${s.playerShield})!`);
+        if (rightIdx !== null) {
+          s.slotMod[rightIdx].powerBonus += 2;
+          events.push(`⚡ Sinapse (Slot ${slotIndex + 1} → ${rightIdx + 1}): energizou o Slot ${rightIdx + 1} (+2 poder)!`);
         }
+        break;
       }
-    } else {
-      // Modo Defesa (Carapaça)
-      const def = acts.defense;
-      s.playerShield += def.shieldGain;
-      activeThorns = def.thorns;
-      activeThornsHeal = def.thornsHeal;
-      activePoisonCounter = def.poisonCounter;
-      activeHalfDamage = def.halfDamage;
-      activeWeakenDamage = def.weakenDamage;
-      activeKinetic = def.kineticConvert;
 
-      if (def.heal > 0) {
-        s.playerHp = Math.min(s.playerMaxHp, s.playerHp + def.heal);
+      case 'FERRAO': {
+        const dmg = 3 + pwr;
+        let poison = 4;
+        if (circuit?.id === 'CM_SOBRECARGA_TOXICA' && leftUsed) {
+          poison = 8;
+        }
+        const r = applyDamageToEnemyTarget(s, targetId, dmg, events);
+        severedAny = r.severedNow;
+        s.enemyPoison += poison;
+        events.unshift(`☠️ [Slot ${slotIndex + 1}] Ferrão Peçonhento causa ${dmg} de dano e injeta +${poison} de Veneno (total: ${s.enemyPoison})!`);
+        if (rightIdx !== null && s.enemyPoison > 0) {
+          s.slotMod[rightIdx].costDelta -= 1;
+          events.push(`⚡ Sinapse (Slot ${slotIndex + 1} → ${rightIdx + 1}): Slot ${rightIdx + 1} custa -1 ATP neste turno!`);
+        }
+        break;
       }
-      if (def.cleanse && s.playerPoison > 0) {
+
+      case 'PINCA': {
+        const bonusShield = s.playerShield > 0 ? 4 : 0;
+        const dmg = 8 + bonusShield + pwr;
+        const r = applyDamageToEnemyTarget(s, targetId, dmg, events);
+        severedAny = r.severedNow;
+        s.playerThorns += 3;
+        events.unshift(`🦀 [Slot ${slotIndex + 1}] Pinça Esmagadora desfere ${dmg} de dano brutal e ergue +3 Espinhos!`);
+        if (severedAny && rightIdx !== null && s.slots[rightIdx] && s.enemyCoreHp > 0) {
+          events.push(`⚡ SINAPSE DE EXECUÇÃO! A amputação dispara o Slot ${rightIdx + 1} (${ORGANS[s.slots[rightIdx]].name}) DE GRAÇA!`);
+          s.turnLog = [...events, ...s.turnLog];
+          return useOrganSlot(s, rightIdx, s.selectedTarget, { isFreeChain: true });
+        }
+        break;
+      }
+
+      case 'FOICE': {
+        const hitDmg = 3 + Math.floor(pwr / 2);
+        events.unshift(`💨 [Slot ${slotIndex + 1}] Asa-Foice Veloz desfere 2 golpes de ${hitDmg}!`);
+        for (let h = 0; h < 2; h++) {
+          if (s.enemyCoreHp <= 0) break;
+          const r = applyDamageToEnemyTarget(s, s.selectedTarget, hitDmg, events);
+          if (r.severedNow) severedAny = r.severedNow;
+        }
+        if (rightIdx !== null) {
+          s.slotMod[rightIdx].costDelta -= 1;
+          events.push(`⚡ Sinapse (Slot ${slotIndex + 1} → ${rightIdx + 1}): Slot ${rightIdx + 1} custa -1 ATP neste turno!`);
+        }
+        break;
+      }
+
+      case 'PRESA_VAMP': {
+        const bites = (circuit?.id === 'CM_FRENESI_SANGUINARIO' && leftUsed) ? 2 : 1;
+        let totalHeal = 0;
+        for (let b = 0; b < bites; b++) {
+          if (s.enemyCoreHp <= 0) break;
+          const dmg = 5 + pwr;
+          const r = applyDamageToEnemyTarget(s, s.selectedTarget, dmg, events);
+          if (r.severedNow) severedAny = r.severedNow;
+          s.playerHp = Math.min(s.playerMaxHp, s.playerHp + 4);
+          totalHeal += 4;
+        }
         s.playerPoison = 0;
-        events.push({ type: 'cleanse', text: `🩸 Sangue Puro purificou 100% do seu Veneno e regenerou +${def.heal} PV!` });
+        events.unshift(`🩸 [Slot ${slotIndex + 1}] Mandíbula Vampírica morde ${bites}×, drena +${totalHeal} PV e purifica seu sangue!`);
+        if (rightIdx !== null) {
+          s.slotMod[rightIdx].powerBonus += 3;
+          events.push(`⚡ Sinapse Sanguínea (Slot ${slotIndex + 1} → ${rightIdx + 1}): Slot ${rightIdx + 1} ganha +3 de poder!`);
+        }
+        break;
       }
 
-      events.push({
-        type: 'player_defend',
-        text: `🛡️ ${def.title}: +${def.shieldGain} Escudo${def.thorns ? ` · Espinhos (${def.thorns}/golpe)` : ''}${def.halfDamage ? ' · Evasão 50%' : ''}${def.weakenDamage ? ` · Pulso -${def.weakenDamage}` : ''}!`,
-      });
-
-      if (def.empStagger > 0 && s.enemyHp > 0) {
-        applyStaggerDamage(s, def.empStagger, 'Pulso Eletromagnético', events);
-      }
-    }
-
-    // 3. Veneno no Inimigo queima (ignora escudo!) e corrói Postura se >= 4
-    if (s.enemyHp > 0 && s.enemyPoison > 0) {
-      const pDmg = Math.min(s.enemyHp, s.enemyPoison);
-      s.enemyHp -= pDmg;
-      events.push({ type: 'poison_tick', text: `☠️ Veneno derrete ${pDmg} PV da presa (ignora escudo)!` });
-      if (s.enemyHp > 0 && s.enemyPoison >= 4 && !s.enemyExposed) {
-        applyStaggerDamage(s, 1, 'Corrosão Tóxica (Veneno ≥ 4)', events);
-      }
-    }
-
-    // 4. Resposta do Inimigo (ataque ou coil_charge)
-    if (s.enemyHp > 0 && s.playerHp > 0 && eIntent.hits && eIntent.hits.length > 0) {
-      const reduceFromSynapse = (s.enemyPoison > 0 && mutIds.has('MUT_TEMPESTADE_TOXICA')) ? 3 : 0;
-      let totalTaken = 0;
-      let hitsBlockedOrParried = 0;
-      let thornsTriggeredCount = 0;
-
-      for (let i = 0; i < eIntent.hits.length; i++) {
-        if (s.playerHp <= 0 || s.enemyHp <= 0) break;
-        let hit = Math.max(1, eIntent.hits[i] - reduceFromSynapse);
-        // Nervo Elétrico inimigo pune jogador que NÃO defendeu neste turno
-        if (eIntent.elecBonus > 0 && mode !== 'defend' && i === 0) {
-          hit += eIntent.elecBonus;
-          events.push({ type: 'elec_punish', text: `⚡ Sem Carapaça ativa! O choque elétrico causa +${eIntent.elecBonus} de dano extra!` });
+      case 'BOBINA': {
+        const dmg = 4 + pwr;
+        const part = s.parts.find(p => p.id === targetId && !p.severed);
+        if (part) part.weakenThisTurn += 4;
+        const r = applyDamageToEnemyTarget(s, targetId, dmg, events);
+        severedAny = r.severedNow;
+        events.unshift(`⚡ [Slot ${slotIndex + 1}] Bobina Voltaica eletrocuta causando ${dmg} de dano e enfraquece a parte em -4!`);
+        if (rightIdx !== null) {
+          s.slotMod[rightIdx].powerBonus += 3;
+          events.push(`⚡ Sinapse Voltaica (Slot ${slotIndex + 1} → ${rightIdx + 1}): Slot ${rightIdx + 1} sobrecarregado (+3 poder)!`);
         }
-        // Pulso Eletromagnético na Carapaça reduz o ataque
-        if (activeWeakenDamage > 0) {
-          const red = Math.min(hit - 1, activeWeakenDamage);
-          hit -= red;
-          activeWeakenDamage = Math.max(0, activeWeakenDamage - red);
-        }
-        // Reflexo Evasivo (Impulso na Carapaça) corta cada golpe pela metade
-        if (activeHalfDamage) {
-          hit = Math.max(1, Math.floor(hit / 2));
-        }
-
-        const abs = Math.min(s.playerShield, hit);
-        s.playerShield -= abs;
-        const net = hit - abs;
-        s.playerHp = Math.max(0, s.playerHp - net);
-        totalTaken += net;
-        if (abs > 0) hitsBlockedOrParried += 1;
-
-        // Retaliação de Espinhos da Carapaça do Jogador
-        if (mode === 'defend' && activeThorns > 0 && s.enemyHp > 0) {
-          const tDealt = Math.min(s.enemyHp, activeThorns);
-          s.enemyHp -= tDealt;
-          thornsTriggeredCount += 1;
-          events.push({ type: 'thorns_hit', text: `🦔 Seus Espinhos perfuram a presa em ${tDealt} de dano!` });
-          if (activeThornsHeal > 0 && s.playerHp > 0) {
-            s.playerHp = Math.min(s.playerMaxHp, s.playerHp + activeThornsHeal);
-            events.push({ type: 'heal', text: `🩸 Espinhos Sanguessugas drenam +${activeThornsHeal} PV!` });
-          }
-        }
-
-        // Presa Vampírica do inimigo: só cura se ferir a carne (net > 0)!
-        if (eIntent.lifesteal > 0 && net > 0 && s.enemyHp > 0) {
-          s.enemyHp = Math.min(s.enemyMaxHp, s.enemyHp + eIntent.lifesteal);
-          events.push({ type: 'enemy_heal', text: `🩸 ${enc.name} fere sua carne e drena +${eIntent.lifesteal} PV!` });
-        }
+        break;
       }
 
-      if (mode === 'defend' && activePoisonCounter > 0 && s.enemyHp > 0) {
-        s.enemyPoison += activePoisonCounter;
-        events.push({ type: 'poison_apply', text: `☠️ Nuvem Ácida intoxica o atacante (+${activePoisonCounter} Veneno)!` });
-      }
-
-      // Veneno do inimigo: se você bloqueou 100% do ataque com a Carapaça, bloqueia metade do veneno!
-      if (eIntent.appliesPoison > 0 && s.playerHp > 0 && s.enemyHp > 0) {
-        const pApplied = (mode === 'defend' && totalTaken === 0) ? 1 : eIntent.appliesPoison;
-        s.playerPoison += pApplied;
-        events.push({
-          type: 'enemy_poison',
-          text: mode === 'defend' && totalTaken === 0
-            ? `🛡️ Sua Carapaça conteve quase todo o ácido (+1 Veneno apenas).`
-            : `☠️ O ataque inimigo injeta +${pApplied} de Veneno em você!`,
-        });
-      }
-
-      events.push({
-        type: 'enemy_attack',
-        text: totalTaken > 0
-          ? `💥 ${eIntent.name} causa ${totalTaken} de dano líquido em você.`
-          : `🛡️ BLOQUEIO PERFEITO! Sua Carapaça absorveu 100% de ${eIntent.name}!`,
-      });
-
-      // Quebra de Postura pela Defesa Tática!
-      if (mode === 'defend' && s.enemyHp > 0 && !s.enemyExposed) {
-        let defStagger = 0;
-        if (enc.staggerRule === 'guard_bonus' && hitsBlockedOrParried > 0) {
-          defStagger = 2; // Escorpião perde 2 Postura de uma vez ao bater na Carapaça!
-        } else if (thornsTriggeredCount > 0) {
-          defStagger = thornsTriggeredCount; // Louva-a-Deus perde 2 Postura ao se espetar 2x na Foice Dupla!
-        } else if (hitsBlockedOrParried > 0 && enc.staggerRule !== 'evasive') {
-          defStagger = 1;
+      case 'CATALISADOR': {
+        const mult = (circuit?.id === 'CM_REATOR_QUIMERICO' && leftUsed) ? 3 : 2;
+        const detonateDmg = s.enemyPoison * mult;
+        const totalDmg = 4 + pwr + detonateDmg;
+        const r = applyDamageToEnemyTarget(s, targetId, totalDmg, events, { ignoreShield: detonateDmg > 0 });
+        severedAny = r.severedNow;
+        events.unshift(
+          `🔮 [Slot ${slotIndex + 1}] Núcleo Alfa detona o Veneno (${s.enemyPoison}×${mult}) causando ${totalDmg} de dano devastador!`
+        );
+        if (rightIdx !== null) {
+          s.atp = Math.min(s.maxAtp + 1, s.atp + 1);
+          events.push(`⚡ Sinapse Alfa: +1 ATP gerado imediatamente!`);
         }
-        if (s.enemyPoison > 0 && mutIds.has('MUT_TEMPESTADE_TOXICA')) {
-          defStagger += 1;
-        }
-        if (defStagger > 0) {
-          applyStaggerDamage(s, defStagger, thornsTriggeredCount > 0 ? 'Contra-Golpe de Espinhos' : 'Bloqueio Tático', events);
-        }
+        break;
       }
     }
 
-    // Se a janela de exposição já estava aberta no início do turno e o jogador NÃO roubou, ela fecha!
-    if (wasExposedAtTurnStart && action.kind !== 'graft_strike' && s.enemyHp > 0) {
-      s.enemyExposed = false;
-      s.enemyStagger = s.enemyMaxStagger;
-      events.push({
-        type: 'window_closed',
-        text: `🔒 Você não arrancou o órgão a tempo — ${enc.name} recompôs a Postura!`,
-      });
+    // Se a Carapaça estava à esquerda deste slot e já foi usada neste turno, dá +3 Escudo de Sinapse!
+    if (slotIndex > 0 && s.slots[slotIndex - 1] === 'CARAPACA' && s.slotMod[slotIndex - 1].usedThisTurn > 0) {
+      s.playerShield += 3;
+      events.push(`🛡️ Ressonância da Carapaça (Slot ${slotIndex} → ${slotIndex + 1}): +3 Escudo bônus!`);
     }
 
-    // Conversão Cinética (Catalisador na Defesa)
-    if (activeKinetic && s.playerShield > 0) {
-      s.kineticBonus = s.playerShield;
-      events.push({ type: 'kinetic', text: `🔮 Conversão Cinética: +${s.kineticBonus} de dano carregado para sua próxima Garra!` });
-    }
-
-    s.playerShield = 0;
-    if (s.playerHp > 0 && s.enemyHp > 0 && s.playerPoison > 0) {
-      s.playerHp = Math.max(0, s.playerHp - s.playerPoison);
-      events.push({ type: 'player_poison_tick', text: `☠️ Você sofre ${s.playerPoison} de Veneno.` });
-      s.playerPoison = Math.max(0, s.playerPoison - 1);
-    }
-
-    s.turn += 1;
-    s.swapsUsedThisTurn = 0;
-
-    if (s.enemyHp <= 0) {
+    if (s.enemyCoreHp <= 0) {
       s.outcome = 'win';
-      events.push({ type: 'win', text: `🏆 Presa abatida!` });
+      events.push(`🏆 PRESA ABATIDA! Você dominou a anatomia de ${ENCOUNTERS[s.stageIndex].name}!`);
     } else if (s.playerHp <= 0) {
       s.outcome = 'loss';
-      events.push({ type: 'loss', text: `💀 Seu organismo tombou.` });
+      events.push(`💀 Sua Quimera tombou.`);
     }
 
-    s.lastEvents = events;
+    s.turnLog = [...events, ...s.turnLog].slice(0, 14);
     return s;
   }
 
-  function preview(state, action) {
-    const next = step(state, action);
-    return {
-      action,
-      nextState: next,
-      enemyHpDelta: state.enemyHp - next.enemyHp,
-      playerHpDelta: next.playerHp - state.playerHp,
-      events: next.lastEvents,
-      mutationsAfter: detectMutations(next.slots),
-    };
+  // Finaliza o turno do jogador: queima Veneno no inimigo e executa as intenções de todas as PARTES VIVAS!
+  function endTurn(state) {
+    if (state.outcome !== 'ongoing') return state;
+    const s = cloneState(state);
+    const enc = ENCOUNTERS[s.stageIndex];
+    const events = [];
+
+    // 1. Veneno corrói o núcleo do inimigo (e também corrói 2 PV da parte mirada!)
+    if (s.enemyCoreHp > 0 && s.enemyPoison > 0) {
+      const pDmg = Math.min(s.enemyCoreHp, s.enemyPoison);
+      s.enemyCoreHp -= pDmg;
+      events.push(`☠️ Veneno corrói ${pDmg} PV do organismo inimigo!`);
+      const aimedPart = s.parts.find(p => p.id === s.selectedTarget && !p.severed);
+      if (aimedPart) {
+        const partCorrode = Math.min(aimedPart.hp, Math.ceil(s.enemyPoison / 2));
+        aimedPart.hp -= partCorrode;
+        if (aimedPart.hp <= 0) {
+          aimedPart.severed = true;
+          s.looseOrgans.push(aimedPart.organId);
+          events.push(`🧪 O Veneno derreteu e amputou ${aimedPart.name}! [${ORGANS[aimedPart.organId].name}] caiu na mesa!`);
+          const nextAlive = s.parts.find(p => !p.severed);
+          s.selectedTarget = nextAlive ? nextAlive.id : 'core';
+        }
+      }
+    }
+
+    if (s.enemyCoreHp <= 0) {
+      s.outcome = 'win';
+      events.push(`🏆 ${enc.name} sucumbiu ao Veneno!`);
+      s.turnLog = [...events, ...s.turnLog].slice(0, 14);
+      return s;
+    }
+
+    // 2. Cada parte VIVA (não amputada) executa sua ação anunciada!
+    const aliveParts = s.parts.filter(p => !p.severed);
+    if (aliveParts.length === 0 && s.enemyCoreHp > 0) {
+      // Se todas as partes foram amputadas mas o núcleo ainda vive, o núcleo dá um espasmo de 4 de dano
+      const hit = 4;
+      const abs = Math.min(s.playerShield, hit);
+      s.playerShield -= abs;
+      s.playerHp = Math.max(0, s.playerHp - (hit - abs));
+      events.push(`💥 Núcleo agonizante se debate causando ${hit - abs} de dano líquido.`);
+    }
+
+    for (const part of aliveParts) {
+      if (s.playerHp <= 0 || s.enemyCoreHp <= 0) break;
+      const it = part.intent;
+
+      if (it.type === 'defend' || it.type === 'buff') {
+        if (it.heal) {
+          s.enemyCoreHp = Math.min(s.enemyMaxCoreHp, s.enemyCoreHp + it.heal);
+          events.push(`🩸 ${part.name} usa ${it.name} e regenera +${it.heal} PV!`);
+        }
+        if (it.poison) {
+          s.playerPoison += it.poison;
+          events.push(`☠️ ${part.name} usa ${it.name} (+${it.poison} Veneno em você)!`);
+        }
+        if (it.dmg) {
+          const hit = Math.max(0, it.dmg - part.weakenThisTurn);
+          const abs = Math.min(s.playerShield, hit);
+          s.playerShield -= abs;
+          s.playerHp = Math.max(0, s.playerHp - (hit - abs));
+          events.push(`⚡ ${part.name} (${it.name}) causa ${hit - abs} de dano líquido.`);
+        }
+      } else if (it.type === 'attack') {
+        const hits = it.hits || 1;
+        let totalNet = 0;
+        for (let h = 0; h < hits; h++) {
+          if (s.playerHp <= 0 || s.enemyCoreHp <= 0) break;
+          const raw = Math.max(1, it.dmg - part.weakenThisTurn);
+          const abs = Math.min(s.playerShield, raw);
+          s.playerShield -= abs;
+          const net = raw - abs;
+          s.playerHp = Math.max(0, s.playerHp - net);
+          totalNet += net;
+
+          if (s.playerThorns > 0 && s.enemyCoreHp > 0) {
+            s.enemyCoreHp = Math.max(0, s.enemyCoreHp - s.playerThorns);
+            events.push(`🦔 Seus Espinhos ferem a presa em ${s.playerThorns}!`);
+          }
+          if (it.lifesteal && net > 0 && s.enemyCoreHp > 0) {
+            s.enemyCoreHp = Math.min(s.enemyMaxCoreHp, s.enemyCoreHp + it.lifesteal);
+            events.push(`🩸 ${part.name} drena +${it.lifesteal} PV da sua carne!`);
+          }
+        }
+        if (it.poison && s.playerHp > 0 && s.enemyCoreHp > 0) {
+          const pApp = totalNet === 0 ? 1 : it.poison;
+          s.playerPoison += pApp;
+          events.push(`☠️ ${part.name} injeta +${pApp} de Veneno!`);
+        }
+        events.push(
+          totalNet > 0
+            ? `💥 ${part.name} usa ${it.name} e causa ${totalNet} de dano líquido.`
+            : `🛡️ Sua Carapaça bloqueou 100% de ${it.name} (${part.name})!`
+        );
+      }
+    }
+
+    // 3. Veneno no jogador queima no fim do turno inimigo
+    if (s.playerHp > 0 && s.enemyCoreHp > 0 && s.playerPoison > 0) {
+      s.playerHp = Math.max(0, s.playerHp - s.playerPoison);
+      events.push(`☠️ Você sofre ${s.playerPoison} de dano de Veneno.`);
+      s.playerPoison = Math.max(0, s.playerPoison - 1);
+    }
+
+    // 4. Prepara o próximo turno
+    s.turn += 1;
+    s.atp = s.maxAtp;
+    s.playerShield = 0;
+    s.playerThorns = 0;
+    s.enemyShield = 0;
+    s.enemyThorns = 0;
+    s.slotMod = Array.from({ length: SLOT_COUNT }, () => ({ costDelta: 0, powerBonus: 0, usedThisTurn: 0 }));
+
+    for (let i = 0; i < s.parts.length; i++) {
+      const p = s.parts[i];
+      p.weakenThisTurn = 0;
+      const spec = enc.parts[i];
+      p.intent = { ...spec.intents[s.turn % spec.intents.length] };
+      if (!p.severed && p.intent.type === 'defend') {
+        s.enemyShield += p.intent.shield || 0;
+        s.enemyThorns += p.intent.thorns || 0;
+      }
+    }
+
+    if (s.enemyCoreHp <= 0) {
+      s.outcome = 'win';
+      events.push(`🏆 Presa abatida!`);
+    } else if (s.playerHp <= 0) {
+      s.outcome = 'loss';
+      events.push(`💀 Sua Quimera tombou.`);
+    }
+
+    s.turnLog = [...events, ...s.turnLog].slice(0, 14);
+    return s;
   }
 
   return {
     VERSION,
-    GENES,
-    MUTATIONS,
+    MAX_ATP,
+    SLOT_COUNT,
+    ORGANS,
+    CIRCUIT_MUTATIONS,
     ENCOUNTERS,
-    detectMutations,
+    detectActiveCircuits,
     createRunState,
-    getEnemyIntent,
-    describePlayerActions,
-    equipGene,
-    step,
-    preview,
+    getSlotEffectiveStats,
+    selectTarget,
+    installOrgan,
+    useOrganSlot,
+    endTurn,
   };
 });
 
 </script>
 <script>
-/* O Enxerto · Controlador Interativo v0.8 (Caça Biológica, Enxerto de Assalto, SVG Dinâmico e Atlas) */
+/* O Enxerto · Controlador v1.0 (Circuito de Sinapse + Mira Anatômica + Amputação em Tempo Real) */
 (function () {
   'use strict';
 
-  const B = window.BioEngine;
+  const C = window.BioCircuit;
   const by = id => document.getElementById(id);
 
-  let state = B.createRunState(0);
-  let selectedGraftGene = null;
+  let state = C.createRunState(0);
+  let pendingOrganToInstall = null;
 
   function el(tag, text = '', cls = '') {
     const n = document.createElement(tag);
@@ -1225,446 +1175,295 @@ button:disabled{opacity:.4;cursor:not-allowed}
     return n;
   }
 
-  // Gera SVG dinâmico que muda fisicamente conforme os órgãos instalados na criatura!
-  function renderCreatureSvg(genes, isEnemy) {
-    const has = id => genes.includes(id);
-    const bodyColor = isEnemy ? '#3b242c' : '#1b3b2b';
-    const strokeColor = isEnemy ? '#fb7185' : '#6ee7b7';
-
-    let parts = '';
-    // Espinhos dorsais (SPI)
-    if (has('SPI')) {
-      parts += `<polygon points="35,18 42,4 49,18" fill="#fb923c"/>
-                <polygon points="50,16 58,2 65,16" fill="#fb923c"/>
-                <polygon points="66,19 74,6 79,21" fill="#fb923c"/>`;
-    }
-    // Glândula/Bolsa Tóxica (TOX)
-    if (has('TOX')) {
-      parts += `<circle cx="38" cy="48" r="10" fill="#a3e635" opacity="0.85"/>
-                <circle cx="34" cy="36" r="4" fill="#bef264"/>`;
-    }
-    // Tendão/Asas de Impulso (IMP)
-    if (has('IMP')) {
-      parts += `<path d="M22,38 Q6,20 28,26 Z" fill="#38bdf8" opacity="0.9"/>
-                <path d="M22,48 Q4,46 26,54 Z" fill="#38bdf8" opacity="0.9"/>`;
-    }
-    // Nervo/Antena Elétrica (ELE)
-    if (has('ELE')) {
-      parts += `<polyline points="55,16 62,3 56,3 64,-6" fill="none" stroke="#facc15" stroke-width="3" stroke-linecap="round"/>`;
-    }
-    // Núcleo Catalisador Raro (CAT)
-    if (has('CAT')) {
-      parts += `<circle cx="56" cy="42" r="11" fill="none" stroke="#c084fc" stroke-width="3" stroke-dasharray="4 2"/>
-                <circle cx="56" cy="42" r="5" fill="#e879f9"/>`;
-    }
-
-    // Corpo base + Olho + Garra/Presas (VAM)
-    const fangColor = has('VAM') ? '#f43f5e' : strokeColor;
-    const flip = isEnemy ? 'transform="scale(-1,1) translate(-110,0)"' : '';
-
-    return `<svg viewBox="0 0 110 76" aria-hidden="true">
-      <g ${flip}>
-        ${parts}
-        <ellipse cx="55" cy="44" rx="28" ry="20" fill="${bodyColor}" stroke="${strokeColor}" stroke-width="2.5"/>
-        <circle cx="72" cy="37" r="4.5" fill="${has('CAT') ? '#e879f9' : '#fef08a'}"/>
-        <path d="M80,44 L98,38 L86,50 Z" fill="${fangColor}"/>
-        ${has('VAM') ? '<polygon points="78,49 83,61 87,49" fill="#f43f5e"/><polygon points="70,51 74,60 78,51" fill="#f43f5e"/>' : ''}
-      </g>
-    </svg>`;
-  }
-
-  function triggerShake(cardId) {
-    const node = by(cardId);
-    if (!node) return;
-    node.classList.remove('shake');
-    void node.offsetWidth;
-    node.classList.add('shake');
-  }
-
   function renderStageTrack() {
     const track = by('stage-track');
     track.replaceChildren();
-    B.ENCOUNTERS.forEach((enc, idx) => {
+    C.ENCOUNTERS.forEach((enc, idx) => {
       const cls = idx === state.stageIndex ? 'stage-dot active' : idx < state.stageIndex ? 'stage-dot done' : 'stage-dot';
-      track.append(el('span', `${idx + 1}/${B.ENCOUNTERS.length}`, cls));
+      track.append(el('span', `${idx + 1}/${C.ENCOUNTERS.length}`, cls));
     });
     by('atlas-count').textContent = String(state.atlas.length);
   }
 
-  function renderHuntBanner() {
-    const banner = by('hunt-banner');
-    const txt = by('hunt-text');
-    const enc = B.ENCOUNTERS[state.stageIndex];
-
-    if (state.outcome === 'win') {
-      banner.className = 'hunt-banner';
-      txt.innerHTML = state.stageIndex < B.ENCOUNTERS.length - 1
-        ? `<b>🏆 Presa abatida!</b> Seus órgãos roubados permanecem no seu corpo e você recupera <b>+6 PV</b> para a próxima caçada.`
-        : `<b>👑 VITÓRIA SUPREMA!</b> Você derrotou a Quimera Alfa e dominou a cadeia evolutiva!`;
+  function renderLootTray() {
+    const tray = by('loot-tray');
+    const btns = by('loot-buttons');
+    btns.replaceChildren();
+    if (state.looseOrgans.length === 0 || state.outcome !== 'ongoing') {
+      tray.hidden = true;
       return;
     }
-    if (state.outcome === 'loss') {
-      banner.className = 'hunt-banner';
-      txt.innerHTML = `<b>💀 Seu organismo tombou.</b> Tente novamente esta luta ou inicie uma Nova Caçada.`;
-      return;
+    tray.hidden = false;
+    for (const orgId of state.looseOrgans) {
+      const def = C.ORGANS[orgId];
+      const b = el('button', `🧬 Enxertar ${def.name} (+1 ATP, +4 Escudo)`, 'btn-primary btn-sm');
+      b.type = 'button';
+      b.onclick = () => openInstallModal(orgId, true);
+      btns.append(b);
     }
-    if (state.enemyExposed && state.enemyGenes.length > 0) {
-      banner.className = 'hunt-banner exposed-alert';
-      const names = state.enemyGenes.map(g => B.GENES[g].name).join(' ou ');
-      txt.innerHTML = `<b>🔓 POSTURA QUEBRADA!</b> Toque agora em <b>${names}</b> no cartão do inimigo para <b>ARRANCAR E ENXERTAR</b> no seu corpo!`;
-      return;
-    }
-    banner.className = 'hunt-banner';
-    txt.innerHTML = `<b>🎯 Dica de Caça:</b> ${enc.tip}`;
   }
 
   function renderEnemy() {
-    const enc = B.ENCOUNTERS[state.stageIndex];
-    const intent = B.getEnemyIntent(state);
-
+    const enc = C.ENCOUNTERS[state.stageIndex];
     by('enemy-name').textContent = enc.name;
     by('enemy-sub').textContent = enc.subtitle;
 
-    const statuses = by('enemy-statuses');
-    statuses.replaceChildren();
-    if (state.enemyShield > 0) {
-      statuses.append(el('span', `🛡️ Escudo ${state.enemyShield}`, 'status-tag shield'));
-    }
-    if (state.enemyPoison > 0) {
-      statuses.append(el('span', `☠️ Veneno ${state.enemyPoison}/turno`, 'status-tag poison'));
-    }
+    const st = by('enemy-statuses');
+    st.replaceChildren();
+    if (state.enemyShield > 0) st.append(el('span', `🛡️ Escudo ${state.enemyShield}`, 'stag shield'));
+    if (state.enemyThorns > 0) st.append(el('span', `🦔 Espinhos ${state.enemyThorns}`, 'stag thorns'));
+    if (state.enemyPoison > 0) st.append(el('span', `☠️ Veneno ${state.enemyPoison}/turno`, 'stag poison'));
 
-    by('enemy-hp-text').textContent = `${state.enemyHp} / ${state.enemyMaxHp}`;
-    by('enemy-hp-bar').style.width = `${Math.max(0, Math.round((state.enemyHp / state.enemyMaxHp) * 100))}%`;
+    by('enemy-core-text').textContent = `${state.enemyCoreHp} / ${state.enemyMaxCoreHp}`;
+    by('enemy-core-bar').style.width = `${Math.max(0, Math.round((state.enemyCoreHp / state.enemyMaxCoreHp) * 100))}%`;
 
-    const stLabel = by('stagger-label');
-    if (state.enemyExposed) {
-      stLabel.textContent = '🔓 ÓRGÃOS EXPOSTOS!';
-      by('enemy-stagger-text').textContent = 'ROUBE AGORA!';
-      by('enemy-stagger-bar').style.width = '100%';
-    } else if (state.enemyGenes.length === 0) {
-      stLabel.textContent = 'Órgãos arrancados';
-      by('enemy-stagger-text').textContent = 'Desarmado';
-      by('enemy-stagger-bar').style.width = '0%';
-    } else {
-      stLabel.textContent = 'Postura (zere p/ expor)';
-      by('enemy-stagger-text').textContent = `${state.enemyStagger} / ${state.enemyMaxStagger}`;
-      by('enemy-stagger-bar').style.width = `${Math.round((state.enemyStagger / state.enemyMaxStagger) * 100)}%`;
-    }
+    const grid = by('parts-grid');
+    grid.replaceChildren();
 
-    by('enemy-svg').innerHTML = renderCreatureSvg(state.enemyGenes, true);
-    by('enemy-anatomy').textContent = `🔬 ${enc.staggerRuleText}`;
-
-    const itTitle = by('enemy-intent-title');
-    const itDesc = by('enemy-intent-desc');
-    if (state.outcome !== 'ongoing') {
-      itTitle.textContent = state.outcome === 'win' ? '🏆 Presa Abatida' : 'Combate encerrado';
-      itDesc.textContent = '';
-    } else if (intent.type === 'defend') {
-      itTitle.className = 'intent-badge defend';
-      itTitle.textContent = `🛡️ Próxima ação: ${intent.name} (+${intent.shield} Escudo)`;
-      itDesc.textContent = intent.desc;
-    } else {
-      itTitle.className = 'intent-badge';
-      itTitle.textContent = `⚠️ Vai atacar: ${intent.name} · ${intent.hits.join(' + ')} (${intent.totalRaw} dano)`;
-      const extras = [];
-      if (intent.appliesPoison) extras.push(`aplica +${intent.appliesPoison} Veneno`);
-      if (intent.lifesteal) extras.push(`drena +${intent.lifesteal} PV`);
-      if (intent.elecBonus) extras.push(`+${intent.elecBonus} dano se você estiver sem escudo`);
-      if (intent.thorns) extras.push(`Espinhos devolvem ${intent.thorns} se você atacar`);
-      itDesc.textContent = extras.length ? `Efeito dos órgãos dele: ${extras.join(' · ')}.` : 'Sem efeitos extras.';
-    }
-
-    const organsWrap = by('enemy-organs');
-    organsWrap.replaceChildren();
-    by('enemy-organs-label').textContent = state.enemyExposed && state.enemyGenes.length
-      ? '🔓 TOQUE NUM ÓRGÃO ABAIXO PARA ARRANCAR E ENXERTAR AGORA:'
-      : 'Órgãos instalados na Presa (quebre a Postura para roubar):';
-
-    if (state.enemyGenes.length === 0) {
-      organsWrap.append(el('div', 'Você já arrancou todos os órgãos especiais desta presa!', 'organ-desc'));
-      return;
-    }
-
-    for (const gId of state.enemyGenes) {
-      const g = B.GENES[gId];
-      const canSteal = state.enemyExposed && state.outcome === 'ongoing';
-      const card = el(canSteal ? 'button' : 'div', '', [
-        'organ-card',
-        canSteal ? 'exposed' : '',
-        selectedGraftGene === gId ? 'selected-graft' : '',
+    for (const part of state.parts) {
+      const aimed = state.selectedTarget === part.id && !part.severed;
+      const org = C.ORGANS[part.organId];
+      const card = el('div', '', [
+        'part-card',
+        aimed ? 'aimed' : '',
+        part.severed ? 'severed' : '',
       ].filter(Boolean).join(' '));
-      if (canSteal) card.type = 'button';
 
-      const head = el('div', '', 'organ-head');
-      const nameSpan = el('span', '', 'organ-name');
-      const dot = el('span', '', 'organ-dot');
-      dot.style.background = g.color;
-      nameSpan.append(dot, el('span', g.name));
-      head.append(nameSpan, el('span', canSteal ? '⚡ ARRANCAR!' : g.tag, 'organ-tag'));
+      const top = el('div', '', 'part-top');
+      const nameEl = el('span', `${part.severed ? '✂️' : '🎯'} ${part.name}`, 'part-name');
+      const badge = el(
+        'span',
+        part.severed ? 'AMPUTADA' : aimed ? '🎯 MIRA ATIVA' : 'Toque p/ mirar',
+        'aim-badge'
+      );
+      top.append(nameEl, badge);
 
-      const desc = el('div', `Nele: ${g.enemyEffect}`, 'organ-desc');
-      const yours = el('div', `Em você: ${g.summary}`, 'organ-desc');
-      yours.style.color = '#d9f99d';
+      const barWrap = el('div', '', 'core-bar-wrap');
+      barWrap.style.marginTop = '2px';
+      const bh = el('div', '', 'bar-head');
+      bh.append(el('span', 'PV da Parte (zere p/ amputar)'), el('span', `${part.hp} / ${part.maxHp}`));
+      const bt = el('div', '', 'bar-track');
+      const bf = el('div', '', 'bar-fill part-hp');
+      bf.style.width = `${Math.max(0, Math.round((part.hp / part.maxHp) * 100))}%`;
+      bt.append(bf);
+      barWrap.append(bh, bt);
 
-      card.append(head, desc, yours);
-      if (canSteal) {
-        card.onclick = () => openGraftModal(gId);
+      const it = part.intent;
+      let intentText = '';
+      if (part.severed) {
+        intentText = `❌ Ação "${it.name}" CANCELADA por amputação!`;
+      } else if (it.type === 'defend') {
+        intentText = `🛡️ Ativo agora: ${it.name} (+${it.shield || 0} Escudo${it.thorns ? `, Espinhos ${it.thorns}` : ''}${it.heal ? `, Cura +${it.heal}` : ''})`;
+      } else if (it.type === 'buff') {
+        intentText = `🧪 Vai usar: ${it.name} (+${it.poison || 0} Veneno${it.dmg ? `, ${it.dmg} dano` : ''})`;
+      } else {
+        const effDmg = Math.max(1, it.dmg - part.weakenThisTurn);
+        const hitsStr = it.hits && it.hits > 1 ? `${it.hits}×${effDmg}` : `${effDmg}`;
+        intentText = `⚠️ Vai atacar: ${it.name} → ${hitsStr} de dano${it.poison ? ` +${it.poison} Veneno` : ''}${it.lifesteal ? ` (Drena +${it.lifesteal} PV)` : ''}`;
       }
-      organsWrap.append(card);
+      const intentEl = el('div', intentText, `part-intent${it.type === 'defend' ? ' defend' : ''}`);
+      const dropEl = el('div', `🧬 Órgão ao amputar: ${org.name} (${org.tag})`, 'part-drop');
+
+      card.append(top, barWrap, intentEl, dropEl);
+      if (!part.severed && state.outcome === 'ongoing') {
+        card.onclick = () => {
+          state = C.selectTarget(state, part.id);
+          render();
+        };
+      }
+      grid.append(card);
     }
-  }
-
-  function openGraftModal(geneId) {
-    selectedGraftGene = geneId;
-    const g = B.GENES[geneId];
-    const modal = by('graft-modal');
-    by('graft-modal-title').textContent = `⚡ Enxertar ${g.name} agora!`;
-    by('graft-modal-desc').textContent =
-      `Ao arrancar ${g.name}, o inimigo perde esse poder IMEDIATAMENTE. Escolha onde conectar no seu corpo — você já executa o ataque ou defesa na mesma hora:`;
-
-    const choices = by('graft-choices');
-    choices.replaceChildren();
-
-    // Opção 1: Enxertar na Garra (Ataque) e JÁ ATACAR
-    const atkSlotIdx = state.slots.attack[0] === null ? 0 : state.slots.attack[1] === null ? 1 : 0;
-    const atkReplaced = state.slots.attack[atkSlotIdx];
-    const prevAtk = B.preview(state, { kind: 'graft_strike', geneId, targetGroup: 'attack', slotIndex: atkSlotIdx });
-
-    const btnAtk = el('button', '', 'graft-choice-btn atk');
-    btnAtk.type = 'button';
-    btnAtk.append(
-      el('b', `🐾 Enxertar na GARRA e JÁ ATACAR!${atkReplaced ? ` (move ${B.GENES[atkReplaced].short} p/ reserva)` : ''}`),
-      el('span', g.onAttack),
-      el('small', `Resultado imediato: Inimigo perde ${prevAtk.enemyHpDelta} PV (fica com ${prevAtk.nextState.enemyHp} PV) · Seus PV: ${prevAtk.nextState.playerHp}/${state.playerMaxHp}${prevAtk.mutationsAfter.length ? ` · 🧬 Desperta ${prevAtk.mutationsAfter.map(m => m.name).join('!')}` : ''}`)
-    );
-    btnAtk.onclick = () => {
-      modal.hidden = true;
-      selectedGraftGene = null;
-      runTurn({ kind: 'graft_strike', geneId, targetGroup: 'attack', slotIndex: atkSlotIdx });
-    };
-
-    // Opção 2: Enxertar na Carapaça (Defesa) e JÁ DEFENDER
-    const defSlotIdx = state.slots.defense[0] === null ? 0 : state.slots.defense[1] === null ? 1 : 0;
-    const defReplaced = state.slots.defense[defSlotIdx];
-    const prevDef = B.preview(state, { kind: 'graft_strike', geneId, targetGroup: 'defense', slotIndex: defSlotIdx });
-
-    const btnDef = el('button', '', 'graft-choice-btn def');
-    btnDef.type = 'button';
-    btnDef.append(
-      el('b', `🛡️ Enxertar na CARAPAÇA e JÁ DEFENDER!${defReplaced ? ` (move ${B.GENES[defReplaced].short} p/ reserva)` : ''}`),
-      el('span', g.onDefense),
-      el('small', `Resultado imediato: Seus PV ficam em ${prevDef.nextState.playerHp}/${state.playerMaxHp} · Inimigo perde ${prevDef.enemyHpDelta} PV${prevDef.mutationsAfter.length ? ` · 🧬 Desperta ${prevDef.mutationsAfter.map(m => m.name).join('!')}` : ''}`)
-    );
-    btnDef.onclick = () => {
-      modal.hidden = true;
-      selectedGraftGene = null;
-      runTurn({ kind: 'graft_strike', geneId, targetGroup: 'defense', slotIndex: defSlotIdx });
-    };
-
-    choices.append(btnAtk, btnDef);
-    modal.hidden = false;
   }
 
   function renderPlayer() {
-    const acts = B.describePlayerActions(state);
-    const equippedGenes = [
-      ...state.slots.attack.filter(Boolean),
-      ...state.slots.defense.filter(Boolean),
-    ];
+    by('atp-text').textContent = `${state.atp} / ${state.maxAtp}`;
+    const pips = by('atp-pips');
+    pips.replaceChildren();
+    for (let i = 0; i < Math.max(state.maxAtp, state.atp); i++) {
+      pips.append(el('span', '', `atp-pip${i < state.atp ? ' on' : ''}`));
+    }
 
-    const statuses = by('player-statuses');
-    statuses.replaceChildren();
-    if (state.playerPoison > 0) {
-      statuses.append(el('span', `☠️ Veneno ${state.playerPoison}`, 'status-tag poison'));
-    }
-    if (state.kineticBonus > 0) {
-      statuses.append(el('span', `🔮 Carga +${state.kineticBonus} dano`, 'status-tag kinetic'));
-    }
+    const st = by('player-statuses');
+    st.replaceChildren();
+    if (state.playerShield > 0) st.append(el('span', `🛡️ Escudo ${state.playerShield}`, 'stag shield'));
+    if (state.playerThorns > 0) st.append(el('span', `🦔 Espinhos ${state.playerThorns}`, 'stag thorns'));
+    if (state.playerPoison > 0) st.append(el('span', `☠️ Veneno ${state.playerPoison}`, 'stag poison'));
 
     by('player-hp-text').textContent = `${state.playerHp} / ${state.playerMaxHp}`;
     by('player-hp-bar').style.width = `${Math.max(0, Math.round((state.playerHp / state.playerMaxHp) * 100))}%`;
-    by('player-svg').innerHTML = renderCreatureSvg(equippedGenes, false);
 
-    const mHint = by('metabolic-hint');
-    if (state.swapsUsedThisTurn === 0) {
-      mHint.textContent = '⚡ Adaptação Metabólica: 1 troca (Garra ↔ Carapaça) GRÁTIS neste turno';
-      mHint.style.color = '#6ee7b7';
-    } else {
-      mHint.textContent = '⚠️ Troca grátis usada · Nova troca neste turno custa -2 PV (Estresse Metabólico)';
-      mHint.style.color = '#fbbf24';
-    }
-
-    // Mutações Ativas
-    const mutStrip = by('mutation-strip');
-    mutStrip.replaceChildren();
-    if (acts.mutations.length > 0) {
-      mutStrip.hidden = false;
-      for (const m of acts.mutations) {
-        const pill = el('div', '', 'mutation-pill');
-        pill.append(el('b', `🧬 ${m.name}`), el('span', m.desc));
-        mutStrip.append(pill);
+    // Circuitos ativos
+    const circuits = C.detectActiveCircuits(state.slots);
+    const cBanner = by('circuit-banner');
+    cBanner.replaceChildren();
+    if (circuits.length > 0) {
+      cBanner.hidden = false;
+      for (const cm of circuits) {
+        const pill = el('div', '', 'circuit-pill');
+        pill.innerHTML = `<b>⚡ ${cm.name} (Slot ${cm.fromSlot + 1} → Slot ${cm.toSlot + 1}):</b> ${cm.desc}`;
+        cBanner.append(pill);
       }
     } else {
-      mutStrip.hidden = true;
+      cBanner.hidden = true;
     }
 
-    // Slots da Garra e da Carapaça (tocar num gene equipado move Garra <-> Carapaça grátis!)
-    renderSocketGroup('attack', 'attack-sockets');
-    renderSocketGroup('defense', 'defense-sockets');
+    // Trilha de 4 Slots
+    const track = by('circuit-track');
+    track.replaceChildren();
+    const aimedPart = state.parts.find(p => p.id === state.selectedTarget && !p.severed);
+    const targetName = aimedPart ? aimedPart.name : 'Núcleo da Presa';
 
-    // Reserva
-    const resStrip = by('reserve-strip');
-    resStrip.replaceChildren();
+    for (let idx = 0; idx < C.SLOT_COUNT; idx++) {
+      const stats = C.getSlotEffectiveStats(state, idx);
+      if (!stats) {
+        const empty = el('div', '', 'slot-card empty');
+        empty.append(
+          el('div', `Slot ${idx + 1} · Vazio`, 'slot-num'),
+          el('div', 'Ampute uma parte inimiga para enxertar um órgão aqui!', 'slot-desc')
+        );
+        track.append(empty);
+        continue;
+      }
+
+      const { def, cost, powerBonus, canAfford, extraNotes } = stats;
+      const energized = powerBonus > 0 || cost < def.cost || extraNotes.length > 0;
+      const card = el('div', '', `slot-card${energized ? ' energized' : ''}`);
+      card.style.borderTop = `3px solid ${def.color}`;
+
+      const top = el('div', '', 'slot-num');
+      top.append(
+        el('span', `Slot ${idx + 1}${idx < C.SLOT_COUNT - 1 ? ' →' : ''}`),
+        el('span', cost === 0 ? '⚡ 0 ATP (GRÁTIS!)' : `${cost} ATP`, `cost-pill${cost === 0 ? ' free' : ''}`)
+      );
+
+      const title = el('div', def.name, 'slot-title');
+      title.style.color = def.color;
+
+      let descText = def.desc;
+      if (powerBonus > 0) descText += ` [⚡ +${powerBonus} Poder de Sinapse!]`;
+      if (extraNotes.length) descText += ` [${extraNotes.join(' ')}]`;
+      const desc = el('div', descText, 'slot-desc');
+
+      const syn = el('div', def.synapseDesc, 'slot-synapse');
+
+      const actions = el('div', '', 'slot-actions');
+      const fireLabel = def.targetType === 'part'
+        ? `⚡ Disparar em ${targetName}`
+        : `🛡️ Ativar (${cost} ATP)`;
+      const fireBtn = el('button', fireLabel, `fire-btn ${canAfford ? 'btn-primary' : ''}`);
+      fireBtn.type = 'button';
+      fireBtn.disabled = !canAfford;
+      fireBtn.onclick = () => {
+        state = C.useOrganSlot(state, idx);
+        render();
+      };
+
+      const moveBtn = el('button', '⇄', 'btn-sm btn-ghost');
+      moveBtn.type = 'button';
+      moveBtn.title = 'Mover este órgão para outro slot (grátis)';
+      moveBtn.onclick = () => openInstallModal(stats.organId, false);
+
+      actions.append(fireBtn, moveBtn);
+      card.append(top, title, desc, syn, actions);
+      track.append(card);
+    }
+
+    // Reserva e Botão Encerrar Turno
+    const resBar = by('reserve-bar');
+    resBar.replaceChildren();
     if (state.reserve.length > 0) {
-      resStrip.hidden = false;
-      resStrip.append(el('small', 'Reserva (toque p/ equipar grátis):'));
-      for (const gId of state.reserve) {
-        const g = B.GENES[gId];
-        const b = el('button', `+ ${g.short} (Garra/Carapaça)`, 'btn-sm');
+      resBar.append(el('small', 'Reserva (toque p/ instalar):'));
+      for (const rId of state.reserve) {
+        const b = el('button', `+ ${C.ORGANS[rId].name}`, 'btn-sm');
         b.type = 'button';
-        b.onclick = () => {
-          const emptyAtk = state.slots.attack.indexOf(null);
-          const emptyDef = state.slots.defense.indexOf(null);
-          if (emptyAtk !== -1) state = B.equipGene(state, gId, 'attack', emptyAtk);
-          else if (emptyDef !== -1) state = B.equipGene(state, gId, 'defense', emptyDef);
-          else state = B.equipGene(state, gId, 'attack', 0);
-          render();
-        };
-        resStrip.append(b);
+        b.onclick = () => openInstallModal(rId, false);
+        resBar.append(b);
       }
-    } else {
-      resStrip.hidden = true;
     }
 
-    // Botões de Ataque e Defesa com Previsão Exata
-    const combatBox = by('combat-actions');
-    const outPanel = by('outcome-panel');
-
+    const footer = by('turn-footer');
+    const outBar = by('outcome-bar');
     if (state.outcome !== 'ongoing') {
-      combatBox.hidden = true;
-      outPanel.hidden = false;
-      outPanel.replaceChildren();
+      footer.hidden = true;
+      outBar.hidden = false;
+      outBar.replaceChildren();
       if (state.outcome === 'win') {
-        if (state.stageIndex < B.ENCOUNTERS.length - 1) {
-          const nextEnc = B.ENCOUNTERS[state.stageIndex + 1];
-          const bNext = el('button', `Avançar para ${nextEnc.name} (+6 PV) →`, 'btn-primary');
+        if (state.stageIndex < C.ENCOUNTERS.length - 1) {
+          const nextEnc = C.ENCOUNTERS[state.stageIndex + 1];
+          const bNext = el('button', `🏆 Avançar para ${nextEnc.name} (+10 PV) →`, 'btn-primary');
           bNext.style.width = '100%';
           bNext.onclick = () => {
-            state = B.createRunState(state.stageIndex + 1, state);
+            state = C.createRunState(state.stageIndex + 1, state);
             render();
           };
-          outPanel.append(bNext);
+          outBar.append(bNext);
         } else {
-          const bRestart = el('button', '🏆 Jogar Nova Caçada (Atlas preservado)', 'btn-primary');
-          bRestart.style.width = '100%';
-          bRestart.onclick = () => {
-            state = B.createRunState(0, { atlas: state.atlas });
+          const bWin = el('button', '👑 VITÓRIA SUPREMA! Iniciar Nova Caçada (Atlas mantido)', 'btn-primary');
+          bWin.style.width = '100%';
+          bWin.onclick = () => {
+            state = C.createRunState(0, { atlas: state.atlas });
             render();
           };
-          outPanel.append(bRestart);
+          outBar.append(bWin);
         }
       } else {
         const bRetry = el('button', '🔄 Tentar este encontro novamente', 'btn-primary');
         bRetry.style.width = '100%';
         bRetry.onclick = () => {
-          state = B.createRunState(state.stageIndex, {
+          state = C.createRunState(state.stageIndex, {
             slots: state.slots,
             reserve: state.reserve,
             atlas: state.atlas,
           });
           render();
         };
-        outPanel.append(bRetry);
+        outBar.append(bRetry);
       }
     } else {
-      combatBox.hidden = false;
-      outPanel.hidden = true;
-
-      const prevAtk = B.preview(state, { kind: 'attack' });
-      const prevDef = B.preview(state, { kind: 'defend' });
-
-      by('btn-attack-title').textContent = `🐾 ${acts.attack.title} (${acts.attack.hits.join('+')})`;
-      const atkParts = [`Tira ${prevAtk.enemyHpDelta} PV dele`];
-      if (acts.attack.poisonApplied) atkParts.push(`+${acts.attack.poisonApplied} Veneno`);
-      if (acts.attack.lifesteal) atkParts.push('Drena vida');
-      if (prevAtk.nextState.enemyExposed && !state.enemyExposed) atkParts.push('🔓 QUEBRA POSTURA!');
-      if (prevAtk.nextState.enemyHp <= 0) atkParts.push('🏆 ABATE AGORA!');
-      by('btn-attack-sub').textContent = atkParts.join(' · ');
-
-      by('btn-defend-title').textContent = `🛡️ ${acts.defense.title} (+${acts.defense.shieldGain} Escudo)`;
-      const defParts = [`Você fica com ${prevDef.nextState.playerHp}/${state.playerMaxHp} PV`];
-      if (acts.defense.thorns) defParts.push(`Espinhos (${acts.defense.thorns})`);
-      if (prevDef.nextState.enemyExposed && !state.enemyExposed) defParts.push('🔓 QUEBRA POSTURA!');
-      by('btn-defend-sub').textContent = defParts.join(' · ');
+      footer.hidden = false;
+      outBar.hidden = true;
+      const endBtn = by('btn-end-turn');
+      endBtn.className = state.atp === 0 ? 'btn-primary end-turn-btn' : 'btn-warn end-turn-btn';
+      endBtn.textContent = state.atp === 0
+        ? '⏭️ ATP Esgotado · Encerrar Turno →'
+        : `⏭️ Encerrar Turno (${state.atp} ATP restante)`;
     }
 
-    // Feed de Eventos do Turno
+    // Feed de Eventos
     const feed = by('event-feed');
     feed.replaceChildren();
-    if (state.lastEvents.length === 0) {
-      feed.append(el('div', state.enemyExposed
-        ? '🔓 Postura quebrada! Toque num órgão brilhante do inimigo para arrancar e enxertar!'
-        : 'Toque em um órgão do seu corpo para alterná-lo entre Garra e Carapaça (grátis), ou escolha Atacar / Defender.', 'event-item'));
-    } else {
-      for (const ev of state.lastEvents) {
-        feed.append(el('div', ev.text, 'event-item'));
-      }
+    for (const line of state.turnLog) {
+      feed.append(el('div', line, 'event-item'));
     }
   }
 
-  function renderSocketGroup(groupName, containerId) {
-    const container = by(containerId);
-    container.replaceChildren();
-    const otherGroup = groupName === 'attack' ? 'defense' : 'attack';
+  function openInstallModal(organId, isFromLoot) {
+    pendingOrganToInstall = organId;
+    const def = C.ORGANS[organId];
+    const modal = by('install-modal');
+    by('install-title').textContent = isFromLoot
+      ? `🧬 Enxertar ${def.name} (+1 ATP e +4 Escudo!)`
+      : `🔄 Posicionar ${def.name} no Circuito`;
+    by('install-desc').textContent = `${def.desc} · ${def.synapseDesc}`;
 
-    state.slots[groupName].forEach((gId, idx) => {
-      if (!gId) {
-        const empty = el('div', '', 'socket-slot');
-        empty.append(
-          el('div', 'Encaixe vazio', 's-title'),
-          el('div', groupName === 'attack' ? 'Roube um órgão p/ sua Garra' : 'Roube um órgão p/ sua Carapaça', 's-effect')
-        );
-        container.append(empty);
-        return;
-      }
-      const g = B.GENES[gId];
-      const slot = el('button', '', 'socket-slot filled');
-      slot.type = 'button';
-      slot.style.borderColor = g.color;
-      const titleRow = el('div', '', 's-title');
-      const left = el('span', g.name);
-      left.style.color = g.color;
-      const costLbl = state.swapsUsedThisTurn === 0 ? 'GRÁTIS' : '-2 PV';
-      const swapHint = el('span', `⇄ ${otherGroup === 'attack' ? 'Garra' : 'Carapaça'} (${costLbl})`, 'organ-tag');
-      titleRow.append(left, swapHint);
-
-      const eff = el('div', groupName === 'attack' ? g.onAttack : g.onDefense, 's-effect');
-      slot.append(titleRow, eff);
-
-      slot.onclick = () => {
-        if (state.outcome !== 'ongoing') return;
-        try {
-          const targetIdx = state.slots[otherGroup][0] === null ? 0 : state.slots[otherGroup][1] === null ? 1 : 0;
-          state = B.equipGene(state, gId, otherGroup, targetIdx);
-          render();
-        } catch (err) {
-          state.lastEvents = [{ type: 'warn', text: `⚠️ ${err.message}` }, ...state.lastEvents];
-          render();
-        }
+    const grid = by('slot-pick-grid');
+    grid.replaceChildren();
+    for (let i = 0; i < C.SLOT_COUNT; i++) {
+      const cur = state.slots[i];
+      const b = el('button', '', cur ? 'btn-ghost' : 'btn-good');
+      b.type = 'button';
+      b.style.textAlign = 'left';
+      b.innerHTML = `<b style="display:block;color:var(--accent)">Slot ${i + 1}${i < 3 ? ` (envia pulso p/ Slot ${i + 2})` : ' (receptor final)'}</b>` +
+        `<span style="font-size:.74rem">${cur ? `Trocar com ${C.ORGANS[cur].name}` : '+ Encaixe Livre'}</span>`;
+      b.onclick = () => {
+        modal.hidden = true;
+        pendingOrganToInstall = null;
+        state = C.installOrgan(state, organId, i);
+        render();
       };
-      container.append(slot);
-    });
-  }
-
-  function runTurn(action) {
-    state = B.step(state, action);
-    if (action.kind === 'attack' || action.kind === 'graft_strike') {
-      triggerShake('enemy-card');
-    } else {
-      triggerShake('player-card');
+      grid.append(b);
     }
-    render();
+    modal.hidden = false;
   }
 
   function renderAtlasModal() {
@@ -1672,71 +1471,52 @@ button:disabled{opacity:.4;cursor:not-allowed}
     list.replaceChildren();
     const seen = new Set(state.atlas);
 
-    for (const g of Object.values(B.GENES)) {
-      const unlocked = seen.has(`GENE:${g.id}`);
-      const item = el('div', '', `atlas-item${unlocked ? '' : ' locked'}`);
-      item.append(
-        el('b', unlocked ? `🧬 ${g.name} (${g.tag})` : `🔒 Órgão Desconhecido (${g.tag})`),
-        el('div', unlocked ? `• Na Garra: ${g.onAttack}` : 'Encontre uma presa com este órgão para registrar.'),
-        el('div', unlocked ? `• Na Carapaça: ${g.onDefense}` : '')
-      );
-      list.append(item);
+    for (const org of Object.values(C.ORGANS)) {
+      const ok = seen.has(`ORGAN:${org.id}`);
+      const d = el('div', '', '');
+      d.style.cssText = 'background:var(--well);border:1px solid var(--edge);border-radius:8px;padding:7px 9px';
+      d.innerHTML = ok
+        ? `<b style="color:${org.color}">🧬 ${org.name} (${org.cost} ATP · ${org.tag})</b><div>${org.desc}</div><div style="color:var(--warn)">${org.synapseDesc}</div>`
+        : `<b style="color:var(--muted)">🔒 Órgão Desconhecido (${org.tag})</b>`;
+      list.append(d);
     }
-
-    for (const m of B.MUTATIONS) {
-      const unlocked = seen.has(`MUT:${m.id}`);
-      const pairNames = m.genes.map(id => B.GENES[id].short).join(' + ');
-      const item = el('div', '', `atlas-item${unlocked ? '' : ' locked'}`);
-      item.append(
-        el('b', unlocked ? `✨ ${m.name} (${pairNames})` : `🔒 Mutação Secreta (${pairNames})`),
-        el('div', unlocked ? m.desc : `Equipe ${pairNames} juntos no seu organismo para despertar esta mutação.`)
-      );
-      list.append(item);
+    for (const cm of C.CIRCUIT_MUTATIONS) {
+      const ok = seen.has(`CIRCUIT:${cm.id}`);
+      const pairNames = cm.pair.map(id => C.ORGANS[id].name).join(' → ');
+      const d = el('div', '', '');
+      d.style.cssText = 'background:var(--well);border:1px solid var(--purple);border-radius:8px;padding:7px 9px';
+      d.innerHTML = ok
+        ? `<b style="color:#d8b4fe">⚡ ${cm.name} (${pairNames})</b><div>${cm.desc}</div>`
+        : `<b style="color:var(--muted)">🔒 Circuito Secreto (${pairNames})</b><div>Coloque esses dois órgãos lado a lado para descobrir.</div>`;
+      list.append(d);
     }
   }
 
   function render() {
     renderStageTrack();
-    renderHuntBanner();
+    renderLootTray();
     renderEnemy();
     renderPlayer();
   }
 
-  by('btn-attack').onclick = () => runTurn({ kind: 'attack' });
-  by('btn-defend').onclick = () => runTurn({ kind: 'defend' });
-
-  by('btn-close-graft').onclick = () => {
-    by('graft-modal').hidden = true;
-    selectedGraftGene = null;
+  by('btn-end-turn').onclick = () => {
+    state = C.endTurn(state);
+    render();
   };
-
-  by('btn-atlas').onclick = () => {
-    renderAtlasModal();
-    by('atlas-modal').hidden = false;
-  };
+  by('btn-close-install').onclick = () => { by('install-modal').hidden = true; };
+  by('btn-atlas').onclick = () => { renderAtlasModal(); by('atlas-modal').hidden = false; };
   by('btn-close-atlas').onclick = () => { by('atlas-modal').hidden = true; };
-
   by('btn-how').onclick = () => { by('how-modal').hidden = false; };
   by('btn-close-how').onclick = () => { by('how-modal').hidden = true; };
   by('btn-ok-how').onclick = () => { by('how-modal').hidden = true; };
-
   by('btn-restart').onclick = () => {
-    state = B.createRunState(0, { atlas: state.atlas });
+    state = C.createRunState(0, { atlas: state.atlas });
     render();
   };
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      by('graft-modal').hidden = true;
-      by('atlas-modal').hidden = true;
-      by('how-modal').hidden = true;
-    }
-  });
-
-  window.__BIO_DEBUG__ = {
+  window.__BIO_CIRCUIT_DEBUG__ = {
     getState: () => state,
     setState: s => { state = s; render(); },
-    openGraftModal,
   };
 
   render();
