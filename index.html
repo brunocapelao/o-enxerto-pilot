@@ -1,0 +1,2324 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>O Enxerto · Piloto v0.7.1</title>
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0d1411;
+  --panel:#16211c;
+  --well:#101915;
+  --edge:#354a3f;
+  --edge-hi:#5f836e;
+  --text:#f2f6ec;
+  --muted:#b5c6bc;
+  --accent:#d9f58b;
+  --accent-ink:#101a13;
+  --good:#6ee7b7;
+  --warn:#fbbf24;
+  --danger:#f87171;
+  --info:#7dd3fc;
+  /* Paleta acessível (Okabe-Ito adaptada) com texto escuro >= 7:1 */
+  --g-I:#f5b971;
+  --g-T:#86d4a8;
+  --g-A:#e8a8d0;
+  --g-F:#f2dc74;
+  --g-R:#8ec4f5;
+  --g-V:#8de0d6;
+  --g-Q:#f59898;
+  --g-B:#c9b8f5;
+  --g-M:#d6c6a5;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:radial-gradient(ellipse at 15% 0,#223729,transparent 55%),var(--bg);color:var(--text);font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+body{min-height:100dvh}
+button,select,input{font:inherit;color:var(--text)}
+button,select,input{background:#213128;border:1px solid var(--edge);border-radius:8px;min-height:44px;padding:6px 10px}
+button{cursor:pointer;font-weight:600;transition:border-color .12s,transform .08s,background .12s}
+button:hover:not(:disabled){border-color:var(--accent)}
+button:active:not(:disabled){transform:scale(.98)}
+button:disabled{opacity:.42;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn-good{background:#1b3c2d;border-color:var(--good);color:#d7ffed}
+.btn-warn{background:#3b2d14;border-color:var(--warn);color:#fef0c7}
+.btn-danger{background:#421b1b;border-color:var(--danger);color:#fee2e2}
+.btn-ghost{background:transparent;border-color:var(--edge);color:var(--muted)}
+.btn-sm{min-height:36px;padding:4px 8px;font-size:.82rem}
+
+.shell{max-width:980px;margin:0 auto;padding:8px 10px 14px;display:flex;flex-direction:column;gap:8px}
+
+/* Cabeçalho compacto + gaveta de moderação */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:6px}
+.brand h1{margin:0;font-size:1.05rem;letter-spacing:-.02em}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:999px;font-size:.74rem;font-weight:700;background:var(--well);border:1px solid var(--edge);color:var(--muted)}
+.badge.mode-enxerto{border-color:var(--accent);color:var(--accent)}
+.badge.mode-controle{border-color:var(--info);color:var(--info)}
+.top-controls{display:flex;gap:5px;align-items:center}
+
+.mod-drawer{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:10px;display:grid;gap:8px}
+.mod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px}
+.mod-grid label{display:grid;gap:3px;font-size:.76rem;color:var(--muted)}
+.mod-grid select,.mod-grid input{min-height:38px;padding:4px 8px;font-size:.84rem;width:100%}
+.mod-help-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--edge);padding-top:8px}
+.mod-help-row small{color:var(--muted);font-size:.76rem}
+
+/* Layout principal: 1 coluna mobile (4 faixas compactas) / 2 colunas desktop */
+.arena{display:grid;grid-template-columns:1fr;gap:8px}
+@media(min-width:780px){
+  .shell{padding:14px 18px 24px;gap:12px}
+  .arena{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:start;gap:12px}
+  .col-left,.col-right{display:flex;flex-direction:column;gap:10px}
+}
+.col-left,.col-right{display:flex;flex-direction:column;gap:8px;min-width:0}
+
+.card{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:9px 10px;min-width:0}
+
+/* Faixa 1: Inimigo + Intenção + Genes expostos */
+.enemy-head{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.enemy-title{display:flex;align-items:center;gap:6px}
+.enemy-title h2{margin:0;font-size:1rem}
+.hp-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:7px;background:var(--well);border:1px solid var(--edge);font-size:.82rem}
+.hp-pill b{color:var(--accent)}
+.enemy-intent-row{margin-top:6px;display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:6px 8px}
+.intent-main{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.88rem}
+.intent-dmg{color:var(--warn);font-weight:800}
+.intent-guard{color:var(--info);font-weight:800}
+.enemy-genes{margin-top:6px;display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.gene-chip{display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:3px 8px;border-radius:7px;font-size:.78rem;font-weight:700;border:1px solid var(--edge);background:var(--well);color:var(--muted)}
+.gene-chip.exposed{background:#342611;border:2px solid var(--warn);color:#fff2cc;cursor:pointer;animation:pulse 1.5s infinite}
+.gene-chip.exposed.active-target{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);animation:none}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,.35)}50%{box-shadow:0 0 0 4px rgba(251,191,36,0)}}
+
+/* Faixa 2: Status do Jogador OU Cartão de Prévia Fixo */
+.status-bar{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.player-stats{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.window-pill{margin-top:6px;padding:5px 8px;border-radius:8px;font-size:.8rem;background:var(--well);border:1px solid var(--edge);color:var(--muted)}
+.window-pill.open{background:#183324;border-color:var(--good);color:#d7ffed;font-weight:600}
+
+.preview-card{border:2px solid var(--accent);background:#18281e}
+.preview-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px}
+.preview-head b{color:var(--accent);font-size:.88rem}
+.preview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.p-box{background:var(--well);border:1px solid var(--edge);border-radius:8px;padding:5px 6px;font-size:.76rem}
+.p-box small{display:block;color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.03em}
+.p-box strong{display:block;margin-top:2px;font-size:.82rem;color:var(--text)}
+.p-box .gain{color:var(--good);display:block}
+.p-box .loss{color:var(--warn);display:block}
+.risk-banner{margin-top:6px;padding:5px 8px;border-radius:7px;font-size:.78rem;font-weight:700}
+.risk-banner.warn{background:#3b2b10;border:1px solid var(--warn);color:#fef0c7}
+.risk-banner.danger{background:#471919;border:1px solid var(--danger);color:#fee2e2}
+.preview-actions{margin-top:7px;display:flex;gap:6px;flex-wrap:wrap}
+.preview-actions button{flex:1 1 auto;min-height:40px}
+
+/* Faixa 3: Grade 4x3 com portas diretas e pontes vivas */
+.board-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px}
+.board-head h3{margin:0;font-size:.9rem}
+.board-hint{font-size:.78rem;color:var(--muted);margin:0 0 6px}
+.board-wrap{position:relative;max-width:348px;margin:0 auto}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.cell{
+  position:relative;
+  min-height:54px;
+  aspect-ratio:1.35;
+  padding:2px;
+  border-radius:8px;
+  background:var(--well);
+  border:1.5px dashed var(--edge);
+  color:var(--muted);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  line-height:1.05;
+  user-select:none;
+}
+.cell.filled{color:#0c130f;border-style:solid;border-color:rgba(0,0,0,.35)}
+.cell .cid{font-size:.98rem;font-weight:850}
+.cell .cname{font-size:.64rem;font-weight:700;opacity:.88}
+.cell.selected{outline:2.5px solid #ffffff;outline-offset:-2px;z-index:2}
+.cell.target-free{border:2.5px solid var(--good)!important;box-shadow:0 0 0 2px rgba(110,231,183,.25);z-index:2}
+.cell.target-swap{border:2.5px dashed var(--warn)!important;box-shadow:0 0 0 2px rgba(251,191,36,.25);z-index:2}
+.cell.target-picked{outline:3px solid var(--accent)!important;outline-offset:1px;z-index:3}
+.cell.dimmed{opacity:.42}
+.cell .tbadge{position:absolute;top:2px;right:3px;font-size:.66rem;font-weight:900;padding:0 3px;border-radius:4px;background:#0d1411;color:var(--good);line-height:1.25}
+.cell.target-swap .tbadge{color:var(--warn)}
+
+.port{position:absolute;font-size:.66rem;line-height:1;padding:1px 2px;border-radius:3px;background:#101915;color:#e5efe8;pointer-events:none}
+.port.out{color:var(--accent)}
+.port.linked{background:var(--accent);color:#0f1912;font-weight:900}
+.port.n{top:-1px;left:50%;transform:translateX(-50%)}
+.port.s{bottom:-1px;left:50%;transform:translateX(-50%)}
+.port.e{right:-1px;top:50%;transform:translateY(-50%)}
+.port.w{left:-1px;top:50%;transform:translateY(-50%)}
+
+/* Atalhos contextuais (modo destino / reconfigurar / montagem livre) */
+.quick-strip{margin-top:6px;display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.quick-strip button{min-height:38px;padding:5px 9px;font-size:.8rem}
+.feedback-line{margin:5px 0 0;min-height:1.1em;font-size:.78rem;color:var(--warn)}
+
+/* Faixa 4: Barra de Ações do Turno */
+.action-bar{display:flex;gap:6px;flex-wrap:wrap}
+.action-bar button{flex:1 1 calc(50% - 6px);min-height:44px;padding:6px 8px;font-size:.84rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.action-bar button small{font-size:.69rem;font-weight:500;opacity:.85}
+
+@media(max-width:779px){
+  .shell{padding:6px 8px 10px;gap:5px}
+  .topbar{flex-wrap:nowrap}
+  .brand h1{font-size:.94rem}
+  #version-badge{display:none}
+  .top-controls .btn-sm{min-height:32px;padding:3px 7px;font-size:.74rem}
+  .arena,.col-left,.col-right{gap:5px}
+  .card{padding:6px 8px;border-radius:10px}
+  .enemy-head{flex-wrap:nowrap}
+  .enemy-title h2{font-size:.92rem}
+  #btn-sentinela{min-height:30px;padding:2px 7px;font-size:.74rem}
+  .hp-pill{padding:2px 6px;font-size:.76rem}
+  .enemy-intent-row{margin-top:4px;padding:4px 7px;font-size:.82rem}
+  .enemy-genes{margin-top:4px;gap:4px}
+  .gene-chip{min-height:28px;padding:2px 6px;font-size:.72rem}
+  #phase-badge{display:none}
+  .window-pill{margin-top:4px;padding:4px 7px;font-size:.74rem}
+  .board-head{margin-bottom:3px}
+  .board-hint{font-size:.72rem;margin:0 0 4px}
+  .board{gap:4px}
+  .cell{min-height:44px;aspect-ratio:1.65}
+  .cell .cid{font-size:.88rem}
+  .cell .cname{font-size:.58rem}
+  .quick-strip{margin-top:4px}
+  .feedback-line{margin-top:3px;min-height:0;font-size:.74rem}
+  .action-bar button{min-height:42px;padding:4px 6px;font-size:.82rem}
+}
+
+/* Resumo de conexões e registro recolhível */
+details.fold{background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:7px 10px}
+details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(--muted)}
+.repertoire{margin-top:6px;display:grid;gap:4px;font-size:.8rem}
+.repertoire div{border-top:1px solid var(--edge);padding-top:4px}
+#log{margin:6px 0 0;padding-left:18px;font-size:.8rem;color:var(--muted);display:grid;gap:3px}
+
+/* Banner de fim de encontro / montagem entre lutas */
+.end-box{display:grid;gap:8px;text-align:left}
+.end-box h3{margin:0;font-size:1rem}
+.end-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+/* Modal Sentinela e Repetição */
+.modal-backdrop{position:fixed;inset:0;background:rgba(5,10,8,.76);display:flex;align-items:center;justify-content:center;padding:14px;z-index:50}
+.modal-card{background:var(--panel);border:1px solid var(--edge-hi);border-radius:14px;padding:14px;max-width:420px;width:100%;display:grid;gap:10px}
+.modal-card h3{margin:0;font-size:1rem}
+.modal-card textarea{width:100%;min-height:68px;background:var(--well);border:1px solid var(--edge);border-radius:8px;padding:8px;color:var(--text);font:inherit}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand">
+      <h1>O Enxerto</h1>
+      <span class="badge" id="version-badge">v0.7.1</span>
+      <span class="badge" id="mode-badge">Enxerto</span>
+    </div>
+    <div class="top-controls">
+      <button type="button" class="btn-sm btn-ghost" id="btn-mod" aria-expanded="false">Moderação</button>
+      <button type="button" class="btn-sm" id="btn-save">Salvar JSON</button>
+      <button type="button" class="btn-sm btn-ghost" id="btn-reset">Recomeçar</button>
+    </div>
+  </header>
+
+  <section class="mod-drawer" id="mod-drawer" aria-label="Painel de moderação" hidden>
+    <div class="mod-grid">
+      <label>Código participante
+        <input id="inp-code" type="text" value="P01" maxlength="16" aria-label="Código do participante">
+      </label>
+      <label>Condição
+        <select id="sel-condition">
+          <option value="enxerto">Enxerto (em combate)</option>
+          <option value="controle">Controle (só reserva)</option>
+        </select>
+      </label>
+      <label>Perfil inicial
+        <select id="sel-profile">
+          <option value="cheia">Cheia (12 PV · com M)</option>
+          <option value="aberta">Aberta (15 PV · livre)</option>
+        </select>
+      </label>
+      <label>Cenário / Sequência
+        <select id="sel-scenario">
+          <option value="A">Sequência A (Reflexo A → Sentinela)</option>
+          <option value="B">Sequência B (Reflexo B → Sentinela)</option>
+          <option value="exercicio_neutro">Exercício neutro</option>
+          <option value="contraexemplo">Contraexemplo</option>
+        </select>
+      </label>
+    </div>
+    <div class="mod-help-row">
+      <small>Registrar ajuda:</small>
+      <button type="button" class="btn-sm" data-help="control">Ajuda: Controle</button>
+      <button type="button" class="btn-sm" data-help="rule">Ajuda: Regra</button>
+      <button type="button" class="btn-sm btn-warn" data-help="strategy">Ajuda: Estratégia</button>
+      <button type="button" class="btn-sm btn-ghost" id="btn-replay-modal">Registrar repetição</button>
+    </div>
+  </section>
+
+  <main class="arena" id="arena">
+    <div class="col-left">
+      <!-- FAIXA 1: Inimigo -->
+      <section class="card" aria-labelledby="enemy-name">
+        <div class="enemy-head">
+          <div class="enemy-title">
+            <h2 id="enemy-name">Reflexo A</h2>
+            <span class="badge" id="turn-badge">Turno 1 / 7</span>
+          </div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <span class="hp-pill">PV <b id="enemy-hp">9 / 9</b></span>
+            <button type="button" class="btn-sm btn-ghost" id="btn-sentinela">Ver Sentinela</button>
+          </div>
+        </div>
+        <div class="enemy-intent-row">
+          <div class="intent-main" id="enemy-intent"></div>
+          <small id="enemy-passive" style="color:var(--muted)"></small>
+        </div>
+        <div class="enemy-genes" id="enemy-genes" aria-label="Genes do inimigo"></div>
+      </section>
+
+      <!-- FAIXA 2: Status do Jogador OU Cartão Fixo de Prévia -->
+      <section class="card" id="status-card" aria-live="polite">
+        <div class="status-bar">
+          <div class="player-stats" id="player-stats"></div>
+          <span class="badge" id="phase-badge">Combate</span>
+        </div>
+        <div class="window-pill" id="window-pill"></div>
+      </section>
+
+      <section class="card preview-card" id="preview-card" aria-live="polite" hidden>
+        <div class="preview-head">
+          <b id="preview-title">Prévia</b>
+          <button type="button" class="btn-sm" id="btn-rotate-preview" hidden>Girar destino ↻</button>
+        </div>
+        <div class="preview-grid">
+          <div class="p-box">
+            <small>Golpe inimigo</small>
+            <strong id="prev-enemy">—</strong>
+          </div>
+          <div class="p-box">
+            <small>Seu genoma</small>
+            <strong id="prev-genome">—</strong>
+          </div>
+          <div class="p-box">
+            <small>Dano líquido</small>
+            <strong id="prev-damage">—</strong>
+          </div>
+        </div>
+        <div class="risk-banner" id="prev-risk" hidden></div>
+        <div class="preview-actions">
+          <button type="button" class="btn-primary" id="btn-confirm">Confirmar turno</button>
+          <button type="button" class="btn-ghost" id="btn-cancel">Cancelar</button>
+        </div>
+      </section>
+
+      <!-- FAIXA 4 (em mobile aparece abaixo da grade via order, mas agrupamos ações perto da grade) -->
+      <section class="card" id="end-card" hidden>
+        <div class="end-box">
+          <h3 id="end-title"></h3>
+          <p id="end-desc" style="margin:0;color:var(--muted);font-size:.86rem"></p>
+          <div class="end-actions" id="end-actions"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-right">
+      <!-- FAIXA 3: Grade 4x3 do Jogador -->
+      <section class="card" aria-labelledby="board-title">
+        <div class="board-head">
+          <h3 id="board-title">Seu Genoma (4×3)</h3>
+          <span class="badge" id="space-badge">12 / 12 células</span>
+        </div>
+        <p class="board-hint" id="board-hint"></p>
+        <div class="board-wrap">
+          <div class="board" id="board" role="grid" aria-label="Grade 4 por 3 do jogador"></div>
+        </div>
+        <div class="quick-strip" id="quick-strip"></div>
+        <p class="feedback-line" id="feedback" role="status" aria-live="polite"></p>
+      </section>
+
+      <!-- FAIXA 4: Ações do Turno -->
+      <section class="card" id="actions-card" aria-label="Ações do turno">
+        <div class="action-bar" id="action-bar"></div>
+      </section>
+
+      <details class="fold">
+        <summary>Expressões ativas e registro de combate</summary>
+        <div class="repertoire" id="repertoire"></div>
+        <ol id="log" aria-label="Registro de combate"></ol>
+      </details>
+    </div>
+  </main>
+</div>
+
+<!-- Modal: Ver Sentinela -->
+<div class="modal-backdrop" id="sentinela-modal" role="dialog" aria-modal="true" aria-labelledby="sent-title" hidden>
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3 id="sent-title">Próximo encontro · Sentinela (11 PV)</h3>
+      <button type="button" class="btn-sm btn-ghost" id="btn-close-sentinela">Fechar</button>
+    </div>
+    <p style="margin:0;color:var(--muted);font-size:.84rem">
+      Intenções: <b>Rajada (2+2+2) → Impacto (3+3) → Guarda (3) → Rajada (2+2+2)</b>.<br>
+      Defesa ativa: <b>Amortecimento (M)</b> reduz <b>-2 por ataque</b>.
+    </p>
+    <p style="margin:0;font-size:.82rem;color:var(--accent)">
+      Dica tática: <b>Revestimento (B)</b> corta cada golpe da Rajada (2+2+2 → 1+1+1). <b>Repique (Q)</b> acelera o dano ou dobra sua Riposta (ignora M).
+    </p>
+    <div id="sentinela-mini-board" class="board" style="max-width:260px;margin:0 auto"></div>
+  </div>
+</div>
+
+<!-- Modal: Repetição opcional -->
+<div class="modal-backdrop" id="replay-modal" role="dialog" aria-modal="true" aria-labelledby="rep-title" hidden>
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3 id="rep-title">Repetição opcional (Debrief)</h3>
+      <button type="button" class="btn-sm btn-ghost" id="btn-close-replay">Fechar</button>
+    </div>
+    <p style="margin:0;color:var(--muted);font-size:.84rem">O participante aceitou repetir uma situação para testar outro plano?</p>
+    <textarea id="replay-plan" placeholder="Plano verbalizado pelo participante (ex.: vou guardar B para a Sentinela)..."></textarea>
+    <div style="display:flex;gap:6px">
+      <button type="button" class="btn-primary" id="btn-replay-yes" style="flex:1">Sim, repetir agora</button>
+      <button type="button" class="btn-ghost" id="btn-replay-no" style="flex:1">Não repetiu</button>
+    </div>
+  </div>
+</div>
+
+<script>window.ENXERTO_FIXTURES = {
+  "versao_contrato": "0.7.1",
+  "grade": [4, 3],
+  "ordem_tupla": ["gene", "x", "y", "rotacao"],
+  "genomas": {
+    "cheia": [
+      ["I", 0, 2, 2],
+      ["T", 1, 0, 0],
+      ["A", 2, 1, 0],
+      ["F", 0, 1, 2],
+      ["R", 1, 2, 0],
+      ["V", 0, 0, 2],
+      ["M", 2, 0, 0]
+    ],
+    "aberta": [
+      ["I", 0, 2, 2],
+      ["T", 1, 0, 0],
+      ["A", 2, 1, 0],
+      ["F", 0, 1, 2],
+      ["R", 1, 2, 0],
+      ["V", 0, 0, 2]
+    ],
+    "reflexo_A": [
+      ["I", 1, 0, 0],
+      ["T", 0, 1, 0],
+      ["F", 1, 1, 0],
+      ["Q", 2, 0, 0],
+      ["B", 1, 2, 0]
+    ],
+    "reflexo_B": [
+      ["I", 2, 0, 0],
+      ["T", 3, 1, 2],
+      ["F", 2, 1, 0],
+      ["Q", 0, 0, 2],
+      ["B", 2, 2, 2]
+    ],
+    "sentinela": [
+      ["I", 0, 0, 0],
+      ["R", 1, 0, 0],
+      ["Q", 0, 1, 1],
+      ["T", 1, 1, 0],
+      ["M", 2, 1, 0]
+    ],
+    "exercicio_jogador": [
+      ["I", 0, 2, 2],
+      ["T", 1, 0, 0],
+      ["A", 2, 1, 0],
+      ["F", 0, 1, 2]
+    ],
+    "exercicio_alvo": [
+      ["I", 1, 0, 0],
+      ["Q", 2, 0, 0]
+    ]
+  },
+  "estados": [
+    {
+      "id": "repique_exposto_cheia",
+      "jogador": "cheia",
+      "inimigo": "reflexo_A",
+      "pv_jogador": 6,
+      "pv_max_jogador": 12,
+      "pv_inimigo": 8,
+      "intencao": "Impacto",
+      "expostos": ["Q", "B"],
+      "ataque_bruto": [4, 4]
+    },
+    {
+      "id": "repique_exposto_aberta",
+      "jogador": "aberta",
+      "inimigo": "reflexo_A",
+      "pv_jogador": 8,
+      "pv_max_jogador": 15,
+      "pv_inimigo": 8,
+      "intencao": "Impacto",
+      "expostos": ["Q", "B"],
+      "ataque_bruto": [4, 4]
+    },
+    {
+      "id": "contraexemplo_cheia",
+      "jogador": "cheia",
+      "inimigo": "reflexo_A",
+      "pv_jogador": 6,
+      "pv_max_jogador": 12,
+      "pv_inimigo": 3,
+      "intencao": "Impacto",
+      "expostos": ["Q", "B"],
+      "ataque_bruto": [4, 4]
+    },
+    {
+      "id": "contraexemplo_aberta",
+      "jogador": "aberta",
+      "inimigo": "reflexo_A",
+      "pv_jogador": 6,
+      "pv_max_jogador": 15,
+      "pv_inimigo": 3,
+      "intencao": "Impacto",
+      "expostos": ["Q", "B"],
+      "ataque_bruto": [4, 4]
+    },
+    {
+      "id": "exercicio_neutro",
+      "jogador": "exercicio_jogador",
+      "inimigo": "exercicio_alvo",
+      "pv_jogador": 10,
+      "pv_max_jogador": 10,
+      "pv_inimigo": 6,
+      "intencao": "Impacto",
+      "expostos": ["Q"],
+      "ataque_bruto": [3, 3]
+    }
+  ],
+  "calibracao_v0_7_1": {
+    "perfis": {
+      "cheia": { "pv_max_jogador": 12 },
+      "aberta": { "pv_max_jogador": 15 }
+    },
+    "recuperacao_entre_lutas": 2,
+    "encontros": {
+      "reflexo_A": {
+        "nome": "Reflexo A",
+        "genoma": "reflexo_A",
+        "pv": 9,
+        "intencoes": ["Impacto", "Impacto", "Guarda", "Impacto"],
+        "limite_turnos": 7
+      },
+      "reflexo_B": {
+        "nome": "Reflexo B",
+        "genoma": "reflexo_B",
+        "pv": 10,
+        "intencoes": ["Guarda", "Impacto", "Impacto", "Guarda"],
+        "limite_turnos": 7
+      },
+      "sentinela": {
+        "nome": "Sentinela",
+        "genoma": "sentinela",
+        "pv": 11,
+        "intencoes": ["Rajada", "Impacto", "Guarda", "Rajada"],
+        "limite_turnos": 7
+      }
+    }
+  }
+};</script>
+<script>
+/* O Enxerto (New Genome) · Motor Determinístico v0.7.1 (puro, imutável, zero dependências).
+ * Compartilhado entre Node (testes/simulador) e Navegador (prévia === resolução). */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  if (root) root.EnxertoEngine = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, () => {
+  'use strict';
+
+  const WIDTH = 4;
+  const HEIGHT = 3;
+  const BUILD_VERSION = '0.7.1';
+
+  const CATALOG = {
+    I: {
+      id: 'I', name: 'Impulso', short: 'Imp', kind: 'core',
+      cells: [[0, 0]],
+      ports: [[0, 0, 0, 1], [0, 0, 1, 0], [0, 0, -1, 0]],
+      description: 'Libera Impacto (3 de dano base). Sem Impulso, ação basal é Patada (2).',
+    },
+    T: {
+      id: 'T', name: 'Trama', short: 'Tra', kind: 'core',
+      cells: [[0, 0], [0, 1]],
+      ports: [[0, 0, 1, 0], [0, 1, 1, 0], [0, 0, -1, 0], [0, 1, -1, 0], [0, 0, 0, -1], [0, 1, 0, 1]],
+      description: 'Libera Guarda (3). Bloqueio total de dano positivo dispara Riposta de 2 (ignora B/M).',
+    },
+    A: {
+      id: 'A', name: 'Aderência', short: 'Ade', kind: 'core',
+      cells: [[0, 0], [1, 0], [1, 1]],
+      ports: [[0, 0, -1, 0], [0, 0, 0, 1], [1, 0, 0, -1]],
+      description: 'Conectada a Trama, abre janela de extração quando Guarda absorve ≥ 1 de dano.',
+    },
+    F: {
+      id: 'F', name: 'Rigidez', short: 'Rig', kind: 'mod', output: true,
+      cells: [[0, 0]],
+      ports: [[0, 0, 0, -1]],
+      description: 'Em Impulso: +1 ao golpe base. Em Trama: +2 à Guarda.',
+    },
+    R: {
+      id: 'R', name: 'Ritmo', short: 'Rit', kind: 'mod', output: true,
+      cells: [[0, 0], [1, 0]],
+      ports: [[0, 0, -1, 0]],
+      description: 'Em Impulso: libera Rajada (2 golpes de Impacto - 1, mín. 1).',
+    },
+    V: {
+      id: 'V', name: 'Reserva', short: 'Res', kind: 'mod', output: true,
+      cells: [[0, 0]],
+      ports: [[0, 0, -1, 0]],
+      description: 'Em Trama: cura +1 PV (1× por luta) após Guarda que absorve dano com PV abaixo do máx.',
+    },
+    Q: {
+      id: 'Q', name: 'Repique', short: 'Rep', kind: 'mod', output: true, extractable: true,
+      cells: [[0, 0], [1, 0]],
+      ports: [[0, 0, -1, 0]],
+      description: 'Em Impulso: repete 1× o último golpe. Em Trama: repete 1× a Riposta (2+2).',
+    },
+    B: {
+      id: 'B', name: 'Revestimento', short: 'Rev', kind: 'mod', output: true, extractable: true,
+      cells: [[0, 0]],
+      ports: [[0, 0, -1, 0]],
+      description: 'Em Trama: reduz em 1 cada golpe recebido (antes de M e da Guarda).',
+    },
+    M: {
+      id: 'M', name: 'Amortecimento', short: 'Amo', kind: 'mod', output: true, extractable: true,
+      cells: [[0, 0], [1, 0]],
+      ports: [[0, 0, -1, 0]],
+      description: 'Em Trama: reduz em 2 o dano total de cada ataque recebido (empilha com B).',
+    },
+  };
+
+  const EXTRACTABLE = new Set(['Q', 'B', 'M']);
+  const PAIRS = [
+    ['F', 'I'], ['F', 'T'],
+    ['R', 'I'],
+    ['V', 'T'],
+    ['Q', 'I'], ['Q', 'T'],
+    ['B', 'T'], ['M', 'T'],
+    ['T', 'A'],
+  ];
+
+  function rotateVec(u, v, rotation) {
+    let x = u, y = v;
+    const steps = ((rotation % 4) + 4) % 4;
+    for (let n = 0; n < steps; n++) [x, y] = [-y, x];
+    return [x, y];
+  }
+
+  function piece(id, x, y, rotation = 0) {
+    const def = CATALOG[id];
+    if (!def) throw new RangeError(`Gene desconhecido: ${id}`);
+    const rot = ((rotation % 4) + 4) % 4;
+    const rawCells = def.cells.map(([u, v]) => rotateVec(u, v, rot));
+    const x0 = Math.min(...rawCells.map(c => c[0]));
+    const y0 = Math.min(...rawCells.map(c => c[1]));
+    const place = ([u, v]) => [u - x0 + x, v - y0 + y];
+    const cells = rawCells.map(place);
+    const ports = def.ports.map(([u, v, dx, dy]) => [
+      ...place(rotateVec(u, v, rot)),
+      ...rotateVec(dx, dy, rot),
+    ]);
+    return { id, x, y, rotation: rot, cells, ports };
+  }
+
+  const fromRows = rows => rows.map(([id, x, y, r]) => piece(id, x, y, r));
+  const serialize = layout =>
+    layout.map(p => [p.id, p.x, p.y, p.rotation]).sort((a, b) => a[0].localeCompare(b[0]));
+
+  function fits(layout) {
+    if (new Set(layout.map(p => p.id)).size !== layout.length) return false;
+    const seen = new Set();
+    for (const p of layout) {
+      for (const [x, y] of p.cells) {
+        if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) return false;
+        const k = `${x},${y}`;
+        if (seen.has(k)) return false;
+        seen.add(k);
+      }
+    }
+    return true;
+  }
+
+  function matchingPortEdge(a, b) {
+    for (const [x, y, dx, dy] of a.ports) {
+      for (const [u, v, du, dv] of b.ports) {
+        if (x + dx === u && y + dy === v && dx === -du && dy === -dv) {
+          return { from: [x, y], to: [u, v], dx, dy };
+        }
+      }
+    }
+    return null;
+  }
+
+  const plugs = (a, b) => matchingPortEdge(a, b) !== null;
+
+  function express(layout) {
+    const byId = new Map(layout.map(p => [p.id, p]));
+    const links = [];
+    const bridges = [];
+    for (const [a, b] of PAIRS) {
+      if (!byId.has(a) || !byId.has(b)) continue;
+      const edge = matchingPortEdge(byId.get(a), byId.get(b));
+      if (edge) {
+        links.push([a, b]);
+        bridges.push({ fromId: a, toId: b, from: edge.from, to: edge.to, dx: edge.dx, dy: edge.dy });
+      }
+    }
+    const has = (a, b) => links.some(([u, v]) => u === a && v === b);
+    const present = id => byId.has(id);
+
+    const basePower = present('I') ? 3 + (has('F', 'I') ? 1 : 0) : 2;
+    const attacks = {};
+    if (present('I')) {
+      attacks.Impacto = { id: 'Impacto', name: 'Impacto', hits: has('Q', 'I') ? [basePower, basePower] : [basePower] };
+      if (has('R', 'I')) {
+        const rh = Math.max(1, basePower - 1);
+        attacks.Rajada = { id: 'Rajada', name: 'Rajada', hits: has('Q', 'I') ? [rh, rh, rh] : [rh, rh] };
+      }
+    } else {
+      attacks.Patada = { id: 'Patada', name: 'Patada', hits: [2] };
+    }
+
+    const guard = present('T') ? 3 + (has('F', 'T') ? 2 : 0) : 0;
+    const riposteHits = present('T') ? (has('Q', 'T') ? [2, 2] : [2]) : [];
+    const perHitReduce = has('B', 'T') ? 1 : 0;
+    const perAttackReduce = has('M', 'T') ? 2 : 0;
+    const heal = has('V', 'T') ? 1 : 0;
+    const canExpose = has('T', 'A');
+
+    return {
+      attacks,
+      attackList: Object.values(attacks),
+      guard,
+      riposteHits,
+      perHitReduce,
+      perAttackReduce,
+      heal,
+      canExpose,
+      links,
+      bridges,
+      linkKeys: links.map(([a, b]) => `${a}->${b}`),
+      present: [...byId.keys()].sort(),
+    };
+  }
+
+  function describeLink(linkKey) {
+    switch (linkKey) {
+      case 'F->I': return 'Rigidez → Impulso (+1 dano base)';
+      case 'F->T': return 'Rigidez → Trama (+2 Guarda)';
+      case 'R->I': return 'Ritmo → Impulso (libera Rajada)';
+      case 'V->T': return 'Reserva → Trama (cura 1 PV ao defender)';
+      case 'Q->I': return 'Repique → Impulso (repete último golpe no próx. turno)';
+      case 'Q->T': return 'Repique → Trama (Riposta dupla 2+2)';
+      case 'B->T': return 'Revestimento → Trama (-1 por golpe recebido)';
+      case 'M->T': return 'Amortecimento → Trama (-2 por ataque recebido)';
+      case 'T->A': return 'Trama → Aderência (Guarda abre extração)';
+      default: return linkKey;
+    }
+  }
+
+  function validatePlacement(layout, cand, allowReplaceMax = 0) {
+    for (const [x, y] of cand.cells) {
+      if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) {
+        return { ok: false, reason: 'out_of_bounds', message: 'Fora da grade 4×3.' };
+      }
+    }
+    const others = layout.filter(p => p.id !== cand.id);
+    const cset = new Set(cand.cells.map(c => `${c[0]},${c[1]}`));
+    const colliding = others.filter(p => p.cells.some(c => cset.has(`${c[0]},${c[1]}`)));
+    if (colliding.length > allowReplaceMax) {
+      const reason = allowReplaceMax === 0 ? 'overlap' : 'too_many_replacements';
+      const message = allowReplaceMax === 0
+        ? `Sobrepõe ${colliding.map(p => CATALOG[p.id].name).join(' e ')}.`
+        : `Sobrepõe ${colliding.length} peças (máximo 1 substituição).`;
+      return { ok: false, reason, message, colliding: colliding.map(p => p.id) };
+    }
+    const removed = colliding[0]?.id ?? null;
+    const nextLayout = [...others.filter(p => p.id !== removed), cand];
+    return { ok: true, nextLayout, removed };
+  }
+
+  const SINGLE_CACHE = new Map();
+  function allSinglePlacements(id) {
+    if (SINGLE_CACHE.has(id)) return SINGLE_CACHE.get(id);
+    const out = [];
+    const seen = new Set();
+    for (let y = 0; y < HEIGHT; y++) {
+      for (let x = 0; x < WIDTH; x++) {
+        for (let r = 0; r < 4; r++) {
+          const cand = piece(id, x, y, r);
+          if (!fits([cand])) continue;
+          const k = JSON.stringify(cand.cells) + JSON.stringify(cand.ports);
+          if (!seen.has(k)) {
+            seen.add(k);
+            out.push(cand);
+          }
+        }
+      }
+    }
+    SINGLE_CACHE.set(id, out);
+    return out;
+  }
+
+  function getGraftPlacements(gene, layout, { connectedOnly = true } = {}) {
+    if (layout.some(p => p.id === gene)) return [];
+    const out = [];
+    for (const cand of allSinglePlacements(gene)) {
+      const v = validatePlacement(layout, cand, 1);
+      if (!v.ok) continue;
+      const nextExp = express(v.nextLayout);
+      const connected = nextExp.links.some(([a]) => a === gene);
+      if (connectedOnly && !connected) continue;
+      out.push({
+        gene,
+        placed: [gene, cand.x, cand.y, cand.rotation],
+        piece: cand,
+        removed: v.removed,
+        nextLayout: v.nextLayout,
+        connected,
+        linksAdded: nextExp.linkKeys.filter(k => k.startsWith(`${gene}->`)),
+      });
+    }
+    return out;
+  }
+
+  function getReconfPlacements(layout, geneId) {
+    const current = layout.find(p => p.id === geneId);
+    if (!current) return [];
+    const curLinks = new Set(express(layout).linkKeys);
+    const out = [];
+    for (const cand of allSinglePlacements(geneId)) {
+      if (cand.x === current.x && cand.y === current.y && cand.rotation === current.rotation) continue;
+      const v = validatePlacement(layout, cand, 0);
+      if (!v.ok) continue;
+      const nextExp = express(v.nextLayout);
+      const gained = nextExp.linkKeys.filter(k => !curLinks.has(k));
+      const lost = [...curLinks].filter(k => !nextExp.linkKeys.includes(k));
+      out.push({
+        gene: geneId,
+        placed: [geneId, cand.x, cand.y, cand.rotation],
+        piece: cand,
+        inPlace: cand.x === current.x && cand.y === current.y,
+        nextLayout: v.nextLayout,
+        gained,
+        lost,
+      });
+    }
+    return out;
+  }
+
+  function resolveIncoming(rawHits, perHitReduce, perAttackReduce, guardPool) {
+    const afterPerHit = rawHits.map(h => Math.max(0, h - perHitReduce));
+    const sumAfterPerHit = afterPerHit.reduce((a, b) => a + b, 0);
+    const totalAfterReduce = Math.max(0, sumAfterPerHit - perAttackReduce);
+    const absorbed = Math.min(guardPool, totalAfterReduce);
+    const netDamage = totalAfterReduce - absorbed;
+    const fullBlock = totalAfterReduce > 0 && netDamage === 0;
+    return { afterPerHit, totalAfterReduce, absorbed, netDamage, fullBlock };
+  }
+
+  function getEnemyIntent(state, foe) {
+    const name = foe.intencoes[state.turn % foe.intencoes.length];
+    const eExp = express(state.enemyLayout);
+    if (name === 'Guarda') {
+      return eExp.guard > 0
+        ? { kind: 'Guarda', name: 'Guarda', guard: eExp.guard, hits: [] }
+        : { kind: 'Attack', name: 'Patada', hits: [2], guard: 0 };
+    }
+    if (eExp.attacks[name]) {
+      return { kind: 'Attack', name, hits: [...eExp.attacks[name].hits], guard: 0 };
+    }
+    if (eExp.attacks.Impacto) {
+      return { kind: 'Attack', name: 'Impacto', hits: [...eExp.attacks.Impacto.hits], guard: 0 };
+    }
+    return { kind: 'Attack', name: 'Patada', hits: [2], guard: 0 };
+  }
+
+  const isWin = state => state.playerHp > 0 && state.enemyHp <= 0;
+  const isDone = (state, foe) =>
+    state.playerHp <= 0 || state.enemyHp <= 0 || state.turn >= foe.limite_turnos;
+
+  function getOutcome(state, foe) {
+    if (isWin(state)) return 'win';
+    if (state.playerHp <= 0) return 'loss_hp';
+    if (state.turn >= foe.limite_turnos) return 'loss_timeout';
+    return 'ongoing';
+  }
+
+  function nextHp(state, recovery = 2) {
+    return Math.min(state.playerMaxHp, state.playerHp + recovery);
+  }
+
+  function legalActions(state, foe, mode = 'enxerto', { dedupeGraft = true, usefulReconfOnly = false } = {}) {
+    if (isDone(state, foe)) return [];
+    const pExp = express(state.playerLayout);
+    const list = [];
+
+    for (const atk of pExp.attackList) {
+      list.push({ kind: 'Atacar', attack: atk.id, label: `Atacar:${atk.id}` });
+    }
+    if (pExp.guard > 0) {
+      list.push({ kind: 'Guarda', label: 'Guarda' });
+    }
+
+    for (const gene of state.exposed) {
+      if (!state.enemyLayout.some(p => p.id === gene)) continue;
+      list.push({ kind: 'ExtrairReserva', targetGene: gene, label: `Reserva:${gene}` });
+      if (mode === 'enxerto') {
+        const placements = getGraftPlacements(gene, state.playerLayout, { connectedOnly: true });
+        const seen = new Set();
+        for (const pl of placements) {
+          const exp = express(pl.nextLayout);
+          const sig = JSON.stringify({ l: exp.linkKeys, p: exp.present, r: pl.removed });
+          if (dedupeGraft && seen.has(sig)) continue;
+          seen.add(sig);
+          list.push({
+            kind: 'Enxertar',
+            targetGene: gene,
+            placed: pl.placed,
+            removed: pl.removed,
+            label: `Enxertar:${gene}@(${pl.placed[1]},${pl.placed[2]},r${pl.placed[3]})${pl.removed ? '-' + pl.removed : ''}`,
+          });
+        }
+      }
+    }
+
+    if (mode === 'enxerto') {
+      const seen = new Set();
+      for (const p of state.playerLayout) {
+        for (const pl of getReconfPlacements(state.playerLayout, p.id)) {
+          if (usefulReconfOnly && pl.gained.length === 0) continue;
+          const sig = JSON.stringify(express(pl.nextLayout).linkKeys);
+          if (usefulReconfOnly && seen.has(sig)) continue;
+          seen.add(sig);
+          list.push({
+            kind: 'Reconfigurar',
+            gene: p.id,
+            placed: pl.placed,
+            label: `Reconf:${p.id}@(${pl.placed[1]},${pl.placed[2]},r${pl.placed[3]})`,
+          });
+        }
+      }
+    }
+    return list;
+  }
+
+  function step(state, foe, action) {
+    if (isDone(state, foe)) throw new RangeError('O encontro já terminou.');
+
+    const beforePlayerExp = express(state.playerLayout);
+    const beforeIntent = getEnemyIntent(state, foe);
+    const s = {
+      ...state,
+      playerLayout: state.playerLayout.map(p => ({ ...p })),
+      enemyLayout: state.enemyLayout.map(p => ({ ...p })),
+      reserve: [...state.reserve],
+      captured: [...(state.captured ?? [])],
+      exposed: [...state.exposed],
+    };
+
+    const log = [];
+    let pGuard = 0;
+    let playerDidGuard = false;
+    let removedGene = null;
+
+    if (action.kind === 'Reconfigurar') {
+      const cand = piece(...action.placed);
+      const v = validatePlacement(s.playerLayout, cand, 0);
+      if (!v.ok) throw new RangeError(`Reconfiguração ilegal (${v.reason}): ${v.message}`);
+      s.playerLayout = v.nextLayout;
+      log.push(`Reconfigurou ${CATALOG[cand.id].name}.`);
+    } else if (action.kind === 'ExtrairReserva') {
+      if (!s.exposed.includes(action.targetGene) || !s.enemyLayout.some(p => p.id === action.targetGene)) {
+        throw new RangeError('Alvo não exposto para extração.');
+      }
+      s.enemyLayout = s.enemyLayout.filter(p => p.id !== action.targetGene);
+      const alreadyOwned = s.playerLayout.some(p => p.id === action.targetGene) || s.reserve.includes(action.targetGene);
+      if (!alreadyOwned) {
+        s.reserve.push(action.targetGene);
+        s.captured.push(action.targetGene);
+        log.push(`Extraiu ${CATALOG[action.targetGene].name} para a reserva.`);
+      } else {
+        log.push(`Desarmou ${CATALOG[action.targetGene].name} do inimigo (cópia descartada).`);
+      }
+    } else if (action.kind === 'Enxertar') {
+      if (!s.exposed.includes(action.targetGene) || !s.enemyLayout.some(p => p.id === action.targetGene)) {
+        throw new RangeError('Alvo não exposto para enxerto.');
+      }
+      if (s.playerLayout.some(p => p.id === action.targetGene)) {
+        throw new RangeError('Gene duplicado não pode ser enxertado na grade.');
+      }
+      const cand = piece(...action.placed);
+      if (cand.id !== action.targetGene) throw new RangeError('ID do encaixe diverge do alvo.');
+      const v = validatePlacement(s.playerLayout, cand, 1);
+      if (!v.ok) throw new RangeError(`Enxerto ilegal (${v.reason}): ${v.message}`);
+      s.enemyLayout = s.enemyLayout.filter(p => p.id !== action.targetGene);
+      s.playerLayout = v.nextLayout;
+      removedGene = v.removed;
+      if (!s.reserve.includes(action.targetGene)) s.captured.push(action.targetGene);
+      if (removedGene) {
+        s.reserve.push(removedGene);
+        log.push(`Enxertou ${CATALOG[cand.id].name} (guardou ${CATALOG[removedGene].name}).`);
+      } else {
+        log.push(`Enxertou ${CATALOG[cand.id].name} em espaço livre.`);
+      }
+    }
+
+    const pExp = express(s.playerLayout);
+    const eExp = express(s.enemyLayout);
+    const afterIntent = getEnemyIntent(s, foe);
+    const eGuard = afterIntent.kind === 'Guarda' ? afterIntent.guard : 0;
+
+    let enemyDamageTaken = 0;
+    let playerDamageTaken = 0;
+    let playerRiposted = 0;
+    let enemyRiposted = 0;
+    let reserveHealed = false;
+
+    if (action.kind === 'Atacar') {
+      const atk = pExp.attacks[action.attack];
+      if (!atk) throw new RangeError(`Ataque indisponível: ${action.attack}`);
+      const res = resolveIncoming(atk.hits, eExp.perHitReduce, eExp.perAttackReduce, eGuard);
+      const dealt = Math.min(s.enemyHp, res.netDamage);
+      enemyDamageTaken += dealt;
+      s.enemyHp = Math.max(0, s.enemyHp - res.netDamage);
+      log.push(`${atk.name} (${atk.hits.join('+')}) causa ${dealt} de dano líquido.`);
+      if (s.enemyHp > 0 && afterIntent.kind === 'Guarda' && res.fullBlock && eExp.riposteHits.length > 0) {
+        enemyRiposted = eExp.riposteHits.reduce((a, b) => a + b, 0);
+        playerDamageTaken += enemyRiposted;
+        s.playerHp = Math.max(0, s.playerHp - enemyRiposted);
+        log.push(`Inimigo bloqueou totalmente e disparou Riposta de ${enemyRiposted}.`);
+      }
+    } else if (action.kind === 'Guarda') {
+      if (pExp.guard <= 0) throw new RangeError('Guarda indisponível sem Trama.');
+      pGuard = pExp.guard;
+      playerDidGuard = true;
+      log.push(`Você ergue Guarda (${pGuard}).`);
+    }
+
+    let nextExposed = [];
+    if (s.enemyHp > 0 && s.playerHp > 0 && afterIntent.kind === 'Attack') {
+      const res = resolveIncoming(afterIntent.hits, pExp.perHitReduce, pExp.perAttackReduce, pGuard);
+      playerDamageTaken += res.netDamage;
+      s.playerHp = Math.max(0, s.playerHp - res.netDamage);
+      if (res.netDamage > 0) {
+        log.push(`${foe.nome || 'Inimigo'} ataca (${afterIntent.hits.join('+')}) e causa ${res.netDamage} líquido.`);
+      } else {
+        log.push(`${foe.nome || 'Inimigo'} ataca (${afterIntent.hits.join('+')}), 0 de dano líquido.`);
+      }
+      if (s.playerHp > 0 && playerDidGuard) {
+        if (res.absorbed >= 1 && pExp.canExpose) {
+          nextExposed = s.enemyLayout.filter(p => EXTRACTABLE.has(p.id)).map(p => p.id);
+          if (nextExposed.length) log.push(`Trama → Aderência expõe ${nextExposed.join(', ')} no próximo turno.`);
+        }
+        if (res.fullBlock && pExp.riposteHits.length > 0) {
+          playerRiposted = pExp.riposteHits.reduce((a, b) => a + b, 0);
+          const ripDealt = Math.min(s.enemyHp, playerRiposted);
+          enemyDamageTaken += ripDealt;
+          s.enemyHp = Math.max(0, s.enemyHp - playerRiposted);
+          log.push(`Bloqueio total! Riposta (${pExp.riposteHits.join('+')}) causa ${ripDealt}.`);
+        }
+        if (res.absorbed >= 1 && pExp.heal && !s.reserveSpent && s.playerHp < s.playerMaxHp) {
+          s.playerHp = Math.min(s.playerMaxHp, s.playerHp + pExp.heal);
+          s.reserveSpent = true;
+          reserveHealed = true;
+          log.push('Reserva recupera +1 PV.');
+        }
+      }
+    }
+
+    s.exposed = nextExposed;
+    s.turn += 1;
+
+    const linksGained = pExp.linkKeys.filter(k => !beforePlayerExp.linkKeys.includes(k));
+    const linksLost = beforePlayerExp.linkKeys.filter(k => !pExp.linkKeys.includes(k));
+
+    return {
+      state: s,
+      log,
+      meta: {
+        beforeIntent,
+        afterIntent,
+        removedGene,
+        enemyDamageTaken,
+        playerDamageTaken,
+        playerRiposted,
+        enemyRiposted,
+        reserveHealed,
+        windowOpened: nextExposed,
+        linksGained,
+        linksLost,
+        playerHpBefore: state.playerHp,
+        playerHpAfter: s.playerHp,
+        enemyHpBefore: state.enemyHp,
+        enemyHpAfter: s.enemyHp,
+      },
+    };
+  }
+
+  function preview(state, foe, action) {
+    const beforeExp = express(state.playerLayout);
+    const result = step(state, foe, action);
+    const afterExp = express(result.state.playerLayout);
+    const m = result.meta;
+    const mitigationLost =
+      m.afterIntent.kind === 'Attack' &&
+      (afterExp.perAttackReduce < beforeExp.perAttackReduce || afterExp.perHitReduce < beforeExp.perHitReduce);
+    const exposeBroken = beforeExp.canExpose && !afterExp.canExpose;
+
+    return {
+      action,
+      nextState: result.state,
+      meta: m,
+      log: result.log,
+      diff: {
+        enemyHitsBefore: m.beforeIntent.hits,
+        enemyHitsAfter: m.afterIntent.hits,
+        enemyGuardBefore: m.beforeIntent.guard,
+        enemyGuardAfter: m.afterIntent.guard,
+        linksGained: m.linksGained,
+        linksLost: m.linksLost,
+        effectsGained: m.linksGained.map(describeLink),
+        effectsLost: m.linksLost.map(describeLink),
+        removedGene: m.removedGene,
+        predictedNetDamage: m.playerDamageTaken,
+        predictedPlayerHp: result.state.playerHp,
+        predictedEnemyHp: result.state.enemyHp,
+        lethalRisk: result.state.playerHp <= 0,
+        mitigationLost,
+        exposeBroken,
+      },
+    };
+  }
+
+  function createEncounterState(profile, encounterKey, fixtures, overrides = {}) {
+    const cal = fixtures.calibracao_v0_7_1;
+    const foe = cal.encontros[encounterKey];
+    const maxHp = cal.perfis[profile].pv_max_jogador;
+    return {
+      turn: 0,
+      playerHp: overrides.playerHp ?? maxHp,
+      playerMaxHp: overrides.playerMaxHp ?? maxHp,
+      enemyHp: overrides.enemyHp ?? foe.pv,
+      enemyMaxHp: foe.pv,
+      playerLayout: overrides.playerLayout ?? fromRows(fixtures.genomas[profile]),
+      enemyLayout: fromRows(fixtures.genomas[foe.genoma]),
+      reserve: overrides.reserve ? [...overrides.reserve] : [],
+      captured: overrides.captured ? [...overrides.captured] : [],
+      exposed: overrides.exposed ? [...overrides.exposed] : [],
+      reserveSpent: false,
+    };
+  }
+
+  function createFixtureState(fixtureId, fixtures) {
+    const fx = fixtures.estados.find(e => e.id === fixtureId);
+    if (!fx) throw new RangeError(`Fixture não encontrada: ${fixtureId}`);
+    const foe = {
+      nome: fixtureId === 'exercicio_neutro' ? 'Alvo de Exercício' : 'Reflexo A',
+      genoma: fx.inimigo,
+      pv: fx.pv_inimigo,
+      intencoes: [fx.intencao],
+      limite_turnos: 7,
+    };
+    const state = {
+      turn: 0,
+      playerHp: fx.pv_jogador,
+      playerMaxHp: fx.pv_max_jogador,
+      enemyHp: fx.pv_inimigo,
+      enemyMaxHp: fx.pv_inimigo,
+      playerLayout: fromRows(fixtures.genomas[fx.jogador]),
+      enemyLayout: fromRows(fixtures.genomas[fx.inimigo]),
+      reserve: [],
+      captured: [],
+      exposed: [...fx.expostos],
+      reserveSpent: false,
+    };
+    return { state, foe, fixture: fx };
+  }
+
+  return {
+    WIDTH, HEIGHT, BUILD_VERSION, CATALOG, EXTRACTABLE, PAIRS,
+    piece, fromRows, serialize, fits, plugs, express, describeLink,
+    validatePlacement, allSinglePlacements, getGraftPlacements, getReconfPlacements,
+    resolveIncoming, getEnemyIntent, isWin, isDone, getOutcome, nextHp,
+    legalActions, step, preview, createEncounterState, createFixtureState,
+  };
+});
+
+</script>
+<script>
+/* O Enxerto · Telemetria v0.7.1 — Schema fechado de 12 eventos sem PII. */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  if (root) root.EnxertoTelemetry = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, () => {
+  'use strict';
+
+  const SCHEMA_VERSION = '0.7.1';
+  const BUILD_VERSION = '0.7.1';
+
+  const ALLOWED_EVENTS = Object.freeze([
+    'session_start',
+    'encounter_start',
+    'turn_intent',
+    'preview_open',
+    'preview_cancel',
+    'invalid_action',
+    'action_confirm',
+    'turn_resolve',
+    'help',
+    'encounter_end',
+    'transition_assembly',
+    'replay_choice',
+  ]);
+
+  const EVENT_SET = new Set(ALLOWED_EVENTS);
+
+  function createSession(initialMeta = {}) {
+    let seq = 0;
+    const events = [];
+    const meta = {
+      participantCode: initialMeta.participantCode || 'P00',
+      deviceHint: initialMeta.deviceHint || 'desktop',
+      condition: initialMeta.condition || 'enxerto',
+      scenario: initialMeta.scenario || 'exercicio_neutro',
+      profile: initialMeta.profile || 'cheia',
+      attempt: initialMeta.attempt ?? 1,
+    };
+
+    function setMeta(patch = {}) {
+      Object.assign(meta, patch);
+    }
+
+    function record(event, turn, data = {}, overrideMeta = {}) {
+      if (!EVENT_SET.has(event)) {
+        throw new RangeError(`Evento fora do schema fechado v0.7.1: ${event}`);
+      }
+      seq += 1;
+      const entry = {
+        seq,
+        tsMs: Date.now(),
+        participantCode: overrideMeta.participantCode ?? meta.participantCode,
+        buildVersion: BUILD_VERSION,
+        condition: overrideMeta.condition ?? meta.condition,
+        scenario: overrideMeta.scenario ?? meta.scenario,
+        profile: overrideMeta.profile ?? meta.profile,
+        attempt: overrideMeta.attempt ?? meta.attempt,
+        turn: Number.isFinite(turn) ? turn : 0,
+        event,
+        data,
+      };
+      events.push(entry);
+      return entry;
+    }
+
+    function exportPayload() {
+      return {
+        schemaVersion: SCHEMA_VERSION,
+        buildVersion: BUILD_VERSION,
+        participantCode: meta.participantCode,
+        deviceHint: meta.deviceHint,
+        exportedAt: new Date().toISOString(),
+        events: events.slice(),
+      };
+    }
+
+    function getEvents() {
+      return events.slice();
+    }
+
+    function clear() {
+      seq = 0;
+      events.length = 0;
+    }
+
+    return { setMeta, record, exportPayload, getEvents, clear, getMeta: () => ({ ...meta }) };
+  }
+
+  return { SCHEMA_VERSION, BUILD_VERSION, ALLOWED_EVENTS, createSession };
+});
+
+</script>
+<script>
+/* O Enxerto · Controlador de Interface v0.7.1 (Mobile-First <= 3 toques + Telemetria Fechada) */
+(function () {
+  'use strict';
+
+  const E = window.EnxertoEngine;
+  const T = window.EnxertoTelemetry;
+  const FIXTURES = window.ENXERTO_FIXTURES;
+  const by = id => document.getElementById(id);
+
+  const GENE_COLORS = {
+    I: 'var(--g-I)', T: 'var(--g-T)', A: 'var(--g-A)', F: 'var(--g-F)',
+    R: 'var(--g-R)', V: 'var(--g-V)', Q: 'var(--g-Q)', B: 'var(--g-B)', M: 'var(--g-M)',
+  };
+
+  const deviceHint = (typeof window !== 'undefined' &&
+    (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.innerWidth <= 700))
+    ? 'touch' : 'desktop';
+
+  const session = T.createSession({ participantCode: 'P01', deviceHint });
+
+  // Estado reativo da UI (nunca duplica matemática de combate)
+  let ui = {
+    condition: 'enxerto',      // 'controle' | 'enxerto'
+    profile: 'cheia',          // 'cheia' | 'aberta'
+    sequence: 'A',             // 'A' | 'B' | 'exercicio_neutro' | 'contraexemplo'
+    stage: 0,                  // 0 = primeiro encontro, 1 = sentinela
+    scenarioKey: 'reflexo_A',
+    attempt: 1,
+    phase: 'combat',           // 'combat' | 'assembly' | 'end'
+    state: null,
+    foe: null,
+    owned: [],                 // IDs possuídos na remontagem livre
+    assemblyHistory: [],
+    assemblySelected: null,
+    assemblyRotations: {},
+    logs: [],
+    feedback: '',
+    // Submodos de combate (<= 3 toques)
+    mode: 'idle',              // 'idle' | 'graft_pick' | 'reconf_pick' | 'preview'
+    targetGene: null,          // gene inimigo escolhido ('Q'|'B'|'M')
+    reconfGene: null,          // gene próprio escolhido
+    previewObj: null,          // retorno de E.preview(...)
+    previewGroup: null,        // array de placements alternativos no mesmo anchor (para Girar destino)
+    previewGroupIdx: 0,
+    previewOpenedAt: 0,
+    turnStartedAt: 0,
+    counters: { graft: 0, reconfigure: 0, extractReserve: 0, previewCancel: 0 },
+  };
+
+  function el(tag, text = '', cls = '') {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== '') n.textContent = text;
+    return n;
+  }
+
+  function currentFoeSpec(key) {
+    return FIXTURES.calibracao_v0_7_1.encontros[key];
+  }
+
+  function emitTurnIntent() {
+    if (ui.phase !== 'combat' || E.isDone(ui.state, ui.foe)) return;
+    const intent = E.getEnemyIntent(ui.state, ui.foe);
+    const legal = E.legalActions(ui.state, ui.foe, ui.condition);
+    ui.turnStartedAt = Date.now();
+    session.record('turn_intent', ui.state.turn, {
+      enemyIntentName: intent.name,
+      enemyRawHits: intent.kind === 'Attack' ? intent.hits : [],
+      enemyGuard: intent.kind === 'Guarda' ? intent.guard : 0,
+      exposed: [...ui.state.exposed],
+      legalActionKinds: [...new Set(legal.map(a => a.kind))],
+      playerHp: ui.state.playerHp,
+      enemyHp: ui.state.enemyHp,
+    });
+  }
+
+  function startSequence({ keepAttempt = false } = {}) {
+    ui.condition = by('sel-condition').value;
+    ui.profile = by('sel-profile').value;
+    ui.sequence = by('sel-scenario').value;
+    ui.stage = 0;
+    if (!keepAttempt) ui.attempt = 1;
+    ui.logs = [];
+    ui.feedback = '';
+    ui.phase = 'combat';
+    ui.mode = 'idle';
+    ui.targetGene = null;
+    ui.reconfGene = null;
+    ui.previewObj = null;
+    ui.previewGroup = null;
+    ui.assemblyHistory = [];
+    ui.assemblySelected = null;
+    ui.assemblyRotations = {};
+    ui.counters = { graft: 0, reconfigure: 0, extractReserve: 0, previewCancel: 0 };
+
+    const participantCode = (by('inp-code').value || 'P00').trim() || 'P00';
+
+    // Se o participante ainda não interagiu (apenas setup inicial do moderador),
+    // limpa eventos de boot padrão para não contaminar perfil/ordem inicial no JSON.
+    const hasInteraction = session.getEvents().some(e => e.event === 'action_confirm' || e.event === 'preview_open');
+    if (!hasInteraction) session.clear();
+
+    if (ui.sequence === 'exercicio_neutro') {
+      const fx = E.createFixtureState('exercicio_neutro', FIXTURES);
+      ui.state = fx.state;
+      ui.foe = fx.foe;
+      ui.scenarioKey = 'exercicio_neutro';
+    } else if (ui.sequence === 'contraexemplo') {
+      const id = ui.profile === 'cheia' ? 'contraexemplo_cheia' : 'contraexemplo_aberta';
+      const fx = E.createFixtureState(id, FIXTURES);
+      ui.state = fx.state;
+      ui.foe = fx.foe;
+      ui.scenarioKey = id;
+    } else {
+      const key = ui.sequence === 'A' ? 'reflexo_A' : 'reflexo_B';
+      ui.foe = currentFoeSpec(key);
+      ui.state = E.createEncounterState(ui.profile, key, FIXTURES);
+      ui.scenarioKey = key;
+    }
+
+    ui.owned = [...new Set(ui.state.playerLayout.map(p => p.id))];
+
+    session.setMeta({
+      participantCode,
+      condition: ui.condition,
+      profile: ui.profile,
+      scenario: ui.scenarioKey,
+      attempt: ui.attempt,
+    });
+
+    session.record('session_start', 0, {
+      condition: ui.condition,
+      profile: ui.profile,
+      sequence: ui.sequence,
+      viewport: [window.innerWidth, window.innerHeight],
+    });
+
+    recordEncounterStart();
+    emitTurnIntent();
+    render();
+  }
+
+  function recordEncounterStart() {
+    const pExp = E.express(ui.state.playerLayout);
+    const eExp = E.express(ui.state.enemyLayout);
+    session.record('encounter_start', ui.state.turn, {
+      enemyId: ui.scenarioKey,
+      playerHp: ui.state.playerHp,
+      playerMaxHp: ui.state.playerMaxHp,
+      enemyHp: ui.state.enemyHp,
+      playerLayout: E.serialize(ui.state.playerLayout),
+      enemyLayout: E.serialize(ui.state.enemyLayout),
+      playerLinks: pExp.linkKeys,
+      enemyLinks: eExp.linkKeys,
+      reserve: [...ui.state.reserve],
+    });
+  }
+
+  function mapActionKind(kind) {
+    if (kind === 'Atacar') return 'attack';
+    if (kind === 'Guarda') return 'guard';
+    if (kind === 'ExtrairReserva') return 'extract_reserve';
+    if (kind === 'Enxertar') return 'graft';
+    if (kind === 'Reconfigurar') return 'reconfigure';
+    return kind;
+  }
+
+  function openPreview(action, group = null, groupIdx = 0) {
+    try {
+      const prev = E.preview(ui.state, ui.foe, action);
+      ui.mode = 'preview';
+      ui.previewObj = prev;
+      ui.previewGroup = group;
+      ui.previewGroupIdx = groupIdx;
+      ui.previewOpenedAt = Date.now();
+      ui.feedback = '';
+
+      session.record('preview_open', ui.state.turn, {
+        actionKind: mapActionKind(action.kind),
+        gene: action.targetGene || action.gene || null,
+        placement: action.placed || null,
+        removedGene: prev.diff.removedGene,
+        enemyHitsBefore: prev.diff.enemyHitsBefore,
+        enemyHitsAfter: prev.diff.enemyHitsAfter,
+        linksGained: prev.diff.linksGained,
+        linksLost: prev.diff.linksLost,
+        predictedNetDamage: prev.diff.predictedNetDamage,
+        predictedPlayerHp: prev.diff.predictedPlayerHp,
+        lethalRisk: prev.diff.lethalRisk,
+      });
+      render();
+    } catch (err) {
+      ui.feedback = err.message;
+      render();
+    }
+  }
+
+  function cancelPreview() {
+    if (ui.mode === 'preview' && ui.previewObj) {
+      const a = ui.previewObj.action;
+      ui.counters.previewCancel += 1;
+      session.record('preview_cancel', ui.state.turn, {
+        actionKind: mapActionKind(a.kind),
+        gene: a.targetGene || a.gene || null,
+        placement: a.placed || null,
+        dwellMs: Math.max(0, Date.now() - ui.previewOpenedAt),
+      });
+    }
+    ui.mode = 'idle';
+    ui.targetGene = null;
+    ui.reconfGene = null;
+    ui.previewObj = null;
+    ui.previewGroup = null;
+    ui.feedback = 'Prévia cancelada — turno e PV preservados.';
+    render();
+  }
+
+  function executeAction(action, fromPreview = false) {
+    const beforeState = ui.state;
+    const decisionMs = Math.max(0, Date.now() - (fromPreview ? ui.previewOpenedAt : ui.turnStartedAt));
+    const res = E.step(ui.state, ui.foe, action);
+
+    if (action.kind === 'Enxertar') ui.counters.graft += 1;
+    if (action.kind === 'Reconfigurar') ui.counters.reconfigure += 1;
+    if (action.kind === 'ExtrairReserva') ui.counters.extractReserve += 1;
+
+    session.record('action_confirm', beforeState.turn, {
+      actionKind: mapActionKind(action.kind),
+      attackId: action.attack || null,
+      gene: action.targetGene || action.gene || null,
+      placement: action.placed || null,
+      removedGene: res.meta.removedGene,
+      fromPreview,
+      decisionMs,
+    });
+
+    session.record('turn_resolve', beforeState.turn, {
+      playerHpBefore: res.meta.playerHpBefore,
+      playerHpAfter: res.meta.playerHpAfter,
+      enemyHpBefore: res.meta.enemyHpBefore,
+      enemyHpAfter: res.meta.enemyHpAfter,
+      enemyHitsBefore: res.meta.beforeIntent.hits,
+      enemyHitsAfter: res.meta.afterIntent.hits,
+      playerDamageTaken: res.meta.playerDamageTaken,
+      enemyDamageTaken: res.meta.enemyDamageTaken,
+      playerRiposted: res.meta.playerRiposted,
+      enemyRiposted: res.meta.enemyRiposted,
+      reserveHealed: res.meta.reserveHealed,
+      windowOpened: res.meta.windowOpened,
+      playerLayoutAfter: E.serialize(res.state.playerLayout),
+      enemyLayoutAfter: E.serialize(res.state.enemyLayout),
+      linksGained: res.meta.linksGained,
+      linksLost: res.meta.linksLost,
+    });
+
+    ui.state = res.state;
+    ui.logs.unshift(`T${beforeState.turn + 1}: ${res.log.join(' ')}`);
+    ui.mode = 'idle';
+    ui.targetGene = null;
+    ui.reconfGene = null;
+    ui.previewObj = null;
+    ui.previewGroup = null;
+    ui.feedback = '';
+
+    if (E.isDone(ui.state, ui.foe)) {
+      ui.phase = 'end';
+      const outcome = E.getOutcome(ui.state, ui.foe);
+      session.record('encounter_end', ui.state.turn, {
+        outcome,
+        playerHp: ui.state.playerHp,
+        enemyHp: ui.state.enemyHp,
+        turnsUsed: ui.state.turn,
+        capturedGenes: [...ui.state.captured],
+        graftCount: ui.counters.graft,
+        reconfigureCount: ui.counters.reconfigure,
+        extractReserveCount: ui.counters.extractReserve,
+        previewCancelCount: ui.counters.previewCancel,
+      });
+    } else {
+      emitTurnIntent();
+    }
+    render();
+  }
+
+  function enterAssemblyForSentinela() {
+    const recovery = FIXTURES.calibracao_v0_7_1.recuperacao_entre_lutas;
+    const hpBefore = ui.state.playerHp;
+    const hpAfter = E.nextHp(ui.state, recovery);
+    const ownedSet = new Set([
+      ...ui.state.playerLayout.map(p => p.id),
+      ...ui.state.reserve,
+      ...ui.state.captured,
+    ]);
+    ui.owned = [...ownedSet];
+    ui.stage = 1;
+    ui.scenarioKey = 'sentinela';
+    ui.foe = currentFoeSpec('sentinela');
+    ui.state = E.createEncounterState(ui.profile, 'sentinela', FIXTURES, {
+      playerHp: hpAfter,
+      playerLayout: ui.state.playerLayout,
+      reserve: ui.owned.filter(id => !ui.state.playerLayout.some(p => p.id === id)),
+      captured: [...ui.state.captured],
+    });
+    ui.hpBeforeRecovery = hpBefore;
+    ui.phase = 'assembly';
+    ui.mode = 'idle';
+    ui.assemblyHistory = [];
+    ui.assemblySelected = ui.state.reserve[0] || ui.owned[0] || null;
+    ui.assemblyRotations = {};
+    ui.logs = [];
+    ui.feedback = ui.state.captured.length
+      ? `Genes capturados disponíveis: ${ui.state.captured.map(id => E.CATALOG[id].name).join(', ')}. Remonte sua grade para enfrentar a Sentinela.`
+      : 'Você recuperou até +2 PV. Ajuste sua grade se desejar e inicie a Sentinela.';
+    session.setMeta({ scenario: 'sentinela' });
+    render();
+  }
+
+  function startSentinelaCombat() {
+    const pExp = E.express(ui.state.playerLayout);
+    const equippedIds = ui.state.playerLayout.map(p => p.id);
+    session.record('transition_assembly', 0, {
+      hpBeforeRecovery: ui.hpBeforeRecovery ?? ui.state.playerHp,
+      hpAfterRecovery: ui.state.playerHp,
+      ownedGenes: [...ui.owned],
+      equippedLayout: E.serialize(ui.state.playerLayout),
+      links: pExp.linkKeys,
+      usedCapturedGenes: ui.state.captured.filter(id => equippedIds.includes(id)),
+    });
+    ui.phase = 'combat';
+    ui.counters = { graft: 0, reconfigure: 0, extractReserve: 0, previewCancel: 0 };
+    ui.feedback = '';
+    recordEncounterStart();
+    emitTurnIntent();
+    render();
+  }
+
+  function tapExposedGene(geneId) {
+    if (ui.phase !== 'combat') return;
+    if (!ui.state.exposed.includes(geneId)) {
+      ui.feedback = `${E.CATALOG[geneId].name} não está exposto. Use Guarda com Trama → Aderência primeiro.`;
+      session.record('invalid_action', ui.state.turn, {
+        actionKind: 'extract_reserve', gene: geneId, placement: null, reason: 'not_exposed',
+      });
+      render();
+      return;
+    }
+    if (ui.condition === 'controle') {
+      openPreview({ kind: 'ExtrairReserva', targetGene: geneId });
+      return;
+    }
+    // Modo Enxerto: 1º toque abre Modo Destino (ou aviso de duplicata)
+    ui.mode = 'graft_pick';
+    ui.targetGene = geneId;
+    ui.reconfGene = null;
+    ui.previewObj = null;
+    if (ui.state.playerLayout.some(p => p.id === geneId)) {
+      ui.feedback = `Você já possui ${E.CATALOG[geneId].name} na grade. Use "Enviar à reserva" para desarmar o inimigo.`;
+    } else {
+      ui.feedback = `Toque num destaque da grade (verde = livre, âmbar = substitui 1 peça) ou envie ${E.CATALOG[geneId].name} à reserva.`;
+    }
+    render();
+  }
+
+  function groupGraftByCell(geneId) {
+    const placements = E.getGraftPlacements(geneId, ui.state.playerLayout, { connectedOnly: true });
+    const byAnchor = new Map();
+    for (const pl of placements) {
+      const key = `${pl.piece.x},${pl.piece.y}`;
+      if (!byAnchor.has(key)) byAnchor.set(key, []);
+      byAnchor.get(key).push(pl);
+    }
+    return { placements, byAnchor };
+  }
+
+  function handleBoardTap(x, y, part) {
+    if (ui.phase === 'assembly') {
+      handleAssemblyBoardTap(x, y, part);
+      return;
+    }
+    if (ui.phase !== 'combat') return;
+
+    // Modo Destino de Enxerto (2º toque)
+    if (ui.mode === 'graft_pick' && ui.targetGene) {
+      if (ui.state.playerLayout.some(p => p.id === ui.targetGene)) {
+        ui.feedback = `Gene ${E.CATALOG[ui.targetGene].name} já está equipado — use "Enviar à reserva" para desarmar.`;
+        session.record('invalid_action', ui.state.turn, {
+          actionKind: 'graft', gene: ui.targetGene, placement: [ui.targetGene, x, y, 0], reason: 'duplicate_gene',
+        });
+        render();
+        return;
+      }
+      const { placements } = groupGraftByCell(ui.targetGene);
+      // Encontra encaixes que cobrem a célula tocada (priorizando âncora exata, depois célula coberta)
+      let matches = placements.filter(pl => pl.piece.x === x && pl.piece.y === y);
+      if (!matches.length) matches = placements.filter(pl => pl.piece.cells.some(([u, v]) => u === x && v === y));
+      if (!matches.length) {
+        const testV = E.validatePlacement(ui.state.playerLayout, E.piece(ui.targetGene, x, y, 0), 1);
+        const reason = testV.ok ? 'overlap' : testV.reason;
+        const msg = testV.ok
+          ? 'Sem porta compatível conectada nessa célula.'
+          : testV.message;
+        ui.feedback = msg;
+        session.record('invalid_action', ui.state.turn, {
+          actionKind: 'graft', gene: ui.targetGene, placement: [ui.targetGene, x, y, 0], reason,
+        });
+        render();
+        return;
+      }
+      const first = matches[0];
+      openPreview(
+        { kind: 'Enxertar', targetGene: ui.targetGene, placed: first.placed, removed: first.removed },
+        matches,
+        0
+      );
+      return;
+    }
+
+    // Modo Reconfigurar (2º toque)
+    if (ui.mode === 'reconf_pick') {
+      if (!ui.reconfGene) {
+        if (part) {
+          ui.reconfGene = part.id;
+          ui.feedback = `Escolha uma rotação rápida abaixo ou toque numa célula livre para mover ${E.CATALOG[part.id].name}.`;
+          render();
+        }
+        return;
+      }
+      if (part && part.id !== ui.reconfGene) {
+        ui.reconfGene = part.id;
+        ui.feedback = `Selecionado ${E.CATALOG[part.id].name}. Escolha uma rotação abaixo ou uma célula livre.`;
+        render();
+        return;
+      }
+      const opts = E.getReconfPlacements(ui.state.playerLayout, ui.reconfGene);
+      let matches = opts.filter(pl => !pl.inPlace && pl.piece.x === x && pl.piece.y === y);
+      if (!matches.length) matches = opts.filter(pl => pl.piece.cells.some(([u, v]) => u === x && v === y));
+      if (!matches.length) {
+        ui.feedback = 'Posição ocupada ou fora da grade para reconfigurar.';
+        session.record('invalid_action', ui.state.turn, {
+          actionKind: 'reconfigure', gene: ui.reconfGene, placement: [ui.reconfGene, x, y, 0], reason: 'overlap',
+        });
+        render();
+        return;
+      }
+      // Prioriza opção que cria conexão
+      matches.sort((a, b) => b.gained.length - a.gained.length);
+      openPreview({ kind: 'Reconfigurar', gene: ui.reconfGene, placed: matches[0].placed }, matches, 0);
+      return;
+    }
+
+    // Em repouso no modo Enxerto: tocar uma peça própria abre Reconfigurar direto (<= 3 toques!)
+    if (ui.mode === 'idle' && ui.condition === 'enxerto' && part) {
+      ui.mode = 'reconf_pick';
+      ui.reconfGene = part.id;
+      ui.feedback = `${E.CATALOG[part.id].name}: ${E.CATALOG[part.id].description}`;
+      render();
+    } else if (part) {
+      ui.feedback = `${E.CATALOG[part.id].name}: ${E.CATALOG[part.id].description}`;
+      render();
+    }
+  }
+
+  function handleAssemblyBoardTap(x, y, part) {
+    if (!ui.assemblySelected) {
+      if (part) { ui.assemblySelected = part.id; ui.feedback = E.CATALOG[part.id].description; render(); }
+      return;
+    }
+    if (part && part.id !== ui.assemblySelected) {
+      ui.assemblySelected = part.id;
+      ui.feedback = E.CATALOG[part.id].description;
+      render();
+      return;
+    }
+    const rot = ui.state.playerLayout.find(p => p.id === ui.assemblySelected)?.rotation
+      ?? ui.assemblyRotations[ui.assemblySelected] ?? 0;
+    const cand = E.piece(ui.assemblySelected, x, y, rot);
+    const v = E.validatePlacement(ui.state.playerLayout, cand, 0);
+    if (!v.ok) {
+      ui.feedback = v.message;
+      render();
+      return;
+    }
+    ui.assemblyHistory.push(ui.state.playerLayout);
+    ui.state = {
+      ...ui.state,
+      playerLayout: v.nextLayout,
+      reserve: ui.owned.filter(id => !v.nextLayout.some(p => p.id === id)),
+    };
+    ui.feedback = `${E.CATALOG[cand.id].name} posicionado.`;
+    render();
+  }
+
+  function renderEnemyCard() {
+    const eExp = E.express(ui.state.enemyLayout);
+    const done = E.isDone(ui.state, ui.foe);
+    const intent = E.getEnemyIntent(ui.state, ui.foe);
+
+    by('enemy-name').textContent = ui.foe.nome || ui.scenarioKey;
+    by('turn-badge').textContent = ui.phase === 'assembly'
+      ? 'Montagem'
+      : done ? (E.isWin(ui.state) ? 'Vitória' : 'Encerrado')
+      : `Turno ${ui.state.turn + 1} / ${ui.foe.limite_turnos}`;
+    by('enemy-hp').textContent = `${ui.state.enemyHp} / ${ui.state.enemyMaxHp}`;
+
+    const intentEl = by('enemy-intent');
+    intentEl.replaceChildren();
+    if (done) {
+      intentEl.append(el('span', E.isWin(ui.state) ? 'Inimigo derrotado' : 'Combate encerrado'));
+    } else if (intent.kind === 'Guarda') {
+      intentEl.append(el('span', 'Intenção: '), el('span', `Guarda (${intent.guard}) · Riposta ${eExp.riposteHits.join('+') || 0}`, 'intent-guard'));
+    } else {
+      intentEl.append(el('span', `Intenção: ${intent.name} `), el('span', intent.hits.join(' + '), 'intent-dmg'));
+    }
+
+    const passives = [];
+    if (eExp.perHitReduce) passives.push(`B: -${eExp.perHitReduce}/golpe`);
+    if (eExp.perAttackReduce) passives.push(`M: -${eExp.perAttackReduce}/ataque`);
+    by('enemy-passive').textContent = passives.join(' · ') || 'Sem blindagem';
+
+    const gWrap = by('enemy-genes');
+    gWrap.replaceChildren();
+    for (const p of ui.state.enemyLayout) {
+      const exposed = ui.state.exposed.includes(p.id) && ui.phase === 'combat' && !done;
+      const chip = el(exposed ? 'button' : 'span',
+        `${p.id} ${E.CATALOG[p.id].short}${exposed ? ' · EXPOSTO' : ''}`,
+        ['gene-chip', exposed ? 'exposed' : '', ui.targetGene === p.id ? 'active-target' : ''].join(' ')
+      );
+      if (exposed) {
+        chip.type = 'button';
+        chip.onclick = () => tapExposedGene(p.id);
+      }
+      gWrap.append(chip);
+    }
+
+    by('btn-sentinela').hidden = ui.stage === 1 || ui.sequence === 'exercicio_neutro' || ui.sequence === 'contraexemplo';
+  }
+
+  function renderStatusOrPreview() {
+    const isPrev = ui.mode === 'preview' && ui.previewObj;
+    by('status-card').hidden = isPrev;
+    by('preview-card').hidden = !isPrev;
+
+    if (!isPrev) {
+      const pExp = E.express(ui.state.playerLayout);
+      const stats = by('player-stats');
+      stats.replaceChildren();
+      const mkPill = (lbl, val) => {
+        const s = el('span', `${lbl} `, 'hp-pill');
+        s.append(el('b', val));
+        return s;
+      };
+      stats.append(mkPill('Seus PV', `${ui.state.playerHp} / ${ui.state.playerMaxHp}`));
+      if (pExp.guard) stats.append(mkPill('Guarda', `${pExp.guard}`));
+      const red = [];
+      if (pExp.perHitReduce) red.push(`-${pExp.perHitReduce}/golpe`);
+      if (pExp.perAttackReduce) red.push(`-${pExp.perAttackReduce}/atq`);
+      if (red.length) stats.append(mkPill('Defesa', red.join(' ')));
+
+      by('phase-badge').textContent = ui.phase === 'assembly' ? 'Montagem livre' : ui.phase === 'end' ? 'Fim' : 'Combate';
+
+      const wp = by('window-pill');
+      if (ui.phase === 'assembly') {
+        wp.className = 'window-pill open';
+        wp.textContent = 'Entre lutas: mova, gire e equipe genes livremente antes da Sentinela.';
+      } else if (ui.state.exposed.length) {
+        wp.className = 'window-pill open';
+        wp.textContent = `Janela aberta (${ui.state.exposed.map(id => `${id} ${E.CATALOG[id].name}`).join(', ')}) · fecha após sua próxima ação.`;
+      } else if (pExp.canExpose) {
+        wp.className = 'window-pill';
+        wp.textContent = 'Janela fechada · use Guarda contra um ataque (absorver ≥ 1) para expor genes inimigos.';
+      } else {
+        wp.className = 'window-pill';
+        wp.textContent = 'Trama → Aderência desconectada · janela de extração indisponível.';
+      }
+      return;
+    }
+
+    const { action, diff, meta } = ui.previewObj;
+    let title = 'Prévia';
+    if (action.kind === 'Enxertar') {
+      title = `Prévia · Enxertar ${E.CATALOG[action.targetGene].name}${diff.removedGene ? ` (guarda ${E.CATALOG[diff.removedGene].name})` : ' (livre)'}`;
+    } else if (action.kind === 'ExtrairReserva') {
+      title = `Prévia · Extrair ${E.CATALOG[action.targetGene].name} para Reserva`;
+    } else if (action.kind === 'Reconfigurar') {
+      title = `Prévia · Reconfigurar ${E.CATALOG[action.gene].name}`;
+    }
+    by('preview-title').textContent = title;
+
+    const rotBtn = by('btn-rotate-preview');
+    rotBtn.hidden = !(ui.previewGroup && ui.previewGroup.length > 1);
+    rotBtn.onclick = () => {
+      const nextIdx = (ui.previewGroupIdx + 1) % ui.previewGroup.length;
+      const pl = ui.previewGroup[nextIdx];
+      const nextAct = action.kind === 'Enxertar'
+        ? { kind: 'Enxertar', targetGene: action.targetGene, placed: pl.placed, removed: pl.removed }
+        : { kind: 'Reconfigurar', gene: action.gene, placed: pl.placed };
+      openPreview(nextAct, ui.previewGroup, nextIdx);
+    };
+
+    const beforeStr = meta.beforeIntent.kind === 'Attack' ? meta.beforeIntent.hits.join('+') : `Guarda ${meta.beforeIntent.guard}`;
+    const afterStr = meta.afterIntent.kind === 'Attack' ? meta.afterIntent.hits.join('+') : `Guarda ${meta.afterIntent.guard}`;
+    by('prev-enemy').textContent = beforeStr === afterStr ? `${afterStr} (igual)` : `${beforeStr} → ${afterStr}`;
+
+    const gEl = by('prev-genome');
+    gEl.replaceChildren();
+    if (diff.linksGained.length) {
+      gEl.append(el('span', `+ ${diff.linksGained.join(', ')}`, 'gain'));
+    }
+    if (diff.linksLost.length) {
+      gEl.append(el('span', `- ${diff.linksLost.join(', ')}`, 'loss'));
+    }
+    if (!diff.linksGained.length && !diff.linksLost.length) {
+      gEl.textContent = action.kind === 'ExtrairReserva' ? 'Grade intacta (vai à reserva)' : 'Sem nova conexão';
+    }
+
+    by('prev-damage').textContent = `${diff.predictedNetDamage} PV (fica ${diff.predictedPlayerHp}/${ui.state.playerMaxHp})`;
+
+    const risk = by('prev-risk');
+    if (diff.lethalRisk) {
+      risk.hidden = false;
+      risk.className = 'risk-banner danger';
+      risk.textContent = 'RISCO LETAL: confirmar esta ação leva seus PV a 0 neste turno.';
+    } else if (diff.mitigationLost) {
+      risk.hidden = false;
+      risk.className = 'risk-banner warn';
+      risk.textContent = `Atenção: perder ${diff.removedGene ? E.CATALOG[diff.removedGene].name : 'defesa'} aumenta o dano recebido neste turno.`;
+    } else if (diff.exposeBroken) {
+      risk.hidden = false;
+      risk.className = 'risk-banner warn';
+      risk.textContent = 'Atenção: esta troca desconecta Trama → Aderência (sem novas janelas nesta luta).';
+    } else {
+      risk.hidden = true;
+    }
+  }
+
+  function renderBoard() {
+    const isPrev = ui.mode === 'preview' && ui.previewObj;
+    const layout = isPrev ? ui.previewObj.nextState.playerLayout : ui.state.playerLayout;
+    const exp = E.express(layout);
+
+    const cellsCount = layout.reduce((n, p) => n + p.cells.length, 0);
+    by('space-badge').textContent = `${cellsCount} / 12 células`;
+
+    const board = by('board');
+    board.replaceChildren();
+
+    // Destaque de destinos legais
+    const freeCells = new Set();
+    const swapCells = new Set();
+    const pickedCells = new Set();
+
+    if (ui.mode === 'graft_pick' && ui.targetGene && !ui.state.playerLayout.some(p => p.id === ui.targetGene)) {
+      const { placements } = groupGraftByCell(ui.targetGene);
+      for (const pl of placements) {
+        const set = pl.removed ? swapCells : freeCells;
+        for (const [cx, cy] of pl.piece.cells) set.add(`${cx},${cy}`);
+      }
+    } else if (ui.mode === 'reconf_pick' && ui.reconfGene) {
+      for (const pl of E.getReconfPlacements(ui.state.playerLayout, ui.reconfGene)) {
+        if (!pl.inPlace) for (const [cx, cy] of pl.piece.cells) freeCells.add(`${cx},${cy}`);
+      }
+    } else if (isPrev && ui.previewObj.action.placed) {
+      const pCand = E.piece(...ui.previewObj.action.placed);
+      for (const [cx, cy] of pCand.cells) pickedCells.add(`${cx},${cy}`);
+    }
+
+    // Mapeia portas ativamente conectadas para destaque visual
+    const activePortKey = new Set();
+    for (const b of exp.bridges) {
+      activePortKey.add(`${b.from[0]},${b.from[1]},${b.dx},${b.dy}`);
+      activePortKey.add(`${b.to[0]},${b.to[1]},${-b.dx},${-b.dy}`);
+    }
+
+    const hintEl = by('board-hint');
+    if (ui.phase === 'assembly') {
+      hintEl.textContent = 'Toque num gene abaixo e depois numa célula livre. Use Girar ou Guardar à vontade.';
+    } else if (ui.mode === 'graft_pick') {
+      hintEl.textContent = `Destino para ${E.CATALOG[ui.targetGene].name}: verde (+) = livre · âmbar (⇄) = substitui 1 peça.`;
+    } else if (ui.mode === 'reconf_pick') {
+      hintEl.textContent = ui.reconfGene
+        ? `Reconfigurando ${E.CATALOG[ui.reconfGene].name}: use um atalho abaixo ou toque numa célula verde.`
+        : 'Toque em um gene da sua grade para mover ou girar (usa o turno).';
+    } else if (isPrev) {
+      hintEl.textContent = 'Visualizando resultado da grade. Confirme ou cancele no cartão acima.';
+    } else {
+      hintEl.textContent = ui.condition === 'enxerto'
+        ? 'Portas brilhantes = conexões ativas. Toque num gene para reconfigurar ou num gene inimigo exposto.'
+        : 'Portas brilhantes = conexões ativas. No modo Controle, alterações na grade ocorrem entre lutas.';
+    }
+
+    for (let y = 0; y < E.HEIGHT; y++) {
+      for (let x = 0; x < E.WIDTH; x++) {
+        const part = layout.find(p => p.cells.some(([u, v]) => u === x && v === y));
+        const key = `${x},${y}`;
+        const isFree = freeCells.has(key);
+        const isSwap = !isFree && swapCells.has(key);
+        const isPicked = pickedCells.has(key);
+        const dim = (ui.mode === 'graft_pick' || (ui.mode === 'reconf_pick' && ui.reconfGene)) && !isFree && !isSwap && part?.id !== ui.reconfGene;
+
+        const cls = [
+          'cell',
+          part ? 'filled' : '',
+          (ui.reconfGene && part?.id === ui.reconfGene) || (ui.phase === 'assembly' && part?.id === ui.assemblySelected) ? 'selected' : '',
+          isFree ? 'target-free' : '',
+          isSwap ? 'target-swap' : '',
+          isPicked ? 'target-picked' : '',
+          dim ? 'dimmed' : '',
+        ].filter(Boolean).join(' ');
+
+        const btn = el('button', '', cls);
+        btn.type = 'button';
+        btn.dataset.x = x;
+        btn.dataset.y = y;
+        if (part) {
+          btn.style.background = GENE_COLORS[part.id];
+          btn.append(el('span', part.id, 'cid'), el('span', E.CATALOG[part.id].short, 'cname'));
+          for (const [u, v, dx, dy] of part.ports) {
+            if (u !== x || v !== y) continue;
+            const side = dx > 0 ? 'e' : dx < 0 ? 'w' : dy > 0 ? 's' : 'n';
+            const linked = activePortKey.has(`${u},${v},${dx},${dy}`);
+            const sym = E.CATALOG[part.id].output ? '◆' : '◇';
+            btn.append(el('span', sym, `port ${side}${E.CATALOG[part.id].output ? ' out' : ''}${linked ? ' linked' : ''}`));
+          }
+        } else {
+          btn.append(el('span', '·', 'cid'));
+        }
+        if (isFree) btn.append(el('span', '+', 'tbadge'));
+        else if (isSwap) btn.append(el('span', '⇄', 'tbadge'));
+
+        btn.setAttribute('aria-label', `Linha ${y + 1}, coluna ${x + 1} · ${part ? E.CATALOG[part.id].name : 'vazia'}`);
+        btn.onclick = () => handleBoardTap(x, y, part);
+        board.append(btn);
+      }
+    }
+
+    renderQuickStrip();
+    by('feedback').textContent = ui.feedback;
+  }
+
+  function renderQuickStrip() {
+    const strip = by('quick-strip');
+    strip.replaceChildren();
+
+    if (ui.phase === 'assembly') {
+      for (const id of ui.owned) {
+        const equipped = ui.state.playerLayout.some(p => p.id === id);
+        const b = el('button', `${id} ${E.CATALOG[id].short}${equipped ? '' : ' (res)'}`, ui.assemblySelected === id ? 'btn-primary' : '');
+        b.type = 'button';
+        b.onclick = () => { ui.assemblySelected = id; ui.feedback = E.CATALOG[id].description; render(); };
+        strip.append(b);
+      }
+      const bRot = el('button', 'Girar ↻');
+      bRot.type = 'button';
+      bRot.disabled = !ui.assemblySelected;
+      bRot.onclick = () => {
+        const id = ui.assemblySelected;
+        const cur = ui.state.playerLayout.find(p => p.id === id);
+        const nextR = ((cur?.rotation ?? ui.assemblyRotations[id] ?? 0) + 1) % 4;
+        if (cur) {
+          const v = E.validatePlacement(ui.state.playerLayout, E.piece(id, cur.x, cur.y, nextR), 0);
+          if (!v.ok) { ui.feedback = v.message; render(); return; }
+          ui.assemblyHistory.push(ui.state.playerLayout);
+          ui.state = { ...ui.state, playerLayout: v.nextLayout };
+          ui.feedback = `${E.CATALOG[id].name} girado (${nextR * 90}°).`;
+        } else {
+          ui.assemblyRotations[id] = nextR;
+          ui.feedback = `Orientação na reserva: ${nextR * 90}°.`;
+        }
+        render();
+      };
+      const bStore = el('button', 'Guardar');
+      bStore.type = 'button';
+      bStore.disabled = !ui.state.playerLayout.some(p => p.id === ui.assemblySelected);
+      bStore.onclick = () => {
+        const id = ui.assemblySelected;
+        ui.assemblyHistory.push(ui.state.playerLayout);
+        const nextLayout = ui.state.playerLayout.filter(p => p.id !== id);
+        ui.state = { ...ui.state, playerLayout: nextLayout, reserve: ui.owned.filter(g => !nextLayout.some(p => p.id === g)) };
+        ui.feedback = `${E.CATALOG[id].name} guardado na reserva.`;
+        render();
+      };
+      const bUndo = el('button', 'Desfazer', 'btn-ghost');
+      bUndo.type = 'button';
+      bUndo.disabled = !ui.assemblyHistory.length;
+      bUndo.onclick = () => {
+        const prev = ui.assemblyHistory.pop();
+        ui.state = { ...ui.state, playerLayout: prev, reserve: ui.owned.filter(g => !prev.some(p => p.id === g)) };
+        ui.feedback = 'Montagem anterior restaurada.';
+        render();
+      };
+      strip.append(bRot, bStore, bUndo);
+      return;
+    }
+
+    if (ui.mode === 'graft_pick' && ui.targetGene) {
+      const bRes = el('button', `Enviar ${ui.targetGene} à reserva`, 'btn-good');
+      bRes.type = 'button';
+      bRes.onclick = () => openPreview({ kind: 'ExtrairReserva', targetGene: ui.targetGene });
+      const bBack = el('button', 'Voltar', 'btn-ghost');
+      bBack.type = 'button';
+      bBack.onclick = () => { ui.mode = 'idle'; ui.targetGene = null; ui.feedback = ''; render(); };
+      strip.append(bRes, bBack);
+      return;
+    }
+
+    if (ui.mode === 'reconf_pick') {
+      if (ui.reconfGene) {
+        const inPlace = E.getReconfPlacements(ui.state.playerLayout, ui.reconfGene).filter(pl => pl.inPlace);
+        // Exibe atalhos 1-toque para rotações no lugar (priorizando as que criam conexões)
+        inPlace.sort((a, b) => b.gained.length - a.gained.length);
+        for (const pl of inPlace) {
+          const lbl = pl.gained.length
+            ? `Girar ${pl.gene} → ${pl.gained.map(g => g.split('->')[1]).join(',')}`
+            : `Girar ${pl.gene} (${pl.placed[3] * 90}°)`;
+          const b = el('button', lbl, pl.gained.length ? 'btn-good' : '');
+          b.type = 'button';
+          b.onclick = () => openPreview({ kind: 'Reconfigurar', gene: pl.gene, placed: pl.placed });
+          strip.append(b);
+        }
+      }
+      const bBack = el('button', 'Voltar', 'btn-ghost');
+      bBack.type = 'button';
+      bBack.onclick = () => { ui.mode = 'idle'; ui.reconfGene = null; ui.feedback = ''; render(); };
+      strip.append(bBack);
+    }
+  }
+
+  function renderActions() {
+    const card = by('actions-card');
+    const bar = by('action-bar');
+    const endCard = by('end-card');
+    bar.replaceChildren();
+
+    if (ui.phase === 'end') {
+      card.hidden = true;
+      endCard.hidden = false;
+      const win = E.isWin(ui.state);
+      const outcome = E.getOutcome(ui.state, ui.foe);
+      by('end-title').textContent = win
+        ? (ui.stage === 0 && (ui.sequence === 'A' || ui.sequence === 'B') ? 'Reflexo vencido!' : 'Encontro vencido!')
+        : outcome === 'loss_timeout' ? 'Limite de turnos atingido' : 'Derrota (0 PV)';
+      by('end-desc').textContent = win
+        ? (ui.stage === 0 && (ui.sequence === 'A' || ui.sequence === 'B')
+          ? `Você fechou com ${ui.state.playerHp} PV e recuperará até +2 PV (${E.nextHp(ui.state)} PV) antes da Sentinela.`
+          : `Concluído com ${ui.state.playerHp}/${ui.state.playerMaxHp} PV em ${ui.state.turn} turnos.`)
+        : 'Você pode tentar novamente (marcado como nova tentativa na telemetria) ou salvar o JSON.';
+
+      const acts = by('end-actions');
+      acts.replaceChildren();
+      if (win && ui.stage === 0 && (ui.sequence === 'A' || ui.sequence === 'B')) {
+        const bNext = el('button', 'Montar para Sentinela →', 'btn-primary');
+        bNext.type = 'button';
+        bNext.onclick = enterAssemblyForSentinela;
+        acts.append(bNext);
+      } else {
+        const bRetry = el('button', 'Repetir cenário', 'btn-primary');
+        bRetry.type = 'button';
+        bRetry.onclick = () => { ui.attempt += 1; startSequence({ keepAttempt: true }); };
+        const bRep = el('button', 'Registrar repetição (Debrief)', 'btn-ghost');
+        bRep.type = 'button';
+        bRep.onclick = () => { by('replay-modal').hidden = false; };
+        acts.append(bRetry, bRep);
+      }
+      return;
+    }
+
+    endCard.hidden = true;
+    card.hidden = false;
+
+    if (ui.phase === 'assembly') {
+      const bStart = el('button', 'Iniciar luta contra Sentinela', 'btn-primary');
+      bStart.type = 'button';
+      bStart.onclick = startSentinelaCombat;
+      bar.append(bStart);
+      return;
+    }
+
+    const pExp = E.express(ui.state.playerLayout);
+    const disabled = ui.mode === 'preview';
+
+    for (const atk of pExp.attackList) {
+      const b = el('button', '', '');
+      b.type = 'button';
+      b.disabled = disabled;
+      b.append(el('span', atk.name), el('small', `Golpe ${atk.hits.join(' + ')}`));
+      b.onclick = () => executeAction({ kind: 'Atacar', attack: atk.id }, false);
+      bar.append(b);
+    }
+
+    if (pExp.guard > 0) {
+      const bG = el('button', '', '');
+      bG.type = 'button';
+      bG.disabled = disabled;
+      bG.append(el('span', `Guarda · ${pExp.guard}`), el('small', pExp.canExpose ? 'Bloqueia + expõe' : `Riposta ${pExp.riposteHits.join('+')}`));
+      bG.onclick = () => executeAction({ kind: 'Guarda' }, false);
+      bar.append(bG);
+    }
+
+    for (const gId of ui.state.exposed) {
+      if (!ui.state.enemyLayout.some(p => p.id === gId)) continue;
+      const bE = el('button', '', 'btn-warn');
+      bE.type = 'button';
+      bE.disabled = disabled;
+      bE.append(
+        el('span', `Extrair ${gId} (${E.CATALOG[gId].short})`),
+        el('small', ui.condition === 'enxerto' ? 'Enxertar ou Reserva' : 'Enviar à Reserva')
+      );
+      bE.onclick = () => tapExposedGene(gId);
+      bar.append(bE);
+    }
+
+    if (ui.condition === 'enxerto') {
+      const bR = el('button', '', ui.mode === 'reconf_pick' ? 'btn-primary' : 'btn-ghost');
+      bR.type = 'button';
+      bR.disabled = disabled;
+      bR.append(el('span', 'Reconfigurar'), el('small', 'Mover ou girar 1 gene'));
+      bR.onclick = () => {
+        ui.mode = ui.mode === 'reconf_pick' ? 'idle' : 'reconf_pick';
+        ui.reconfGene = null;
+        ui.targetGene = null;
+        ui.feedback = ui.mode === 'reconf_pick' ? 'Toque em um gene da grade para girar ou mover.' : '';
+        render();
+      };
+      bar.append(bR);
+    }
+  }
+
+  function renderRepertoireAndLog() {
+    const pExp = E.express(ui.state.playerLayout);
+    const rep = by('repertoire');
+    rep.replaceChildren();
+    for (const lk of pExp.linkKeys) {
+      rep.append(el('div', E.describeLink(lk)));
+    }
+    if (!pExp.linkKeys.length) rep.append(el('div', 'Nenhuma conexão ativa.'));
+
+    const logEl = by('log');
+    logEl.replaceChildren();
+    for (const line of ui.logs) logEl.append(el('li', line));
+  }
+
+  function renderSentinelaMiniBoard() {
+    const wrap = by('sentinela-mini-board');
+    wrap.replaceChildren();
+    const layout = E.fromRows(FIXTURES.genomas.sentinela);
+    for (let y = 0; y < E.HEIGHT; y++) {
+      for (let x = 0; x < E.WIDTH; x++) {
+        const part = layout.find(p => p.cells.some(([u, v]) => u === x && v === y));
+        const c = el('div', '', ['cell', part ? 'filled' : ''].join(' '));
+        if (part) {
+          c.style.background = GENE_COLORS[part.id];
+          c.append(el('span', part.id, 'cid'), el('span', E.CATALOG[part.id].short, 'cname'));
+        } else {
+          c.append(el('span', '·', 'cid'));
+        }
+        wrap.append(c);
+      }
+    }
+  }
+
+  function render() {
+    const mb = by('mode-badge');
+    mb.textContent = ui.condition === 'enxerto' ? 'Enxerto' : 'Controle';
+    mb.className = `badge mode-${ui.condition}`;
+    renderEnemyCard();
+    renderStatusOrPreview();
+    renderBoard();
+    renderActions();
+    renderRepertoireAndLog();
+  }
+
+  // Eventos globais da barra e modais
+  by('btn-mod').onclick = () => {
+    const d = by('mod-drawer');
+    d.hidden = !d.hidden;
+    by('btn-mod').setAttribute('aria-expanded', String(!d.hidden));
+  };
+  by('btn-reset').onclick = () => startSequence();
+  by('sel-condition').onchange = () => startSequence();
+  by('sel-profile').onchange = () => startSequence();
+  by('sel-scenario').onchange = () => startSequence();
+  by('inp-code').onchange = () => {
+    const code = (by('inp-code').value || 'P00').trim() || 'P00';
+    session.setMeta({ participantCode: code });
+    const hasInteraction = session.getEvents().some(e => e.event === 'action_confirm' || e.event === 'preview_open');
+    if (!hasInteraction) startSequence();
+  };
+
+  by('btn-confirm').onclick = () => {
+    if (ui.mode === 'preview' && ui.previewObj) executeAction(ui.previewObj.action, true);
+  };
+  by('btn-cancel').onclick = cancelPreview;
+
+  by('btn-sentinela').onclick = () => { by('sentinela-modal').hidden = false; };
+  by('btn-close-sentinela').onclick = () => { by('sentinela-modal').hidden = true; };
+
+  by('btn-replay-modal').onclick = () => { by('replay-modal').hidden = false; };
+  by('btn-close-replay').onclick = () => { by('replay-modal').hidden = true; };
+  by('btn-replay-yes').onclick = () => {
+    session.record('replay_choice', ui.state.turn, {
+      accepted: true,
+      targetScenario: ui.scenarioKey,
+      statedPlan: (by('replay-plan').value || '').trim(),
+    });
+    by('replay-modal').hidden = true;
+    by('replay-plan').value = '';
+    ui.attempt += 1;
+    startSequence({ keepAttempt: true });
+  };
+  by('btn-replay-no').onclick = () => {
+    session.record('replay_choice', ui.state.turn, {
+      accepted: false,
+      targetScenario: null,
+      statedPlan: (by('replay-plan').value || '').trim(),
+    });
+    by('replay-modal').hidden = true;
+    ui.feedback = 'Escolha de repetição registrada na telemetria.';
+    render();
+  };
+
+  for (const btn of document.querySelectorAll('[data-help]')) {
+    btn.onclick = () => {
+      const helpType = btn.dataset.help;
+      session.record('help', ui.state.turn, { helpType, note: '' });
+      ui.feedback = `Ajuda registrada (${helpType}).`;
+      render();
+    };
+  }
+
+  by('btn-save').onclick = () => {
+    const payload = session.exportPayload();
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `O_Enxerto_v0_7_1_${payload.participantCode}.json`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (!by('sentinela-modal').hidden) by('sentinela-modal').hidden = true;
+      else if (!by('replay-modal').hidden) by('replay-modal').hidden = true;
+      else if (ui.mode === 'preview') cancelPreview();
+      else if (ui.mode !== 'idle') { ui.mode = 'idle'; ui.targetGene = null; ui.reconfGene = null; render(); }
+    }
+  });
+
+  // API leve para inspeção em testes automatizados (sem alterar fluxo de usuário)
+  window.__ENXERTO_DEBUG__ = {
+    getState: () => ui.state,
+    getTelemetry: () => session.exportPayload(),
+    getMode: () => ui.mode,
+    getPhase: () => ui.phase,
+  };
+
+  renderSentinelaMiniBoard();
+  startSequence();
+})();
+
+</script>
+</body>
+</html>
