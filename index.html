@@ -46,7 +46,7 @@ button:disabled{opacity:.42;cursor:not-allowed}
 .btn-warn{background:#3b2d14;border-color:var(--warn);color:#fef0c7}
 .btn-danger{background:#421b1b;border-color:var(--danger);color:#fee2e2}
 .btn-ghost{background:transparent;border-color:var(--edge);color:var(--muted)}
-.btn-sm{min-height:36px;padding:4px 8px;font-size:.82rem}
+.btn-sm{min-height:34px;padding:4px 8px;font-size:.8rem}
 
 .shell{max-width:980px;margin:0 auto;padding:8px 10px 14px;display:flex;flex-direction:column;gap:8px}
 
@@ -59,6 +59,20 @@ button:disabled{opacity:.42;cursor:not-allowed}
 .badge.mode-controle{border-color:var(--info);color:var(--info)}
 .top-controls{display:flex;gap:5px;align-items:center}
 
+/* Banner de Guia Passo a Passo (Coach Banner) */
+.coach-banner{
+  background:linear-gradient(90deg,#1a2f23,#15241c);
+  border:1.5px solid var(--accent);
+  border-radius:10px;
+  padding:7px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.coach-text{font-size:.82rem;line-height:1.3}
+.coach-text b{color:var(--accent)}
+
 .mod-drawer{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:10px;display:grid;gap:8px}
 .mod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px}
 .mod-grid label{display:grid;gap:3px;font-size:.76rem;color:var(--muted)}
@@ -66,46 +80,52 @@ button:disabled{opacity:.42;cursor:not-allowed}
 .mod-help-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--edge);padding-top:8px}
 .mod-help-row small{color:var(--muted);font-size:.76rem}
 
-/* Layout principal: 1 coluna mobile (4 faixas compactas) / 2 colunas desktop */
+/* Layout principal */
 .arena{display:grid;grid-template-columns:1fr;gap:8px}
 @media(min-width:780px){
   .shell{padding:14px 18px 24px;gap:12px}
-  .arena{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:start;gap:12px}
+  .arena{grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);align-items:start;gap:12px}
   .col-left,.col-right{display:flex;flex-direction:column;gap:10px}
 }
 .col-left,.col-right{display:flex;flex-direction:column;gap:8px;min-width:0}
 
 .card{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:9px 10px;min-width:0}
 
-/* Faixa 1: Inimigo + Intenção + Genes expostos */
+/* Faixa 1: Inimigo + Intenção + Matemática ao vivo + Peças do Inimigo */
 .enemy-head{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
 .enemy-title{display:flex;align-items:center;gap:6px}
 .enemy-title h2{margin:0;font-size:1rem}
 .hp-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:7px;background:var(--well);border:1px solid var(--edge);font-size:.82rem}
 .hp-pill b{color:var(--accent)}
-.enemy-intent-row{margin-top:6px;display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:6px 8px}
+.enemy-intent-row{margin-top:6px;display:flex;flex-direction:column;gap:3px;background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:6px 8px}
+.intent-top{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
 .intent-main{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.88rem}
 .intent-dmg{color:var(--warn);font-weight:800}
 .intent-guard{color:var(--info);font-weight:800}
+.intent-math{font-size:.76rem;color:var(--good);font-weight:600}
 .enemy-genes{margin-top:6px;display:flex;gap:5px;flex-wrap:wrap;align-items:center}
-.gene-chip{display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:3px 8px;border-radius:7px;font-size:.78rem;font-weight:700;border:1px solid var(--edge);background:var(--well);color:var(--muted)}
-.gene-chip.exposed{background:#342611;border:2px solid var(--warn);color:#fff2cc;cursor:pointer;animation:pulse 1.5s infinite}
+.gene-chip{display:inline-flex;align-items:center;gap:4px;min-height:30px;padding:3px 8px;border-radius:7px;font-size:.76rem;font-weight:700;border:1px solid var(--edge);background:var(--well);color:var(--muted)}
+.gene-chip small{font-weight:500;opacity:.88}
+.gene-chip.exposed{background:#3a280e;border:2px solid var(--warn);color:#fff4d1;cursor:pointer;animation:pulse 1.4s infinite}
 .gene-chip.exposed.active-target{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);animation:none}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,.35)}50%{box-shadow:0 0 0 4px rgba(251,191,36,0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,.4)}50%{box-shadow:0 0 0 5px rgba(251,191,36,0)}}
+@keyframes coachGlow{0%,100%{box-shadow:0 0 0 0 rgba(217,245,139,.55);border-color:var(--accent)}50%{box-shadow:0 0 0 6px rgba(217,245,139,0);border-color:#ffffff}}
+.coach-highlight{animation:coachGlow 1.3s infinite!important}
 
-/* Faixa 2: Status do Jogador OU Cartão de Prévia Fixo */
+/* Faixa 2: Status do Jogador + Resumo do Turno Passado OU Cartão de Prévia Fixo */
 .status-bar{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
 .player-stats{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.window-pill{margin-top:6px;padding:5px 8px;border-radius:8px;font-size:.8rem;background:var(--well);border:1px solid var(--edge);color:var(--muted)}
+.window-pill{margin-top:5px;padding:5px 8px;border-radius:8px;font-size:.78rem;background:var(--well);border:1px solid var(--edge);color:var(--muted)}
 .window-pill.open{background:#183324;border-color:var(--good);color:#d7ffed;font-weight:600}
+.last-turn-banner{margin-top:5px;padding:5px 8px;border-radius:8px;font-size:.78rem;background:#192620;border-left:3px solid var(--accent);color:var(--text)}
 
 .preview-card{border:2px solid var(--accent);background:#18281e}
 .preview-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px}
 .preview-head b{color:var(--accent);font-size:.88rem}
 .preview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
-.p-box{background:var(--well);border:1px solid var(--edge);border-radius:8px;padding:5px 6px;font-size:.76rem}
-.p-box small{display:block;color:var(--muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.03em}
-.p-box strong{display:block;margin-top:2px;font-size:.82rem;color:var(--text)}
+.p-box{background:var(--well);border:1px solid var(--edge);border-radius:8px;padding:5px 6px;font-size:.75rem}
+.p-box small{display:block;color:var(--muted);font-size:.66rem;text-transform:uppercase;letter-spacing:.03em}
+.p-box strong{display:block;margin-top:2px;font-size:.8rem;color:var(--text)}
 .p-box .gain{color:var(--good);display:block}
 .p-box .loss{color:var(--warn);display:block}
 .risk-banner{margin-top:6px;padding:5px 8px;border-radius:7px;font-size:.78rem;font-weight:700}
@@ -114,17 +134,17 @@ button:disabled{opacity:.42;cursor:not-allowed}
 .preview-actions{margin-top:7px;display:flex;gap:6px;flex-wrap:wrap}
 .preview-actions button{flex:1 1 auto;min-height:40px}
 
-/* Faixa 3: Grade 4x3 com portas diretas e pontes vivas */
-.board-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px}
+/* Faixa 3: Grade 4x3 com nome + efeito em cada peça e pontes vivas */
+.board-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px}
 .board-head h3{margin:0;font-size:.9rem}
-.board-hint{font-size:.78rem;color:var(--muted);margin:0 0 6px}
-.board-wrap{position:relative;max-width:348px;margin:0 auto}
+.board-hint{font-size:.77rem;color:var(--muted);margin:0 0 6px}
+.board-wrap{position:relative;max-width:360px;margin:0 auto}
 .board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
 .cell{
   position:relative;
   min-height:54px;
   aspect-ratio:1.35;
-  padding:2px;
+  padding:2px 3px;
   border-radius:8px;
   background:var(--well);
   border:1.5px dashed var(--edge);
@@ -135,21 +155,22 @@ button:disabled{opacity:.42;cursor:not-allowed}
   justify-content:center;
   line-height:1.05;
   user-select:none;
+  text-align:center;
 }
-.cell.filled{color:#0c130f;border-style:solid;border-color:rgba(0,0,0,.35)}
-.cell .cid{font-size:.98rem;font-weight:850}
-.cell .cname{font-size:.64rem;font-weight:700;opacity:.88}
+.cell.filled{color:#0c130f;border-style:solid;border-color:rgba(0,0,0,.4)}
+.cell .ctitle{font-size:.74rem;font-weight:850;letter-spacing:-.02em}
+.cell .ceffect{font-size:.62rem;font-weight:750;opacity:.92;margin-top:1px}
 .cell.selected{outline:2.5px solid #ffffff;outline-offset:-2px;z-index:2}
 .cell.target-free{border:2.5px solid var(--good)!important;box-shadow:0 0 0 2px rgba(110,231,183,.25);z-index:2}
 .cell.target-swap{border:2.5px dashed var(--warn)!important;box-shadow:0 0 0 2px rgba(251,191,36,.25);z-index:2}
 .cell.target-picked{outline:3px solid var(--accent)!important;outline-offset:1px;z-index:3}
 .cell.dimmed{opacity:.42}
-.cell .tbadge{position:absolute;top:2px;right:3px;font-size:.66rem;font-weight:900;padding:0 3px;border-radius:4px;background:#0d1411;color:var(--good);line-height:1.25}
+.cell .tbadge{position:absolute;top:1px;right:2px;font-size:.53rem;font-weight:900;padding:0 3px;border-radius:3px;background:#0d1411;color:var(--good);line-height:1.2}
 .cell.target-swap .tbadge{color:var(--warn)}
 
-.port{position:absolute;font-size:.66rem;line-height:1;padding:1px 2px;border-radius:3px;background:#101915;color:#e5efe8;pointer-events:none}
+.port{position:absolute;font-size:.64rem;line-height:1;padding:1px 2px;border-radius:3px;background:#101915;color:#e5efe8;pointer-events:none}
 .port.out{color:var(--accent)}
-.port.linked{background:var(--accent);color:#0f1912;font-weight:900}
+.port.linked{background:var(--accent);color:#0f1912;font-weight:900;box-shadow:0 0 4px rgba(217,245,139,.8)}
 .port.n{top:-1px;left:50%;transform:translateX(-50%)}
 .port.s{bottom:-1px;left:50%;transform:translateX(-50%)}
 .port.e{right:-1px;top:50%;transform:translateY(-50%)}
@@ -160,37 +181,50 @@ button:disabled{opacity:.42;cursor:not-allowed}
 .quick-strip button{min-height:38px;padding:5px 9px;font-size:.8rem}
 .feedback-line{margin:5px 0 0;min-height:1.1em;font-size:.78rem;color:var(--warn)}
 
-/* Faixa 4: Barra de Ações do Turno */
+/* Faixa 4: Barra de Ações do Turno com previsão em linguagem natural */
 .action-bar{display:flex;gap:6px;flex-wrap:wrap}
-.action-bar button{flex:1 1 calc(50% - 6px);min-height:44px;padding:6px 8px;font-size:.84rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
-.action-bar button small{font-size:.69rem;font-weight:500;opacity:.85}
+.action-bar button{flex:1 1 calc(50% - 6px);min-height:44px;padding:6px 8px;font-size:.84rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;text-align:center}
+.action-bar button small{font-size:.68rem;font-weight:500;opacity:.9}
 
 @media(max-width:779px){
-  .shell{padding:6px 8px 10px;gap:5px}
-  .topbar{flex-wrap:nowrap}
-  .brand h1{font-size:.94rem}
+  .shell{padding:4px 6px 6px;gap:3px}
+  .topbar{gap:4px}
+  .brand{gap:4px}
+  .brand h1{font-size:.86rem}
   #version-badge{display:none}
-  .top-controls .btn-sm{min-height:32px;padding:3px 7px;font-size:.74rem}
-  .arena,.col-left,.col-right{gap:5px}
-  .card{padding:6px 8px;border-radius:10px}
+  .top-controls{gap:3px}
+  .top-controls .btn-sm{min-height:26px;padding:1px 5px;font-size:.68rem}
+  .coach-banner{padding:4px 7px;border-radius:8px}
+  .coach-text{font-size:.71rem;line-height:1.22}
+  .arena,.col-left,.col-right{gap:3px}
+  .card{padding:4px 6px;border-radius:9px}
   .enemy-head{flex-wrap:nowrap}
-  .enemy-title h2{font-size:.92rem}
-  #btn-sentinela{min-height:30px;padding:2px 7px;font-size:.74rem}
-  .hp-pill{padding:2px 6px;font-size:.76rem}
-  .enemy-intent-row{margin-top:4px;padding:4px 7px;font-size:.82rem}
-  .enemy-genes{margin-top:4px;gap:4px}
-  .gene-chip{min-height:28px;padding:2px 6px;font-size:.72rem}
+  .enemy-title h2{font-size:.86rem}
+  #turn-badge{font-size:.66rem;padding:1px 5px}
+  #btn-sentinela{min-height:24px;padding:1px 5px;font-size:.68rem}
+  .hp-pill{padding:1px 5px;font-size:.71rem}
+  .enemy-intent-row{margin-top:2px;padding:3px 6px;font-size:.74rem;gap:1px}
+  .intent-math{font-size:.68rem}
+  .enemy-genes{margin-top:2px;gap:3px}
+  .gene-chip{min-height:22px;padding:1px 5px;font-size:.66rem}
   #phase-badge{display:none}
-  .window-pill{margin-top:4px;padding:4px 7px;font-size:.74rem}
-  .board-head{margin-bottom:3px}
-  .board-hint{font-size:.72rem;margin:0 0 4px}
-  .board{gap:4px}
-  .cell{min-height:44px;aspect-ratio:1.65}
-  .cell .cid{font-size:.88rem}
-  .cell .cname{font-size:.58rem}
-  .quick-strip{margin-top:4px}
-  .feedback-line{margin-top:3px;min-height:0;font-size:.74rem}
-  .action-bar button{min-height:42px;padding:4px 6px;font-size:.82rem}
+  .window-pill{margin-top:2px;padding:2px 5px;font-size:.68rem}
+  .last-turn-banner{margin-top:2px;padding:2px 5px;font-size:.68rem}
+  .board-head{margin-bottom:1px}
+  .board-head h3{font-size:.82rem}
+  .board-hint{display:none}
+  .board{gap:3px}
+  .cell{min-height:38px;aspect-ratio:1.95}
+  .cell .ctitle{font-size:.65rem}
+  .cell .ceffect{font-size:.54rem}
+  .quick-strip{margin-top:2px}
+  .quick-strip button{min-height:32px;padding:3px 7px;font-size:.74rem}
+  .feedback-line{margin-top:1px;min-height:0;font-size:.68rem}
+  .action-bar{gap:4px}
+  .action-bar button{min-height:38px;padding:2px 4px;font-size:.76rem}
+  .action-bar button small{font-size:.61rem}
+  details.fold{padding:4px 7px}
+  details.fold summary{font-size:.74rem}
 }
 
 /* Resumo de conexões e registro recolhível */
@@ -205,10 +239,14 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
 .end-box h3{margin:0;font-size:1rem}
 .end-actions{display:flex;gap:6px;flex-wrap:wrap}
 
-/* Modal Sentinela e Repetição */
-.modal-backdrop{position:fixed;inset:0;background:rgba(5,10,8,.76);display:flex;align-items:center;justify-content:center;padding:14px;z-index:50}
-.modal-card{background:var(--panel);border:1px solid var(--edge-hi);border-radius:14px;padding:14px;max-width:420px;width:100%;display:grid;gap:10px}
-.modal-card h3{margin:0;font-size:1rem}
+/* Modais (Como Jogar, Sentinela e Repetição) */
+.modal-backdrop{position:fixed;inset:0;background:rgba(5,10,8,.8);display:flex;align-items:center;justify-content:center;padding:12px;z-index:50}
+.modal-card{background:var(--panel);border:1.5px solid var(--edge-hi);border-radius:14px;padding:14px;max-width:440px;width:100%;display:grid;gap:10px;max-height:92dvh;overflow-y:auto}
+.modal-card h3{margin:0;font-size:1.05rem;color:var(--accent)}
+.how-steps{display:grid;gap:7px;font-size:.82rem;line-height:1.38}
+.how-step{background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:7px 9px}
+.how-step > b:first-child{color:var(--accent);display:block;margin-bottom:3px}
+.how-step b{color:var(--accent)}
 .modal-card textarea{width:100%;min-height:68px;background:var(--well);border:1px solid var(--edge);border-radius:8px;padding:8px;color:var(--text);font:inherit}
 [hidden]{display:none!important}
 </style>
@@ -222,11 +260,17 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
       <span class="badge" id="mode-badge">Enxerto</span>
     </div>
     <div class="top-controls">
+      <button type="button" class="btn-sm btn-good" id="btn-how">? Ajuda</button>
       <button type="button" class="btn-sm btn-ghost" id="btn-mod" aria-expanded="false">Moderação</button>
       <button type="button" class="btn-sm" id="btn-save">Salvar JSON</button>
       <button type="button" class="btn-sm btn-ghost" id="btn-reset">Recomeçar</button>
     </div>
   </header>
+
+  <!-- Banner de dica contextual passo a passo -->
+  <div class="coach-banner" id="coach-banner" role="status" aria-live="polite">
+    <div class="coach-text" id="coach-text"></div>
+  </div>
 
   <section class="mod-drawer" id="mod-drawer" aria-label="Painel de moderação" hidden>
     <div class="mod-grid">
@@ -249,7 +293,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
         <select id="sel-scenario">
           <option value="A">Sequência A (Reflexo A → Sentinela)</option>
           <option value="B">Sequência B (Reflexo B → Sentinela)</option>
-          <option value="exercicio_neutro">Exercício neutro</option>
+          <option value="exercicio_neutro">Exercício neutro (Tutorial guiado)</option>
           <option value="contraexemplo">Contraexemplo</option>
         </select>
       </label>
@@ -273,13 +317,16 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
             <span class="badge" id="turn-badge">Turno 1 / 7</span>
           </div>
           <div style="display:flex;gap:5px;align-items:center">
-            <span class="hp-pill">PV <b id="enemy-hp">9 / 9</b></span>
-            <button type="button" class="btn-sm btn-ghost" id="btn-sentinela">Ver Sentinela</button>
+            <span class="hp-pill">PV Inimigo <b id="enemy-hp">9 / 9</b></span>
+            <button type="button" class="btn-sm btn-ghost" id="btn-sentinela">2ª Luta: Sentinela</button>
           </div>
         </div>
         <div class="enemy-intent-row">
-          <div class="intent-main" id="enemy-intent"></div>
-          <small id="enemy-passive" style="color:var(--muted)"></small>
+          <div class="intent-top">
+            <div class="intent-main" id="enemy-intent"></div>
+            <small id="enemy-passive" style="color:var(--muted)"></small>
+          </div>
+          <div class="intent-math" id="enemy-math"></div>
         </div>
         <div class="enemy-genes" id="enemy-genes" aria-label="Genes do inimigo"></div>
       </section>
@@ -291,6 +338,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
           <span class="badge" id="phase-badge">Combate</span>
         </div>
         <div class="window-pill" id="window-pill"></div>
+        <div class="last-turn-banner" id="last-turn-banner" hidden></div>
       </section>
 
       <section class="card preview-card" id="preview-card" aria-live="polite" hidden>
@@ -304,11 +352,11 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
             <strong id="prev-enemy">—</strong>
           </div>
           <div class="p-box">
-            <small>Seu genoma</small>
+            <small>Mudança na grade</small>
             <strong id="prev-genome">—</strong>
           </div>
           <div class="p-box">
-            <small>Dano líquido</small>
+            <small>Dano que você sofre</small>
             <strong id="prev-damage">—</strong>
           </div>
         </div>
@@ -319,7 +367,6 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
         </div>
       </section>
 
-      <!-- FAIXA 4 (em mobile aparece abaixo da grade via order, mas agrupamos ações perto da grade) -->
       <section class="card" id="end-card" hidden>
         <div class="end-box">
           <h3 id="end-title"></h3>
@@ -333,7 +380,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
       <!-- FAIXA 3: Grade 4x3 do Jogador -->
       <section class="card" aria-labelledby="board-title">
         <div class="board-head">
-          <h3 id="board-title">Seu Genoma (4×3)</h3>
+          <h3 id="board-title">Seu Organismo (Grade 4×3)</h3>
           <span class="badge" id="space-badge">12 / 12 células</span>
         </div>
         <p class="board-hint" id="board-hint"></p>
@@ -350,7 +397,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
       </section>
 
       <details class="fold">
-        <summary>Expressões ativas e registro de combate</summary>
+        <summary>Conexões ativas e histórico de turnos</summary>
         <div class="repertoire" id="repertoire"></div>
         <ol id="log" aria-label="Registro de combate"></ol>
       </details>
@@ -358,21 +405,52 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
   </main>
 </div>
 
+<!-- Modal: Como Jogar em 20 Segundos -->
+<div class="modal-backdrop" id="how-modal" role="dialog" aria-modal="true" aria-labelledby="how-title" hidden>
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3 id="how-title">Como jogar O Enxerto (em 3 passos)</h3>
+      <button type="button" class="btn-sm btn-ghost" id="btn-close-how">Fechar</button>
+    </div>
+    <div class="how-steps">
+      <div class="how-step">
+        <b>1. Suas ações vêm das peças conectadas na grade 4×3</b>
+        Quando uma seta de saída (<b>◆</b>) aponta para um encaixe (<b>◇</b>) vizinho, a conexão acende em verde. Ex.: <b>Impulso</b> cria o ataque; <b>Trama</b> cria a Guarda.
+      </div>
+      <div class="how-step">
+        <b>2. Use "Guarda" para abrir a janela de roubo (Extração)</b>
+        Quando você usa <b>Guarda</b> e absorve pelo menos 1 de dano, a conexão <b>Trama → Aderência</b> deixa os genes laranjas do inimigo (<b>Repique Q</b> e <b>Revestimento B</b>) <b>EXPOSTOS</b> por 1 turno.
+      </div>
+      <div class="how-step">
+        <b>3. Roube e enxerte o gene inimigo no meio da luta!</b>
+        No turno em que o gene está <b>EXPOSTO</b>, toque em <b>Extrair Q ou B</b>:
+        <br>• O inimigo <b>perde o bônus na mesma hora</b> (o ataque dele cai de <code>4+4</code> para <code>4</code>!).
+        <br>• Você pode <b>encaixar a peça direto na sua grade</b> (trocando por 1 peça sua) ou enviar para a reserva. A <b>Prévia</b> mostra o resultado exato antes de confirmar.
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button type="button" class="btn-primary" id="btn-start-combat" style="flex:1">Entendi, jogar agora</button>
+      <button type="button" class="btn-good" id="btn-start-tutorial" style="flex:1">Praticar no Tutorial (1 min)</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal: Ver Sentinela -->
 <div class="modal-backdrop" id="sentinela-modal" role="dialog" aria-modal="true" aria-labelledby="sent-title" hidden>
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 id="sent-title">Próximo encontro · Sentinela (11 PV)</h3>
+      <h3 id="sent-title">2ª Luta · Sentinela (11 PV)</h3>
       <button type="button" class="btn-sm btn-ghost" id="btn-close-sentinela">Fechar</button>
     </div>
     <p style="margin:0;color:var(--muted);font-size:.84rem">
-      Intenções: <b>Rajada (2+2+2) → Impacto (3+3) → Guarda (3) → Rajada (2+2+2)</b>.<br>
-      Defesa ativa: <b>Amortecimento (M)</b> reduz <b>-2 por ataque</b>.
+      Após vencer o Reflexo, você recupera <b>+2 PV</b> e enfrenta a <b>Sentinela</b>:<br>
+      • Ataques: <b>Rajada (2+2+2) → Impacto (3+3) → Guarda (3)</b>.<br>
+      • Defesa: <b>Amortecimento (M)</b> reduz <b>-2 por ataque</b>.
     </p>
     <p style="margin:0;font-size:.82rem;color:var(--accent)">
-      Dica tática: <b>Revestimento (B)</b> corta cada golpe da Rajada (2+2+2 → 1+1+1). <b>Repique (Q)</b> acelera o dano ou dobra sua Riposta (ignora M).
+      Por que isso importa agora? Se você roubar <b>Revestimento (B, -1/golpe)</b> no Reflexo, a Rajada <code>2+2+2</code> da Sentinela cai pela metade (<code>1+1+1</code>). Se roubar <b>Repique (Q)</b>, você bate dobrado (<code>4+4</code>).
     </p>
-    <div id="sentinela-mini-board" class="board" style="max-width:260px;margin:0 auto"></div>
+    <div id="sentinela-mini-board" class="board" style="max-width:280px;margin:0 auto"></div>
   </div>
 </div>
 
@@ -1258,7 +1336,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
 
 </script>
 <script>
-/* O Enxerto · Controlador de Interface v0.7.1 (Mobile-First <= 3 toques + Telemetria Fechada) */
+/* O Enxerto · Controlador de Interface v0.7.1 (UX Autoexplicativa, Guia Passo a Passo e <= 3 Toques) */
 (function () {
   'use strict';
 
@@ -1272,35 +1350,47 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     R: 'var(--g-R)', V: 'var(--g-V)', Q: 'var(--g-Q)', B: 'var(--g-B)', M: 'var(--g-M)',
   };
 
+  // Rótulos ultra-claros que cabem na célula e dizem EXATAMENTE o que a peça faz
+  const GENE_BADGE = {
+    I: { title: 'I · Impulso', effect: 'Ataque 3' },
+    T: { title: 'T · Trama', effect: 'Guarda 3' },
+    A: { title: 'A · Aderência', effect: 'Abre Roubo' },
+    F: { title: 'F · Rigidez', effect: '+1 Atq / +2 Gda' },
+    R: { title: 'R · Ritmo', effect: 'Rajada 2×' },
+    V: { title: 'V · Reserva', effect: 'Cura +1 PV' },
+    Q: { title: 'Q · Repique', effect: 'Golpe Duplo' },
+    B: { title: 'B · Revest.', effect: '-1 / golpe' },
+    M: { title: 'M · Amortec.', effect: '-2 / ataque' },
+  };
+
   const deviceHint = (typeof window !== 'undefined' &&
     (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.innerWidth <= 700))
     ? 'touch' : 'desktop';
 
   const session = T.createSession({ participantCode: 'P01', deviceHint });
 
-  // Estado reativo da UI (nunca duplica matemática de combate)
   let ui = {
-    condition: 'enxerto',      // 'controle' | 'enxerto'
-    profile: 'cheia',          // 'cheia' | 'aberta'
-    sequence: 'A',             // 'A' | 'B' | 'exercicio_neutro' | 'contraexemplo'
-    stage: 0,                  // 0 = primeiro encontro, 1 = sentinela
+    condition: 'enxerto',
+    profile: 'cheia',
+    sequence: 'A',
+    stage: 0,
     scenarioKey: 'reflexo_A',
     attempt: 1,
-    phase: 'combat',           // 'combat' | 'assembly' | 'end'
+    phase: 'combat',
     state: null,
     foe: null,
-    owned: [],                 // IDs possuídos na remontagem livre
+    owned: [],
     assemblyHistory: [],
     assemblySelected: null,
     assemblyRotations: {},
     logs: [],
+    lastTurnSummary: '',
     feedback: '',
-    // Submodos de combate (<= 3 toques)
-    mode: 'idle',              // 'idle' | 'graft_pick' | 'reconf_pick' | 'preview'
-    targetGene: null,          // gene inimigo escolhido ('Q'|'B'|'M')
-    reconfGene: null,          // gene próprio escolhido
-    previewObj: null,          // retorno de E.preview(...)
-    previewGroup: null,        // array de placements alternativos no mesmo anchor (para Girar destino)
+    mode: 'idle',
+    targetGene: null,
+    reconfGene: null,
+    previewObj: null,
+    previewGroup: null,
     previewGroupIdx: 0,
     previewOpenedAt: 0,
     turnStartedAt: 0,
@@ -1341,6 +1431,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     ui.stage = 0;
     if (!keepAttempt) ui.attempt = 1;
     ui.logs = [];
+    ui.lastTurnSummary = '';
     ui.feedback = '';
     ui.phase = 'combat';
     ui.mode = 'idle';
@@ -1355,8 +1446,6 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
 
     const participantCode = (by('inp-code').value || 'P00').trim() || 'P00';
 
-    // Se o participante ainda não interagiu (apenas setup inicial do moderador),
-    // limpa eventos de boot padrão para não contaminar perfil/ordem inicial no JSON.
     const hasInteraction = session.getEvents().some(e => e.event === 'action_confirm' || e.event === 'preview_open');
     if (!hasInteraction) session.clear();
 
@@ -1471,7 +1560,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     ui.reconfGene = null;
     ui.previewObj = null;
     ui.previewGroup = null;
-    ui.feedback = 'Prévia cancelada — turno e PV preservados.';
+    ui.feedback = 'Prévia cancelada — seu turno e seus PV continuam intactos.';
     render();
   }
 
@@ -1514,7 +1603,9 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     });
 
     ui.state = res.state;
-    ui.logs.unshift(`T${beforeState.turn + 1}: ${res.log.join(' ')}`);
+    const turnLine = `Turno ${beforeState.turn + 1}: ${res.log.join(' ')}`;
+    ui.logs.unshift(turnLine);
+    ui.lastTurnSummary = turnLine;
     ui.mode = 'idle';
     ui.targetGene = null;
     ui.reconfGene = null;
@@ -1568,9 +1659,10 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     ui.assemblySelected = ui.state.reserve[0] || ui.owned[0] || null;
     ui.assemblyRotations = {};
     ui.logs = [];
+    ui.lastTurnSummary = '';
     ui.feedback = ui.state.captured.length
-      ? `Genes capturados disponíveis: ${ui.state.captured.map(id => E.CATALOG[id].name).join(', ')}. Remonte sua grade para enfrentar a Sentinela.`
-      : 'Você recuperou até +2 PV. Ajuste sua grade se desejar e inicie a Sentinela.';
+      ? `Genes roubados na reserva: ${ui.state.captured.map(id => E.CATALOG[id].name).join(', ')}. Toque neles abaixo para encaixar na grade antes da Sentinela.`
+      : 'Você recuperou até +2 PV. Ajuste sua grade se quiser e inicie a luta contra a Sentinela.';
     session.setMeta({ scenario: 'sentinela' });
     render();
   }
@@ -1589,6 +1681,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     ui.phase = 'combat';
     ui.counters = { graft: 0, reconfigure: 0, extractReserve: 0, previewCancel: 0 };
     ui.feedback = '';
+    ui.lastTurnSummary = '';
     recordEncounterStart();
     emitTurnIntent();
     render();
@@ -1597,7 +1690,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
   function tapExposedGene(geneId) {
     if (ui.phase !== 'combat') return;
     if (!ui.state.exposed.includes(geneId)) {
-      ui.feedback = `${E.CATALOG[geneId].name} não está exposto. Use Guarda com Trama → Aderência primeiro.`;
+      ui.feedback = `${E.CATALOG[geneId].name} está protegido. Use "Guarda" contra um ataque inimigo primeiro para expô-lo.`;
       session.record('invalid_action', ui.state.turn, {
         actionKind: 'extract_reserve', gene: geneId, placement: null, reason: 'not_exposed',
       });
@@ -1608,15 +1701,14 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
       openPreview({ kind: 'ExtrairReserva', targetGene: geneId });
       return;
     }
-    // Modo Enxerto: 1º toque abre Modo Destino (ou aviso de duplicata)
     ui.mode = 'graft_pick';
     ui.targetGene = geneId;
     ui.reconfGene = null;
     ui.previewObj = null;
     if (ui.state.playerLayout.some(p => p.id === geneId)) {
-      ui.feedback = `Você já possui ${E.CATALOG[geneId].name} na grade. Use "Enviar à reserva" para desarmar o inimigo.`;
+      ui.feedback = `Você já tem ${E.CATALOG[geneId].name} na grade. Toque em "Enviar ${geneId} à reserva" para desarmar o inimigo.`;
     } else {
-      ui.feedback = `Toque num destaque da grade (verde = livre, âmbar = substitui 1 peça) ou envie ${E.CATALOG[geneId].name} à reserva.`;
+      ui.feedback = `PASSO 2: Toque numa célula destacada na sua grade (+ Livre ou ⇄ Troca) para ver a prévia, ou envie ${E.CATALOG[geneId].name} à reserva.`;
     }
     render();
   }
@@ -1639,7 +1731,6 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     }
     if (ui.phase !== 'combat') return;
 
-    // Modo Destino de Enxerto (2º toque)
     if (ui.mode === 'graft_pick' && ui.targetGene) {
       if (ui.state.playerLayout.some(p => p.id === ui.targetGene)) {
         ui.feedback = `Gene ${E.CATALOG[ui.targetGene].name} já está equipado — use "Enviar à reserva" para desarmar.`;
@@ -1650,14 +1741,13 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
         return;
       }
       const { placements } = groupGraftByCell(ui.targetGene);
-      // Encontra encaixes que cobrem a célula tocada (priorizando âncora exata, depois célula coberta)
       let matches = placements.filter(pl => pl.piece.x === x && pl.piece.y === y);
       if (!matches.length) matches = placements.filter(pl => pl.piece.cells.some(([u, v]) => u === x && v === y));
       if (!matches.length) {
         const testV = E.validatePlacement(ui.state.playerLayout, E.piece(ui.targetGene, x, y, 0), 1);
         const reason = testV.ok ? 'overlap' : testV.reason;
         const msg = testV.ok
-          ? 'Sem porta compatível conectada nessa célula.'
+          ? 'Essa posição não conecta o gene em Impulso (I) nem em Trama (T). Toque numa célula destacada.'
           : testV.message;
         ui.feedback = msg;
         session.record('invalid_action', ui.state.turn, {
@@ -1675,12 +1765,11 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
       return;
     }
 
-    // Modo Reconfigurar (2º toque)
     if (ui.mode === 'reconf_pick') {
       if (!ui.reconfGene) {
         if (part) {
           ui.reconfGene = part.id;
-          ui.feedback = `Escolha uma rotação rápida abaixo ou toque numa célula livre para mover ${E.CATALOG[part.id].name}.`;
+          ui.feedback = `Escolha um botão de rotação abaixo ou toque numa célula verde livre para mover ${E.CATALOG[part.id].name}.`;
           render();
         }
         return;
@@ -1702,13 +1791,11 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
         render();
         return;
       }
-      // Prioriza opção que cria conexão
       matches.sort((a, b) => b.gained.length - a.gained.length);
       openPreview({ kind: 'Reconfigurar', gene: ui.reconfGene, placed: matches[0].placed }, matches, 0);
       return;
     }
 
-    // Em repouso no modo Enxerto: tocar uma peça própria abre Reconfigurar direto (<= 3 toques!)
     if (ui.mode === 'idle' && ui.condition === 'enxerto' && part) {
       ui.mode = 'reconf_pick';
       ui.reconfGene = part.id;
@@ -1750,8 +1837,68 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     render();
   }
 
+  // Coach Banner contextual: explica em português claro o que está acontecendo e qual o próximo passo
+  function renderCoachBanner() {
+    const ct = by('coach-text');
+    ct.replaceChildren();
+    const pExp = E.express(ui.state.playerLayout);
+    const intent = E.getEnemyIntent(ui.state, ui.foe);
+
+    if (ui.phase === 'end') {
+      const win = E.isWin(ui.state);
+      ct.innerHTML = win
+        ? '<b>Vitória!</b> Veja o resultado abaixo ou avance para a próxima etapa.'
+        : '<b>Fim da tentativa.</b> Toque em "Repetir cenário" abaixo para tentar outra linha tática.';
+      return;
+    }
+    if (ui.phase === 'assembly') {
+      ct.innerHTML = '<b>Entre lutas (Montagem Livre):</b> Encaixe os genes que você roubou na grade e toque em <b>Iniciar luta contra Sentinela</b>.';
+      return;
+    }
+    if (ui.mode === 'preview') {
+      ct.innerHTML = '<b>Passo 3 de 3 (Prévia):</b> Confira como o golpe inimigo e seu dano mudam. Toque em <b>Confirmar turno</b> ou <b>Cancelar</b> (grátis).';
+      return;
+    }
+    if (ui.mode === 'graft_pick' && ui.targetGene) {
+      ct.innerHTML = `<b>Passo 2 de 3 (Onde instalar ${E.CATALOG[ui.targetGene].name}?):</b> Toque numa célula destacada na sua grade (<b>+ Livre</b> ou <b>⇄ Troca</b>) ou em <b>Enviar à reserva</b>.`;
+      return;
+    }
+    if (ui.mode === 'reconf_pick') {
+      ct.innerHTML = '<b>Reconfigurar peça:</b> Toque num atalho de giro abaixo da grade (ex.: girar Rigidez para Trama) ou toque em <b>Voltar</b>.';
+      return;
+    }
+
+    if (ui.sequence === 'exercicio_neutro') {
+      ct.innerHTML = '<b>Tutorial guiado:</b> 1) Toque na peça amarela <b>F · Rigidez</b> na grade para girá-la para <b>Trama</b>. 2) Ou toque em <b>Extrair Q</b> para roubar o golpe duplo do inimigo!';
+      return;
+    }
+    if (ui.sequence === 'contraexemplo') {
+      ct.innerHTML = '<b>Desafio rápido:</b> O inimigo só tem <b>3 PV</b>! Veja nos botões abaixo qual ação derrota o inimigo agora mesmo sem sofrer dano.';
+      return;
+    }
+
+    if (ui.state.exposed.length > 0) {
+      const names = ui.state.exposed.map(id => `${E.CATALOG[id].name} (${id})`).join(' e ');
+      ct.innerHTML = `<b>JANELA ABERTA!</b> Você bloqueou o golpe anterior e expôs <b>${names}</b>. Toque em <b>Extrair Q</b> para cortar o ataque inimigo pela metade agora!`;
+      return;
+    }
+
+    if (intent.kind === 'Attack' && pExp.canExpose && ui.state.turn === 0) {
+      ct.innerHTML = `<b>Dica de abertura:</b> O inimigo vai atacar com <b>${intent.hits.join('+')}</b>. Use <b>Guarda</b> neste 1º turno para bloquear parte do dano e <b>expor os genes dele</b> no próximo turno!`;
+      return;
+    }
+
+    if (intent.kind === 'Guarda') {
+      ct.innerHTML = `<b>Atenção:</b> O inimigo vai usar <b>Guarda (${intent.guard})</b>. Se ele bloquear 100% de um ataque seu, ele devolve <b>Riposta de 2</b> (Rajada fura a Guarda; ou gire F no modo Enxerto).`;
+      return;
+    }
+
+    ct.innerHTML = '<b>Seu turno:</b> Compare nos botões abaixo quanto dano cada ataque causa ou use <b>Guarda</b> para reduzir o ataque inimigo e abrir nova janela de roubo.';
+  }
+
   function renderEnemyCard() {
     const eExp = E.express(ui.state.enemyLayout);
+    const pExp = E.express(ui.state.playerLayout);
     const done = E.isDone(ui.state, ui.foe);
     const intent = E.getEnemyIntent(ui.state, ui.foe);
 
@@ -1763,27 +1910,57 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     by('enemy-hp').textContent = `${ui.state.enemyHp} / ${ui.state.enemyMaxHp}`;
 
     const intentEl = by('enemy-intent');
+    const mathEl = by('enemy-math');
     intentEl.replaceChildren();
+    mathEl.replaceChildren();
+
     if (done) {
       intentEl.append(el('span', E.isWin(ui.state) ? 'Inimigo derrotado' : 'Combate encerrado'));
+      mathEl.textContent = '';
     } else if (intent.kind === 'Guarda') {
-      intentEl.append(el('span', 'Intenção: '), el('span', `Guarda (${intent.guard}) · Riposta ${eExp.riposteHits.join('+') || 0}`, 'intent-guard'));
+      intentEl.append(
+        el('span', 'Ação dele neste turno: '),
+        el('span', `Guarda (bloqueia ${intent.guard}) + Riposta ${eExp.riposteHits.join('+') || 0}`, 'intent-guard')
+      );
+      mathEl.textContent = 'Ele não ataca neste turno, mas se bloquear 100% do seu golpe, contra-ataca com 2 de dano.';
     } else {
-      intentEl.append(el('span', `Intenção: ${intent.name} `), el('span', intent.hits.join(' + '), 'intent-dmg'));
+      const rawTotal = intent.hits.reduce((a, b) => a + b, 0);
+      intentEl.append(
+        el('span', `Vai atacar com ${intent.name}: `),
+        el('span', `${intent.hits.join(' + ')} (${rawTotal} bruto)`, 'intent-dmg')
+      );
+      const noGuard = E.resolveIncoming(intent.hits, pExp.perHitReduce, pExp.perAttackReduce, 0);
+      const withGuard = E.resolveIncoming(intent.hits, pExp.perHitReduce, pExp.perAttackReduce, pExp.guard);
+      const parts = [];
+      if (pExp.perHitReduce || pExp.perAttackReduce) {
+        parts.push(`Sua armadura reduz para ${noGuard.netDamage}`);
+      } else {
+        parts.push(`Sem Guarda você sofre ${noGuard.netDamage}`);
+      }
+      if (pExp.guard > 0) {
+        parts.push(`Com Guarda (${pExp.guard}) você sofre ${withGuard.netDamage}${withGuard.absorbed >= 1 && pExp.canExpose ? ' e EXPÕE Q/B!' : ''}`);
+      }
+      mathEl.textContent = '→ ' + parts.join(' · ');
     }
 
     const passives = [];
-    if (eExp.perHitReduce) passives.push(`B: -${eExp.perHitReduce}/golpe`);
-    if (eExp.perAttackReduce) passives.push(`M: -${eExp.perAttackReduce}/ataque`);
-    by('enemy-passive').textContent = passives.join(' · ') || 'Sem blindagem';
+    if (eExp.perHitReduce) passives.push(`Armadura B: -${eExp.perHitReduce} por golpe`);
+    if (eExp.perAttackReduce) passives.push(`Armadura M: -${eExp.perAttackReduce} por ataque`);
+    by('enemy-passive').textContent = passives.join(' · ') || 'Sem armadura ativa';
 
     const gWrap = by('enemy-genes');
     gWrap.replaceChildren();
     for (const p of ui.state.enemyLayout) {
       const exposed = ui.state.exposed.includes(p.id) && ui.phase === 'combat' && !done;
-      const chip = el(exposed ? 'button' : 'span',
-        `${p.id} ${E.CATALOG[p.id].short}${exposed ? ' · EXPOSTO' : ''}`,
-        ['gene-chip', exposed ? 'exposed' : '', ui.targetGene === p.id ? 'active-target' : ''].join(' ')
+      const badge = GENE_BADGE[p.id] || { title: p.id, effect: '' };
+      const chip = el(exposed ? 'button' : 'span', '', [
+        'gene-chip',
+        exposed ? 'exposed' : '',
+        ui.targetGene === p.id ? 'active-target' : '',
+      ].join(' '));
+      chip.append(
+        el('span', `${badge.title} (${badge.effect})`),
+        exposed ? el('small', ' · ROUBAR AGORA') : el('small', '')
       );
       if (exposed) {
         chip.type = 'button';
@@ -1810,11 +1987,11 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
         return s;
       };
       stats.append(mkPill('Seus PV', `${ui.state.playerHp} / ${ui.state.playerMaxHp}`));
-      if (pExp.guard) stats.append(mkPill('Guarda', `${pExp.guard}`));
+      if (pExp.guard) stats.append(mkPill('Sua Guarda', `${pExp.guard}`));
       const red = [];
       if (pExp.perHitReduce) red.push(`-${pExp.perHitReduce}/golpe`);
-      if (pExp.perAttackReduce) red.push(`-${pExp.perAttackReduce}/atq`);
-      if (red.length) stats.append(mkPill('Defesa', red.join(' ')));
+      if (pExp.perAttackReduce) red.push(`-${pExp.perAttackReduce}/ataque`);
+      if (red.length) stats.append(mkPill('Sua Armadura', red.join(' ')));
 
       by('phase-badge').textContent = ui.phase === 'assembly' ? 'Montagem livre' : ui.phase === 'end' ? 'Fim' : 'Combate';
 
@@ -1824,13 +2001,21 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
         wp.textContent = 'Entre lutas: mova, gire e equipe genes livremente antes da Sentinela.';
       } else if (ui.state.exposed.length) {
         wp.className = 'window-pill open';
-        wp.textContent = `Janela aberta (${ui.state.exposed.map(id => `${id} ${E.CATALOG[id].name}`).join(', ')}) · fecha após sua próxima ação.`;
+        wp.textContent = `Janela de roubo ABERTA (${ui.state.exposed.map(id => `${id} ${E.CATALOG[id].name}`).join(', ')}) · aproveite neste turno!`;
       } else if (pExp.canExpose) {
         wp.className = 'window-pill';
-        wp.textContent = 'Janela fechada · use Guarda contra um ataque (absorver ≥ 1) para expor genes inimigos.';
+        wp.textContent = 'Janela de roubo fechada · use Guarda quando o inimigo atacar para expor os genes dele.';
       } else {
         wp.className = 'window-pill';
         wp.textContent = 'Trama → Aderência desconectada · janela de extração indisponível.';
+      }
+
+      const ltb = by('last-turn-banner');
+      if (ui.lastTurnSummary) {
+        ltb.hidden = false;
+        ltb.textContent = `Último turno: ${ui.lastTurnSummary}`;
+      } else {
+        ltb.hidden = true;
       }
       return;
     }
@@ -1838,11 +2023,11 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     const { action, diff, meta } = ui.previewObj;
     let title = 'Prévia';
     if (action.kind === 'Enxertar') {
-      title = `Prévia · Enxertar ${E.CATALOG[action.targetGene].name}${diff.removedGene ? ` (guarda ${E.CATALOG[diff.removedGene].name})` : ' (livre)'}`;
+      title = `Prévia · Enxertar ${E.CATALOG[action.targetGene].name}${diff.removedGene ? ` (troca por ${E.CATALOG[diff.removedGene].name})` : ' (em espaço livre)'}`;
     } else if (action.kind === 'ExtrairReserva') {
-      title = `Prévia · Extrair ${E.CATALOG[action.targetGene].name} para Reserva`;
+      title = `Prévia · Roubar ${E.CATALOG[action.targetGene].name} para a Reserva`;
     } else if (action.kind === 'Reconfigurar') {
-      title = `Prévia · Reconfigurar ${E.CATALOG[action.gene].name}`;
+      title = `Prévia · Girar/Mover ${E.CATALOG[action.gene].name}`;
     }
     by('preview-title').textContent = title;
 
@@ -1863,31 +2048,31 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
 
     const gEl = by('prev-genome');
     gEl.replaceChildren();
-    if (diff.linksGained.length) {
-      gEl.append(el('span', `+ ${diff.linksGained.join(', ')}`, 'gain'));
+    if (diff.effectsGained.length) {
+      gEl.append(el('span', `+ ${diff.effectsGained.join('; ')}`, 'gain'));
     }
-    if (diff.linksLost.length) {
-      gEl.append(el('span', `- ${diff.linksLost.join(', ')}`, 'loss'));
+    if (diff.effectsLost.length) {
+      gEl.append(el('span', `- ${diff.effectsLost.join('; ')}`, 'loss'));
     }
-    if (!diff.linksGained.length && !diff.linksLost.length) {
-      gEl.textContent = action.kind === 'ExtrairReserva' ? 'Grade intacta (vai à reserva)' : 'Sem nova conexão';
+    if (!diff.effectsGained.length && !diff.effectsLost.length) {
+      gEl.textContent = action.kind === 'ExtrairReserva' ? 'Desarma inimigo (vai p/ reserva)' : 'Sem nova conexão';
     }
 
-    by('prev-damage').textContent = `${diff.predictedNetDamage} PV (fica ${diff.predictedPlayerHp}/${ui.state.playerMaxHp})`;
+    by('prev-damage').textContent = `${diff.predictedNetDamage} PV (fica com ${diff.predictedPlayerHp}/${ui.state.playerMaxHp} PV)`;
 
     const risk = by('prev-risk');
     if (diff.lethalRisk) {
       risk.hidden = false;
       risk.className = 'risk-banner danger';
-      risk.textContent = 'RISCO LETAL: confirmar esta ação leva seus PV a 0 neste turno.';
+      risk.textContent = 'RISCO LETAL: confirmar esta ação deixa você com 0 PV neste turno!';
     } else if (diff.mitigationLost) {
       risk.hidden = false;
       risk.className = 'risk-banner warn';
-      risk.textContent = `Atenção: perder ${diff.removedGene ? E.CATALOG[diff.removedGene].name : 'defesa'} aumenta o dano recebido neste turno.`;
+      risk.textContent = `Atenção: tirar ${diff.removedGene ? E.CATALOG[diff.removedGene].name : 'sua armadura'} aumenta o dano sofrido neste turno.`;
     } else if (diff.exposeBroken) {
       risk.hidden = false;
       risk.className = 'risk-banner warn';
-      risk.textContent = 'Atenção: esta troca desconecta Trama → Aderência (sem novas janelas nesta luta).';
+      risk.textContent = 'Atenção: esta troca desconecta Trama → Aderência (não abrirá novas janelas nesta luta).';
     } else {
       risk.hidden = true;
     }
@@ -1904,7 +2089,6 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     const board = by('board');
     board.replaceChildren();
 
-    // Destaque de destinos legais
     const freeCells = new Set();
     const swapCells = new Set();
     const pickedCells = new Set();
@@ -1924,7 +2108,6 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
       for (const [cx, cy] of pCand.cells) pickedCells.add(`${cx},${cy}`);
     }
 
-    // Mapeia portas ativamente conectadas para destaque visual
     const activePortKey = new Set();
     for (const b of exp.bridges) {
       activePortKey.add(`${b.from[0]},${b.from[1]},${b.dx},${b.dy}`);
@@ -1933,19 +2116,17 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
 
     const hintEl = by('board-hint');
     if (ui.phase === 'assembly') {
-      hintEl.textContent = 'Toque num gene abaixo e depois numa célula livre. Use Girar ou Guardar à vontade.';
+      hintEl.textContent = 'Toque num gene abaixo e depois numa célula livre. Use Girar ou Guardar sem gastar turno.';
     } else if (ui.mode === 'graft_pick') {
-      hintEl.textContent = `Destino para ${E.CATALOG[ui.targetGene].name}: verde (+) = livre · âmbar (⇄) = substitui 1 peça.`;
+      hintEl.textContent = `Escolha onde encaixar ${E.CATALOG[ui.targetGene].name}: verde (+ Livre) ou âmbar (⇄ Troca 1 peça).`;
     } else if (ui.mode === 'reconf_pick') {
       hintEl.textContent = ui.reconfGene
-        ? `Reconfigurando ${E.CATALOG[ui.reconfGene].name}: use um atalho abaixo ou toque numa célula verde.`
-        : 'Toque em um gene da sua grade para mover ou girar (usa o turno).';
+        ? `Reconfigurando ${E.CATALOG[ui.reconfGene].name}: toque num botão de giro abaixo ou numa célula verde.`
+        : 'Toque em um gene da sua grade para girar ou mover (gasta o turno).';
     } else if (isPrev) {
-      hintEl.textContent = 'Visualizando resultado da grade. Confirme ou cancele no cartão acima.';
+      hintEl.textContent = 'Simulação da grade após sua escolha. Confirme ou cancele no cartão acima.';
     } else {
-      hintEl.textContent = ui.condition === 'enxerto'
-        ? 'Portas brilhantes = conexões ativas. Toque num gene para reconfigurar ou num gene inimigo exposto.'
-        : 'Portas brilhantes = conexões ativas. No modo Controle, alterações na grade ocorrem entre lutas.';
+      hintEl.textContent = 'Conexões verdes brilhantes (◆→◇) estão ativas. Toque em qualquer peça para ver ou girar.';
     }
 
     for (let y = 0; y < E.HEIGHT; y++) {
@@ -1972,8 +2153,9 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
         btn.dataset.x = x;
         btn.dataset.y = y;
         if (part) {
+          const info = GENE_BADGE[part.id] || { title: part.id, effect: '' };
           btn.style.background = GENE_COLORS[part.id];
-          btn.append(el('span', part.id, 'cid'), el('span', E.CATALOG[part.id].short, 'cname'));
+          btn.append(el('span', info.title, 'ctitle'), el('span', info.effect, 'ceffect'));
           for (const [u, v, dx, dy] of part.ports) {
             if (u !== x || v !== y) continue;
             const side = dx > 0 ? 'e' : dx < 0 ? 'w' : dy > 0 ? 's' : 'n';
@@ -1982,12 +2164,12 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
             btn.append(el('span', sym, `port ${side}${E.CATALOG[part.id].output ? ' out' : ''}${linked ? ' linked' : ''}`));
           }
         } else {
-          btn.append(el('span', '·', 'cid'));
+          btn.append(el('span', 'Vazio', 'ceffect'));
         }
-        if (isFree) btn.append(el('span', '+', 'tbadge'));
-        else if (isSwap) btn.append(el('span', '⇄', 'tbadge'));
+        if (isFree) btn.append(el('span', '+ Livre', 'tbadge'));
+        else if (isSwap) btn.append(el('span', '⇄ Troca', 'tbadge'));
 
-        btn.setAttribute('aria-label', `Linha ${y + 1}, coluna ${x + 1} · ${part ? E.CATALOG[part.id].name : 'vazia'}`);
+        btn.setAttribute('aria-label', `Linha ${y + 1}, coluna ${x + 1} · ${part ? `${E.CATALOG[part.id].name} (${GENE_BADGE[part.id]?.effect || ''})` : 'vazia'}`);
         btn.onclick = () => handleBoardTap(x, y, part);
         board.append(btn);
       }
@@ -2004,7 +2186,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     if (ui.phase === 'assembly') {
       for (const id of ui.owned) {
         const equipped = ui.state.playerLayout.some(p => p.id === id);
-        const b = el('button', `${id} ${E.CATALOG[id].short}${equipped ? '' : ' (res)'}`, ui.assemblySelected === id ? 'btn-primary' : '');
+        const b = el('button', `${GENE_BADGE[id].title}${equipped ? '' : ' (Reserva)'}`, ui.assemblySelected === id ? 'btn-primary' : '');
         b.type = 'button';
         b.onclick = () => { ui.assemblySelected = id; ui.feedback = E.CATALOG[id].description; render(); };
         strip.append(b);
@@ -2053,7 +2235,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     }
 
     if (ui.mode === 'graft_pick' && ui.targetGene) {
-      const bRes = el('button', `Enviar ${ui.targetGene} à reserva`, 'btn-good');
+      const bRes = el('button', `Enviar ${ui.targetGene} (${E.CATALOG[ui.targetGene].name}) à reserva`, 'btn-good');
       bRes.type = 'button';
       bRes.onclick = () => openPreview({ kind: 'ExtrairReserva', targetGene: ui.targetGene });
       const bBack = el('button', 'Voltar', 'btn-ghost');
@@ -2066,7 +2248,6 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     if (ui.mode === 'reconf_pick') {
       if (ui.reconfGene) {
         const inPlace = E.getReconfPlacements(ui.state.playerLayout, ui.reconfGene).filter(pl => pl.inPlace);
-        // Exibe atalhos 1-toque para rotações no lugar (priorizando as que criam conexões)
         inPlace.sort((a, b) => b.gained.length - a.gained.length);
         for (const pl of inPlace) {
           const lbl = pl.gained.length
@@ -2097,18 +2278,18 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
       const win = E.isWin(ui.state);
       const outcome = E.getOutcome(ui.state, ui.foe);
       by('end-title').textContent = win
-        ? (ui.stage === 0 && (ui.sequence === 'A' || ui.sequence === 'B') ? 'Reflexo vencido!' : 'Encontro vencido!')
-        : outcome === 'loss_timeout' ? 'Limite de turnos atingido' : 'Derrota (0 PV)';
+        ? (ui.stage === 0 && (ui.sequence === 'A' || ui.sequence === 'B') ? '1ª Luta vencida!' : 'Encontro vencido!')
+        : outcome === 'loss_timeout' ? 'Limite de 7 turnos atingido' : 'Derrota (seus PV chegaram a 0)';
       by('end-desc').textContent = win
         ? (ui.stage === 0 && (ui.sequence === 'A' || ui.sequence === 'B')
-          ? `Você fechou com ${ui.state.playerHp} PV e recuperará até +2 PV (${E.nextHp(ui.state)} PV) antes da Sentinela.`
+          ? `Você terminou com ${ui.state.playerHp} PV e recupera +2 PV (vai a ${E.nextHp(ui.state)} PV) para enfrentar a Sentinela.`
           : `Concluído com ${ui.state.playerHp}/${ui.state.playerMaxHp} PV em ${ui.state.turn} turnos.`)
-        : 'Você pode tentar novamente (marcado como nova tentativa na telemetria) ou salvar o JSON.';
+        : 'Toque em "Repetir cenário" abaixo para tentar outra estratégia.';
 
       const acts = by('end-actions');
       acts.replaceChildren();
       if (win && ui.stage === 0 && (ui.sequence === 'A' || ui.sequence === 'B')) {
-        const bNext = el('button', 'Montar para Sentinela →', 'btn-primary');
+        const bNext = el('button', 'Preparar grade para 2ª Luta (Sentinela) →', 'btn-primary');
         bNext.type = 'button';
         bNext.onclick = enterAssemblyForSentinela;
         acts.append(bNext);
@@ -2128,7 +2309,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     card.hidden = false;
 
     if (ui.phase === 'assembly') {
-      const bStart = el('button', 'Iniciar luta contra Sentinela', 'btn-primary');
+      const bStart = el('button', 'Iniciar luta contra Sentinela →', 'btn-primary');
       bStart.type = 'button';
       bStart.onclick = startSentinelaCombat;
       bar.append(bStart);
@@ -2136,34 +2317,55 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     }
 
     const pExp = E.express(ui.state.playerLayout);
+    const eExp = E.express(ui.state.enemyLayout);
+    const intent = E.getEnemyIntent(ui.state, ui.foe);
+    const eGuard = intent.kind === 'Guarda' ? intent.guard : 0;
     const disabled = ui.mode === 'preview';
 
+    // Destaca o botão recomendado pelo Coach em momentos-chave para guiar quem nunca jogou
+    const recommendGuardOpening = ui.state.turn === 0 && intent.kind === 'Attack' && pExp.canExpose && ui.state.exposed.length === 0 && ui.sequence !== 'contraexemplo';
+    const recommendImpactWin = ui.sequence === 'contraexemplo';
+
     for (const atk of pExp.attackList) {
-      const b = el('button', '', '');
+      const res = E.resolveIncoming(atk.hits, eExp.perHitReduce, eExp.perAttackReduce, eGuard);
+      const willKill = res.netDamage >= ui.state.enemyHp;
+      const b = el('button', '', (recommendImpactWin && atk.id === 'Impacto') ? 'coach-highlight btn-good' : '');
       b.type = 'button';
       b.disabled = disabled;
-      b.append(el('span', atk.name), el('small', `Golpe ${atk.hits.join(' + ')}`));
+      b.append(
+        el('span', `Atacar: ${atk.name} (${atk.hits.join(' + ')})`),
+        el('small', willKill ? `Causa ${res.netDamage} líquido · VENCE AGORA!` : `Causa ${res.netDamage} de dano líquido`)
+      );
       b.onclick = () => executeAction({ kind: 'Atacar', attack: atk.id }, false);
       bar.append(b);
     }
 
     if (pExp.guard > 0) {
-      const bG = el('button', '', '');
+      const inc = intent.kind === 'Attack'
+        ? E.resolveIncoming(intent.hits, pExp.perHitReduce, pExp.perAttackReduce, pExp.guard)
+        : null;
+      const subText = inc
+        ? `Bloqueia ${inc.absorbed} (sofre ${inc.netDamage})${inc.absorbed >= 1 && pExp.canExpose ? ' · EXPÕE Q/B!' : ''}`
+        : 'Inimigo não ataca neste turno';
+      const bG = el('button', '', recommendGuardOpening ? 'coach-highlight btn-good' : '');
       bG.type = 'button';
       bG.disabled = disabled;
-      bG.append(el('span', `Guarda · ${pExp.guard}`), el('small', pExp.canExpose ? 'Bloqueia + expõe' : `Riposta ${pExp.riposteHits.join('+')}`));
+      bG.append(el('span', `Guarda · Escudo ${pExp.guard}`), el('small', subText));
       bG.onclick = () => executeAction({ kind: 'Guarda' }, false);
       bar.append(bG);
     }
 
     for (const gId of ui.state.exposed) {
       if (!ui.state.enemyLayout.some(p => p.id === gId)) continue;
-      const bE = el('button', '', 'btn-warn');
+      const bE = el('button', '', 'btn-warn coach-highlight');
       bE.type = 'button';
       bE.disabled = disabled;
+      const sub = gId === 'Q'
+        ? (ui.condition === 'enxerto' ? 'Corta 4+4→4 e instala golpe duplo' : 'Corta 4+4→4 e guarda na reserva')
+        : (ui.condition === 'enxerto' ? 'Tira -1/golpe dele e instala em você' : 'Tira -1/golpe dele e guarda');
       bE.append(
         el('span', `Extrair ${gId} (${E.CATALOG[gId].short})`),
-        el('small', ui.condition === 'enxerto' ? 'Enxertar ou Reserva' : 'Enviar à Reserva')
+        el('small', sub)
       );
       bE.onclick = () => tapExposedGene(gId);
       bar.append(bE);
@@ -2173,12 +2375,12 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
       const bR = el('button', '', ui.mode === 'reconf_pick' ? 'btn-primary' : 'btn-ghost');
       bR.type = 'button';
       bR.disabled = disabled;
-      bR.append(el('span', 'Reconfigurar'), el('small', 'Mover ou girar 1 gene'));
+      bR.append(el('span', 'Reconfigurar'), el('small', 'Girar ou mover 1 peça sua'));
       bR.onclick = () => {
         ui.mode = ui.mode === 'reconf_pick' ? 'idle' : 'reconf_pick';
         ui.reconfGene = null;
         ui.targetGene = null;
-        ui.feedback = ui.mode === 'reconf_pick' ? 'Toque em um gene da grade para girar ou mover.' : '';
+        ui.feedback = ui.mode === 'reconf_pick' ? 'Toque em um gene da grade (ex.: F · Rigidez) para girar ou mover.' : '';
         render();
       };
       bar.append(bR);
@@ -2208,10 +2410,11 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
         const part = layout.find(p => p.cells.some(([u, v]) => u === x && v === y));
         const c = el('div', '', ['cell', part ? 'filled' : ''].join(' '));
         if (part) {
+          const info = GENE_BADGE[part.id] || { title: part.id, effect: '' };
           c.style.background = GENE_COLORS[part.id];
-          c.append(el('span', part.id, 'cid'), el('span', E.CATALOG[part.id].short, 'cname'));
+          c.append(el('span', info.title, 'ctitle'), el('span', info.effect, 'ceffect'));
         } else {
-          c.append(el('span', '·', 'cid'));
+          c.append(el('span', 'Vazio', 'ceffect'));
         }
         wrap.append(c);
       }
@@ -2222,6 +2425,7 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     const mb = by('mode-badge');
     mb.textContent = ui.condition === 'enxerto' ? 'Enxerto' : 'Controle';
     mb.className = `badge mode-${ui.condition}`;
+    renderCoachBanner();
     renderEnemyCard();
     renderStatusOrPreview();
     renderBoard();
@@ -2229,7 +2433,17 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
     renderRepertoireAndLog();
   }
 
-  // Eventos globais da barra e modais
+  // Eventos globais
+  by('btn-how').onclick = () => { by('how-modal').hidden = false; };
+  by('btn-close-how').onclick = () => { by('how-modal').hidden = true; };
+  by('btn-start-combat').onclick = () => { by('how-modal').hidden = true; };
+  by('btn-start-tutorial').onclick = () => {
+    by('how-modal').hidden = true;
+    by('sel-scenario').value = 'exercicio_neutro';
+    by('sel-condition').value = 'enxerto';
+    startSequence();
+  };
+
   by('btn-mod').onclick = () => {
     const d = by('mod-drawer');
     d.hidden = !d.hidden;
@@ -2300,14 +2514,14 @@ details.fold summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(-
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
-      if (!by('sentinela-modal').hidden) by('sentinela-modal').hidden = true;
+      if (!by('how-modal').hidden) by('how-modal').hidden = true;
+      else if (!by('sentinela-modal').hidden) by('sentinela-modal').hidden = true;
       else if (!by('replay-modal').hidden) by('replay-modal').hidden = true;
       else if (ui.mode === 'preview') cancelPreview();
       else if (ui.mode !== 'idle') { ui.mode = 'idle'; ui.targetGene = null; ui.reconfGene = null; render(); }
     }
   });
 
-  // API leve para inspeção em testes automatizados (sem alterar fluxo de usuário)
   window.__ENXERTO_DEBUG__ = {
     getState: () => ui.state,
     getTelemetry: () => session.exportPayload(),
