@@ -3,20 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>O Enxerto v4.0 · Arena Tática 7x5 + Genoma Espacial 3x3</title>
+<title>O Enxerto · Cirurgia Genética em Combate</title>
 <style>
 :root{
   color-scheme:dark;
-  --bg:#070c0a;
-  --panel:#101a16;
-  --panel-hi:#172720;
-  --well:#0a110e;
-  --edge:#263c32;
-  --edge-hi:#4a7560;
-  --text:#f0f7f2;
-  --muted:#9fb8aa;
+  --bg:#070d0a;
+  --panel:#101b16;
+  --well:#0a120e;
+  --edge:#253d32;
+  --edge-hi:#4d7a64;
+  --text:#f2f8f4;
+  --muted:#a0bab0;
   --accent:#bef264;
-  --accent-ink:#0b140d;
+  --accent-ink:#0b150d;
   --good:#34d399;
   --warn:#fbbf24;
   --danger:#fb7185;
@@ -24,98 +23,57 @@
   --purple:#c084fc;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:radial-gradient(circle at 50% 0%,#183025 0%,var(--bg) 70%);color:var(--text);font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:radial-gradient(circle at 50% 0%,#193327 0%,var(--bg) 72%);color:var(--text);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
 body{min-height:100dvh}
-button{font:inherit;color:var(--text);background:#172921;border:1.5px solid var(--edge);border-radius:10px;min-height:36px;padding:5px 10px;cursor:pointer;font-weight:750;transition:transform .08s,border-color .15s,background .15s,box-shadow .15s}
+button{font:inherit;color:var(--text);background:#172a21;border:1.5px solid var(--edge);border-radius:11px;min-height:42px;padding:7px 12px;cursor:pointer;font-weight:800;transition:transform .08s,border-color .15s,background .15s,box-shadow .15s}
 button:hover:not(:disabled){border-color:var(--accent)}
-button:active:not(:disabled){transform:scale(.97)}
+button:active:not(:disabled){transform:scale(.98)}
 button:disabled{opacity:.38;cursor:not-allowed}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.btn-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:850}
+.btn-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:900}
 .btn-good{background:#123828;border-color:var(--good);color:#d1fae5}
 .btn-warn{background:#3d2a0d;border-color:var(--warn);color:#fef3c7}
-.btn-purple{background:#2e1442;border-color:var(--purple);color:#f3e8ff}
+.btn-info{background:#0e2f44;border-color:var(--info);color:#e0f2fe}
 .btn-ghost{background:transparent;border-color:var(--edge);color:var(--muted)}
-.btn-sm{min-height:28px;padding:3px 7px;font-size:.72rem;border-radius:8px}
+.btn-sm{min-height:34px;padding:5px 10px;font-size:.79rem;border-radius:9px}
 
-.app{max-width:1160px;margin:0 auto;padding:8px 10px 16px;display:flex;flex-direction:column;gap:7px}
+/* Spotlight pulsante do Tutorial Guiado! */
+@keyframes pulseSpotlight{
+  0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,.85),0 0 18px rgba(251,191,36,.5)}
+  50%{box-shadow:0 0 0 7px rgba(251,191,36,0),0 0 26px rgba(251,191,36,.85)}
+}
+.spotlight{
+  border:2.5px solid var(--warn)!important;
+  animation:pulseSpotlight 1.2s infinite!important;
+}
+
+.app{max-width:860px;margin:0 auto;padding:10px 12px 22px;display:flex;flex-direction:column;gap:10px}
 
 /* Topbar */
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.brand h1{margin:0;font-size:1.03rem;letter-spacing:-.02em;color:var(--accent)}
+.brand h1{margin:0;font-size:1.1rem;letter-spacing:-.02em;color:var(--accent)}
 .stage-track{display:flex;gap:4px;align-items:center}
-.stage-dot{padding:2px 7px;border-radius:999px;font-size:.69rem;font-weight:800;background:var(--well);border:1px solid var(--edge);color:var(--muted)}
+.stage-dot{padding:2px 8px;border-radius:999px;font-size:.72rem;font-weight:800;background:var(--well);border:1px solid var(--edge);color:var(--muted)}
 .stage-dot.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .stage-dot.done{background:#143828;color:var(--good);border-color:var(--good)}
 .top-actions{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
 
-/* BANDEJA CIRÚRGICA DE EXTRAÇÃO EM VIDA (T ◆→◇ A) */
-.extraction-tray{
-  background:linear-gradient(90deg,#1a3315,#162620);
-  border:2px solid var(--accent);
-  border-radius:13px;
-  padding:9px 12px;
-  display:grid;
-  gap:7px;
-  animation:pulseBorder 1.4s infinite;
-}
-@keyframes pulseBorder{0%,100%{box-shadow:0 0 0 0 rgba(190,242,100,.4)}50%{box-shadow:0 0 0 6px rgba(190,242,100,0)}}
-.extraction-tray-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.extraction-tray-head b{color:var(--accent);font-size:.86rem}
-.extract-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:7px}
-.extract-card{background:var(--well);border:1.5px solid var(--edge-hi);border-radius:10px;padding:7px 9px;display:grid;gap:5px}
-
-/* HUD Superior */
-.hud-bar{
+/* Banner do Tutorial Passo a Passo */
+.coach-banner{
+  background:linear-gradient(90deg,#3b2807,#1f1809);
+  border:2px solid var(--warn);
+  border-radius:14px;
+  padding:10px 13px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:8px;
-  flex-wrap:wrap;
-  background:var(--well);
-  border:1px solid var(--edge);
-  border-radius:11px;
-  padding:6px 10px;
+  gap:10px;
 }
-.vitals-group,.expr-group{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
-.vital-pill{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  padding:3px 9px;
-  border-radius:999px;
-  font-weight:900;
-  font-size:.77rem;
-  border:1.5px solid var(--edge);
-  background:#13211b;
-}
-.vital-pill.hp{border-color:var(--good);color:#6ee7b7}
-.vital-pill.steps{border-color:var(--accent);color:var(--accent)}
-.vital-pill.shield{border-color:#38bdf8;background:#0c2938;color:#bae6fd}
-.expr-pill{
-  padding:3px 8px;
-  border-radius:7px;
-  font-size:.72rem;
-  font-weight:850;
-  background:#15231d;
-  border:1px solid var(--edge);
-  color:#d6e6dc;
-}
-.expr-pill.hi{border-color:var(--purple);color:#e9d5ff;background:#241236}
+.coach-step{font-size:.73rem;font-weight:900;color:var(--warn);text-transform:uppercase;letter-spacing:.04em}
+.coach-text{font-size:.88rem;font-weight:750;color:#fef3c7;margin-top:2px}
 
-/* Layout Principal: Arena 7x5 (Esquerda) + Matriz Genética Espacial 3x3 (Direita) */
-.main-split{
-  display:grid;
-  grid-template-columns:1.25fr 0.95fr;
-  gap:9px;
-  align-items:start;
-}
-@media(max-width:920px){
-  .main-split{grid-template-columns:1fr}
-}
-
-.card{background:var(--panel);border:1.5px solid var(--edge);border-radius:14px;padding:10px 12px;position:relative}
+.card{background:var(--panel);border:1.5px solid var(--edge);border-radius:16px;padding:12px 14px;position:relative}
 
 @keyframes hitShake{
   0%,100%{transform:translateX(0)}
@@ -126,225 +84,144 @@ button:disabled{opacity:.38;cursor:not-allowed}
 }
 .shake{animation:hitShake .28s ease}
 
-/* TABULEIRO TÁTICO 7x5 */
-.arena-header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:5px}
-.arena-header h2{margin:0;font-size:.96rem;color:var(--accent)}
-.arena-header small{color:var(--muted);font-size:.72rem}
+/* Barra de Vida */
+.hp-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.hp-bar-wrap{margin-top:6px;background:var(--well);border:1px solid var(--edge);border-radius:10px;padding:6px 10px}
+.hp-head{display:flex;justify-content:space-between;font-size:.82rem;font-weight:850;margin-bottom:4px}
+.hp-track{height:10px;background:#1a2821;border-radius:99px;overflow:hidden}
+.hp-fill{height:100%;background:linear-gradient(90deg,#ef4444,#f97316);transition:width .25s ease}
+.hp-fill.player{background:linear-gradient(90deg,#10b981,#84cc16)}
 
-.board-grid{
+/* Card do Inimigo */
+.enemy-layout{
+  margin-top:8px;
   display:grid;
-  grid-template-columns:repeat(7,minmax(0,1fr));
-  gap:4px;
-  background:#08100d;
-  border:2px solid var(--edge-hi);
-  border-radius:12px;
-  padding:6px;
-  user-select:none;
+  grid-template-columns:130px 1fr;
+  gap:12px;
+  align-items:center;
 }
-.tile{
-  aspect-ratio:1/0.92;
-  min-height:60px;
-  background:#121f1a;
-  border:1.5px solid #20352c;
-  border-radius:9px;
-  padding:3px;
+@media(max-width:600px){
+  .enemy-layout{grid-template-columns:1fr;gap:8px}
+}
+.creature-art{
+  background:radial-gradient(circle,#1b3327 0%,var(--well) 78%);
+  border:1.5px solid var(--edge);
+  border-radius:13px;
+  height:110px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:space-between;
-  position:relative;
-  cursor:default;
-  transition:transform .08s,border-color .14s,background .14s;
-}
-@media(max-width:560px){
-  .board-grid{gap:3px;padding:4px}
-  .tile{min-height:52px;padding:2px;border-radius:7px}
-}
-.tile.rock{background:#1a211e;border-color:#37413d;color:#94a3b8}
-.tile.spikes{background:radial-gradient(circle,#362012 0%,#1a120b 82%);border-color:#f97316}
-.tile.acid{background:radial-gradient(circle,#263e10 0%,#13200a 80%);border-color:#65a30d}
-.tile.grass{background:radial-gradient(circle,#123524 0%,#0f1f18 85%);border-color:#10b981}
-.tile.danger-zone{
-  border:2px dashed #fb923c!important;
-  background:repeating-linear-gradient(135deg,rgba(239,68,68,.18),rgba(239,68,68,.18) 6px,rgba(18,31,26,.92) 6px,rgba(18,31,26,.92) 12px)!important;
-}
-.tile.reachable{
-  border-color:var(--good);
-  background:linear-gradient(145deg,#133626,#0f2119);
-  cursor:pointer;
-}
-.tile.attack-target{
-  border-color:var(--danger);
-  background:linear-gradient(145deg,#3b121d,#1a0f13);
-  box-shadow:0 0 8px rgba(251,113,133,.45);
-  cursor:pointer;
-}
-.tile.player-tile{
-  border-color:var(--accent);
-  background:linear-gradient(145deg,#1f3818,#101f15);
-}
-
-.tile-top{width:100%;display:flex;justify-content:space-between;align-items:center;font-size:.58rem;font-weight:900;line-height:1}
-.tile-sprite{font-size:1.35rem;line-height:1;display:flex;align-items:center;justify-content:center}
-.facing-arrow{font-size:.7rem;color:var(--warn);font-weight:900}
-.tile-hp{
-  width:100%;
-  background:#09110e;
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:4px;
-  padding:1px 3px;
-  font-size:.59rem;
-  font-weight:900;
-  text-align:center;
-  white-space:nowrap;
-  overflow:hidden;
-}
-@media(max-width:560px){
-  .tile-sprite{font-size:1.08rem}
-  .tile-top{font-size:.5rem}
-  .tile-hp{font-size:.51rem;padding:1px 2px}
-}
-.tile-hp.enemy{color:#fda4af;border-color:#881337;background:#280a14}
-.tile-hp.player{color:#bef264;border-color:#3f6212;background:#17290b}
-.tile-hp.danger{color:#fed7aa;border-color:#ea580c;background:#431407}
-.dmg-preview-badge{
-  position:absolute;
-  top:-7px;
-  right:-4px;
-  z-index:5;
-  background:var(--danger);
-  color:#fff;
-  font-size:.58rem;
-  font-weight:900;
-  padding:1px 4px;
-  border-radius:99px;
-  box-shadow:0 2px 6px rgba(0,0,0,.6);
-  white-space:nowrap;
-}
-.dmg-preview-badge.crit{background:linear-gradient(90deg,#f59e0b,#ef4444);border:1px solid #fef08a}
-.backstab-hint{font-size:.53rem;font-weight:900;color:#fde047;background:rgba(180,83,9,.55);border:1px dashed #fbbf24;border-radius:3px;padding:1px 2px}
-
-/* Cards de Genoma Simétrico dos Inimigos */
-.enemy-genomes-strip{
-  margin-top:7px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:6px;
-}
-.enemy-gcard{
-  background:var(--well);
-  border:1.5px solid var(--edge);
-  border-radius:10px;
-  padding:6px 8px;
-  font-size:.73rem;
-  display:grid;
-  gap:4px;
-}
-.enemy-gcard.exposed{
-  border-color:var(--accent);
-  background:linear-gradient(145deg,#192e16,#0d1712);
-}
-.gene-chips{display:flex;gap:4px;flex-wrap:wrap}
-.gene-chip{
-  padding:2px 6px;
-  border-radius:6px;
-  font-size:.67rem;
-  font-weight:850;
-  background:#15251e;
-  border:1px solid var(--edge-hi);
-}
-.gene-chip.extractable{border-color:var(--accent);color:var(--accent)}
-
-/* PAINEL DIREITO: MATRIZ GENÉTICA ESPACIAL 3x3 (◆━━▶◇) + AÇÕES */
-.genome-matrix{
-  margin-top:6px;
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:6px;
-  background:#070e0b;
-  border:2px solid var(--edge-hi);
-  border-radius:12px;
-  padding:7px;
-}
-.gcell{
-  min-height:82px;
-  background:#12201a;
-  border:1.5px solid var(--edge);
-  border-radius:10px;
-  padding:6px 7px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  gap:3px;
-  position:relative;
-}
-.gcell.core{
-  background:linear-gradient(145deg,#1c2e24,#0f1a15);
-  border-width:2px;
-}
-.gcell.empty{
-  border-style:dashed;
-  opacity:.65;
   justify-content:center;
-  align-items:center;
-  text-align:center;
+  font-size:3rem;
+  position:relative;
 }
-.gcell-top{display:flex;justify-content:space-between;align-items:center;font-size:.64rem;font-weight:900;color:var(--muted)}
-.port-beam{
-  font-size:.65rem;
-  font-weight:900;
-  padding:1px 5px;
-  border-radius:5px;
-  background:#1f3524;
-  color:var(--accent);
-  border:1px solid #4d7c0f;
+.intent-banner{
+  background:#2a1219;
+  border:1.5px solid var(--danger);
+  border-radius:11px;
+  padding:8px 11px;
+  font-size:.88rem;
+  font-weight:850;
+  color:#ffe4e6;
 }
-.gcell-title{font-size:.8rem;font-weight:900}
-.gcell-desc{font-size:.66rem;color:#cbdcd2;line-height:1.18}
+.intent-banner.guard{
+  background:#0d283a;
+  border-color:var(--info);
+  color:#e0f2fe;
+}
 
-/* Botões de Ação Derivados do Genoma (Impacto, Rajada, Guarda) */
-.actions-grid{
-  margin-top:7px;
+.enemy-genes-box{margin-top:9px;display:grid;gap:7px}
+.enemy-gene-card{
+  background:var(--well);
+  border:1.5px solid var(--edge-hi);
+  border-radius:12px;
+  padding:9px 11px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.enemy-gene-card.exposed{
+  background:linear-gradient(90deg,#1b3515,#112218);
+  border:2px solid var(--accent);
+}
+
+/* SEU CORPO: 2 COLUNAS CLARAS (⚔️ ATAQUE vs 🛡️ DEFESA) */
+.poles-grid{
+  margin-top:10px;
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:6px;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
-@media(max-width:480px){
-  .actions-grid{grid-template-columns:1fr}
+@media(max-width:640px){
+  .poles-grid{grid-template-columns:1fr}
 }
-.action-btn{
+.pole-box{
   background:var(--well);
   border:2px solid var(--edge);
+  border-radius:14px;
+  padding:10px 11px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.pole-box.attack{border-color:#fb923c;background:linear-gradient(180deg,rgba(251,146,60,.08),var(--well) 45%)}
+.pole-box.defense{border-color:#38bdf8;background:linear-gradient(180deg,rgba(56,189,248,.08),var(--well) 45%)}
+.pole-header{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.pole-title{font-size:.9rem;font-weight:900}
+.pole-stat{font-size:.78rem;font-weight:900;padding:2px 8px;border-radius:99px;background:#182820}
+
+.gene-slot-card{
+  background:var(--panel);
+  border:1.5px solid var(--edge-hi);
   border-radius:11px;
-  padding:7px 8px;
+  padding:8px 10px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.gene-slot-top{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.gene-effect-now{font-size:.81rem;font-weight:850;color:var(--accent)}
+
+/* BOTÕES PRINCIPAIS DE DECISÃO DO TURNO (COM PRÉVIA AO VIVO!) */
+.decision-grid{
+  margin-top:12px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+@media(max-width:600px){
+  .decision-grid{grid-template-columns:1fr}
+}
+.decision-btn{
+  padding:11px 13px;
+  border-radius:13px;
   text-align:left;
   display:flex;
   flex-direction:column;
-  gap:2px;
+  gap:4px;
 }
-.action-btn.selected{
-  border-color:var(--accent);
-  background:linear-gradient(155deg,#1d331b,#0f1c15);
-  box-shadow:0 0 8px rgba(190,242,100,.25);
-}
+.decision-btn .d-title{font-size:.98rem;font-weight:900;display:flex;justify-content:space-between;align-items:center}
+.decision-btn .d-preview{font-size:.79rem;font-weight:750;opacity:.95;line-height:1.28}
 
 .event-feed{
-  margin-top:7px;
+  margin-top:10px;
   background:var(--well);
   border:1px solid var(--edge);
-  border-radius:10px;
-  padding:6px 8px;
+  border-radius:11px;
+  padding:8px 10px;
   display:grid;
-  gap:3px;
-  font-size:.73rem;
-  max-height:110px;
+  gap:4px;
+  font-size:.79rem;
+  max-height:120px;
   overflow-y:auto;
 }
-.event-item{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.event-item{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.06)}
 
 .combat-toast{
   position:fixed;
-  top:12px;
+  top:14px;
   left:50%;
   transform:translateX(-50%);
   z-index:80;
@@ -353,15 +230,15 @@ button:disabled{opacity:.38;cursor:not-allowed}
   border:2px solid var(--accent);
   color:var(--text);
   font-weight:900;
-  font-size:.83rem;
-  padding:6px 14px;
+  font-size:.86rem;
+  padding:7px 16px;
   border-radius:999px;
   box-shadow:0 8px 24px rgba(0,0,0,.65);
 }
 
 .modal-backdrop{position:fixed;inset:0;background:rgba(4,9,7,.86);display:flex;align-items:center;justify-content:center;padding:12px;z-index:60}
-.modal-card{background:var(--panel);border:2px solid var(--edge-hi);border-radius:16px;padding:14px;max-width:520px;width:100%;display:grid;gap:10px;max-height:92dvh;overflow-y:auto}
-.modal-card h3{margin:0;font-size:1.05rem;color:var(--accent)}
+.modal-card{background:var(--panel);border:2px solid var(--edge-hi);border-radius:16px;padding:16px;max-width:520px;width:100%;display:grid;gap:10px;max-height:92dvh;overflow-y:auto}
+.modal-card h3{margin:0;font-size:1.08rem;color:var(--accent)}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -371,96 +248,110 @@ button:disabled{opacity:.38;cursor:not-allowed}
 <div class="app">
   <header class="topbar">
     <div class="brand">
-      <h1>🧬 O Enxerto v4.0 · Arena Tática & Genoma Espacial</h1>
+      <h1>🧬 O Enxerto · Cirurgia Genética</h1>
       <div class="stage-track" id="stage-track"></div>
     </div>
     <div class="top-actions">
       <button type="button" class="btn-sm btn-ghost" id="btn-sfx">🔊 Som</button>
-      <button type="button" class="btn-sm btn-good" id="btn-atlas">📖 Catálogo de Genes (9)</button>
+      <button type="button" class="btn-sm btn-good" id="btn-atlas">📖 Genes (7)</button>
       <button type="button" class="btn-sm btn-ghost" id="btn-how">? Como Jogar</button>
-      <button type="button" class="btn-sm btn-ghost" id="btn-restart">Nova Caçada</button>
+      <button type="button" class="btn-sm btn-ghost" id="btn-restart">Recomeçar</button>
     </div>
   </header>
 
-  <!-- BANDEJA CIRÚRGICA DE EXTRAÇÃO EM VIDA (APARECE QUANDO UM INIMIGO VIVO FICA EXPOSTO!) -->
-  <section class="extraction-tray" id="extraction-tray" hidden aria-label="Janela de Extração Cirúrgica em Vida">
-    <div class="extraction-tray-head">
-      <b>🧬 JANELA DE EXTRAÇÃO ABERTA (T ◆→◇ A)! Arranque um gene do inimigo VIVO para desarmá-lo na hora e enxertar na sua Grade 3×3:</b>
+  <!-- BANNER DO TUTORIAL GUIADO PASSO A PASSO -->
+  <div class="coach-banner" id="coach-banner" hidden>
+    <div>
+      <div class="coach-step" id="coach-step">PASSO 1 DE 3</div>
+      <div class="coach-text" id="coach-text"></div>
     </div>
-    <div class="extract-cards" id="extract-cards"></div>
+  </div>
+
+  <!-- SEÇÃO 1: O MONSTRO INIMIGO (INTENÇÃO + GENES QUE VOCÊ PODE ARRANCAR!) -->
+  <section class="card" id="enemy-card" aria-labelledby="enemy-name">
+    <div class="hp-row">
+      <div>
+        <h2 id="enemy-name" style="margin:0;font-size:1.05rem">Escorpião de Repique</h2>
+        <small id="enemy-sub" style="color:var(--muted);font-size:.78rem"></small>
+      </div>
+      <div id="enemy-badges" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    </div>
+
+    <div class="hp-bar-wrap">
+      <div class="hp-head"><span>Vida do Inimigo</span><span id="enemy-hp-text">14 / 14 PV</span></div>
+      <div class="hp-track"><div class="hp-fill" id="enemy-hp-bar" style="width:100%"></div></div>
+    </div>
+
+    <div class="enemy-layout">
+      <div class="creature-art" id="enemy-art">🦂</div>
+      <div>
+        <div class="intent-banner" id="enemy-intent-banner"></div>
+        <div class="enemy-genes-box" id="enemy-genes-box"></div>
+      </div>
+    </div>
   </section>
 
-  <!-- HUD DE EXPRESSÃO GENÉTICA EM TEMPO REAL -->
-  <div class="hud-bar">
-    <div class="vitals-group" id="vitals-group"></div>
-    <div class="expr-group" id="expr-group"></div>
-  </div>
+  <!-- SEÇÃO 2: SEU CORPO MUTANTE (⚔️ GENES NO ATAQUE  ⇄  🛡️ GENES NA DEFESA) -->
+  <section class="card" id="player-card" aria-labelledby="player-title">
+    <div class="hp-row">
+      <div>
+        <h2 id="player-title" style="margin:0;font-size:1.05rem">Seu Corpo Mutante (Reconfigure Grátis com ⇄)</h2>
+        <small style="color:var(--muted);font-size:.78rem">Mova qualquer gene seu entre <b>⚔️ Ataque</b> e <b>🛡️ Defesa</b> e veja a prévia dos botões mudar na hora!</small>
+      </div>
+      <div id="player-badges" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    </div>
 
-  <div class="main-split">
-    <!-- COLUNA 1: ARENA TÁTICA 7x5 + GENOMAS SIMÉTRICOS DOS INIMIGOS -->
-    <section class="card" id="arena-card" aria-labelledby="arena-title">
-      <div class="arena-header">
-        <div>
-          <h2 id="arena-title">Arena 1</h2>
-          <small id="arena-sub"></small>
+    <div class="hp-bar-wrap">
+      <div class="hp-head"><span>Sua Vida</span><span id="player-hp-text">24 / 24 PV</span></div>
+      <div class="hp-track"><div class="hp-fill player" id="player-hp-bar" style="width:100%"></div></div>
+    </div>
+
+    <!-- AS 2 CAIXAS DO SEU GENOMA: ⚔️ ATAQUE (Esquerda) e 🛡️ DEFESA (Direita) -->
+    <div class="poles-grid">
+      <div class="pole-box attack">
+        <div class="pole-header">
+          <span class="pole-title" style="color:#fb923c">⚔️ SEUS GENES NO ATAQUE</span>
+          <span class="pole-stat" id="pole-atk-stat" style="color:#fed7aa">Golpe: 4</span>
         </div>
+        <div id="player-atk-genes" style="display:grid;gap:7px"></div>
       </div>
 
-      <div class="board-grid" id="board-grid" role="grid" aria-label="Tabuleiro Tático 7 por 5"></div>
-
-      <div style="margin-top:5px;font-size:.7rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px">
-        <span>🟢 <b>Andar</b> · 🎯 <b>Atacar</b> · ⚠️ <b>Mira Inimiga (Empurre outro inimigo nela p/ causar 💥 Fogo Amigo!)</b></span>
-        <span>🧬 <b>Como Expor Inimigo Vivo:</b> 🛡️ Guarda (T→A), 🗡️ Backstab pelas Costas ou 💥 Colisão!</span>
-      </div>
-
-      <!-- GENOMAS SIMÉTRICOS DOS INIMIGOS VIVOS -->
-      <div class="enemy-genomes-strip" id="enemy-genomes-strip"></div>
-    </section>
-
-    <!-- COLUNA 2: SUA MATRIZ GENÉTICA ESPACIAL 3x3 (I, T, A, F, R, V, Q, B, M) + AÇÕES -->
-    <section class="card" id="genome-card" aria-labelledby="genome-title">
-      <div class="arena-header">
-        <div>
-          <h2 id="genome-title">Sua Matriz Genética Espacial 3×3 (Portas ◆→◇)</h2>
-          <small>Clique em <b>🔄 Girar (I ⇄ T)</b> em <b>🔩 Rigidez (F)</b> ou <b>⚡ Repique (Q)</b> para reconfigurar seu corpo em tempo real!</small>
+      <div class="pole-box defense">
+        <div class="pole-header">
+          <span class="pole-title" style="color:#38bdf8">🛡️ SEUS GENES NA DEFESA</span>
+          <span class="pole-stat" id="pole-def-stat" style="color:#bae6fd">Guarda: 4 · Riposta: 3</span>
         </div>
+        <div id="player-def-genes" style="display:grid;gap:7px"></div>
       </div>
+    </div>
 
-      <div class="genome-matrix" id="genome-matrix" role="grid" aria-label="Matriz Genética 3 por 3"></div>
+    <!-- OS 2 GRANDES BOTÕES DE AÇÃO DO TURNO (COM PRÉVIA EXATA!) -->
+    <div class="decision-grid" id="decision-grid">
+      <button type="button" class="decision-btn btn-warn" id="btn-act-attack">
+        <div class="d-title"><span id="atk-btn-title">⚔️ Atacar Agora</span><span>▶</span></div>
+        <div class="d-preview" id="atk-btn-preview"></div>
+      </button>
 
-      <div id="reserve-strip" style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap;align-items:center"></div>
+      <button type="button" class="decision-btn btn-info" id="btn-act-guard">
+        <div class="d-title"><span id="grd-btn-title">🛡️ Defender & Abrir Brecha (🧬)</span><span>▶</span></div>
+        <div class="d-preview" id="grd-btn-preview"></div>
+      </button>
+    </div>
 
-      <!-- AÇÕES EXPRESSAS PELO SEU GENOMA -->
-      <div class="actions-grid" id="actions-grid"></div>
+    <div id="outcome-bar" style="margin-top:10px" hidden></div>
 
-      <div style="margin-top:8px;display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap" id="turn-footer">
-        <button type="button" class="btn-warn" style="width:100%;min-height:42px;font-size:.88rem" id="btn-end-turn">⏭️ Encerrar Turno</button>
-      </div>
-
-      <div id="outcome-bar" style="margin-top:8px" hidden></div>
-
-      <div class="event-feed" id="event-feed" aria-live="polite"></div>
-    </section>
-  </div>
+    <div class="event-feed" id="event-feed" aria-live="polite"></div>
+  </section>
 </div>
 
-<!-- MODAL: CÂMARA DE EVOLUÇÃO ENTRE ARENAS -->
-<div class="modal-backdrop" id="evo-modal" role="dialog" aria-modal="true" aria-labelledby="evo-title" hidden>
-  <div class="modal-card">
-    <h3 id="evo-title">🧬 Adaptação entre Arenas!</h3>
-    <p style="margin:0;font-size:.81rem;color:var(--muted)">Seus genes enxertados continuam na sua Grade 3×3! Escolha 1 Adaptação adicional para a próxima Arena:</p>
-    <div id="evo-list" style="display:grid;gap:8px"></div>
-  </div>
-</div>
-
-<!-- MODAL: CATÁLOGO OFICIAL DOS 9 GENES -->
+<!-- MODAL: CATÁLOGO DE GENES -->
 <div class="modal-backdrop" id="atlas-modal" role="dialog" aria-modal="true" aria-labelledby="atlas-title" hidden>
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 id="atlas-title">📖 Catálogo Oficial dos 9 Genes (Simetria Jogador = Inimigo)</h3>
+      <h3 id="atlas-title">📖 Como Funciona Cada Gene (No Ataque vs Na Defesa)</h3>
       <button type="button" class="btn-sm btn-ghost" id="btn-close-atlas">Fechar</button>
     </div>
-    <div id="atlas-list" style="display:grid;gap:7px;font-size:.78rem"></div>
+    <div id="atlas-list" style="display:grid;gap:8px;font-size:.82rem"></div>
   </div>
 </div>
 
@@ -468,21 +359,21 @@ button:disabled{opacity:.38;cursor:not-allowed}
 <div class="modal-backdrop" id="how-modal" role="dialog" aria-modal="true" aria-labelledby="how-title" hidden>
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 id="how-title">Como funciona O Enxerto v4.0 (Fusão Definitiva)</h3>
+      <h3 id="how-title">Entenda O Enxerto em 3 Passos Simples</h3>
       <button type="button" class="btn-sm btn-ghost" id="btn-close-how">Fechar</button>
     </div>
-    <div style="display:grid;gap:8px;font-size:.8rem">
-      <div style="background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:8px">
-        <b style="color:var(--accent);display:block">1. Matriz Genética Espacial 3×3 (I, T, A + Modificadores ◆→◇)</b>
-        100% das suas capacidades (e das capacidades dos inimigos!) vêm dos genes conectados nos Núcleos <b>⚔️ I (Impulso)</b>, <b>🛡️ T (Trama)</b> e <b>🧬 A (Aderência)</b>. Você pode clicar em <b>🔄 Girar</b> na peça <b>🔩 F (Rigidez)</b> para alternar entre <b>+1 Ataque (F→I)</b> e <b>+2 Guarda (F→T)</b>, ou girar <b>⚡ Q (Repique)</b> entre <b>Ataque Duplo [4,4] (Q→I)</b> e <b>Riposta Dupla [2,2] (Q→T)</b>!
+    <div style="display:grid;gap:9px;font-size:.84rem">
+      <div style="background:var(--well);border:1px solid var(--edge);border-radius:10px;padding:10px">
+        <b style="color:var(--warn);display:block">1. Reconfigurar (⇄ Mover entre ⚔️ Ataque e 🛡️ Defesa)</b>
+        Todo gene que você tem pode ficar no seu <b>⚔️ ATAQUE</b> ou na sua <b>🛡️ DEFESA</b>. Clicar em <b>⇄ Mover</b> é grátis e muda o efeito do gene na hora (ex.: o <b>🔩 Gene de Força</b> dá <b>+2 Dano</b> no Ataque, ou <b>+4 Escudo</b> na Defesa!).
       </div>
-      <div style="background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:8px">
-        <b style="color:var(--good);display:block">2. Cirurgia em Vida (Expor, Desarmar e Enxertar!)</b>
-        Quando sua <b>🛡️ Guarda</b> absorve ≥ 1 dano (via <b>T ◆→◇ A</b>) — ou quando você aplica um <b>🗡️ Backstab pelas Costas</b> ou <b>💥 Colisão</b> na Arena — o genoma do inimigo vivo fica <b>🧬 EXPOSTO</b>! Clique para <b>arrancar Q, B, M ou R dele em vida</b>: o ataque ou armadura do inimigo cai na hora e o gene vai direto para a sua Grade 3×3!
+      <div style="background:var(--well);border:1px solid var(--edge);border-radius:10px;padding:10px">
+        <b style="color:var(--info);display:block">2. Defender & Abrir Brecha (🛡️ + ⚡ Riposta)</b>
+        Quando o inimigo vai atacar forte, coloque seus genes na <b>🛡️ Defesa</b> e clique em <b>🛡️ Defender & Abrir Brecha</b>. Se você bloquear 100% do golpe (<b>Bloqueio Total</b>), você não sofre nada, devolve uma <b>⚡ Riposta automática</b> e deixa os genes do inimigo <b>🧬 EXPOSTOS</b>!
       </div>
-      <div style="background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:8px">
-        <b style="color:var(--warn);display:block">3. Simetria Matemática (B → M → Guarda → Riposta) & Fogo Amigo</b>
-        <b>🧱 B (Revestimento)</b> reduz <b>-1 por golpe</b> (neutraliza <i>Rajada [2,2,2] → [1,1,1]</i>); <b>🧽 M (Amortecimento)</b> reduz <b>-2 por ataque</b>; e bloquear 100% de um ataque com a <b>🛡️ Guarda</b> dispara <b>⚡ Riposta (que ignora B e M!)</b>. Na Arena 7×5, empurre inimigos para a <b>⚠️ Mira Vermelha</b> para causar <b>💥 Fogo Amigo</b>!
+      <div style="background:var(--well);border:1px solid var(--edge);border-radius:10px;padding:10px">
+        <b style="color:var(--accent);display:block">3. Arrancar o Gene do Inimigo VIVO (✂️ Enxertar!)</b>
+        Quando o inimigo está <b>🧬 EXPOSTO</b>, clique em <b>✂️ Arrancar Gene</b>! O inimigo <b>perde aquele poder imediatamente</b> (ex.: perde o golpe duplo ou a couraça) e o gene passa a ser <b>SEU</b> para o resto da jornada!
       </div>
     </div>
     <button type="button" class="btn-primary" id="btn-ok-how">Entendi, vamos jogar!</button>
@@ -490,33 +381,26 @@ button:disabled{opacity:.38;cursor:not-allowed}
 </div>
 
 <script>
-/* O Enxerto (New Genome) · Motor v4.0 "Fusão Definitiva: Arena Tática 7x5 + Genoma Espacial 3x3 & Cirurgia em Vida"
- * Une 100% dos pilares originais do planejamento (00_LEIA_PRIMEIRO.md / 01_Anexo_Tecnico.md) com a Arena Tática:
+/* O Enxerto (New Genome) · Motor v5.0 "Clareza Absoluta: Cirurgia Genética & Reconfiguração Ataque ⇄ Defesa"
  *
- * 1) GENOMA ESPACIAL 3x3 COM PORTAS DIRETAS VISÍVEIS (◆━━▶◇) E OS 9 GENES ORIGINAIS (I, T, A, F, R, V, Q, B, M):
- *    - Núcleo I (Impulso): libera Impacto [3] (+Empurrão na Arena).
- *    - Núcleo T (Trama): libera Guarda 3 e Riposta [2] (que ignora B e M após Bloqueio Total!).
- *    - Núcleo A (Aderência): conectado a T (T → A), abre a JANELA DE EXTRAÇÃO EM VIDA quando Guarda absorve ≥ 1 dano
- *      (ou ao aplicar Backstab 🗡️ / Colisão 💥 na Arena!).
- *    - F (Rigidez): girável em combate! Ligado a I (F → I) dá +1 ao golpe base de Impacto/Rajada; ligado a T (F → T) dá +2 à Guarda (3 → 5).
- *    - R (Ritmo): ligado a I (R → I) libera Rajada de 2 golpes [max(1, base-1)] com alcance 2 na Arena!
- *    - V (Reserva): ligado a T (V → T) cura +2 PV sempre que a Guarda absorve ≥ 1 dano.
- *    - Q (Repique · Extraível): girável! Ligado a I (Q → I) duplica o último golpe ([4] → [4,4], [2,2] → [2,2,2]);
- *      ligado a T (Q → T) duplica a Riposta ([2] → [2,2] = 4 de dano ignorando B e M!).
- *    - B (Revestimento · Extraível): ligado a T (B → T) reduz -1 de dano POR GOLPE recebido (anti-Rajada), antes de M e da Guarda.
- *    - M (Amortecimento · Extraível): ligado a T (M → T) reduz -2 de dano POR ATAQUE recebido, após B e antes da Guarda. Empilha com B!
- *
- * 2) SIMETRIA 100% REAL (JOGADOR = INIMIGO):
- *    - Reflexo A, Reflexo B, Sentinela e Quimera Apex possuem seu próprio Genoma (I, T, F, R, Q, B, M) e calculam
- *      seus golpes ([4,4], [2,2,2]), Guarda, Riposta, B (-1/golpe) e M (-2/ataque) pela MESMA função pura expressGenome()!
- *
- * 3) CIRURGIA EM VIDA (DESARME IMEDIATO + ENXERTO NA GRADE OU RESERVA):
- *    - Arrancar Q, B, M ou R de um inimigo VIVO remove aquele gene do genoma inimigo NA HORA (ex.: o ataque inimigo
- *      cai de [4,4] para [4] imediatamente, ou ele perde a armadura B/M!) e permite enxertá-lo direto na sua grade 3x3!
- *
- * 4) ARENA TÁTICA 7x5 (MEWGENICS + INTO THE BREACH):
- *    - Movimentação (🐾 Passos), Backstab pelas costas (🗡️ +2 dano e expõe o genoma inimigo!), Colisão em Rochas (🪨 -> 🦴 Espinhos),
- *      Poças Ácidas (🧪) e ⚠️ Mira Telegrafada com 💥 FOGO AMIGO! */
+ * Fidelidade 100% ao planejamento de O Enxerto (00_LEIA_PRIMEIRO.md / 01_Anexo_Tecnico.md) com clareza didática imediata:
+ * 1) DOIS POLOS GENÉTICOS VISUAIS (⚔️ ATAQUE = Impulso I  |  🛡️ DEFESA = Trama T + Aderência A):
+ *    - Todo gene no seu corpo (e no corpo do inimigo!) está plugado ou no ⚔️ ATAQUE ou na 🛡️ DEFESA.
+ *    - Com 1 clique grátis ("⇄ Mover p/ Defesa" ou "⇄ Mover p/ Ataque"), você reconfigura qualquer gene seu antes de agir
+ *      e vê na hora como o dano do seu Ataque e o poder da sua Defesa/Riposta mudam!
+ * 2) DEFENDER ABRE A BRECHA CIRÚRGICA (T → A) + BLOQUEIO TOTAL DISPARA RIPOSTA:
+ *    - Usar "🛡️ Defender & Abrir Brecha" ativa seu Escudo de Guarda.
+ *    - Se a Guarda absorver ≥ 1 de dano, os genes do inimigo VIVO ficam 🧬 EXPOSTOS para cirurgia!
+ *    - Se a Guarda bloquear 100% do ataque inimigo (Bloqueio Total), você dispara automaticamente sua ⚡ RIPOSTA
+ *      (que ignora a Couraça B e o Amortecimento M do inimigo!).
+ * 3) CIRURGIA EM VIDA (✂️ ARRANCAR GENE DO INIMIGO VIVO):
+ *    - Quando o inimigo está 🧬 EXPOSTO, você arranca 1 gene dele (ex.: ⚡ Duplicador Q, 🧱 Couraça B, 🧽 Amortecimento M,
+ *      🌪️ Ritmo R, ☠️ Peçonha P) e enxerta direto no seu ⚔️ ATAQUE ou na sua 🛡️ DEFESA!
+ *    - O inimigo é DESARMADO NA HORA (perde aquele golpe duplo ou aquela armadura imediatamente!) e ainda sofre um
+ *      Choque Cirúrgico ao ter o gene arrancado!
+ * 4) SIMETRIA 100% REAL (JOGADOR = INIMIGO):
+ *    - Jogador e inimigos calculam Ataque, Multigolpe, Couraça (-1/golpe), Amortecimento (-2/ataque), Guarda e Riposta
+ *      pela EXATA MESMA função pura expressBody() e resolveHitSequence()! */
 (function (root, factory) {
   const api = factory();
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -524,1388 +408,625 @@ button:disabled{opacity:.38;cursor:not-allowed}
 })(typeof globalThis !== 'undefined' ? globalThis : this, () => {
   'use strict';
 
-  const VERSION = '4.0.0';
-  const GRID_W = 7;
-  const GRID_H = 5;
-  const GENOME_W = 3;
-  const GENOME_H = 3;
+  const VERSION = '5.0.0';
 
-  // Catálogo Oficial dos 9 Genes de O Enxerto (01_Anexo_Tecnico.md)
+  // Catálogo Oficial de Genes (cada gene tem efeito claro no ⚔️ ATAQUE e na 🛡️ DEFESA!)
   const GENES = {
-    I: {
-      id: 'I',
-      name: 'Impulso',
-      kind: 'core',
-      icon: '⚔️',
-      color: '#fb923c',
-      extractable: false,
-      validCores: [],
-      desc: 'Núcleo Ofensivo: libera Impacto (3 de dano base + empurra 1 casa na Arena). Recebe F, R e Q.',
-    },
-    T: {
-      id: 'T',
-      name: 'Trama',
-      kind: 'core',
-      icon: '🛡️',
-      color: '#38bdf8',
-      extractable: false,
-      validCores: ['A'],
-      desc: 'Núcleo Defensivo: libera Guarda (absorve 3 de dano). Bloqueio Total dispara Riposta [2] (ignora B e M!).',
-    },
-    A: {
-      id: 'A',
-      name: 'Aderência',
-      kind: 'core',
-      icon: '🧬',
-      color: '#a3e635',
-      extractable: false,
-      validCores: [],
-      desc: 'Núcleo Cirúrgico (T → A): abre a Janela de Extração em vida sempre que Guarda absorve ≥ 1 dano (ou em Backstab/Colisão).',
-    },
     F: {
       id: 'F',
-      name: 'Rigidez',
-      kind: 'mod',
+      code: 'F',
+      name: 'Gene de Força (Rigidez)',
       icon: '🔩',
       color: '#f59e0b',
       extractable: false,
-      validCores: ['I', 'T'],
-      desc: 'Girável (🔄): ligado a I (F→I) soma +1 ao golpe base de Impacto/Rajada; ligado a T (F→T) soma +2 à Guarda (3 → 5).',
-    },
-    R: {
-      id: 'R',
-      name: 'Ritmo',
-      kind: 'mod',
-      icon: '🌪️',
-      color: '#22d3ee',
-      extractable: true,
-      validCores: ['I'],
-      desc: 'Ligado a I (R→I): libera Rajada de 2 golpes [max(1, base-1)] com alcance de 2 casas na Arena!',
+      attackTitle: '+2 de Dano Base por golpe',
+      defenseTitle: '+4 de Escudo na Guarda',
+      desc: 'No ⚔️ Ataque aumenta cada golpe em +2. Na 🛡️ Defesa aumenta sua Guarda em +4 (ideal p/ conseguir Bloqueio Total e Riposta!).',
     },
     V: {
       id: 'V',
-      name: 'Reserva',
-      kind: 'mod',
+      code: 'V',
+      name: 'Gene de Reserva (Vital)',
       icon: '💚',
       color: '#34d399',
       extractable: false,
-      validCores: ['T'],
-      desc: 'Ligada a T (V→T): regenera +2 PV sempre que sua Guarda absorve ≥ 1 de dano.',
+      attackTitle: 'Drena +2 PV ao atacar',
+      defenseTitle: 'Cura +3 PV ao defender um golpe',
+      desc: 'No ⚔️ Ataque drena +2 PV. Na 🛡️ Defesa regenera +3 PV sempre que sua Guarda absorve dano.',
     },
     Q: {
       id: 'Q',
-      name: 'Repique',
-      kind: 'mod',
+      code: 'Q',
+      name: 'Gene Duplicador (Repique)',
       icon: '⚡',
       color: '#c084fc',
       extractable: true,
-      validCores: ['I', 'T'],
-      desc: 'Extraível & Girável (🔄): ligado a I (Q→I) duplica o último golpe ([4]→[4,4], [2,2]→[2,2,2]); ligado a T (Q→T) duplica a Riposta ([2]→[2,2])!',
+      attackTitle: 'Bate 2× (Duplica seu Ataque!)',
+      defenseTitle: 'Riposta Dupla (2×3 = 6 de Riposta!)',
+      desc: 'No ⚔️ Ataque repete seu golpe (1× → 2×, ou Rajada 2× → 3×). Na 🛡️ Defesa duplica sua Riposta de Bloqueio Total para [3+3] = 6!',
     },
     B: {
       id: 'B',
-      name: 'Revestimento',
-      kind: 'mod',
+      code: 'B',
+      name: 'Gene de Couraça (Revestimento)',
       icon: '🧱',
       color: '#60a5fa',
       extractable: true,
-      validCores: ['T'],
-      desc: 'Extraível (B→T): reduz em -1 CADA GOLPE de ataque recebido (anti-multigolpe), aplicado antes de M e da Guarda.',
+      attackTitle: 'Quebra-Casco (+2 dano e ignora B inimigo)',
+      defenseTitle: '-1 de dano em CADA GOLPE recebido',
+      desc: 'Na 🛡️ Defesa reduz -1 de cada golpe recebido (mesmo sem defender, neutralizando Rajadas!). No ⚔️ Ataque soma +2 de dano perfurante.',
     },
     M: {
       id: 'M',
-      name: 'Amortecimento',
-      kind: 'mod',
+      code: 'M',
+      name: 'Gene Amortecedor (Membrana)',
       icon: '🧽',
       color: '#818cf8',
       extractable: true,
-      validCores: ['T'],
-      desc: 'Extraível (M→T): reduz em -2 o DANO TOTAL de cada ataque recebido, aplicado após B e antes da Guarda. Empilha com B!',
+      attackTitle: 'Impacto Pesado (+2 de dano no golpe)',
+      defenseTitle: '-2 de dano no ATAQUE TOTAL recebido',
+      desc: 'Na 🛡️ Defesa reduz -2 do dano total de todo ataque recebido (empilha com Couraça B!). No ⚔️ Ataque soma +2 de dano.',
+    },
+    R: {
+      id: 'R',
+      code: 'R',
+      name: 'Gene de Ritmo (Rajada)',
+      icon: '🌪️',
+      color: '#22d3ee',
+      extractable: true,
+      attackTitle: 'Transforma ataque em Rajada (+1 golpe rápido)',
+      defenseTitle: '+2 Escudo e +1 de dano na Riposta',
+      desc: 'No ⚔️ Ataque adiciona +1 golpe rápido à sua sequência. Na 🛡️ Defesa soma +2 à Guarda e +1 em cada Riposta.',
+    },
+    P: {
+      id: 'P',
+      code: 'P',
+      name: 'Gene Peçonhento (Toxina)',
+      icon: '☠️',
+      color: '#a3e635',
+      extractable: true,
+      attackTitle: 'Injeta +3 de Veneno por ataque',
+      defenseTitle: 'Espinhos Tóxicos (+3 Veneno em quem te atacar)',
+      desc: 'No ⚔️ Ataque injeta +3 Veneno na presa. Na 🛡️ Defesa purifica seu sangue e aplica +3 Veneno no atacante quando você defende.',
     },
   };
 
-  // Coordenadas padrão na Matriz Genética 3x3 do Jogador
-  // (0,2)=I, (1,1)=T, (2,1)=A.
-  // As 6 células ao redor ((0,1), (1,2), (1,0), (0,0), (2,0), (2,2)) acomodam os modificadores F, R, V, M, B, Q!
-  const DEFAULT_SLOT_FOR_GENE = {
-    I: { x: 0, y: 2 },
-    T: { x: 1, y: 1 },
-    A: { x: 2, y: 1 },
-    F: { x: 0, y: 1 }, // Entre I (0,2) e T (1,1)! Gira entre ▼I e ▶T!
-    R: { x: 1, y: 2 }, // À direita de I (0,2) e abaixo de T (1,1)!
-    V: { x: 0, y: 0 }, // Canto superior esquerdo → T
-    M: { x: 1, y: 0 }, // Topo centro → ▼T
-    B: { x: 2, y: 0 }, // Topo direito → ↙T
-    Q: { x: 2, y: 2 }, // Canto inferior direito → conecta em I ou T!
-  };
+  // Expressa todas as estatísticas de um organismo (Jogador ou Inimigo) a partir dos seus genes em `attack` e `defense`!
+  // 100% Simétrico: zero regras ocultas!
+  function expressBody(genesList, baseStrike = 4, baseGuard = 4) {
+    const inAtk = id => genesList.some(g => g.id === id && g.side === 'attack');
+    const inDef = id => genesList.some(g => g.id === id && g.side === 'defense');
 
-  // Expressão Pura do Genoma (usada 100% simetricamente pelo Jogador e por TODOS os Inimigos!)
-  function expressGenome(genomeList) {
-    const hasGene = id => genomeList.some(g => g.id === id);
-    const hasLink = (id, core) => genomeList.some(g => g.id === id && g.targetCore === core);
+    // Cálculo do Ataque
+    let hitDmg = baseStrike;
+    if (inAtk('F')) hitDmg += 2;
+    if (inAtk('B')) hitDmg += 2;
+    if (inAtk('M')) hitDmg += 2;
 
-    const hasI = hasGene('I');
-    const hasT = hasGene('T');
-    const hasA = hasGene('A') && hasT; // T → A conectado
-
-    const fOnI = hasI && hasLink('F', 'I');
-    const fOnT = hasT && hasLink('F', 'T');
-    const rOnI = hasI && hasLink('R', 'I');
-    const qOnI = hasI && hasLink('Q', 'I');
-    const qOnT = hasT && hasLink('Q', 'T');
-    const bOnT = hasT && hasLink('B', 'T');
-    const mOnT = hasT && hasLink('M', 'T');
-    const vOnT = hasT && hasLink('V', 'T');
-
-    const baseImpact = hasI ? 3 + (fOnI ? 1 : 0) : 2;
-    const impactHits = qOnI ? [baseImpact, baseImpact] : [baseImpact];
-
-    let rajadaHits = null;
-    if (rOnI) {
-      const rBase = Math.max(1, baseImpact - 1);
-      rajadaHits = qOnI ? [rBase, rBase, rBase] : [rBase, rBase];
+    let hitCount = 1;
+    if (inAtk('R')) {
+      hitCount += 1;
+      hitDmg = Math.max(2, hitDmg - 1); // Rajada distribui em golpes rápidos
+    }
+    if (inAtk('Q')) {
+      hitCount += 1; // Repique duplica / adiciona golpe extra!
     }
 
-    const guardValue = hasT ? 3 + (fOnT ? 2 : 0) : 0;
-    const riposteHits = hasT ? (qOnT ? [2, 2] : [2]) : [];
-    const bReduction = bOnT ? 1 : 0;
-    const mReduction = mOnT ? 2 : 0;
+    const hits = Array.from({ length: hitCount }, () => hitDmg);
+    const totalRawAttack = hits.reduce((a, b) => a + b, 0);
+    const attackLifesteal = inAtk('V') ? 2 : 0;
+    const attackPoison = inAtk('P') ? 3 : 0;
+    const ignoresEnemyB = inAtk('B');
 
-    const activeLinks = [];
-    if (hasA) activeLinks.push('T ◆→◇ A (Janela de Extração)');
-    if (fOnI) activeLinks.push('F ◆→◇ I (+1 Impacto/Rajada)');
-    if (fOnT) activeLinks.push('F ◆→◇ T (+2 Guarda)');
-    if (rOnI) activeLinks.push(`R ◆→◇ I (Rajada [${rajadaHits.join(',')}])`);
-    if (qOnI) activeLinks.push(`Q ◆→◇ I (Repique Duplo [${impactHits.join(',')}])`);
-    if (qOnT) activeLinks.push('Q ◆→◇ T (Riposta Dupla [2,2])');
-    if (bOnT) activeLinks.push('B ◆→◇ T (-1 dano/golpe)');
-    if (mOnT) activeLinks.push('M ◆→◇ T (-2 dano/ataque)');
-    if (vOnT) activeLinks.push('V ◆→◇ T (+2 PV na Guarda)');
+    // Cálculo da Defesa (Passiva B + Passiva M + Guarda Ativa + Riposta + Cura V)
+    const bPerHit = inDef('B') ? 1 : 0;
+    const mPerAttack = inDef('M') ? 2 : 0;
 
-    const extractableGenes = genomeList
-      .filter(g => GENES[g.id]?.extractable)
-      .map(g => g.id);
+    let guardValue = baseGuard;
+    if (inDef('F')) guardValue += 4;
+    if (inDef('R')) guardValue += 2;
+
+    const riposteSingle = 3 + (inDef('R') ? 1 : 0);
+    const riposteHits = inDef('Q') ? [riposteSingle, riposteSingle] : [riposteSingle];
+    const riposteTotal = riposteHits.reduce((a, b) => a + b, 0);
+
+    const guardHeal = inDef('V') ? 3 : 0;
+    const guardThornsPoison = inDef('P') ? 3 : 0;
+
+    const extractableGenes = genesList.filter(g => GENES[g.id]?.extractable).map(g => g.id);
 
     return {
-      hasI,
-      hasT,
-      hasA,
-      fOnI,
-      fOnT,
-      rOnI,
-      qOnI,
-      qOnT,
-      bOnT,
-      mOnT,
-      vOnT,
-      baseImpact,
-      impactHits,
-      rajadaHits,
+      hits,
+      hitCount,
+      hitDmg,
+      totalRawAttack,
+      attackLifesteal,
+      attackPoison,
+      ignoresEnemyB,
+      bPerHit,
+      mPerAttack,
       guardValue,
       riposteHits,
-      bReduction,
-      mReduction,
-      activeLinks,
+      riposteTotal,
+      guardHeal,
+      guardThornsPoison,
       extractableGenes,
     };
   }
 
-  // Fórmula Oficial de Resolução de Dano Multi-Golpe (01_Anexo_Tecnico.md Seção 2.4 & 2.5):
-  // 1) Redução por golpe (B): h'_i = max(0, golpe_i - B)
-  // 2) Soma e redução por ataque (M): dano_pre_guarda = max(0, sum(h'_i) - M)
-  // 3) Absorção pela Guarda (T): absorvido = min(guarda_ativa, dano_pre_guarda), dano_liquido = dano_pre_guarda - absorvido
-  // 4) Gatilhos de Guarda:
-  //    - Janela de Extração (T → A): absorvido >= 1 e T → A conectado
-  //    - Bloqueio Total → Riposta ([2] ou [2,2] com Q → T): guarda_ativa > 0, dano_pre_guarda > 0 e dano_liquido === 0 (ignora B e M!)
-  function resolveAttackMath(rawHits, defenderExpr, activeGuardValue) {
-    const afterB = rawHits.map(h => Math.max(0, h - defenderExpr.bReduction));
-    const sumAfterB = afterB.reduce((a, b) => a + b, 0);
-    const danoPreGuarda = Math.max(0, sumAfterB - defenderExpr.mReduction);
-    const absorvido = Math.min(activeGuardValue, danoPreGuarda);
+  // Resolução Matemática Oficial de um Ataque (Ordem de 01_Anexo_Tecnico.md: B por golpe -> M por ataque -> Guarda -> Janela & Riposta)
+  function resolveHitSequence(attackerExpr, defenderExpr, defenderIsGuarding) {
+    const effB = attackerExpr.ignoresEnemyB ? 0 : defenderExpr.bPerHit;
+    const hitsAfterB = attackerExpr.hits.map(h => Math.max(0, h - effB));
+    const sumAfterB = hitsAfterB.reduce((a, b) => a + b, 0);
+    const danoPreGuarda = Math.max(0, sumAfterB - defenderExpr.mPerAttack);
+
+    const activeGuard = defenderIsGuarding ? defenderExpr.guardValue : 0;
+    const absorvido = Math.min(activeGuard, danoPreGuarda);
     const danoLiquido = danoPreGuarda - absorvido;
 
-    const triggersExtractionWindow = absorvido >= 1 && defenderExpr.hasA;
-    const triggersTotalBlockRiposte = activeGuardValue > 0 && danoPreGuarda > 0 && danoLiquido === 0 && defenderExpr.hasT;
-    const triggersVHeal = absorvido >= 1 && defenderExpr.vOnT;
-    const riposteDamage = triggersTotalBlockRiposte
-      ? defenderExpr.riposteHits.reduce((a, b) => a + b, 0)
-      : 0;
+    // Regra v0.7.1: Guarda absorvendo ≥ 1 dano abre a Janela de Extração (T → A)!
+    const opensExtraction = defenderIsGuarding && absorvido >= 1;
+    // Regra v0.7.1: Bloqueio Total (danoPreGuarda > 0 e danoLiquido === 0 com Guarda ativa) dispara Riposta (que ignora B e M)!
+    const triggersRiposte = defenderIsGuarding && danoPreGuarda > 0 && danoLiquido === 0;
+    const riposteDamage = triggersRiposte ? defenderExpr.riposteTotal : 0;
+    const healFromGuard = opensExtraction ? defenderExpr.guardHeal : 0;
+    const poisonFromGuard = opensExtraction ? defenderExpr.guardThornsPoison : 0;
 
     return {
-      rawHits,
-      afterB,
+      rawHits: attackerExpr.hits,
+      hitsAfterB,
       sumAfterB,
       danoPreGuarda,
+      activeGuard,
       absorvido,
       danoLiquido,
-      triggersExtractionWindow,
-      triggersTotalBlockRiposte,
-      riposteHits: triggersTotalBlockRiposte ? defenderExpr.riposteHits : [],
+      opensExtraction,
+      triggersRiposte,
+      riposteHits: triggersRiposte ? defenderExpr.riposteHits : [],
       riposteDamage,
-      triggersVHeal,
+      healFromGuard,
+      poisonFromGuard,
     };
   }
 
-  // 4 Arenas Táticas Simétricas (Reflexo A & B -> Sentinela -> Conduto Simétrico -> Quimera Apex)
+  // 4 Encontros Simétricos Progressivos (Do Tutorial Guiado no Reflexo A até a Quimera Apex!)
   const ENCOUNTERS = [
     {
-      id: 'arena_reflexos',
+      id: 'escorpiao_reflexo',
       stage: 1,
-      name: 'Arena 1: Fosso dos Reflexos (Reflexo A & Reflexo B)',
-      subtitle: 'Use 🛡️ Guarda, 🗡️ Backstab ou 💥 Fogo Amigo para EXPOR e ARRANCAR os genes [⚡ Q: Repique] e [🧱 B: Revestimento] dos inimigos VIVOS!',
-      playerStart: { x: 1, y: 2, facing: 'right' },
-      rocks: [{ x: 3, y: 1 }, { x: 6, y: 2 }],
-      acids: [{ x: 3, y: 3 }],
-      grass: [{ x: 1, y: 1 }, { x: 2, y: 3 }],
-      enemies: [
-        {
-          id: 'reflexo_A',
-          name: 'Reflexo A (Escorpião Q+B)',
-          icon: '🦂',
-          hp: 12,
-          move: 2,
-          x: 2,
-          y: 1,
-          facing: 'left',
-          aiType: 'stalker',
-          cadence: ['Impacto', 'Impacto', 'Guarda', 'Impacto'],
-          genome: [
-            { id: 'I', x: 0, y: 2 },
-            { id: 'T', x: 1, y: 1 },
-            { id: 'F', x: 0, y: 1, targetCore: 'I' },
-            { id: 'Q', x: 2, y: 2, targetCore: 'I' }, // Impacto [4, 4]! Se você arrancar Q, cai para [4] na hora!
-            { id: 'B', x: 2, y: 0, targetCore: 'T' }, // Revestimento -1/golpe!
-          ],
-        },
-        {
-          id: 'reflexo_B',
-          name: 'Reflexo B (Artilheiro Riposta)',
-          icon: '🦀',
-          hp: 14,
-          move: 1,
-          x: 5,
-          y: 2,
-          facing: 'left',
-          aiType: 'artillery', // Trava ⚠️ MIRA em (2,2) + tem Guarda e Riposta Simétrica!
-          cadence: ['Impacto', 'Guarda', 'Impacto', 'Guarda'],
-          genome: [
-            { id: 'I', x: 0, y: 2 },
-            { id: 'T', x: 1, y: 1 },
-            { id: 'F', x: 0, y: 1, targetCore: 'I' },
-            { id: 'Q', x: 1, y: 2, targetCore: 'T' }, // Riposta Dupla [2, 2]!
-            { id: 'B', x: 2, y: 0, targetCore: 'T' },
-          ],
-        },
+      name: 'Combate 1 de 4 · Escorpião de Repique (Reflexo A)',
+      subtitle: 'Aprenda em 3 cliques: 1) Mova 🔩 Força p/ Defesa → 2) Defenda p/ abrir Brecha → 3) Arranque o ⚡ Gene Duplicador dele!',
+      hp: 14,
+      baseStrike: 4,
+      baseGuard: 3,
+      cadence: ['attack', 'attack', 'guard', 'attack'],
+      genes: [
+        { id: 'Q', side: 'attack' }, // Faz o Escorpião bater 2×4 = 8! Quando você arrancar Q, ele cai para 1×4 = 4!
       ],
     },
     {
-      id: 'arena_sentinela',
+      id: 'caranguejo_couraca',
       stage: 2,
-      name: 'Arena 2: Ninho da Sentinela (Rajada [2,2,2] & Amortecimento M)',
-      subtitle: 'A Sentinela ataca com Rajada [2,2,2]! Enxerte [🧱 B: -1/golpe] em T para neutralizar a Rajada para [1,1,1] e arranque [⚡ Q] ou [🧽 M] dela!',
-      playerStart: { x: 1, y: 2, facing: 'right' },
-      rocks: [{ x: 2, y: 0 }, { x: 4, y: 4 }, { x: 6, y: 2 }],
-      acids: [{ x: 3, y: 1 }, { x: 3, y: 3 }],
-      grass: [{ x: 1, y: 1 }, { x: 2, y: 3 }],
-      enemies: [
-        {
-          id: 'sentinela',
-          name: 'Sentinela (I+R+Q+T+M)',
-          icon: '🦗',
-          hp: 16,
-          move: 2,
-          x: 4,
-          y: 2,
-          facing: 'left',
-          aiType: 'stalker',
-          cadence: ['Rajada', 'Impacto', 'Guarda', 'Rajada'],
-          genome: [
-            { id: 'I', x: 0, y: 2 },
-            { id: 'T', x: 1, y: 1 },
-            { id: 'R', x: 1, y: 2, targetCore: 'I' },
-            { id: 'Q', x: 2, y: 2, targetCore: 'I' }, // Rajada [2, 2, 2] e Impacto [3, 3]!
-            { id: 'M', x: 1, y: 0, targetCore: 'T' }, // Amortecimento -2/ataque!
-          ],
-        },
-        {
-          id: 'sapo_artilheiro',
-          name: 'Bomba-Trama (B+M)',
-          icon: '🐸',
-          hp: 14,
-          move: 1,
-          x: 5,
-          y: 1,
-          facing: 'left',
-          aiType: 'artillery',
-          cadence: ['Impacto', 'Impacto', 'Guarda'],
-          genome: [
-            { id: 'I', x: 0, y: 2 },
-            { id: 'T', x: 1, y: 1 },
-            { id: 'F', x: 0, y: 1, targetCore: 'I' },
-            { id: 'B', x: 2, y: 0, targetCore: 'T' },
-            { id: 'M', x: 1, y: 0, targetCore: 'T' },
-          ],
-        },
+      name: 'Combate 2 de 4 · Caranguejo Blindado (Reflexo B)',
+      subtitle: 'Ele tem [🧱 Couraça -1/golpe] na Defesa e alterna Guarda com Riposta! Arranque a Couraça dele para preparar sua defesa!',
+      hp: 18,
+      baseStrike: 5,
+      baseGuard: 4,
+      cadence: ['attack', 'guard', 'attack', 'attack'],
+      genes: [
+        { id: 'B', side: 'defense' }, // Reduz -1 de cada golpe seu! Arranque B dele!
+        { id: 'F', side: 'attack' },  // Dá +2 ao ataque dele (5+2 = 7)
       ],
     },
     {
-      id: 'arena_conduto',
+      id: 'sentinela_rajada',
       stage: 3,
-      name: 'Arena 3: Conduto Simétrico (Encouraçado & Predador de Ritmo)',
-      subtitle: 'Gire [🔩 F: Rigidez] e [⚡ Q: Repique] entre I (Ataque) e T (Guarda/Riposta) conforme o turno dos inimigos!',
-      playerStart: { x: 0, y: 2, facing: 'right' },
-      rocks: [{ x: 2, y: 2 }, { x: 4, y: 0 }, { x: 4, y: 4 }, { x: 6, y: 1 }],
-      acids: [{ x: 3, y: 2 }, { x: 5, y: 3 }],
-      grass: [{ x: 1, y: 1 }, { x: 1, y: 3 }],
-      enemies: [
-        {
-          id: 'enguia_ritmo',
-          name: 'Predador de Ritmo (F+R+Q)',
-          icon: '⚡',
-          hp: 18,
-          move: 2,
-          x: 4,
-          y: 1,
-          facing: 'left',
-          aiType: 'stalker',
-          cadence: ['Rajada', 'Impacto', 'Rajada'],
-          genome: [
-            { id: 'I', x: 0, y: 2 },
-            { id: 'T', x: 1, y: 1 },
-            { id: 'F', x: 0, y: 1, targetCore: 'I' },
-            { id: 'R', x: 1, y: 2, targetCore: 'I' },
-            { id: 'Q', x: 2, y: 2, targetCore: 'I' }, // Rajada [3, 3, 3]! Arranque Q ou R dele em vida!
-          ],
-        },
-        {
-          id: 'encouracado',
-          name: 'Colosso Blindado (F→T + B + M)',
-          icon: '🐢',
-          hp: 18,
-          move: 1,
-          x: 5,
-          y: 2,
-          facing: 'left',
-          aiType: 'artillery',
-          cadence: ['Guarda', 'Impacto', 'Guarda', 'Impacto'],
-          genome: [
-            { id: 'I', x: 0, y: 2 },
-            { id: 'T', x: 1, y: 1 },
-            { id: 'F', x: 0, y: 1, targetCore: 'T' }, // Guarda 5!
-            { id: 'B', x: 2, y: 0, targetCore: 'T' },
-            { id: 'M', x: 1, y: 0, targetCore: 'T' },
-          ],
-        },
+      name: 'Combate 3 de 4 · Sentinela de Rajada (Louva-a-Deus)',
+      subtitle: 'A Sentinela ataca com 3 golpes rápidos (3×3 = 9)! Coloque sua [🧱 Couraça] e [🧽 Amortecedor] na Defesa para anular a Rajada!',
+      hp: 22,
+      baseStrike: 4,
+      baseGuard: 4,
+      cadence: ['attack', 'attack', 'guard', 'attack'],
+      genes: [
+        { id: 'R', side: 'attack' }, // Rajada
+        { id: 'Q', side: 'attack' }, // 3 golpes de 3 = [3, 3, 3]!
+        { id: 'M', side: 'defense' }, // Amortecedor -2/ataque
       ],
     },
     {
-      id: 'arena_quimera',
+      id: 'quimera_apex',
       stage: 4,
-      name: 'Arena Final 4: Covil da Quimera Apex (Genoma Completo)',
-      subtitle: 'A Quimera Apex possui todos os genes (I+F+R+Q+T+B+M)! Desarme os genes dela em vida com Extração Cirúrgica e Fogo Amigo!',
-      playerStart: { x: 1, y: 2, facing: 'right' },
-      rocks: [{ x: 3, y: 1 }, { x: 3, y: 3 }, { x: 6, y: 2 }],
-      acids: [{ x: 2, y: 0 }, { x: 2, y: 4 }, { x: 4, y: 2 }],
-      grass: [{ x: 1, y: 1 }, { x: 1, y: 3 }, { x: 2, y: 2 }],
-      enemies: [
-        {
-          id: 'guardiao_reflexo',
-          name: 'Guardião Simétrico',
-          icon: '🦇',
-          hp: 16,
-          move: 2,
-          x: 4,
-          y: 1,
-          facing: 'left',
-          aiType: 'stalker',
-          cadence: ['Impacto', 'Guarda', 'Impacto'],
-          genome: [
-            { id: 'I', x: 0, y: 2 },
-            { id: 'T', x: 1, y: 1 },
-            { id: 'F', x: 0, y: 1, targetCore: 'I' },
-            { id: 'Q', x: 2, y: 2, targetCore: 'I' },
-            { id: 'B', x: 2, y: 0, targetCore: 'T' },
-          ],
-        },
-        {
-          id: 'quimera_boss',
-          name: 'Quimera Apex (Boss Genético)',
-          icon: '🐉',
-          hp: 26,
-          move: 1,
-          x: 5,
-          y: 2,
-          facing: 'left',
-          aiType: 'artillery',
-          cadence: ['Rajada', 'Impacto', 'Guarda', 'Rajada'],
-          genome: [
-            { id: 'I', x: 0, y: 2 },
-            { id: 'T', x: 1, y: 1 },
-            { id: 'F', x: 0, y: 1, targetCore: 'I' },
-            { id: 'R', x: 1, y: 2, targetCore: 'I' },
-            { id: 'Q', x: 2, y: 2, targetCore: 'I' },
-            { id: 'B', x: 2, y: 0, targetCore: 'T' },
-            { id: 'M', x: 1, y: 0, targetCore: 'T' },
-          ],
-        },
+      name: 'Combate Final 4 de 4 · Quimera Apex (Genoma Completo)',
+      subtitle: 'O Boss Final possui Toxina, Duplicador e Couraça! Desarme os genes dele um por um com Cirurgia em Vida!',
+      hp: 28,
+      baseStrike: 5,
+      baseGuard: 5,
+      cadence: ['attack', 'attack', 'guard', 'attack'],
+      genes: [
+        { id: 'P', side: 'attack' },  // Peçonha (+3 Veneno)
+        { id: 'Q', side: 'attack' },  // Golpe Duplo
+        { id: 'B', side: 'defense' }, // Couraça -1/golpe
       ],
     },
   ];
 
-  const MUTATION_PERKS = [
-    {
-      id: 'MUT_GIGACHAD',
-      name: 'Mutação: Força Cinética (+Colisão)',
-      icon: '💥',
-      desc: '+3 PV máx e suas Colisões de empurrão contra Rochas/Inimigos causam +3 de dano extra!',
-      apply: p => { p.maxHp += 3; p.hp = Math.min(p.maxHp, p.hp + 5); },
-    },
-    {
-      id: 'MUT_FRENESI_CIRURGICO',
-      name: 'Mutação: Bisturi Neural (+Ação ao Extrair)',
-      icon: '🧬',
-      desc: 'Sempre que você EXTRAIR ou ENXERTAR um gene de um inimigo vivo, ganha +2 Passos e +2 PV imediatamente!',
-      apply: p => { p.vel += 1; p.hp = Math.min(p.maxHp, p.hp + 4); },
-    },
-    {
-      id: 'MUT_SANGUE_ACIDO',
-      name: 'Mutação: Metabolismo Ácido',
-      icon: '🧪',
-      desc: 'Você fica IMUNE a Poças Ácidas (pisar no ácido cura +3 PV!) e ganha +4 PV máx!',
-      apply: p => { p.maxHp += 4; p.hp = Math.min(p.maxHp, p.hp + 6); },
-    },
-  ];
-
-  function inBounds(x, y) {
-    return x >= 0 && x < GRID_W && y >= 0 && y < GRID_H;
-  }
-
-  function manhattan(a, b) {
-    return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-  }
-
-  function getDirection(from, to) {
-    const dx = to.x - from.x;
-    const dy = to.y - from.y;
-    if (Math.abs(dx) >= Math.abs(dy)) {
-      return dx >= 0 ? 'right' : 'left';
-    }
-    return dy >= 0 ? 'down' : 'up';
-  }
-
-  function dirDelta(dir) {
-    if (dir === 'right') return { dx: 1, dy: 0 };
-    if (dir === 'left') return { dx: -1, dy: 0 };
-    if (dir === 'down') return { dx: 0, dy: 1 };
-    return { dx: 0, dy: -1 };
-  }
-
-  function isBackstab(attackerPos, target) {
-    const d = dirDelta(target.facing || 'left');
-    const backX = target.x - d.dx;
-    const backY = target.y - d.dy;
-    if (attackerPos.x === backX && attackerPos.y === backY) return true;
-    if (d.dx !== 0 && Math.sign(attackerPos.x - target.x) === -d.dx) return true;
-    if (d.dy !== 0 && Math.sign(attackerPos.y - target.y) === -d.dy) return true;
-    return false;
-  }
-
-  function buildInitialGrid(enc) {
-    const tiles = [];
-    for (let y = 0; y < GRID_H; y++) {
-      const row = [];
-      for (let x = 0; x < GRID_W; x++) {
-        row.push({ x, y, type: 'floor', corpse: null });
-      }
-      tiles.push(row);
-    }
-    for (const r of enc.rocks || []) {
-      if (inBounds(r.x, r.y)) tiles[r.y][r.x].type = 'rock';
-    }
-    for (const a of enc.acids || []) {
-      if (inBounds(a.x, a.y)) tiles[a.y][a.x].type = 'acid';
-    }
-    for (const g of enc.grass || []) {
-      if (inBounds(g.x, g.y)) tiles[g.y][g.x].type = 'grass';
-    }
-    return tiles;
-  }
-
-  function getEnemyCurrentIntent(enemy, turn) {
-    const expr = expressGenome(enemy.genome);
-    const cad = enemy.cadence || ['Impacto'];
-    const rawIntent = cad[(turn - 1) % cad.length];
-    if (rawIntent === 'Guarda' && expr.hasT) {
-      return {
-        kind: 'Guarda',
-        label: `🛡️ Guarda ${expr.guardValue}${expr.qOnT ? ' + Riposta [2,2]' : ' + Riposta [2]'}`,
-        hits: [],
-        guardValue: expr.guardValue,
-      };
-    }
-    if (rawIntent === 'Rajada' && expr.rajadaHits) {
-      return {
-        kind: 'Rajada',
-        label: `🌪️ Rajada [${expr.rajadaHits.join('+')}]`,
-        hits: expr.rajadaHits,
-        guardValue: 0,
-      };
-    }
-    return {
-      kind: 'Impacto',
-      label: `⚔️ Impacto [${expr.impactHits.join('+')}]`,
-      hits: expr.impactHits,
-      guardValue: 0,
-    };
-  }
-
-  function assignEnemyTelegraphs(s) {
-    for (const en of s.enemies) {
-      if (!en.alive || en.stunned) {
-        en.aimedTile = null;
-        continue;
-      }
-      const intent = getEnemyCurrentIntent(en, s.turn);
-      en.currentIntent = intent;
-      en.activeGuard = intent.kind === 'Guarda' ? intent.guardValue : 0;
-
-      if (en.aiType === 'artillery' && intent.kind !== 'Guarda') {
-        let tx = s.player.x;
-        let ty = s.player.y;
-        if (s.turn === 1 && s.stageIndex === 0 && en.id === 'reflexo_B') {
-          tx = 2;
-          ty = 2;
-        }
-        const totalRaw = intent.hits.reduce((a, b) => a + b, 0);
-        en.aimedTile = {
-          x: tx,
-          y: ty,
-          hits: [...intent.hits],
-          dmg: totalRaw,
-          enemyId: en.id,
-          enemyName: en.name,
-          intentName: intent.label,
-        };
-      } else {
-        en.aimedTile = null;
-      }
-    }
+  function getEnemyIntentKind(enc, turn) {
+    const cad = enc.cadence || ['attack'];
+    return cad[(turn - 1) % cad.length];
   }
 
   function createRunState(stageIndex = 0, carry = null) {
     const enc = ENCOUNTERS[stageIndex];
-    const grid = buildInitialGrid(enc);
 
-    // Genoma Inicial do Jogador (Perfil 'cheia' de 01_Anexo_Tecnico.md: I, T, A, F→I, R→I, V→T, M→T)
-    const genome = carry?.genome
-      ? carry.genome.map(g => ({ ...g }))
+    // Jogador começa com 2 genes muito claros:
+    // - 🔩 F (Gene de Força) no ⚔️ ATAQUE (+2 Dano; se movido p/ Defesa, vira +4 Escudo!)
+    // - 💚 V (Gene de Reserva) na 🛡️ DEFESA (Cura +3 PV ao defender; se movido p/ Ataque, drena +2 PV!)
+    const playerGenes = carry?.playerGenes
+      ? carry.playerGenes.map(g => ({ ...g }))
       : [
-          { id: 'I', x: 0, y: 2 },
-          { id: 'T', x: 1, y: 1 },
-          { id: 'A', x: 2, y: 1 },
-          { id: 'F', x: 0, y: 1, targetCore: 'I' }, // Girável entre I (+1 ataque) e T (+2 Guarda)!
-          { id: 'R', x: 1, y: 2, targetCore: 'I' }, // Libera Rajada!
-          { id: 'V', x: 0, y: 0, targetCore: 'T' }, // Cura na Guarda!
-          { id: 'M', x: 1, y: 0, targetCore: 'T' }, // Amortecimento -2/ataque!
+          { id: 'F', side: 'attack' },
+          { id: 'V', side: 'defense' },
         ];
 
-    const reserve = carry?.reserve ? [...carry.reserve] : [];
-    const mutations = carry?.mutations ? [...carry.mutations] : [];
+    const maxHp = 24;
+    const playerHp = carry?.playerHp ? Math.min(maxHp, carry.playerHp + 6) : maxHp;
 
-    const basePlayer = carry?.player
-      ? {
-          ...carry.player,
-          x: enc.playerStart.x,
-          y: enc.playerStart.y,
-          facing: enc.playerStart.facing || 'right',
-          hp: Math.min(carry.player.maxHp, carry.player.hp + 4),
-          activeGuard: 0,
-          poison: 0,
-        }
-      : {
-          x: enc.playerStart.x,
-          y: enc.playerStart.y,
-          facing: enc.playerStart.facing || 'right',
-          hp: 24,
-          maxHp: 24,
-          activeGuard: 0,
-          poison: 0,
-          vel: 3,
-        };
-
-    const enemies = enc.enemies.map(e => ({
-      ...e,
-      maxHp: e.hp,
-      genome: e.genome.map(g => ({ ...g })),
-      exposed: false, // Fica true quando Guarda (T→A), Backstab (🗡️) ou Colisão (💥) abre a janela de extração!
-      activeGuard: 0,
-      poison: 0,
-      stunned: false,
-      alive: true,
-      aimedTile: null,
-      currentIntent: null,
-    }));
-
-    const state = {
+    return {
       version: VERSION,
       stageIndex,
       encounterId: enc.id,
       turn: 1,
-      grid,
-      player: basePlayer,
-      genome,
-      reserve,
-      stepsLeft: basePlayer.vel,
-      combatActionUsed: false, // 1 ação principal de combate por turno (Impacto, Rajada ou Guarda), enquanto Reconfigurar e Extrair em janela aberta são táticos!
-      selectedAction: 'IMPACTO', // 'IMPACTO' | 'RAJADA' | 'GUARDA' | 'SALTO'
-      mutations,
-      enemies,
-      atlas: Object.keys(GENES),
+      playerHp,
+      playerMaxHp: maxHp,
+      playerPoison: 0,
+      playerGenes,
+      enemyHp: enc.hp,
+      enemyMaxHp: enc.hp,
+      enemyBaseStrike: enc.baseStrike,
+      enemyBaseGuard: enc.baseGuard,
+      enemyPoison: 0,
+      enemyGenes: enc.genes.map(g => ({ ...g })),
+      enemyIntent: getEnemyIntentKind(enc, 1), // 'attack' | 'guard'
+      enemyExposed: false, // Fica true quando você defende absorvendo ≥ 1 de dano!
+      tutorialDismissed: Boolean(carry?.tutorialDismissed),
       outcome: 'ongoing',
-      evolutionPending: false,
       lastAction: null,
       turnLog: [
-        `🧬 ${enc.name}! Seu Genoma 3×3 expressa suas ações reais: Impacto, Rajada e Guarda (com Riposta e Extração T→A).`,
-        `💡 Abra a Janela de Extração (🧬) com 🛡️ Guarda, 🗡️ Backstab ou 💥 Colisão para ARRANCAR genes [⚡ Q, 🧱 B, 🧽 M] do inimigo VIVO!`,
+        `🧬 ${enc.name} iniciado! Veja a intenção do inimigo e mova seus genes entre ⚔️ ATAQUE e 🛡️ DEFESA antes de agir.`,
       ],
     };
-
-    assignEnemyTelegraphs(state);
-    return state;
   }
 
   function cloneState(s) {
     return {
       ...s,
-      grid: s.grid.map(row => row.map(cell => ({ ...cell, corpse: cell.corpse ? { ...cell.corpse } : null }))),
-      player: { ...s.player },
-      genome: s.genome.map(g => ({ ...g })),
-      reserve: [...s.reserve],
-      mutations: [...s.mutations],
-      enemies: s.enemies.map(e => ({
-        ...e,
-        genome: e.genome.map(g => ({ ...g })),
-        aimedTile: e.aimedTile ? { ...e.aimedTile, hits: [...(e.aimedTile.hits || [])] } : null,
-        currentIntent: e.currentIntent ? { ...e.currentIntent, hits: [...(e.currentIntent.hits || [])] } : null,
-      })),
+      playerGenes: s.playerGenes.map(g => ({ ...g })),
+      enemyGenes: s.enemyGenes.map(g => ({ ...g })),
       turnLog: [...s.turnLog],
     };
   }
 
   function getPlayerExpression(state) {
-    return expressGenome(state.genome);
+    return expressBody(state.playerGenes, 4, 4);
   }
 
-  function getEnemyExpression(enemy) {
-    return expressGenome(enemy.genome);
+  function getEnemyExpression(state) {
+    return expressBody(state.enemyGenes, state.enemyBaseStrike, state.enemyBaseGuard);
   }
 
-  function enemyAt(s, x, y) {
-    return s.enemies.find(e => e.alive && e.x === x && e.y === y) || null;
-  }
+  // Calcula o Passo do Tutorial Interativo no Combate 1 (guia os primeiros 3 cliques do jogador!)
+  function getTutorialCoach(state) {
+    if (state.tutorialDismissed || state.stageIndex !== 0 || state.outcome !== 'ongoing') return null;
+    const hasQ = state.playerGenes.some(g => g.id === 'Q');
+    const fInDefense = state.playerGenes.some(g => g.id === 'F' && g.side === 'defense');
+    const fInAttack = state.playerGenes.some(g => g.id === 'F' && g.side === 'attack');
 
-  function aimedTelegraphsAt(s, x, y) {
-    return s.enemies.filter(
-      e => e.alive && !e.stunned && e.aimedTile && e.aimedTile.x === x && e.aimedTile.y === y
-    );
-  }
-
-  function isBlocked(s, x, y, { ignorePlayer = false } = {}) {
-    if (!inBounds(x, y)) return true;
-    if (s.grid[y][x].type === 'rock') return true;
-    if (enemyAt(s, x, y)) return true;
-    if (!ignorePlayer && s.player.x === x && s.player.y === y) return true;
-    return false;
-  }
-
-  function getReachableTiles(state) {
-    if (state.outcome !== 'ongoing' || state.stepsLeft <= 0) return [];
-    const dist = Array.from({ length: GRID_H }, () => Array(GRID_W).fill(Infinity));
-    const queue = [{ x: state.player.x, y: state.player.y, d: 0 }];
-    dist[state.player.y][state.player.x] = 0;
-    const reachable = [];
-
-    while (queue.length > 0) {
-      const cur = queue.shift();
-      if (cur.d > 0) reachable.push({ x: cur.x, y: cur.y, cost: cur.d });
-      if (cur.d >= state.stepsLeft) continue;
-
-      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-        const nx = cur.x + dx;
-        const ny = cur.y + dy;
-        if (!inBounds(nx, ny)) continue;
-        if (isBlocked(state, nx, ny)) continue;
-        if (dist[ny][nx] > cur.d + 1) {
-          dist[ny][nx] = cur.d + 1;
-          queue.push({ x: nx, y: ny, d: cur.d + 1 });
-        }
+    if (!state.enemyExposed && !hasQ) {
+      if (!fInDefense) {
+        return {
+          step: 'PASSO 1 DE 3 · RECONFIGURAR SEU CORPO',
+          text: 'O Escorpião vai dar um Golpe Duplo (2×4 = 8 de dano)! Clique no botão destacado [⇄ Mover p/ Defesa 🛡️] no seu 🔩 Gene de Força para subir sua Guarda de 4 para 8!',
+          highlightId: 'btn-flip-F',
+        };
       }
+      return {
+        step: 'PASSO 2 DE 3 · DEFENDER & ABRIR BRECHA (🧬)',
+        text: 'Perfeito! Agora sua Guarda vale 8 (BLOQUEIO TOTAL!). Clique em [🛡️ Defender & Abrir Brecha] para bloquear 100% do ataque, dar 3 de Riposta e EXPOR o gene do Escorpião!',
+        highlightId: 'btn-act-guard',
+      };
     }
-    return reachable;
+
+    if (state.enemyExposed && !hasQ) {
+      return {
+        step: 'PASSO 3 DE 3 · CIRURGIA EM VIDA (ARRANCAR O GENE!)',
+        text: 'BRECHA ABERTA! O [⚡ Gene Duplicador] do Escorpião ficou exposto! Clique em [✂️ Arrancar e pôr no meu ⚔️ ATAQUE] para desarmar o Escorpião na hora e roubar o Golpe Duplo dele!',
+        highlightId: 'btn-extract-Q-attack',
+      };
+    }
+
+    if (hasQ && !fInAttack) {
+      return {
+        step: 'BÔNUS · COMBINE FORÇA + DUPLICADOR NO ATAQUE!',
+        text: 'Você roubou o ⚡ Gene Duplicador! Agora clique em [⇄ Mover p/ Ataque ⚔️] no seu 🔩 Gene de Força para bater 2×6 = 12 de dano e vencer!',
+        highlightId: 'btn-flip-F',
+      };
+    }
+
+    if (hasQ && fInAttack) {
+      return {
+        step: 'FINALIZAR · ATAQUE DUPLO DE 12 DE DANO!',
+        text: 'Seu ⚔️ Ataque agora combina 🔩 Força (+2) + ⚡ Duplicador (2×) = 2×6 (12 de dano)! Clique em [⚔️ Atacar Agora] para abater o Escorpião!',
+        highlightId: 'btn-act-attack',
+      };
+    }
+
+    return null;
   }
 
-  // RECONFIGURAR GENOMA EM COMBATE: Gira um modificador (ex.: F entre I e T, ou Q entre I e T) na Matriz 3x3!
-  function rotateGeneInGenome(state, geneId) {
+  // 1) RECONFIGURAR: Move um gene próprio entre ⚔️ ATAQUE e 🛡️ DEFESA (Grátis, antes de escolher a ação do turno!)
+  function toggleGeneSide(state, geneId) {
     if (state.outcome !== 'ongoing') return state;
     const s = cloneState(state);
-    const gene = s.genome.find(g => g.id === geneId);
-    if (!gene) return s;
+    const g = s.playerGenes.find(item => item.id === geneId);
+    if (!g) return s;
+
+    g.side = g.side === 'attack' ? 'defense' : 'attack';
     const def = GENES[geneId];
-    if (!def || def.validCores.length < 2) return s;
-
-    const curIdx = def.validCores.indexOf(gene.targetCore);
-    const nextCore = def.validCores[(curIdx + 1) % def.validCores.length];
-    gene.targetCore = nextCore;
-
-    const expr = expressGenome(s.genome);
-    // Se a Guarda já estava ativada neste turno e girou F para T, atualiza o valor de Guarda ativa!
-    if (s.player.activeGuard > 0) {
-      s.player.activeGuard = expr.guardValue;
-    }
-
-    s.lastAction = { type: 'reconfigure', geneId, targetCore: nextCore };
+    const pExpr = getPlayerExpression(s);
+    s.lastAction = { type: 'reconfigure', geneId, newSide: g.side };
     s.turnLog.unshift(
-      `🔄 RECONFIGURAÇÃO GENÉTICA: [${def.icon} ${def.name}] girado para alimentar o Núcleo ${nextCore} (${GENES[nextCore].name})! Expressão agora: Impacto [${expr.impactHits.join('+')}], Guarda ${expr.guardValue}, Riposta [${expr.riposteHits.join('+')}].`
+      `🔄 RECONFIGURAÇÃO: [${def.icon} ${def.name}] movido para ${g.side === 'attack' ? '⚔️ SEU ATAQUE' : '🛡️ SUA DEFESA'}! (Ataque agora: ${pExpr.hits.join('+')}=${pExpr.totalRawAttack} · Guarda: ${pExpr.guardValue} · Riposta: ${pExpr.riposteTotal})`
     );
     return s;
   }
 
-  // EXTRAIR & ENXERTAR EM VIDA (Cirurgia Genética durante o combate!)
-  // mode: 'graft_I' | 'graft_T' | 'reserve'
-  function extractEnemyGene(state, enemyId, geneId, mode = 'graft_I') {
-    if (state.outcome !== 'ongoing') return state;
-    const s = cloneState(state);
-    const enemy = s.enemies.find(e => e.id === enemyId && e.alive);
-    if (!enemy || !enemy.exposed) return s;
+  // Pré-calcula exatamente o que acontecerá se o jogador clicar em "⚔️ Atacar" ou "🛡️ Defender" agora!
+  function previewTurnOutcomes(state) {
+    const pExpr = getPlayerExpression(state);
+    const eExpr = getEnemyExpression(state);
+    const enemyIsGuarding = state.enemyIntent === 'guard';
 
-    const idx = enemy.genome.findIndex(g => g.id === geneId);
-    if (idx === -1 || !GENES[geneId]?.extractable) return s;
-
-    // 1. Remove o gene do genoma do inimigo IMEDIATAMENTE (Desarme Real!)
-    enemy.genome.splice(idx, 1);
-    enemy.exposed = false; // Consome a janela de extração atual deste inimigo
-
-    // Recalcula a intenção e a ⚠️ MIRA do inimigo imediatamente após o desarme!
-    const newEnemyExpr = expressGenome(enemy.genome);
-    const updatedIntent = getEnemyCurrentIntent(enemy, s.turn);
-    enemy.currentIntent = updatedIntent;
-    if (enemy.activeGuard > 0) {
-      enemy.activeGuard = updatedIntent.kind === 'Guarda' ? updatedIntent.guardValue : 0;
-    }
-    if (enemy.aimedTile) {
-      enemy.aimedTile.hits = [...updatedIntent.hits];
-      enemy.aimedTile.dmg = updatedIntent.hits.reduce((a, b) => a + b, 0);
-      enemy.aimedTile.intentName = updatedIntent.label;
-    }
-
-    const def = GENES[geneId];
-    const events = [
-      `🧬 DESARME EM VIDA! Você arrancou [${def.icon} ${def.name}] de ${enemy.name}! A ação de ${enemy.name} caiu imediatamente para ${updatedIntent.label}!`,
-    ];
-
-    const alreadyInGrid = s.genome.some(g => g.id === geneId);
-    const alreadyInReserve = s.reserve.includes(geneId);
-
-    if (mode === 'reserve' || alreadyInGrid) {
-      // Regra de Unicidade de Gene (01_Anexo_Tecnico.md Seção 2.2): não duplica ID na grade ou reserva, mas desarma o inimigo!
-      if (!alreadyInGrid && !alreadyInReserve) {
-        s.reserve.push(geneId);
-        events.push(`📦 [${def.icon} ${def.name}] guardado na Reserva Genética.`);
-      } else if (alreadyInGrid && (mode === 'graft_I' || mode === 'graft_T')) {
-        // Se já está na grade e o jogador clicou em Enxertar em I/T, redireciona a porta dele para o núcleo pedido!
-        const targetCore = mode === 'graft_T' && def.validCores.includes('T') ? 'T' : def.validCores[0];
-        const own = s.genome.find(g => g.id === geneId);
-        if (own) own.targetCore = targetCore;
-        events.push(`🔗 Como você já possui [${def.name}], o enxerto realinhou a porta dele para ${targetCore} e desarmou o inimigo!`);
-      } else {
-        events.push(`♻️ Regra de Unicidade: ${enemy.name} foi desarmado (você já possui [${def.name}] no seu genoma).`);
+    // Simulação A: Jogador escolhe ⚔️ ATACAR
+    const atkVsEnemy = resolveHitSequence(pExpr, eExpr, enemyIsGuarding);
+    const enemyHpAfterAtk = Math.max(0, state.enemyHp - atkVsEnemy.danoLiquido);
+    let enemyCounterDmgOnAtk = 0;
+    if (enemyHpAfterAtk > 0) {
+      if (enemyIsGuarding && atkVsEnemy.triggersRiposte) {
+        enemyCounterDmgOnAtk = atkVsEnemy.riposteDamage;
+      } else if (!enemyIsGuarding) {
+        const eHitBack = resolveHitSequence(eExpr, pExpr, false);
+        enemyCounterDmgOnAtk = eHitBack.danoLiquido;
       }
+    }
+
+    // Simulação B: Jogador escolhe 🛡️ DEFENDER & ABRIR BRECHA
+    let guardSim = {
+      danoSofrido: 0,
+      absorvido: 0,
+      riposteCausada: 0,
+      curaRecebida: 0,
+      abreBrecha: false,
+    };
+    if (!enemyIsGuarding) {
+      const eVsGuard = resolveHitSequence(eExpr, pExpr, true);
+      guardSim = {
+        danoSofrido: eVsGuard.danoLiquido,
+        absorvido: eVsGuard.absorvido,
+        riposteCausada: eVsGuard.riposteDamage,
+        curaRecebida: eVsGuard.healFromGuard,
+        abreBrecha: eVsGuard.opensExtraction,
+      };
     } else {
-      const targetCore = mode === 'graft_T' && def.validCores.includes('T')
-        ? 'T'
-        : def.validCores.includes('I')
-          ? 'I'
-          : def.validCores[0];
-      const slotPos = DEFAULT_SLOT_FOR_GENE[geneId] || { x: 2, y: 2 };
-      // Se já houver outro modificador naquela célula (x,y), move o antigo para a Reserva (ou realoca para célula livre)
-      const freeCells = [
-        { x: 2, y: 0 },
-        { x: 2, y: 2 },
-        { x: 1, y: 0 },
-        { x: 0, y: 0 },
-        { x: 1, y: 2 },
-        { x: 0, y: 1 },
-      ];
-      let chosenCell = freeCells.find(c => c.x === slotPos.x && c.y === slotPos.y && !s.genome.some(g => g.x === c.x && g.y === c.y));
-      if (!chosenCell) {
-        chosenCell = freeCells.find(c => !s.genome.some(g => g.x === c.x && g.y === c.y));
-      }
-      if (!chosenCell) {
-        // Substitui o modificador na posição padrão e guarda o anterior na reserva
-        const displacedIdx = s.genome.findIndex(g => g.x === slotPos.x && g.y === slotPos.y && GENES[g.id]?.kind === 'mod');
-        if (displacedIdx !== -1) {
-          const disp = s.genome.splice(displacedIdx, 1)[0];
-          if (!s.reserve.includes(disp.id)) s.reserve.push(disp.id);
-          events.push(`🔄 [${GENES[disp.id].name}] foi movido para a Reserva para abrir espaço na grade 3×3.`);
-        }
-        chosenCell = slotPos;
-      }
-
-      s.genome.push({
-        id: geneId,
-        x: chosenCell.x,
-        y: chosenCell.y,
-        targetCore,
-      });
-
-      const playerExpr = expressGenome(s.genome);
-      events.unshift(
-        `⚡ ENXERTO CIRÚRGICO! [${def.icon} ${def.name} ◆→◇ ${targetCore}] conectado na sua Grade 3×3 (${chosenCell.x + 1},${chosenCell.y + 1})! Sua expressão agora: Impacto [${playerExpr.impactHits.join('+')}], Guarda ${playerExpr.guardValue}${playerExpr.bOnT ? ', B(-1/golpe)' : ''}${playerExpr.mOnT ? ', M(-2/ataque)' : ''}!`
-      );
-    }
-
-    if (s.mutations.includes('MUT_FRENESI_CIRURGICO')) {
-      s.stepsLeft += 2;
-      s.player.hp = Math.min(s.player.maxHp, s.player.hp + 2);
-      events.push(`🧬 Bisturi Neural: +2 Passos e +2 PV pelo enxerto em combate!`);
-    }
-
-    s.lastAction = { type: 'extract', enemyId, geneId, mode };
-    s.turnLog = [...events, ...s.turnLog].slice(0, 14);
-    return s;
-  }
-
-  // Instala um gene que estava na Reserva na Grade 3x3
-  function installReserveGene(state, geneId, targetCore = null) {
-    if (state.outcome !== 'ongoing') return state;
-    const s = cloneState(state);
-    if (!s.reserve.includes(geneId)) return s;
-    const def = GENES[geneId];
-    if (!def) return s;
-
-    s.reserve = s.reserve.filter(id => id !== geneId);
-    const core = targetCore && def.validCores.includes(targetCore) ? targetCore : def.validCores[0];
-    const slotPos = DEFAULT_SLOT_FOR_GENE[geneId] || { x: 2, y: 0 };
-    const existingAtPos = s.genome.findIndex(g => g.x === slotPos.x && g.y === slotPos.y && GENES[g.id]?.kind === 'mod');
-    if (existingAtPos !== -1) {
-      const disp = s.genome.splice(existingAtPos, 1)[0];
-      if (!s.reserve.includes(disp.id)) s.reserve.push(disp.id);
-    }
-    s.genome.push({ id: geneId, x: slotPos.x, y: slotPos.y, targetCore: core });
-    s.turnLog.unshift(`🧬 [${def.icon} ${def.name} ◆→◇ ${core}] instalado da Reserva na Grade 3×3!`);
-    return s;
-  }
-
-  function canUseAction(state, actionId) {
-    if (state.outcome !== 'ongoing') return false;
-    const expr = expressGenome(state.genome);
-    if (actionId === 'GUARDA') return !state.combatActionUsed && expr.hasT;
-    if (actionId === 'IMPACTO') return !state.combatActionUsed;
-    if (actionId === 'RAJADA') return !state.combatActionUsed && Boolean(expr.rajadaHits);
-    return false;
-  }
-
-  function getActionTargets(state, actionId = state.selectedAction) {
-    if (!canUseAction(state, actionId)) return [];
-    if (actionId === 'GUARDA') {
-      return [{ x: state.player.x, y: state.player.y, kind: 'self' }];
-    }
-    const range = actionId === 'RAJADA' ? 2 : 1;
-    const targets = [];
-    for (const en of state.enemies) {
-      if (!en.alive) continue;
-      const d = manhattan(state.player, en);
-      if (d >= 1 && d <= range) {
-        targets.push({ x: en.x, y: en.y, kind: 'enemy', enemyId: en.id });
-      }
-    }
-    return targets;
-  }
-
-  // Prévia determinística do ataque sobre um inimigo (calcula B inimigo, M inimigo, Guarda inimiga, Riposta inimiga, Backstab e Colisão!)
-  function previewSkillOnEnemy(state, actionId, enemy) {
-    if (!enemy) return null;
-    const playerExpr = expressGenome(state.genome);
-    const enemyExpr = expressGenome(enemy.genome);
-
-    const rawHits = actionId === 'RAJADA' && playerExpr.rajadaHits
-      ? [...playerExpr.rajadaHits]
-      : [...playerExpr.impactHits];
-
-    const backstab = isBackstab(state.player, enemy);
-    if (backstab && rawHits.length > 0) {
-      rawHits[0] += 2; // +2 dano no 1º golpe por Backstab pelas costas (+ abre Janela de Extração!)
-    }
-
-    const math = resolveAttackMath(rawHits, enemyExpr, enemy.activeGuard || 0);
-
-    let collisionDmg = 0;
-    let pushedIntoAim = false;
-    const pushDist = actionId === 'IMPACTO' ? 1 : 0;
-    if (pushDist > 0) {
-      const dir = getDirection(state.player, enemy);
-      const { dx, dy } = dirDelta(dir);
-      let cx = enemy.x;
-      let cy = enemy.y;
-      for (let step = 1; step <= pushDist; step++) {
-        const nx = cx + dx;
-        const ny = cy + dy;
-        if (!inBounds(nx, ny) || state.grid[ny][nx].type === 'rock' || enemyAt(state, nx, ny)) {
-          collisionDmg = 4 + (state.mutations.includes('MUT_GIGACHAD') ? 3 : 0);
-          break;
-        }
-        cx = nx;
-        cy = ny;
-        if (aimedTelegraphsAt(state, cx, cy).length > 0) {
-          pushedIntoAim = true;
-        }
-      }
+      // Mesmo se o inimigo estiver em Guarda, usar Defender & Sondar abre brecha cirúrgica para o próximo turno
+      guardSim = {
+        danoSofrido: 0,
+        absorvido: 0,
+        riposteCausada: 0,
+        curaRecebida: pExpr.guardHeal,
+        abreBrecha: true,
+      };
     }
 
     return {
-      rawHits,
-      afterB: math.afterB,
-      danoLiquido: math.danoLiquido,
-      backstab,
-      collisionDmg,
-      pushedIntoAim,
-      enemyRiposteDmg: math.riposteDamage,
-      opensExtraction: backstab || collisionDmg > 0 || pushedIntoAim,
-      totalDmg: math.danoLiquido + collisionDmg,
+      pExpr,
+      eExpr,
+      enemyIsGuarding,
+      attackOutcome: {
+        danoCausado: atkVsEnemy.danoLiquido,
+        absorvidoPeloInimigo: atkVsEnemy.absorvido,
+        killsEnemy: enemyHpAfterAtk <= 0,
+        danoRecebidoNoRevide: enemyCounterDmgOnAtk,
+      },
+      guardOutcome: guardSim,
     };
   }
 
-  function selectSkill(state, actionId) {
+  function advanceEnemyTurnClock(s, events) {
+    const enc = ENCOUNTERS[s.stageIndex];
+    // Queima Veneno no fim da rodada
+    if (s.enemyHp > 0 && s.enemyPoison > 0) {
+      const pDmg = Math.min(s.enemyHp, s.enemyPoison);
+      s.enemyHp -= pDmg;
+      events.push(`☠️ Veneno corrói ${pDmg} PV do inimigo!`);
+    }
+    if (s.enemyHp > 0 && s.playerHp > 0 && s.playerPoison > 0) {
+      s.playerHp = Math.max(0, s.playerHp - s.playerPoison);
+      events.push(`☠️ Você sofre ${s.playerPoison} de dano de Veneno.`);
+      s.playerPoison = Math.max(0, s.playerPoison - 1);
+    }
+
+    if (s.enemyHp <= 0) {
+      s.outcome = 'win';
+      events.unshift(`🏆 VITÓRIA! Você superou ${enc.name}!`);
+    } else if (s.playerHp <= 0) {
+      s.outcome = 'loss';
+      events.unshift(`💀 Sua Quimera tombou.`);
+    } else {
+      s.turn += 1;
+      s.enemyIntent = getEnemyIntentKind(enc, s.turn);
+    }
+  }
+
+  // 2) AÇÃO DO TURNO: ⚔️ ATACAR ou 🛡️ DEFENDER & ABRIR BRECHA
+  function executeTurnAction(state, actionKind) {
+    if (state.outcome !== 'ongoing') return state;
     const s = cloneState(state);
-    s.selectedAction = actionId;
+    const pExpr = getPlayerExpression(s);
+    const eExpr = getEnemyExpression(s);
+    const enemyIsGuarding = s.enemyIntent === 'guard';
+    const events = [];
+
+    // Qualquer ação normal fecha a janela anterior se não foi usada, exceto se uma nova Guarda abrir outra!
+    s.enemyExposed = false;
+
+    if (actionKind === 'attack') {
+      const res = resolveHitSequence(pExpr, eExpr, enemyIsGuarding);
+      s.enemyHp = Math.max(0, s.enemyHp - res.danoLiquido);
+      if (pExpr.attackLifesteal > 0 && res.danoLiquido > 0) {
+        s.playerHp = Math.min(s.playerMaxHp, s.playerHp + pExpr.attackLifesteal);
+      }
+      if (pExpr.attackPoison > 0 && res.danoLiquido > 0) {
+        s.enemyPoison += pExpr.attackPoison;
+      }
+
+      events.push(
+        `⚔️ Você ataca (${pExpr.hits.join('+')}=${pExpr.totalRawAttack}): ` +
+          `${eExpr.bPerHit && !pExpr.ignoresEnemyB ? `Couraça inimiga reduz p/ [${res.hitsAfterB.join('+')}] · ` : ''}` +
+          `${eExpr.mPerAttack ? `Amortecedor reduz -${eExpr.mPerAttack} · ` : ''}` +
+          `${res.absorvido > 0 ? `Guarda inimiga bloqueou ${res.absorvido} · ` : ''}` +
+          `Causou ${res.danoLiquido} de dano líquido!`
+      );
+
+      // Simetria: se o inimigo estava em Guarda e fez Bloqueio Total, dispara Riposta inimiga!
+      if (s.enemyHp > 0 && res.triggersRiposte) {
+        s.playerHp = Math.max(0, s.playerHp - res.riposteDamage);
+        events.push(`⚡ RIPOSTA DO INIMIGO! O Bloqueio Total inimigo devolveu ${res.riposteDamage} de dano direto!`);
+      }
+
+      // Resposta do inimigo se ele sobreviveu e estava em modo de Ataque
+      if (s.enemyHp > 0 && s.playerHp > 0 && !enemyIsGuarding) {
+        const eRes = resolveHitSequence(eExpr, pExpr, false);
+        s.playerHp = Math.max(0, s.playerHp - eRes.danoLiquido);
+        if (eExpr.attackPoison > 0 && eRes.danoLiquido > 0) {
+          s.playerPoison += eExpr.attackPoison;
+        }
+        events.push(
+          `💥 Inimigo ataca (${eExpr.hits.join('+')}=${eExpr.totalRawAttack}): ` +
+            `${pExpr.bPerHit ? `sua Couraça B reduz p/ [${eRes.hitsAfterB.join('+')}] · ` : ''}` +
+            `${pExpr.mPerAttack ? `seu Amortecedor M reduz -${pExpr.mPerAttack} · ` : ''}` +
+            `Você sofre ${eRes.danoLiquido} de dano.`
+        );
+      }
+      s.lastAction = { type: 'attack', damageDealt: res.danoLiquido };
+    } else if (actionKind === 'guard') {
+      if (!enemyIsGuarding) {
+        const eRes = resolveHitSequence(eExpr, pExpr, true);
+        s.playerHp = Math.max(0, s.playerHp - eRes.danoLiquido);
+
+        events.push(
+          `🛡️ Você ativou Guarda (${pExpr.guardValue}) contra o ataque inimigo (${eExpr.hits.join('+')}=${eExpr.totalRawAttack}): ` +
+            `${pExpr.bPerHit ? `Couraça B reduziu p/ [${eRes.hitsAfterB.join('+')}] · ` : ''}` +
+            `${pExpr.mPerAttack ? `Amortecedor M reduziu -${pExpr.mPerAttack} · ` : ''}` +
+            `Guarda bloqueou ${eRes.absorvido} → Você sofreu ${eRes.danoLiquido} de dano!`
+        );
+
+        if (s.playerHp > 0) {
+          if (eRes. healFromGuard > 0) {
+            s.playerHp = Math.min(s.playerMaxHp, s.playerHp + eRes.healFromGuard);
+            events.push(`💚 Gene de Reserva (V): sua defesa regenerou +${eRes.healFromGuard} PV!`);
+          }
+          if (eRes.poisonFromGuard > 0) {
+            s.playerPoison = 0;
+            s.enemyPoison += eRes.poisonFromGuard;
+            events.push(`☠️ Espinhos Tóxicos: inimigo recebeu +${eRes.poisonFromGuard} de Veneno!`);
+          }
+          if (eRes.triggersRiposte) {
+            s.enemyHp = Math.max(0, s.enemyHp - eRes.riposteDamage);
+            events.unshift(
+              `⚡ BLOQUEIO TOTAL & RIPOSTA! Sua Guarda bloqueou 100% do golpe e devolveu [${eRes.riposteHits.join('+')}] = ${eRes.riposteDamage} de dano direto!`
+            );
+          }
+          if (eRes.opensExtraction && s.enemyHp > 0 && eExpr.extractableGenes.length > 0) {
+            s.enemyExposed = true;
+            events.unshift(
+              `🧬 BRECHA CIRÚRGICA ABERTA! Sua defesa expôs os genes do inimigo! Clique em [✂️ Arrancar Gene] para roubar o poder dele!`
+            );
+          }
+        }
+      } else {
+        // Ambos defenderam -> abre brecha cirúrgica por sondagem
+        if (pExpr.guardHeal > 0) {
+          s.playerHp = Math.min(s.playerMaxHp, s.playerHp + pExpr.guardHeal);
+        }
+        if (eExpr.extractableGenes.length > 0) {
+          s.enemyExposed = true;
+          events.unshift(`🧬 BRECHA ABERTA! O inimigo hesitou na Guarda e expôs seus genes para extração!`);
+        }
+      }
+      s.lastAction = { type: 'guard', exposed: s.enemyExposed };
+    }
+
+    advanceEnemyTurnClock(s, events);
+    s.turnLog = [...events, ...s.turnLog].slice(0, 12);
     return s;
   }
 
-  // Ativa 🛡️ Guarda (Trama T) no turno atual!
-  function activateGuard(state) {
-    if (!canUseAction(state, 'GUARDA')) return state;
+  // 3) CIRURGIA EM VIDA: Arranca um gene exposto do inimigo VIVO e enxerta direto no seu ⚔️ ATAQUE ou 🛡️ DEFESA!
+  // Arrancar um gene de um inimigo vivo:
+  // - Remove o gene do corpo do inimigo NA HORA (desarmando o ataque ou a defesa dele!)
+  // - Instala o gene no lado escolhido ('attack' | 'defense') do seu corpo!
+  // - É uma AÇÃO CIRÚRGICA RÁPIDA (não encerra seu turno: você já pode testar seu novo gene no mesmo turno!)
+  function extractAndGraftGene(state, geneId, targetSide = 'attack') {
+    if (state.outcome !== 'ongoing' || !state.enemyExposed) return state;
     const s = cloneState(state);
-    const expr = expressGenome(s.genome);
-    s.player.activeGuard = expr.guardValue;
-    s.combatActionUsed = true;
-    s.lastAction = { type: 'guard', guardValue: expr.guardValue };
+    const idx = s.enemyGenes.findIndex(g => g.id === geneId);
+    if (idx === -1 || !GENES[geneId]?.extractable) return s;
+
+    const eExprBefore = getEnemyExpression(s);
+    // 1. Remove do inimigo VIVO!
+    s.enemyGenes.splice(idx, 1);
+    s.enemyExposed = false;
+    const eExprAfter = getEnemyExpression(s);
+
+    // 2. Enxerta no seu corpo (respeitando a Regra de Unicidade de Gene: se já tiver esse ID, move ele para o lado escolhido)
+    const def = GENES[geneId];
+    const existingOwn = s.playerGenes.find(g => g.id === geneId);
+    if (existingOwn) {
+      existingOwn.side = targetSide;
+    } else {
+      s.playerGenes.push({ id: geneId, side: targetSide });
+    }
+
+    const pExprAfter = getPlayerExpression(s);
+    s.lastAction = { type: 'extract', geneId, targetSide };
     s.turnLog.unshift(
-      `🛡️ GUARDA ATIVADA (Trama T = ${expr.guardValue}${expr.bOnT ? ' + B -1/golpe' : ''}${expr.mOnT ? ' + M -2/ataque' : ''})! Se absorver ≥ 1 dano inimigo, T→A abrirá a Janela de Extração (e Bloqueio Total disparará Riposta [${expr.riposteHits.join('+')}]!).`
+      `✂️ CIRURGIA EM VIDA! Você arrancou [${def.icon} ${def.name}] do inimigo e enxertou no seu ${targetSide === 'attack' ? '⚔️ ATAQUE' : '🛡️ DEFESA'}! ` +
+        `O ataque do inimigo caiu de ${eExprBefore.hits.join('+')}=${eExprBefore.totalRawAttack} para ${eExprAfter.hits.join('+')}=${eExprAfter.totalRawAttack}, e você ainda pode agir neste turno!`
     );
     return s;
-  }
-
-  function movePlayer(state, tx, ty) {
-    if (state.outcome !== 'ongoing') return state;
-    const reach = getReachableTiles(state).find(r => r.x === tx && r.y === ty);
-    if (!reach) return state;
-
-    const s = cloneState(state);
-    const dir = getDirection(s.player, { x: tx, y: ty });
-    s.player.x = tx;
-    s.player.y = ty;
-    s.player.facing = dir;
-    s.stepsLeft = Math.max(0, s.stepsLeft - reach.cost);
-
-    const events = [`🐾 Você moveu para (${tx + 1},${ty + 1}) [${s.stepsLeft} passo(s) restante(s)].`];
-
-    const tileType = s.grid[ty][tx].type;
-    if (tileType === 'acid') {
-      if (s.mutations.includes('MUT_SANGUE_ACIDO')) {
-        s.player.hp = Math.min(s.player.maxHp, s.player.hp + 3);
-        events.unshift(`🧪 Metabolismo Ácido: a poça ácida regenerou +3 PV!`);
-      } else {
-        s.player.hp = Math.max(1, s.player.hp - 2);
-        s.player.poison += 1;
-        events.unshift(`🧪 Você pisou na Poça Ácida (-2 PV e +1 Veneno)!`);
-      }
-    } else if (tileType === 'grass') {
-      s.player.activeGuard += 2;
-      events.unshift(`🌿 Cobertura no Mato Alto: +2 de Guarda extra neste turno!`);
-    }
-
-    s.lastAction = { type: 'move', x: tx, y: ty };
-    s.turnLog = [...events, ...s.turnLog].slice(0, 14);
-    return s;
-  }
-
-  function handleEnemyDeathIfZero(s, enemy, events) {
-    if (enemy.hp > 0 || !enemy.alive) return false;
-    enemy.hp = 0;
-    enemy.alive = false;
-    enemy.aimedTile = null;
-    enemy.exposed = false;
-
-    // Se o inimigo morto ainda tinha algum gene extraível que você não possui, guarda na Reserva!
-    for (const g of enemy.genome) {
-      if (GENES[g.id]?.extractable && !s.genome.some(pg => pg.id === g.id) && !s.reserve.includes(g.id)) {
-        s.reserve.push(g.id);
-        events.push(`🧬 Gene [${GENES[g.id].icon} ${GENES[g.id].name}] recuperado dos restos de ${enemy.name} para sua Reserva!`);
-      }
-    }
-
-    events.push(`💀 ${enemy.icon} ${enemy.name} foi abatido!`);
-
-    if (s.enemies.every(e => !e.alive)) {
-      s.outcome = 'win';
-      s.evolutionPending = s.stageIndex < ENCOUNTERS.length - 1;
-      events.unshift(`🏆 ARENA DOMINADA! Todos os organismos hostis foram superados!`);
-    }
-    return true;
-  }
-
-  function displaceEnemyStep(s, enemy, dx, dy, collisionBaseDmg, events) {
-    const nx = enemy.x + dx;
-    const ny = enemy.y + dy;
-    const otherEnemy = enemyAt(s, nx, ny);
-
-    if (!inBounds(nx, ny) || s.grid[ny][nx].type === 'rock' || otherEnemy) {
-      const colDmg = collisionBaseDmg + (s.mutations.includes('MUT_GIGACHAD') ? 3 : 0);
-      if (inBounds(nx, ny) && s.grid[ny][nx].type === 'rock') {
-        s.grid[ny][nx].type = 'spikes';
-        events.push(`🦴 A Rocha em (${nx + 1},${ny + 1}) quebrou virando Escombros de Espinhos!`);
-      }
-
-      enemy.hp = Math.max(0, enemy.hp - colDmg);
-      enemy.exposed = true; // Colisão abre a Janela de Extração no inimigo vivo!
-      const obstacleName = !inBounds(nx, ny)
-        ? 'a Parede da Arena'
-        : otherEnemy
-          ? otherEnemy.name
-          : 'uma Rocha (🪨)';
-      events.push(
-        `💥 COLISÃO! ${enemy.name} bateu contra ${obstacleName} (+${colDmg} dano) e teve o GENOMA EXPOSTO (🧬)!`
-      );
-
-      if (otherEnemy) {
-        otherEnemy.hp = Math.max(0, otherEnemy.hp - colDmg);
-        otherEnemy.exposed = true;
-        events.push(`💥 ${otherEnemy.name} também sofreu ${colDmg} de dano e ficou com o GENOMA EXPOSTO (🧬)!`);
-        handleEnemyDeathIfZero(s, otherEnemy, events);
-      }
-      return false;
-    }
-
-    enemy.x = nx;
-    enemy.y = ny;
-
-    if (enemy.aimedTile) {
-      const aimNx = enemy.aimedTile.x + dx;
-      const aimNy = enemy.aimedTile.y + dy;
-      if (inBounds(aimNx, aimNy)) {
-        enemy.aimedTile.x = aimNx;
-        enemy.aimedTile.y = aimNy;
-        events.push(`🎯 O empurrão deslocou a ⚠️ MIRA de ${enemy.name} para (${aimNx + 1},${aimNy + 1})!`);
-      } else {
-        enemy.aimedTile = null;
-        events.push(`🎯 O empurrão jogou a ⚠️ MIRA de ${enemy.name} para fora da arena (Tiro Cancelado)!`);
-      }
-    }
-
-    const tileType = s.grid[ny][nx].type;
-    if (tileType === 'acid') {
-      enemy.hp = Math.max(0, enemy.hp - 3);
-      enemy.poison += 2;
-      enemy.exposed = true;
-      events.push(`🧪 ${enemy.name} caiu na Poça Ácida (-3 PV, +2 Veneno e 🧬 GENOMA EXPOSTO)!`);
-    } else if (tileType === 'spikes') {
-      enemy.hp = Math.max(0, enemy.hp - 3);
-      enemy.exposed = true;
-      events.push(`🦴 ${enemy.name} caiu nos Escombros de Espinhos (-3 PV e 🧬 GENOMA EXPOSTO)!`);
-    }
-
-    const aimsHere = aimedTelegraphsAt(s, nx, ny);
-    if (aimsHere.length > 0) {
-      enemy.exposed = true;
-      events.push(
-        `⚠️ ARMADILHA TÁTICA! ${enemy.name} foi empurrado para a ⚠️ MIRA de ${aimsHere[0].name} (vai sofrer 💥 FOGO AMIGO e já está com 🧬 GENOMA EXPOSTO)!`
-      );
-    }
-    return true;
-  }
-
-  // Executa Impacto, Rajada ou Guarda na casa alvo (tx, ty)
-  function useSkillOnTile(state, tx, ty, actionOverride = null) {
-    if (state.outcome !== 'ongoing') return state;
-    const actionId = actionOverride || state.selectedAction;
-    if (actionId === 'GUARDA') return activateGuard(state);
-    if (!canUseAction(state, actionId)) return state;
-
-    const validTargets = getActionTargets(state, actionId);
-    const targetInfo = validTargets.find(t => t.x === tx && t.y === ty);
-    if (!targetInfo) return state;
-
-    const s = cloneState(state);
-    const enemy = enemyAt(s, tx, ty);
-    if (!enemy) return s;
-
-    s.combatActionUsed = true;
-    s.player.facing = getDirection(s.player, enemy);
-
-    const playerExpr = expressGenome(s.genome);
-    const enemyExpr = expressGenome(enemy.genome);
-
-    const rawHits = actionId === 'RAJADA' && playerExpr.rajadaHits
-      ? [...playerExpr.rajadaHits]
-      : [...playerExpr.impactHits];
-
-    const backstab = isBackstab(s.player, enemy);
-    if (backstab && rawHits.length > 0) {
-      rawHits[0] += 2;
-      enemy.exposed = true; // Backstab abre a Janela de Extração imediatamente!
-    }
-
-    const math = resolveAttackMath(rawHits, enemyExpr, enemy.activeGuard || 0);
-    enemy.activeGuard = Math.max(0, (enemy.activeGuard || 0) - math.absorvido);
-    enemy.hp = Math.max(0, enemy.hp - math.danoLiquido);
-
-    const events = [
-      `⚔️ ${actionId === 'RAJADA' ? 'Rajada (R→I)' : 'Impacto (I)'} [${rawHits.join('+')}] em ${enemy.name}${backstab ? ' (🗡️ BACKSTAB PELAS COSTAS → 🧬 GENOMA EXPOSTO!)' : ''}: ` +
-        `${enemyExpr.bReduction ? `B(-1/golpe)→[${math.afterB.join('+')}] ` : ''}` +
-        `${enemyExpr.mReduction ? `M(-2/atq)→${math.danoPreGuarda} ` : ''}` +
-        `${math.absorvido > 0 ? `Guarda absorveu ${math.absorvido} → ` : ''}` +
-        `Dano líquido: ${math.danoLiquido}!`,
-    ];
-
-    // Empurrão do Impacto
-    if (actionId === 'IMPACTO' && enemy.hp > 0) {
-      const dir = getDirection(s.player, enemy);
-      const { dx, dy } = dirDelta(dir);
-      const pushDist = 1;
-      for (let step = 0; step < pushDist; step++) {
-        if (enemy.hp <= 0) break;
-        if (!displaceEnemyStep(s, enemy, dx, dy, 4, events)) break;
-      }
-    }
-
-    // Simetria de Riposta Inimiga (Caso 10 de 01_Anexo_Tecnico.md): se o inimigo estava em Guarda, sobreviveu e fez Bloqueio Total, dispara Riposta (ignorando B e M do jogador)!
-    if (enemy.hp > 0 && math.triggersTotalBlockRiposte) {
-      s.player.hp = Math.max(0, s.player.hp - math.riposteDamage);
-      events.push(
-        `⚡ RIPOSTA SIMÉTRICA DE ${enemy.name.toUpperCase()}! Bloqueio total disparou Riposta [${math.riposteHits.join('+')}] causando ${math.riposteDamage} de dano direto (ignora B e M)!`
-      );
-    }
-
-    const died = handleEnemyDeathIfZero(s, enemy, events);
-    s.lastAction = {
-      type: 'attack',
-      actionId,
-      targetX: tx,
-      targetY: ty,
-      backstab,
-      killed: died,
-    };
-
-    if (s.player.hp <= 0 && s.outcome === 'ongoing') {
-      s.outcome = 'loss';
-      events.push(`💀 Sua Quimera tombou.`);
-    }
-
-    s.turnLog = [...events, ...s.turnLog].slice(0, 14);
-    return s;
-  }
-
-  function endTurn(state) {
-    if (state.outcome !== 'ongoing') return state;
-    const s = cloneState(state);
-    const events = [];
-    const playerExpr = expressGenome(s.genome);
-
-    // Helper para resolver um ataque inimigo contra o jogador aplicando B -> M -> Guarda -> Janela (T->A) -> Riposta -> Cura (V->T)
-    function applyEnemyAttackToPlayer(attacker, hits, attackLabel) {
-      const math = resolveAttackMath(hits, playerExpr, s.player.activeGuard || 0);
-      s.player.activeGuard = Math.max(0, (s.player.activeGuard || 0) - math.absorvido);
-      s.player.hp = Math.max(0, s.player.hp - math.danoLiquido);
-
-      events.push(
-        `💥 ${attacker.icon} ${attacker.name} usa ${attackLabel}: ` +
-          `${playerExpr.bReduction ? `seu B(-1/golpe) reduz p/ [${math.afterB.join('+')}] · ` : ''}` +
-          `${playerExpr.mReduction ? `seu M(-2/atq) reduz p/ ${math.danoPreGuarda} · ` : ''}` +
-          `${math.absorvido > 0 ? `sua Guarda absorveu ${math.absorvido} · ` : ''}` +
-          `Dano líquido: ${math.danoLiquido}!`
-      );
-
-      if (s.player.hp > 0) {
-        if (math.triggersExtractionWindow && attacker.alive) {
-          attacker.exposed = true;
-          events.unshift(
-            `🧬 JANELA DE EXTRAÇÃO ABERTA (T ◆→◇ A)! Sua Guarda absorveu o golpe de ${attacker.name} e EXPÔS os genes [${expressGenome(attacker.genome).extractableGenes.join(', ')}] dele para cirurgia!`
-          );
-        }
-        if (math.triggersTotalBlockRiposte && attacker.alive) {
-          attacker.hp = Math.max(0, attacker.hp - math.riposteDamage);
-          events.unshift(
-            `⚡ RIPOSTA DA TRAMA! Bloqueio total disparou sua Riposta [${math.riposteHits.join('+')}] causando ${math.riposteDamage} de dano direto em ${attacker.name} (ignora B e M)!`
-          );
-          handleEnemyDeathIfZero(s, attacker, events);
-        }
-        if (math.triggersVHeal && s.player.hp < s.player.maxHp) {
-          s.player.hp = Math.min(s.player.maxHp, s.player.hp + 2);
-          events.push(`💚 Reserva (V ◆→◇ T): sua Guarda regenerou +2 PV!`);
-        }
-      }
-    }
-
-    // FASE 1: DISPARO DAS ⚠️ MIRAS TELEGRAFADAS (Artillery & Friendly Fire!)
-    for (const shooter of s.enemies) {
-      if (!shooter.alive || shooter.stunned || !shooter.aimedTile) continue;
-      const aim = shooter.aimedTile;
-      shooter.aimedTile = null;
-
-      const victimEnemy = enemyAt(s, aim.x, aim.y);
-      if (victimEnemy && victimEnemy.id !== shooter.id) {
-        // 💥 FOGO AMIGO (aplicando B e M do inimigo vítima!)
-        const victimExpr = expressGenome(victimEnemy.genome);
-        const ffMath = resolveAttackMath(aim.hits || [aim.dmg], victimExpr, victimEnemy.activeGuard || 0);
-        victimEnemy.hp = Math.max(0, victimEnemy.hp - ffMath.danoLiquido);
-        victimEnemy.exposed = true;
-        events.unshift(
-          `💥 FOGO AMIGO! ${shooter.icon} ${shooter.name} disparou ${aim.intentName} em (${aim.x + 1},${aim.y + 1}) e ACERTOU ${victimEnemy.name} causando ${ffMath.danoLiquido} de dano!`
-        );
-        handleEnemyDeathIfZero(s, victimEnemy, events);
-      } else if (s.player.x === aim.x && s.player.y === aim.y) {
-        applyEnemyAttackToPlayer(shooter, aim.hits || [aim.dmg], aim.intentName);
-      } else {
-        events.push(`💨 ESQUIVA TÁTICA! ${shooter.icon} ${shooter.name} atirou em (${aim.x + 1},${aim.y + 1}) e acertou o vazio!`);
-      }
-    }
-
-    if (s.outcome === 'win') {
-      s.turnLog = [...events, ...s.turnLog].slice(0, 14);
-      return s;
-    }
-
-    // FASE 2: VENENO, MOVIMENTO E ATAQUE DOS INIMIGOS VIVOS
-    for (const en of s.enemies) {
-      if (!en.alive) continue;
-
-      if (en.poison > 0) {
-        en.hp = Math.max(0, en.hp - en.poison);
-        events.push(`☠️ ${en.name} sofre ${en.poison} de dano de Veneno.`);
-        if (handleEnemyDeathIfZero(s, en, events)) continue;
-      }
-
-      if (en.stunned) {
-        en.stunned = false;
-        continue;
-      }
-
-      const intent = en.currentIntent || getEnemyCurrentIntent(en, s.turn);
-      if (intent.kind === 'Guarda') {
-        events.push(`🛡️ ${en.icon} ${en.name} mantém ${intent.label}.`);
-        continue;
-      }
-
-      let steps = en.move || 1;
-      const attackRange = intent.kind === 'Rajada' ? 2 : 1;
-      while (steps > 0 && manhattan(en, s.player) > attackRange) {
-        steps--;
-        const candidates = [
-          { x: en.x + 1, y: en.y },
-          { x: en.x - 1, y: en.y },
-          { x: en.x, y: en.y + 1 },
-          { x: en.x, y: en.y - 1 },
-        ].filter(c => inBounds(c.x, c.y) && !isBlocked(s, c.x, c.y));
-
-        if (candidates.length === 0) break;
-        candidates.sort((a, b) => {
-          const da = manhattan(a, s.player) + (s.grid[a.y][a.x].type === 'acid' ? 1.5 : 0);
-          const db = manhattan(b, s.player) + (s.grid[b.y][b.x].type === 'acid' ? 1.5 : 0);
-          return da - db;
-        });
-        const best = candidates[0];
-        if (manhattan(best, s.player) >= manhattan(en, s.player)) break;
-        en.facing = getDirection(en, best);
-        en.x = best.x;
-        en.y = best.y;
-        if (s.grid[en.y][en.x].type === 'acid') {
-          en.hp = Math.max(0, en.hp - 3);
-          en.poison += 1;
-          events.push(`🧪 ${en.name} atravessou a Poça Ácida (-3 PV)!`);
-          if (handleEnemyDeathIfZero(s, en, events)) break;
-        }
-      }
-
-      if (!en.alive) continue;
-      en.facing = getDirection(en, s.player);
-
-      if (en.aiType === 'stalker' && manhattan(en, s.player) <= attackRange) {
-        applyEnemyAttackToPlayer(en, intent.hits, intent.label);
-      }
-    }
-
-    if (s.player.hp > 0 && s.outcome === 'ongoing' && s.player.poison > 0) {
-      s.player.hp = Math.max(0, s.player.hp - s.player.poison);
-      events.push(`☠️ Você sofreu ${s.player.poison} de dano de Veneno.`);
-      s.player.poison = Math.max(0, s.player.poison - 1);
-    }
-
-    if (s.player.hp <= 0 && s.outcome === 'ongoing') {
-      s.outcome = 'loss';
-      events.unshift(`💀 Sua Quimera tombou na arena.`);
-    }
-
-    if (s.outcome === 'ongoing') {
-      s.turn += 1;
-      s.stepsLeft = s.player.vel;
-      s.combatActionUsed = false;
-      s.selectedAction = 'IMPACTO';
-      const onGrass = s.grid[s.player.y][s.player.x].type === 'grass';
-      s.player.activeGuard = onGrass ? 2 : 0;
-      assignEnemyTelegraphs(s);
-    }
-
-    s.lastAction = { type: 'endTurn' };
-    s.turnLog = [...events, ...s.turnLog].slice(0, 14);
-    return s;
-  }
-
-  function chooseEvolutionAndAdvance(state, mutationId) {
-    const s = cloneState(state);
-    const perk = MUTATION_PERKS.find(m => m.id === mutationId);
-    if (perk && !s.mutations.includes(perk.id)) {
-      perk.apply(s.player);
-      s.mutations.push(perk.id);
-    }
-    const nextStage = Math.min(ENCOUNTERS.length - 1, s.stageIndex + 1);
-    return createRunState(nextStage, s);
   }
 
   return {
     VERSION,
-    GRID_W,
-    GRID_H,
-    GENOME_W,
-    GENOME_H,
     GENES,
-    MUTATION_PERKS,
     ENCOUNTERS,
-    expressGenome,
-    resolveAttackMath,
+    expressBody,
+    resolveHitSequence,
+    createRunState,
     getPlayerExpression,
     getEnemyExpression,
-    isBackstab,
-    aimedTelegraphsAt,
-    createRunState,
-    getReachableTiles,
-    rotateGeneInGenome,
-    extractEnemyGene,
-    installReserveGene,
-    canUseAction,
-    getActionTargets,
-    previewSkillOnEnemy,
-    selectSkill,
-    activateGuard,
-    movePlayer,
-    useSkillOnTile,
-    endTurn,
-    chooseEvolutionAndAdvance,
+    getTutorialCoach,
+    toggleGeneSide,
+    previewTurnOutcomes,
+    executeTurnAction,
+    extractAndGraftGene,
   };
 });
 
 </script>
 <script>
-/* O Enxerto · Controlador v4.0 (Arena Tática 7x5 + Matriz Genética Espacial 3x3 + Cirurgia em Vida Simétrica) */
+/* O Enxerto · Controlador v5.0 "Clareza Absoluta & Tutorial Interativo Passo a Passo" */
 (function () {
   'use strict';
 
@@ -1917,12 +1038,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
   let audioCtx = null;
   let toastTimer = null;
 
-  const FACING_ARROW = {
-    left: '◀',
-    right: '▶',
-    up: '▲',
-    down: '▼',
-  };
+  const CREATURE_ICONS = ['🦂', '🦀', '🦗', '🐉'];
 
   function el(tag, text = '', cls = '') {
     const n = document.createElement(tag);
@@ -1944,48 +1060,39 @@ button:disabled{opacity:.38;cursor:not-allowed}
       osc.connect(gain);
       gain.connect(audioCtx.destination);
 
-      if (kind === 'step') {
+      if (kind === 'flip') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(190, now);
-        osc.frequency.exponentialRampToValueAtTime(260, now + 0.06);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+        osc.frequency.setValueAtTime(360, now);
+        osc.frequency.exponentialRampToValueAtTime(520, now + 0.08);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
         osc.start(now);
-        osc.stop(now + 0.07);
-      } else if (kind === 'slash') {
+        osc.stop(now + 0.09);
+      } else if (kind === 'attack') {
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(340, now);
-        osc.frequency.exponentialRampToValueAtTime(110, now + 0.12);
-        gain.gain.setValueAtTime(0.13, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
-        osc.start(now);
-        osc.stop(now + 0.13);
-      } else if (kind === 'crit') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(520, now);
-        osc.frequency.setValueAtTime(680, now + 0.06);
-        osc.frequency.exponentialRampToValueAtTime(120, now + 0.22);
-        gain.gain.setValueAtTime(0.16, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.23);
-        osc.start(now);
-        osc.stop(now + 0.23);
-      } else if (kind === 'guard') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(240, now);
-        osc.frequency.exponentialRampToValueAtTime(480, now + 0.14);
-        gain.gain.setValueAtTime(0.12, now);
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(110, now + 0.14);
+        gain.gain.setValueAtTime(0.14, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
         osc.start(now);
         osc.stop(now + 0.15);
+      } else if (kind === 'guard') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(240, now);
+        osc.frequency.exponentialRampToValueAtTime(480, now + 0.16);
+        gain.gain.setValueAtTime(0.13, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.17);
+        osc.start(now);
+        osc.stop(now + 0.17);
       } else if (kind === 'graft') {
         osc.type = 'sine';
         osc.frequency.setValueAtTime(330, now);
         osc.frequency.setValueAtTime(495, now + 0.08);
         osc.frequency.setValueAtTime(660, now + 0.16);
-        gain.gain.setValueAtTime(0.14, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
         osc.start(now);
-        osc.stop(now + 0.25);
+        osc.stop(now + 0.26);
       }
     } catch (_) {}
   }
@@ -1999,7 +1106,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
     if (toastTimer) clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
       t.hidden = true;
-    }, 1750);
+    }, 1850);
   }
 
   function triggerShake(elId) {
@@ -2019,487 +1126,250 @@ button:disabled{opacity:.38;cursor:not-allowed}
     });
   }
 
-  // Renderiza a Bandeja Cirúrgica de Extração em Vida quando qualquer inimigo vivo está com `exposed === true`!
-  function renderExtractionTray() {
-    const tray = by('extraction-tray');
-    const cardsBox = by('extract-cards');
-    cardsBox.replaceChildren();
+  function renderCoach(coach) {
+    const banner = by('coach-banner');
+    if (!coach) {
+      banner.hidden = true;
+      return;
+    }
+    banner.hidden = false;
+    by('coach-step').textContent = `👆 TUTORIAL GUIADO · ${coach.step}`;
+    by('coach-text').textContent = coach.text;
+  }
 
-    if (state.outcome !== 'ongoing') {
-      tray.hidden = true;
+  function renderEnemy(coach) {
+    const enc = C.ENCOUNTERS[state.stageIndex];
+    const eExpr = C.getEnemyExpression(state);
+
+    by('enemy-name').textContent = enc.name;
+    by('enemy-sub').textContent = enc.subtitle;
+    by('enemy-art').textContent = CREATURE_ICONS[state.stageIndex] || '🦂';
+
+    by('enemy-hp-text').textContent = `${state.enemyHp} / ${state.enemyMaxHp} PV`;
+    by('enemy-hp-bar').style.width = `${Math.max(0, Math.round((state.enemyHp / state.enemyMaxHp) * 100))}%`;
+
+    const badges = by('enemy-badges');
+    badges.replaceChildren();
+    if (state.enemyExposed) {
+      const b = el('span', '🧬 BRECHA ABERTA: ARRANQUE UM GENE!', 'pole-stat');
+      b.style.cssText = 'background:#1b3814;border:1.5px solid var(--accent);color:var(--accent)';
+      badges.append(b);
+    }
+    if (eExpr.bPerHit > 0) {
+      badges.append(el('span', `🧱 Couraça: -${eExpr.bPerHit} dano/golpe`, 'pole-stat'));
+    }
+    if (eExpr.mPerAttack > 0) {
+      badges.append(el('span', `🧽 Amortecedor: -${eExpr.mPerAttack} dano/ataque`, 'pole-stat'));
+    }
+    if (state.enemyPoison > 0) {
+      badges.append(el('span', `☠️ Veneno: ${state.enemyPoison}/turno`, 'pole-stat'));
+    }
+
+    const intentBanner = by('enemy-intent-banner');
+    if (state.enemyIntent === 'guard') {
+      intentBanner.className = 'intent-banner guard';
+      intentBanner.textContent = `🛡️ Intenção do Inimigo neste turno: Postura de Guarda (${eExpr.guardValue} de Escudo + Riposta de ${eExpr.riposteTotal} se bloquear tudo)`;
+    } else {
+      intentBanner.className = 'intent-banner';
+      const hitsDesc =
+        eExpr.hitCount > 1
+          ? `${eExpr.hitCount} golpes de ${eExpr.hitDmg} (${eExpr.totalRawAttack} de dano total)`
+          : `1 golpe de ${eExpr.hitDmg} (${eExpr.totalRawAttack} de dano)`;
+      intentBanner.textContent =
+        `⚠️ Intenção do Inimigo neste turno: Vai Atacar com ${hitsDesc}` +
+        (eExpr.attackPoison ? ` + ${eExpr.attackPoison} de Veneno!` : '!');
+    }
+
+    // Genes acoplados no corpo do inimigo
+    const box = by('enemy-genes-box');
+    box.replaceChildren();
+
+    if (state.enemyGenes.length === 0) {
+      const empty = el('div', '✅ Todos os genes deste inimigo já foram arrancados! Ele está completamente desarmado!', '');
+      empty.style.cssText = 'font-size:.82rem;color:var(--good);font-weight:800;padding:6px 4px';
+      box.append(empty);
       return;
     }
 
-    const exposedEnemies = state.enemies.filter(
-      e => e.alive && e.exposed && C.expressGenome(e.genome).extractableGenes.length > 0
-    );
+    for (const g of state.enemyGenes) {
+      const def = C.GENES[g.id];
+      const canExtract = state.enemyExposed && def.extractable && state.outcome === 'ongoing';
+      const card = el('div', '', `enemy-gene-card${canExtract ? ' exposed' : ''}`);
 
-    if (exposedEnemies.length === 0) {
-      tray.hidden = true;
-      return;
-    }
+      const info = el('div', '', '');
+      const effectOnEnemy = g.side === 'attack' ? def.attackTitle : def.defenseTitle;
+      info.innerHTML =
+        `<b style="color:${def.color};font-size:.88rem">${def.icon} ${def.name} (No ${g.side === 'attack' ? '⚔️ Ataque' : '🛡️ Defesa'} do Inimigo)</b>` +
+        `<div style="font-size:.78rem;color:#d6e4dc">Efeito no inimigo: <b>${effectOnEnemy}</b></div>`;
 
-    tray.hidden = false;
-    for (const en of exposedEnemies) {
-      const enExpr = C.expressGenome(en.genome);
-      for (const geneId of enExpr.extractableGenes) {
-        const def = C.GENES[geneId];
-        const card = el('div', '', 'extract-card');
+      const actions = el('div', '', '');
+      actions.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap';
 
-        const title = el('div', '', '');
-        title.innerHTML =
-          `<b style="color:${def.color};font-size:.82rem">${def.icon} ${def.name} (${def.id}) · Exposto em ${en.icon} ${en.name}</b>` +
-          `<div style="font-size:.7rem;color:var(--muted)">${def.desc}</div>`;
-
-        const btns = el('div', '', '');
-        btns.style.cssText = 'display:flex;gap:5px;flex-wrap:wrap;margin-top:2px';
-
-        if (def.validCores.includes('I')) {
-          const bI = el(
-            'button',
-            `⚡ Enxertar ${def.id} ◆→◇ I (${geneId === 'Q' ? 'Duplica Ataque!' : 'Libera Rajada!'})`,
-            'btn-primary btn-sm'
-          );
-          bI.type = 'button';
-          bI.onclick = () => {
-            state = C.extractEnemyGene(state, en.id, geneId, 'graft_I');
-            playSfx('graft');
-            showToast(`🧬 ${def.name} arrancado de ${en.name} e enxertado em I!`, 'var(--accent)');
-            render();
-          };
-          btns.append(bI);
-        }
-
-        if (def.validCores.includes('T')) {
-          const labelT =
-            geneId === 'Q'
-              ? '⚡ Enxertar Q ◆→◇ T (Riposta [2+2]!)'
-              : geneId === 'B'
-                ? '🛡️ Enxertar B ◆→◇ T (-1/golpe já neste turno!)'
-                : '🛡️ Enxertar M ◆→◇ T (-2/ataque já neste turno!)';
-          const bT = el('button', labelT, def.validCores.includes('I') ? 'btn-purple btn-sm' : 'btn-primary btn-sm');
-          bT.type = 'button';
-          bT.onclick = () => {
-            state = C.extractEnemyGene(state, en.id, geneId, 'graft_T');
-            playSfx('graft');
-            showToast(`🧬 ${def.name} arrancado de ${en.name} e enxertado em T!`, 'var(--info)');
-            render();
-          };
-          btns.append(bT);
-        }
-
-        const bRes = el('button', '📦 Reserva (Só Desarmar)', 'btn-ghost btn-sm');
-        bRes.type = 'button';
-        bRes.onclick = () => {
-          state = C.extractEnemyGene(state, en.id, geneId, 'reserve');
+      if (canExtract) {
+        const btnAtkId = `btn-extract-${g.id}-attack`;
+        const bAtk = el(
+          'button',
+          `✂️ Arrancar → Pôr no meu ⚔️ ATAQUE (${def.attackTitle})`,
+          `btn-primary btn-sm${coach?.highlightId === btnAtkId ? ' spotlight' : ''}`
+        );
+        bAtk.id = btnAtkId;
+        bAtk.type = 'button';
+        bAtk.onclick = () => {
+          state = C.extractAndGraftGene(state, g.id, 'attack');
           playSfx('graft');
-          showToast(`📦 ${en.name} desarmado! ${def.name} foi para a Reserva.`, 'var(--warn)');
+          showToast(`✂️ ${def.name} arrancado do inimigo e enxertado no seu ⚔️ ATAQUE!`, 'var(--accent)');
           render();
         };
-        btns.append(bRes);
 
-        card.append(title, btns);
-        cardsBox.append(card);
-      }
-    }
-  }
-
-  function renderHud() {
-    const p = state.player;
-    const expr = C.getPlayerExpression(state);
-
-    const vitals = by('vitals-group');
-    vitals.replaceChildren();
-    vitals.append(
-      el('span', `❤️ PV ${p.hp}/${p.maxHp}`, 'vital-pill hp'),
-      el('span', `🐾 Passos ${state.stepsLeft}/${p.vel}`, 'vital-pill steps')
-    );
-    if (p.activeGuard > 0) {
-      vitals.append(el('span', `🛡️ Guarda Ativa: ${p.activeGuard}`, 'vital-pill shield'));
-    }
-
-    const exprBox = by('expr-group');
-    exprBox.replaceChildren();
-    const pills = [
-      el('span', `⚔️ Impacto [${expr.impactHits.join('+')}]`, 'expr-pill'),
-      expr.rajadaHits ? el('span', `🌪️ Rajada [${expr.rajadaHits.join('+')}]`, 'expr-pill') : null,
-      el('span', `🛡️ Guarda ${expr.guardValue} · Riposta [${expr.riposteHits.join('+')}]`, 'expr-pill'),
-      expr.bReduction > 0 ? el('span', `🧱 B: -${expr.bReduction}/golpe`, 'expr-pill hi') : null,
-      expr.mReduction > 0 ? el('span', `🧽 M: -${expr.mReduction}/ataque`, 'expr-pill hi') : null,
-      expr.hasA ? el('span', `🧬 T◆→◇A Ativo`, 'expr-pill hi') : null,
-    ].filter(Boolean);
-    exprBox.append(...pills);
-  }
-
-  function isBehindAnyEnemy(x, y) {
-    for (const en of state.enemies) {
-      if (!en.alive) continue;
-      const dx = en.facing === 'right' ? -1 : en.facing === 'left' ? 1 : 0;
-      const dy = en.facing === 'down' ? -1 : en.facing === 'up' ? 1 : 0;
-      if (en.x + dx === x && en.y + dy === y) return en;
-    }
-    return null;
-  }
-
-  function renderBoard() {
-    const enc = C.ENCOUNTERS[state.stageIndex];
-    by('arena-title').textContent = enc.name;
-    by('arena-sub').textContent = enc.subtitle;
-
-    const reachable = C.getReachableTiles(state);
-    const reachMap = new Map(reachable.map(r => [`${r.x},${r.y}`, r]));
-    const actionTargets = C.getActionTargets(state, state.selectedAction);
-    const targetMap = new Map(actionTargets.map(t => [`${t.x},${t.y}`, t]));
-
-    const board = by('board-grid');
-    board.replaceChildren();
-
-    for (let y = 0; y < C.GRID_H; y++) {
-      for (let x = 0; x < C.GRID_W; x++) {
-        const cell = state.grid[y][x];
-        const key = `${x},${y}`;
-        const isPlayer = state.player.x === x && state.player.y === y;
-        const enemy = state.enemies.find(e => e.alive && e.x === x && e.y === y) || null;
-        const reach = reachMap.get(key);
-        const actTarget = targetMap.get(key);
-        const backEnemy = !isPlayer && !enemy && cell.type !== 'rock' ? isBehindAnyEnemy(x, y) : null;
-        const telegraphs = C.aimedTelegraphsAt(state, x, y);
-        const hasDanger = telegraphs.length > 0;
-
-        const classes = ['tile'];
-        if (cell.type === 'rock') classes.push('rock');
-        if (cell.type === 'spikes') classes.push('spikes');
-        if (cell.type === 'acid') classes.push('acid');
-        if (cell.type === 'grass') classes.push('grass');
-        if (hasDanger) classes.push('danger-zone');
-        if (isPlayer) classes.push('player-tile');
-        if (reach && !isPlayer) classes.push('reachable');
-        if (actTarget && actTarget.kind === 'enemy') classes.push('attack-target');
-
-        const tileEl = el('div', '', classes.join(' '));
-        tileEl.setAttribute('role', 'gridcell');
-        tileEl.dataset.x = String(x);
-        tileEl.dataset.y = String(y);
-
-        const top = el('div', '', 'tile-top');
-        let terrainTag = '';
-        if (hasDanger) {
-          const tDmg = telegraphs.reduce((acc, e) => acc + (e.aimedTile?.dmg || 0), 0);
-          terrainTag = enemy ? `💥 FOGO AMIGO!` : `⚠️ MIRA ${tDmg}💥`;
-        } else if (enemy && enemy.exposed) {
-          terrainTag = '🧬 EXPOSTO';
-        } else if (cell.type === 'rock') terrainTag = '🪨 Rocha';
-        else if (cell.type === 'spikes') terrainTag = '🦴 Espinhos';
-        else if (cell.type === 'acid') terrainTag = '🧪 Ácido';
-        else if (cell.type === 'grass') terrainTag = '🌿 Mato';
-
-        const tagSpan = el('span', terrainTag);
-        if (hasDanger) tagSpan.style.color = '#fdba74';
-        else if (enemy && enemy.exposed) tagSpan.style.color = 'var(--accent)';
-        top.append(tagSpan);
-
-        if (isPlayer) {
-          top.append(el('span', FACING_ARROW[state.player.facing] || '▶', 'facing-arrow'));
-        } else if (enemy) {
-          top.append(el('span', `${FACING_ARROW[enemy.facing] || '◀'}`, 'facing-arrow'));
-        } else if (backEnemy) {
-          top.append(el('span', '🗡️ COSTAS', 'backstab-hint'));
-        }
-        tileEl.append(top);
-
-        const sprite = el('div', '', 'tile-sprite');
-        if (isPlayer) sprite.textContent = '🧬';
-        else if (enemy) sprite.textContent = enemy.icon;
-        else if (cell.type === 'rock') sprite.textContent = '🪨';
-        else if (cell.type === 'spikes') sprite.textContent = '🦴';
-        else if (cell.type === 'acid') sprite.textContent = '🧪';
-        else if (cell.type === 'grass') sprite.textContent = '🌿';
-        else if (hasDanger) sprite.textContent = '🎯';
-        else if (reach) {
-          sprite.textContent = '🟢';
-          sprite.style.fontSize = '.82rem';
-        }
-        tileEl.append(sprite);
-
-        if (isPlayer) {
-          tileEl.append(
-            el('div', hasDanger ? `⚠️ MIRA AQUI!` : `VOCÊ ${state.player.hp}❤️`, `tile-hp ${hasDanger ? 'danger' : 'player'}`)
-          );
-        } else if (enemy) {
-          const enExpr = C.expressGenome(enemy.genome);
-          const intentHits = enemy.currentIntent?.hits?.length
-            ? `[${enemy.currentIntent.hits.join('+')}]`
-            : `🛡️${enExpr.guardValue}`;
-          tileEl.append(el('div', `${enemy.hp}❤️ ${intentHits}`, 'tile-hp enemy'));
-
-          if (actTarget && actTarget.kind === 'enemy') {
-            const prev = C.previewSkillOnEnemy(state, state.selectedAction, enemy);
-            if (prev) {
-              const tags = [];
-              if (prev.backstab) tags.push('🗡️COSTAS');
-              if (prev.collisionDmg > 0) tags.push('💥COLISÃO');
-              if (prev.pushedIntoAim) tags.push('⚠️FOGO AMIGO');
-              if (prev.opensExtraction && !enemy.exposed) tags.push('🧬EXPÕE');
-              const txt = `-${prev.totalDmg} PV${tags.length ? ' ' + tags.join('+') : ''}`;
-              tileEl.append(
-                el('div', txt, `dmg-preview-badge${prev.backstab || prev.collisionDmg || prev.pushedIntoAim ? ' crit' : ''}`)
-              );
-            }
-          }
-        } else if (reach) {
-          tileEl.append(el('div', `🐾 ${reach.cost}`, 'tile-hp'));
-        } else if (hasDanger) {
-          tileEl.append(el('div', 'Zona de Tiro', 'tile-hp danger'));
-        } else {
-          tileEl.append(el('div', '', ''));
-        }
-
-        tileEl.onclick = () => onTileClick(x, y, { actTarget, reach, enemy });
-        board.append(tileEl);
-      }
-    }
-
-    renderEnemyGenomesStrip();
-  }
-
-  // Renderiza os cards de Genoma Simétrico dos Inimigos abaixo da Arena!
-  function renderEnemyGenomesStrip() {
-    const strip = by('enemy-genomes-strip');
-    strip.replaceChildren();
-
-    for (const en of state.enemies) {
-      if (!en.alive) continue;
-      const expr = C.expressGenome(en.genome);
-      const card = el('div', '', `enemy-gcard${en.exposed ? ' exposed' : ''}`);
-
-      const head = el('div', '', '');
-      head.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:4px';
-      head.innerHTML =
-        `<b>${en.icon} ${en.name} (${en.hp}/${en.maxHp} PV)</b>` +
-        `<span style="font-size:.66rem;font-weight:900;color:${en.exposed ? 'var(--accent)' : 'var(--muted)'}">` +
-        `${en.exposed ? '🧬 JANELA ABERTA!' : '🔒 Protegido'}</span>`;
-
-      const intentLine = el(
-        'div',
-        `Intenção no turno: ${en.currentIntent ? en.currentIntent.label : 'Impacto'}` +
-          `${expr.bReduction ? ` · B(-${expr.bReduction}/golpe)` : ''}` +
-          `${expr.mReduction ? ` · M(-${expr.mReduction}/atq)` : ''}`,
-        ''
-      );
-      intentLine.style.color = 'var(--warn)';
-
-      const chips = el('div', '', 'gene-chips');
-      for (const g of en.genome) {
-        const def = C.GENES[g.id];
-        const linkStr = g.targetCore ? `→${g.targetCore}` : '';
-        const chip = el(
-          'span',
-          `${def.icon} ${def.id}${linkStr}`,
-          `gene-chip${def.extractable ? ' extractable' : ''}`
+        const btnDefId = `btn-extract-${g.id}-defense`;
+        const bDef = el(
+          'button',
+          `✂️ Arrancar → Pôr na minha 🛡️ DEFESA (${def.defenseTitle})`,
+          `btn-info btn-sm${coach?.highlightId === btnDefId ? ' spotlight' : ''}`
         );
-        chip.title = `${def.name}: ${def.desc}`;
-        chips.append(chip);
+        bDef.id = btnDefId;
+        bDef.type = 'button';
+        bDef.onclick = () => {
+          state = C.extractAndGraftGene(state, g.id, 'defense');
+          playSfx('graft');
+          showToast(`✂️ ${def.name} arrancado do inimigo e enxertado na sua 🛡️ DEFESA!`, 'var(--info)');
+          render();
+        };
+
+        actions.append(bAtk, bDef);
+      } else if (def.extractable) {
+        const lockTag = el(
+          'span',
+          '🔒 Use [🛡️ Defender & Abrir Brecha] para expor e arrancar este gene!',
+          ''
+        );
+        lockTag.style.cssText = 'font-size:.74rem;color:var(--warn);font-weight:750';
+        actions.append(lockTag);
       }
 
-      card.append(head, intentLine, chips);
-      strip.append(card);
+      card.append(info, actions);
+      box.append(card);
     }
   }
 
-  // Renderiza a Matriz Genética Espacial 3x3 do Jogador com Portas Diretas ◆→◇ e Botão 🔄 Girar!
-  function renderGenomeMatrix() {
-    const mat = by('genome-matrix');
-    mat.replaceChildren();
+  function renderPlayer(coach) {
+    const sim = C.previewTurnOutcomes(state);
+    const { pExpr, attackOutcome, guardOutcome, enemyIsGuarding } = sim;
 
-    for (let y = 0; y < C.GENOME_H; y++) {
-      for (let x = 0; x < C.GENOME_W; x++) {
-        const g = state.genome.find(item => item.x === x && item.y === y) || null;
-        if (!g) {
-          const empty = el('div', '', 'gcell empty');
-          empty.append(
-            el('div', `Slot (${x + 1},${y + 1}) Livre`, 'gcell-top'),
-            el('div', 'Arranque Q, B ou M do inimigo vivo p/ enxertar aqui!', 'gcell-desc')
-          );
-          mat.append(empty);
-          continue;
-        }
+    by('player-hp-text').textContent = `${state.playerHp} / ${state.playerMaxHp} PV`;
+    by('player-hp-bar').style.width = `${Math.max(0, Math.round((state.playerHp / state.playerMaxHp) * 100))}%`;
 
-        const def = C.GENES[g.id];
-        const isCore = def.kind === 'core';
-        const cell = el('div', '', `gcell${isCore ? ' core' : ''}`);
-        cell.style.borderColor = def.color;
-
-        const top = el('div', '', 'gcell-top');
-        top.append(el('span', isCore ? `NÚCLEO (${x + 1},${y + 1})` : `GENE (${x + 1},${y + 1})`));
-
-        let portLabel = '';
-        if (g.id === 'T') portLabel = '◆→◇ A';
-        else if (g.id === 'A') portLabel = 'T ◆→◇ A';
-        else if (g.id === 'I') portLabel = '◇ Recebe';
-        else if (g.targetCore) portLabel = `◆━━▶ ◇ ${g.targetCore}`;
-
-        if (portLabel) {
-          top.append(el('span', portLabel, 'port-beam'));
-        }
-
-        const title = el('div', `${def.icon} ${def.id}: ${def.name}`, 'gcell-title');
-        title.style.color = def.color;
-
-        let effectSummary = '';
-        if (g.id === 'I') effectSummary = 'Libera Impacto + Empurrão';
-        else if (g.id === 'T') effectSummary = 'Libera Guarda + Riposta';
-        else if (g.id === 'A') effectSummary = 'Abre Janela de Extração';
-        else if (g.id === 'F') {
-          effectSummary = g.targetCore === 'I' ? 'Ativo em I: +1 Golpe & +1 Empurrão' : 'Ativo em T: +2 Guarda (sobe p/ 5)';
-        } else if (g.id === 'R') {
-          effectSummary = 'Ativo em I: Libera Rajada (Alcance 2)';
-        } else if (g.id === 'V') {
-          effectSummary = 'Ativo em T: +2 PV ao absorver na Guarda';
-        } else if (g.id === 'Q') {
-          effectSummary = g.targetCore === 'I' ? 'Ativo em I: Duplica Golpe ([4,4] / [2,2,2])' : 'Ativo em T: Duplica Riposta ([2,2])';
-        } else if (g.id === 'B') {
-          effectSummary = 'Ativo em T: -1 de dano POR GOLPE';
-        } else if (g.id === 'M') {
-          effectSummary = 'Ativo em T: -2 de dano POR ATAQUE';
-        }
-
-        const desc = el('div', effectSummary, 'gcell-desc');
-        cell.append(top, title, desc);
-
-        // Se a peça é girável entre I e T (F: Rigidez ou Q: Repique), mostra o botão 🔄 Girar em 1 toque!
-        if (def.validCores && def.validCores.length >= 2 && state.outcome === 'ongoing') {
-          const nextCore = g.targetCore === 'I' ? 'T' : 'I';
-          const nextPreview =
-            g.id === 'F'
-              ? nextCore === 'T'
-                ? '+2 Guarda'
-                : '+1 Ataque'
-              : nextCore === 'T'
-                ? 'Riposta [2,2]'
-                : 'Ataque Duplo';
-          const rotBtn = el('button', `🔄 Girar p/ ${nextCore} (${nextPreview})`, 'btn-sm btn-warn');
-          rotBtn.type = 'button';
-          rotBtn.style.marginTop = '3px';
-          rotBtn.onclick = () => {
-            state = C.rotateGeneInGenome(state, g.id);
-            playSfx('graft');
-            showToast(`🔄 ${def.name} (${g.id}) girado para o Núcleo ${nextCore}!`, 'var(--warn)');
-            render();
-          };
-          cell.append(rotBtn);
-        }
-
-        mat.append(cell);
-      }
+    const pBadges = by('player-badges');
+    pBadges.replaceChildren();
+    if (pExpr.bPerHit > 0) {
+      pBadges.append(el('span', `🧱 Sua Couraça: -${pExpr.bPerHit} dano/golpe`, 'pole-stat'));
+    }
+    if (pExpr.mPerAttack > 0) {
+      pBadges.append(el('span', `🧽 Seu Amortecedor: -${pExpr.mPerAttack} dano/ataque`, 'pole-stat'));
+    }
+    if (state.playerPoison > 0) {
+      pBadges.append(el('span', `☠️ Veneno: ${state.playerPoison}/turno`, 'pole-stat'));
     }
 
-    // Reserva Genética
-    const resStrip = by('reserve-strip');
-    resStrip.replaceChildren();
-    if (state.reserve.length > 0) {
-      resStrip.append(el('small', '📦 Reserva Genética (clique p/ enxertar na Grade 3×3):'));
-      for (const rId of state.reserve) {
-        const def = C.GENES[rId];
-        for (const core of def.validCores) {
-          const b = el('button', `+ Enxertar ${def.icon} ${def.id} ◆→◇ ${core}`, 'btn-sm btn-good');
-          b.type = 'button';
-          b.onclick = () => {
-            state = C.installReserveGene(state, rId, core);
-            playSfx('graft');
-            render();
-          };
-          resStrip.append(b);
-        }
-      }
+    by('pole-atk-stat').textContent =
+      pExpr.hitCount > 1
+        ? `Seu Golpe: ${pExpr.hitCount}×${pExpr.hitDmg} (${pExpr.totalRawAttack} total)`
+        : `Seu Golpe: 1×${pExpr.hitDmg} (${pExpr.totalRawAttack} total)`;
+
+    by('pole-def-stat').textContent = `Sua Guarda: ${pExpr.guardValue} Escudo · Riposta: ${pExpr.riposteTotal}`;
+
+    const atkBox = by('player-atk-genes');
+    const defBox = by('player-def-genes');
+    atkBox.replaceChildren();
+    defBox.replaceChildren();
+
+    const atkGenes = state.playerGenes.filter(g => g.side === 'attack');
+    const defGenes = state.playerGenes.filter(g => g.side === 'defense');
+
+    if (atkGenes.length === 0) {
+      const n = el('div', 'Nenhum gene no Ataque (Golpe base: 4). Mova um gene da Defesa para cá se quiser bater mais forte!', '');
+      n.style.cssText = 'font-size:.76rem;color:var(--muted);padding:6px 2px';
+      atkBox.append(n);
     }
-  }
+    if (defGenes.length === 0) {
+      const n = el('div', 'Nenhum gene na Defesa (Guarda base: 4). Mova um gene do Ataque para cá se precisar bloquear um golpe forte!', '');
+      n.style.cssText = 'font-size:.76rem;color:var(--muted);padding:6px 2px';
+      defBox.append(n);
+    }
 
-  function renderActionsAndFooter() {
-    const expr = C.getPlayerExpression(state);
-    const grid = by('actions-grid');
-    grid.replaceChildren();
+    for (const g of state.playerGenes) {
+      const def = C.GENES[g.id];
+      const inAtk = g.side === 'attack';
+      const card = el('div', '', 'gene-slot-card');
+      card.style.borderLeft = `4px solid ${def.color}`;
 
-    // 1. Ação: Impacto (I)
-    const canImpact = C.canUseAction(state, 'IMPACTO');
-    const bImpact = el(
-      'button',
-      '',
-      `action-btn${state.selectedAction === 'IMPACTO' && canImpact ? ' selected' : ''}`
-    );
-    bImpact.type = 'button';
-    bImpact.disabled = !canImpact;
-    bImpact.style.borderTop = '3px solid #fb923c';
-    bImpact.innerHTML =
-      `<div style="display:flex;justify-content:space-between;font-weight:900;font-size:.81rem;color:#fb923c">` +
-      `<span>⚔️ Impacto [${expr.impactHits.join('+')}]</span><span>Alcance 1</span></div>` +
-      `<div style="font-size:.68rem;color:#cbdcd2">Golpeia e empurra ${expr.fOnI ? 2 : 1} casa(s). Clique num inimigo adjacente!</div>`;
-    bImpact.onclick = () => {
-      state = C.selectSkill(state, 'IMPACTO');
-      render();
-    };
-    grid.append(bImpact);
+      const top = el('div', '', 'gene-slot-top');
+      const title = el('b', `${def.icon} ${def.name}`, '');
+      title.style.color = def.color;
+      top.append(title);
 
-    // 2. Ação: Rajada (R → I)
-    const canRajada = C.canUseAction(state, 'RAJADA');
-    const bRajada = el(
-      'button',
-      '',
-      `action-btn${state.selectedAction === 'RAJADA' && canRajada ? ' selected' : ''}`
-    );
-    bRajada.type = 'button';
-    bRajada.disabled = !canRajada;
-    bRajada.style.borderTop = '3px solid #22d3ee';
-    bRajada.innerHTML =
-      `<div style="display:flex;justify-content:space-between;font-weight:900;font-size:.81rem;color:#22d3ee">` +
-      `<span>🌪️ Rajada ${expr.rajadaHits ? `[${expr.rajadaHits.join('+')}]` : '(Requer R→I)'}</span><span>Alcance 2</span></div>` +
-      `<div style="font-size:.68rem;color:#cbdcd2">Multigolpe à distância (2 casas) gerado por Ritmo (R→I).</div>`;
-    bRajada.onclick = () => {
-      state = C.selectSkill(state, 'RAJADA');
-      render();
-    };
-    grid.append(bRajada);
+      const nowEffect = el(
+        'div',
+        `✨ Ativo agora: ${inAtk ? def.attackTitle : def.defenseTitle}`,
+        'gene-effect-now'
+      );
 
-    // 3. Ação: Guarda & Riposta (T + T→A)
-    const canGuard = C.canUseAction(state, 'GUARDA');
-    const bGuard = el('button', '', `action-btn`);
-    bGuard.type = 'button';
-    bGuard.disabled = !canGuard;
-    bGuard.style.borderTop = '3px solid #38bdf8';
-    bGuard.innerHTML =
-      `<div style="display:flex;justify-content:space-between;font-weight:900;font-size:.81rem;color:#38bdf8">` +
-      `<span>🛡️ Ativar Guarda (${expr.guardValue})</span><span>Riposta [${expr.riposteHits.join('+')}]</span></div>` +
-      `<div style="font-size:.68rem;color:#cbdcd2">Absorver ≥ 1 dano abre Janela de Extração (T→A)${expr.vOnT ? ' e cura +2 PV' : ''}!</div>`;
-    bGuard.onclick = () => {
-      state = C.activateGuard(state);
-      playSfx('guard');
-      showToast(`🛡️ Guarda ${expr.guardValue} Ativada! Pronta p/ Riposta e Extração T→A!`, 'var(--info)');
-      render();
-    };
-    grid.append(bGuard);
+      const flipId = `btn-flip-${g.id}`;
+      const flipLabel = inAtk
+        ? `⇄ Mover p/ Defesa 🛡️ (vira: ${def.defenseTitle})`
+        : `⇄ Mover p/ Ataque ⚔️ (vira: ${def.attackTitle})`;
+      const flipBtn = el(
+        'button',
+        flipLabel,
+        `btn-sm ${inAtk ? 'btn-info' : 'btn-warn'}${coach?.highlightId === flipId ? ' spotlight' : ''}`
+      );
+      flipBtn.id = flipId;
+      flipBtn.type = 'button';
+      flipBtn.disabled = state.outcome !== 'ongoing';
+      flipBtn.onclick = () => {
+        state = C.toggleGeneSide(state, g.id);
+        playSfx('flip');
+        render();
+      };
 
-    const footer = by('turn-footer');
+      card.append(top, nowEffect, flipBtn);
+      if (inAtk) atkBox.append(card);
+      else defBox.append(card);
+    }
+
+    // Atualiza os 2 Grandes Botões de Decisão do Turno com Prévia Exata!
+    const decGrid = by('decision-grid');
     const outBar = by('outcome-bar');
-    const evoModal = by('evo-modal');
 
     if (state.outcome !== 'ongoing') {
-      footer.hidden = true;
+      decGrid.hidden = true;
       outBar.hidden = false;
       outBar.replaceChildren();
 
       if (state.outcome === 'win') {
         if (state.stageIndex < C.ENCOUNTERS.length - 1) {
           const nextEnc = C.ENCOUNTERS[state.stageIndex + 1];
-          const bEvo = el('button', `🧬 Avançar com seu Genoma para ${nextEnc.name} →`, 'btn-primary');
-          bEvo.style.width = '100%';
-          bEvo.onclick = () => openEvolutionModal();
-          outBar.append(bEvo);
-          if (state.evolutionPending) {
-            state.evolutionPending = false;
-            openEvolutionModal();
-          }
+          const bNext = el(
+            'button',
+            `🏆 Vitória! Avançar com seus Genes para ${nextEnc.name} (+6 PV) →`,
+            'btn-primary'
+          );
+          bNext.style.width = '100%';
+          bNext.onclick = () => {
+            state = C.createRunState(state.stageIndex + 1, {
+              playerGenes: state.playerGenes,
+              playerHp: state.playerHp,
+              tutorialDismissed: true,
+            });
+            render();
+          };
+          outBar.append(bNext);
         } else {
-          evoModal.hidden = true;
-          const bWin = el('button', '👑 VITÓRIA SUPREMA! Você Dominou Todos os Genomas! (Nova Caçada)', 'btn-primary');
+          const bWin = el(
+            'button',
+            '👑 VITÓRIA SUPREMA! Você Dominou Todos os 4 Combates! (Jogar Novamente)',
+            'btn-primary'
+          );
           bWin.style.width = '100%';
           bWin.onclick = () => {
             state = C.createRunState(0);
@@ -2508,30 +1378,50 @@ button:disabled{opacity:.38;cursor:not-allowed}
           outBar.append(bWin);
         }
       } else {
-        evoModal.hidden = true;
-        const bRetry = el('button', '🔄 Tentar esta Arena novamente', 'btn-primary');
+        const bRetry = el('button', '🔄 Tentar este combate novamente', 'btn-primary');
         bRetry.style.width = '100%';
         bRetry.onclick = () => {
           state = C.createRunState(state.stageIndex, {
-            player: { ...state.player, hp: state.player.maxHp },
-            genome: state.genome,
-            reserve: state.reserve,
-            mutations: state.mutations,
+            playerGenes: state.playerGenes,
+            playerHp: state.playerMaxHp,
+            tutorialDismissed: state.tutorialDismissed,
           });
           render();
         };
         outBar.append(bRetry);
       }
     } else {
-      footer.hidden = false;
+      decGrid.hidden = false;
       outBar.hidden = true;
-      evoModal.hidden = true;
-      const endBtn = by('btn-end-turn');
-      endBtn.className = state.combatActionUsed ? 'btn-primary' : 'btn-warn';
-      endBtn.style.cssText = 'width:100%;min-height:42px;font-size:.88rem';
-      endBtn.textContent = state.combatActionUsed
-        ? '⏭️ Ação Concluída · Encerrar Turno (Inimigos Agem) →'
-        : `⏭️ Encerrar Turno (${state.stepsLeft} Passos restantes · Ação disponível)`;
+
+      const btnAtk = by('btn-act-attack');
+      const btnGrd = by('btn-act-guard');
+
+      btnAtk.className = `decision-btn ${attackOutcome.killsEnemy ? 'btn-primary' : 'btn-warn'}${coach?.highlightId === 'btn-act-attack' ? ' spotlight' : ''}`;
+      by('atk-btn-title').textContent =
+        pExpr.hitCount > 1
+          ? `⚔️ Atacar Agora (${pExpr.hitCount}×${pExpr.hitDmg} = ${pExpr.totalRawAttack})`
+          : `⚔️ Atacar Agora (${pExpr.totalRawAttack} de dano)`;
+
+      by('atk-btn-preview').textContent = attackOutcome.killsEnemy
+        ? `💥 Causa ${attackOutcome.danoCausado} de dano líquido e VENCE O COMBATE AGORA!`
+        : `📊 Prévia: Você causa ${attackOutcome.danoCausado} de dano → Inimigo revida causando ${attackOutcome.danoRecebidoNoRevide} de dano em você.`;
+
+      const isTotalBlock = !enemyIsGuarding && guardOutcome.danoSofrido === 0;
+      btnGrd.className = `decision-btn ${isTotalBlock ? 'btn-good' : 'btn-info'}${coach?.highlightId === 'btn-act-guard' ? ' spotlight' : ''}`;
+      by('grd-btn-title').textContent = `🛡️ Defender & Abrir Brecha (Guarda ${pExpr.guardValue})`;
+
+      if (isTotalBlock) {
+        by('grd-btn-preview').textContent =
+          `✨ BLOQUEIO TOTAL (0 de dano sofrido)! Devolve ${guardOutcome.riposteCausada} de Riposta` +
+          (guardOutcome.curaRecebida ? `, cura +${guardOutcome.curaRecebida} PV` : '') +
+          ` e ✂️ EXPÕE os genes do inimigo!`;
+      } else {
+        by('grd-btn-preview').textContent =
+          `📊 Prévia: Bloqueia ${guardOutcome.absorvido} de dano (sofre ${guardOutcome.danoSofrido})` +
+          (guardOutcome.curaRecebida ? `, cura +${guardOutcome.curaRecebida} PV` : '') +
+          ` e ✂️ EXPÕE os genes do inimigo!`;
+      }
     }
 
     const feed = by('event-feed');
@@ -2541,96 +1431,44 @@ button:disabled{opacity:.38;cursor:not-allowed}
     }
   }
 
-  function onTileClick(x, y, { actTarget, reach, enemy }) {
-    if (state.outcome !== 'ongoing') return;
-
-    if (actTarget && actTarget.kind === 'enemy') {
-      state = C.useSkillOnTile(state, x, y);
-      const la = state.lastAction;
-      if (la && la.backstab) {
-        playSfx('crit');
-        showToast('🗡️ BACKSTAB! Genoma inimigo EXPOSTO para cirurgia!', 'var(--accent)');
-      } else {
-        playSfx('slash');
-      }
-      triggerShake('arena-card');
-      render();
-      return;
-    }
-
-    if (enemy && !state.combatActionUsed) {
-      for (const fallback of ['IMPACTO', 'RAJADA']) {
-        if (
-          C.canUseAction(state, fallback) &&
-          C.getActionTargets(state, fallback).some(t => t.x === x && t.y === y)
-        ) {
-          state = C.selectSkill(state, fallback);
-          state = C.useSkillOnTile(state, x, y, fallback);
-          playSfx('slash');
-          triggerShake('arena-card');
-          render();
-          return;
-        }
-      }
-    }
-
-    if (reach) {
-      state = C.movePlayer(state, x, y);
-      playSfx('step');
-      render();
-    }
-  }
-
-  function openEvolutionModal() {
-    const modal = by('evo-modal');
-    const list = by('evo-list');
-    list.replaceChildren();
-    for (const perk of C.MUTATION_PERKS) {
-      const already = state.mutations.includes(perk.id);
-      const b = el('button', '', already ? 'btn-ghost' : 'btn-good');
-      b.type = 'button';
-      b.style.textAlign = 'left';
-      b.style.padding = '10px 12px';
-      b.innerHTML =
-        `<b style="display:block;color:var(--accent);font-size:.9rem">${perk.icon} ${perk.name}</b>` +
-        `<span style="font-size:.78rem;color:var(--text)">${perk.desc}</span>`;
-      b.onclick = () => {
-        modal.hidden = true;
-        state = C.chooseEvolutionAndAdvance(state, perk.id);
-        playSfx('graft');
-        render();
-      };
-      list.append(b);
-    }
-    modal.hidden = false;
-  }
-
   function renderAtlasModal() {
     const list = by('atlas-list');
     list.replaceChildren();
     for (const g of Object.values(C.GENES)) {
       const d = el('div', '', '');
-      d.style.cssText = 'background:var(--well);border:1px solid var(--edge);border-radius:8px;padding:7px 9px';
+      d.style.cssText = 'background:var(--well);border:1px solid var(--edge);border-radius:10px;padding:9px 11px';
       d.innerHTML =
-        `<b style="color:${g.color}">${g.icon} Gene ${g.id} — ${g.name} (${g.kind === 'core' ? 'Núcleo' : g.extractable ? 'Modificador Extraível' : 'Modificador'})</b>` +
-        `<div>${g.desc}</div>`;
+        `<b style="color:${g.color};font-size:.9rem">${g.icon} ${g.name}</b>` +
+        `<div style="margin-top:3px"><span style="color:#fb923c;font-weight:800">⚔️ No Ataque:</span> ${g.attackTitle}</div>` +
+        `<div><span style="color:#38bdf8;font-weight:800">🛡️ Na Defesa:</span> ${g.defenseTitle}</div>`;
       list.append(d);
     }
   }
 
   function render() {
+    const coach = C.getTutorialCoach(state);
     renderStageTrack();
-    renderExtractionTray();
-    renderHud();
-    renderBoard();
-    renderGenomeMatrix();
-    renderActionsAndFooter();
+    renderCoach(coach);
+    renderEnemy(coach);
+    renderPlayer(coach);
   }
 
-  by('btn-end-turn').onclick = () => {
-    state = C.endTurn(state);
+  by('btn-act-attack').onclick = () => {
+    state = C.executeTurnAction(state, 'attack');
+    playSfx('attack');
+    triggerShake('enemy-card');
     render();
   };
+
+  by('btn-act-guard').onclick = () => {
+    state = C.executeTurnAction(state, 'guard');
+    playSfx('guard');
+    if (state.enemyExposed) {
+      showToast('🧬 BRECHA ABERTA! Agora clique em [✂️ Arrancar Gene] no card do inimigo!', 'var(--accent)');
+    }
+    render();
+  };
+
   by('btn-sfx').onclick = () => {
     sfxEnabled = !sfxEnabled;
     by('btn-sfx').textContent = sfxEnabled ? '🔊 Som' : '🔇 Mudo';
