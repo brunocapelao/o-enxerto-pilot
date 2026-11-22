@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>O Enxerto v7.0 · Lootbound 5×4 + Spore + Shogun Showdown 1D</title>
+  <title>O Enxerto v7.5 · Quimera Viva (Shogun 1D + Lootbound 5×4 + Spore)</title>
   <style>
     :root {
-      --bg: #070c0a;
-      --panel: #0e1814;
-      --panel-2: #14231d;
-      --border: #233c31;
-      --border-hi: #386350;
-      --text: #e9f6f0;
-      --muted: #8fb3a3;
+      --bg: #060b09;
+      --panel: #0d1713;
+      --panel-2: #13221c;
+      --border: #213a2f;
+      --border-hi: #386552;
+      --text: #eaf7f1;
+      --muted: #8cb2a1;
       --accent: #a3e635;
       --gold: #facc15;
       --danger: #fb7185;
@@ -26,54 +26,76 @@
     html, body {
       margin: 0;
       padding: 0;
-      background: radial-gradient(circle at 20% 0%, #10241b 0%, var(--bg) 60%);
+      background: radial-gradient(circle at 20% 0%, #10271d 0%, var(--bg) 62%);
       color: var(--text);
       font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.4;
       min-height: 100vh;
     }
 
+    @keyframes screenShake {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-5px, 2px); }
+      40% { transform: translate(5px, -2px); }
+      60% { transform: translate(-3px, -1px); }
+      80% { transform: translate(3px, 1px); }
+    }
+    .shake { animation: screenShake 0.28s ease-in-out; }
+
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translate(-50%, 6px) scale(0.8); }
+      18% { opacity: 1; transform: translate(-50%, -6px) scale(1.1); }
+      80% { opacity: 1; transform: translate(-50%, -26px) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -40px) scale(0.92); }
+    }
+
+    @keyframes pulseWarn {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(251, 113, 133, 0.5); }
+      50% { box-shadow: 0 0 0 5px rgba(251, 113, 133, 0); }
+    }
+
+    @keyframes pulseSynapse {
+      0%, 100% { opacity: 0.72; stroke-dashoffset: 0; }
+      50% { opacity: 1; stroke-dashoffset: -12; }
+    }
+
     header.topbar {
       position: sticky;
       top: 0;
       z-index: 40;
-      background: rgba(7, 12, 10, 0.94);
+      background: rgba(6, 11, 9, 0.94);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
-      padding: 10px 14px;
+      padding: 9px 14px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
     }
 
     .brand { display: flex; align-items: center; gap: 9px; }
-    .brand h1 { margin: 0; font-size: 1rem; font-weight: 900; letter-spacing: -0.01em; }
-    .brand .sub { font-size: 0.74rem; color: var(--muted); }
+    .brand h1 { margin: 0; font-size: 0.98rem; font-weight: 900; letter-spacing: -0.01em; }
+    .brand .sub { font-size: 0.72rem; color: var(--muted); }
 
-    .hud-pills {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-    }
+    .hud-pills { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
     .pill {
       background: var(--panel-2);
       border: 1px solid var(--border-hi);
       border-radius: 999px;
       padding: 4px 10px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 800;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       white-space: nowrap;
     }
     .pill.hp { border-color: #fb7185; color: #fecdd3; }
     .pill.shield { border-color: #38bdf8; color: #bae6fd; }
     .pill.recomb { border-color: #a3e635; color: #d9f99d; }
     .pill.wave { border-color: #facc15; color: #fef08a; }
+    .pill.boss { border-color: #c084fc; color: #f3e8ff; }
 
     .btn {
       appearance: none;
@@ -82,7 +104,7 @@
       color: var(--text);
       border-radius: 9px;
       padding: 7px 11px;
-      font-size: 0.8rem;
+      font-size: 0.79rem;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
@@ -92,22 +114,22 @@
       text-decoration: none;
       transition: all 0.13s ease;
     }
-    .btn:hover:not(:disabled) { border-color: var(--accent); background: #1a3027; }
+    .btn:hover:not(:disabled) { border-color: var(--accent); background: #1a3228; }
     .btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .btn.primary { background: var(--accent); color: #07120c; border-color: var(--accent); }
     .btn.primary:hover:not(:disabled) { background: #bef264; }
     .btn.gold { background: rgba(250, 204, 21, 0.16); border-color: var(--gold); color: #fef08a; }
     .btn.gold:hover:not(:disabled) { background: rgba(250, 204, 21, 0.28); }
-    .btn.danger { background: rgba(251, 113, 133, 0.16); border-color: var(--danger); color: #fecdd3; }
+    .btn.cyan { background: rgba(56, 189, 248, 0.16); border-color: var(--cyan); color: #bae6fd; }
 
     /* SPLIT-SCREEN WORKSPACE */
     .split-layout {
-      max-width: 1400px;
+      max-width: 1420px;
       margin: 0 auto;
-      padding: 14px 12px 36px;
+      padding: 12px 12px 36px;
       display: grid;
       grid-template-columns: minmax(0, 1.24fr) minmax(0, 0.96fr);
-      gap: 14px;
+      gap: 13px;
       align-items: start;
     }
     @media (max-width: 980px) {
@@ -127,29 +149,61 @@
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 9px;
     }
-    .panel-title { margin: 0; font-size: 0.98rem; font-weight: 900; display: flex; align-items: center; gap: 6px; }
+    .panel-title { margin: 0; font-size: 0.96rem; font-weight: 900; display: flex; align-items: center; gap: 6px; }
     .hint-bar {
       background: rgba(250, 204, 21, 0.08);
       border: 1px solid rgba(250, 204, 21, 0.28);
       color: #fef08a;
       border-radius: 9px;
       padding: 7px 10px;
-      font-size: 0.78rem;
+      font-size: 0.77rem;
+      margin-bottom: 10px;
+    }
+
+    /* WAVE CLEAR & LOOTBOUND BOSS DRAFT */
+    .wave-banner {
+      background: linear-gradient(135deg, rgba(163, 230, 53, 0.16), rgba(192, 132, 252, 0.12));
+      border: 1.5px solid var(--accent);
+      border-radius: 11px;
+      padding: 12px;
       margin-bottom: 11px;
     }
-    .wave-banner {
-      background: linear-gradient(135deg, rgba(163, 230, 53, 0.18), rgba(56, 189, 248, 0.12));
-      border: 1.5px solid var(--accent);
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 12px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
+    .draft-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
+      margin-top: 10px;
+    }
+    @media (max-width: 600px) {
+      .draft-grid { grid-template-columns: 1fr; }
+    }
+    .draft-card {
+      background: #0d1814;
+      border: 1.5px solid var(--border-hi);
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      color: var(--text);
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .draft-card:hover {
+      border-color: var(--gold);
+      background: #142720;
+      transform: translateY(-2px);
+    }
+    .draft-boss-warn {
+      font-size: 0.7rem;
+      color: #f3e8ff;
+      background: rgba(192, 132, 252, 0.14);
+      border: 1px solid rgba(192, 132, 252, 0.35);
+      border-radius: 6px;
+      padding: 4px 6px;
     }
 
     /* ==================== LEFT: SHOGUN 1D COMBAT STRIP ==================== */
@@ -158,11 +212,12 @@
       grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 6px;
       margin-bottom: 10px;
+      position: relative;
     }
     .strip-cell {
       min-width: 0;
-      min-height: 112px;
-      background: #0b1511;
+      min-height: 124px;
+      background: #0a1410;
       border: 1.5px solid var(--border);
       border-radius: 10px;
       padding: 5px 3px;
@@ -172,30 +227,68 @@
       justify-content: space-between;
       position: relative;
       text-align: center;
-      transition: all 0.18s ease;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
     }
     .strip-cell.threat {
-      background: repeating-linear-gradient(-45deg, rgba(251, 113, 133, 0.18), rgba(251, 113, 133, 0.18) 6px, rgba(11, 21, 17, 0.9) 6px, rgba(11, 21, 17, 0.9) 12px);
+      background: repeating-linear-gradient(-45deg, rgba(251, 113, 133, 0.19), rgba(251, 113, 133, 0.19) 6px, rgba(10, 20, 16, 0.92) 6px, rgba(10, 20, 16, 0.92) 12px);
       border-color: var(--danger);
     }
     .strip-cell.acid {
-      box-shadow: inset 0 -10px 14px rgba(163, 230, 53, 0.22);
+      box-shadow: inset 0 -12px 16px rgba(163, 230, 53, 0.25);
     }
     .strip-cell.player-cell {
       border-color: var(--accent);
-      background: linear-gradient(180deg, rgba(163, 230, 53, 0.12), #0b1511);
+      background: linear-gradient(180deg, rgba(163, 230, 53, 0.14), #0a1410);
     }
     .strip-cell.preview-hit {
-      outline: 2px solid var(--gold);
+      outline: 2.5px solid var(--gold);
       outline-offset: -2px;
     }
-    .strip-cell.clickable-step {
-      cursor: pointer;
-    }
+    .strip-cell.clickable-step { cursor: pointer; }
     .strip-cell.clickable-step:hover {
       border-color: var(--cyan);
-      background: rgba(56, 189, 248, 0.12);
+      background: rgba(56, 189, 248, 0.14);
     }
+    .strip-cell.clickable-swap {
+      cursor: pointer;
+      border-color: var(--cyan);
+      box-shadow: inset 0 0 12px rgba(56, 189, 248, 0.22);
+    }
+    .strip-cell.clickable-swap:hover {
+      background: rgba(56, 189, 248, 0.2);
+      transform: translateY(-2px);
+    }
+    .strip-cell.flash-hit {
+      background: rgba(251, 113, 133, 0.42) !important;
+      border-color: #fff !important;
+      transform: scale(1.05);
+    }
+    .strip-cell.flash-boom {
+      background: rgba(250, 204, 21, 0.45) !important;
+      border-color: var(--gold) !important;
+      transform: scale(1.08);
+    }
+
+    .float-popup {
+      position: absolute;
+      left: 50%;
+      top: 18px;
+      z-index: 25;
+      pointer-events: none;
+      font-size: 0.78rem;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 7px;
+      background: rgba(6, 11, 9, 0.94);
+      border: 1.5px solid var(--gold);
+      color: #fef08a;
+      white-space: nowrap;
+      animation: floatUp 0.95s ease-out forwards;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+    .float-popup.dmg { border-color: var(--danger); color: #fecdd3; }
+    .float-popup.good { border-color: var(--accent); color: #d9f99d; }
+
     .s-top {
       width: 100%;
       display: flex;
@@ -206,34 +299,25 @@
       padding: 0 2px;
     }
     .intent-tag {
-      background: rgba(251, 113, 133, 0.25);
+      background: rgba(251, 113, 133, 0.28);
       border: 1px solid var(--danger);
       color: #fecdd3;
       border-radius: 5px;
       padding: 1px 4px;
-      font-size: 0.63rem;
+      font-size: 0.62rem;
       font-weight: 900;
       animation: pulseWarn 1.2s infinite;
     }
-    @keyframes pulseWarn {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(251, 113, 133, 0.45); }
-      50% { box-shadow: 0 0 0 4px rgba(251, 113, 133, 0); }
-    }
     .actor-sprite {
-      font-size: 1.75rem;
+      font-size: 1.7rem;
       line-height: 1;
-      position: relative;
       display: inline-flex;
       align-items: center;
       gap: 2px;
     }
-    .facing-arrow {
-      font-size: 0.72rem;
-      font-weight: 900;
-      color: var(--gold);
-    }
+    .facing-arrow { font-size: 0.74rem; font-weight: 900; color: var(--gold); }
     .actor-name {
-      font-size: 0.62rem;
+      font-size: 0.61rem;
       font-weight: 800;
       color: var(--text);
       max-width: 100%;
@@ -241,22 +325,36 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .hp-badge {
-      font-size: 0.66rem;
+    .trait-chip {
+      font-size: 0.56rem;
       font-weight: 900;
-      background: rgba(0, 0, 0, 0.55);
+      padding: 1px 4px;
+      border-radius: 5px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #bae6fd;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .trait-chip.boom { background: rgba(251, 146, 60, 0.18); border-color: rgba(251, 146, 60, 0.45); color: #fed7aa; }
+    .trait-chip.shield { background: rgba(250, 204, 21, 0.16); border-color: rgba(250, 204, 21, 0.45); color: #fef08a; }
+    .hp-badge {
+      font-size: 0.65rem;
+      font-weight: 900;
+      background: rgba(0, 0, 0, 0.58);
       border-radius: 5px;
       padding: 1px 5px;
       white-space: nowrap;
     }
-    .loot-chip {
-      font-size: 0.6rem;
-      color: #d9f99d;
-      background: rgba(163, 230, 53, 0.12);
-      border: 1px solid rgba(163, 230, 53, 0.35);
-      border-radius: 5px;
+    .swap-hint {
+      font-size: 0.58rem;
+      font-weight: 900;
+      color: #7dd3fc;
+      background: rgba(56, 189, 248, 0.16);
+      border-radius: 4px;
       padding: 0 4px;
-      margin-top: 2px;
     }
     .extract-btn {
       width: 100%;
@@ -264,27 +362,21 @@
       background: var(--gold);
       color: #090e0b;
       border-radius: 6px;
-      font-size: 0.62rem;
+      font-size: 0.61rem;
       font-weight: 900;
       padding: 3px 2px;
       cursor: pointer;
-      animation: pulseGold 1s infinite;
-    }
-    @keyframes pulseGold {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.04); }
     }
 
     @media (max-width: 600px) {
       .strip-grid { gap: 3px; }
-      .strip-cell { min-height: 92px; padding: 3px 1px; }
+      .strip-cell { min-height: 98px; padding: 3px 1px; }
       .actor-sprite { font-size: 1.25rem; }
       .actor-name { display: none; }
-      .hp-badge { font-size: 0.56rem; padding: 1px 3px; }
-      .intent-tag { font-size: 0.54rem; padding: 0 2px; }
+      .trait-chip { font-size: 0.5rem; padding: 0 2px; }
+      .hp-badge { font-size: 0.54rem; padding: 1px 2px; }
     }
 
-    /* CONTROLS & COMBO QUEUE */
     .controls-row {
       display: flex;
       flex-wrap: wrap;
@@ -296,27 +388,22 @@
       background: #0a130f;
       border: 1px solid var(--border-hi);
       border-radius: 10px;
-      padding: 9px;
-      margin-bottom: 11px;
+      padding: 8px 9px;
+      margin-bottom: 10px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
     }
-    .queue-slots {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
+    .queue-slots { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
     .q-slot {
       min-width: 82px;
       padding: 6px 8px;
       border-radius: 8px;
       border: 1.5px dashed var(--border-hi);
       background: rgba(255, 255, 255, 0.02);
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       font-weight: 800;
       color: var(--muted);
       text-align: center;
@@ -324,15 +411,15 @@
     .q-slot.filled {
       border-style: solid;
       border-color: var(--gold);
-      background: rgba(250, 204, 21, 0.14);
+      background: rgba(250, 204, 21, 0.16);
       color: #fef08a;
       cursor: pointer;
     }
 
-    /* GENERATED WEAPON CARDS (LIVE FROM 5x4!) */
+    /* GENERATED WEAPON CARDS */
     .weapons-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
       gap: 8px;
       margin-bottom: 10px;
     }
@@ -345,49 +432,32 @@
       flex-direction: column;
       gap: 5px;
       cursor: pointer;
-      transition: all 0.13s ease;
+      transition: all 0.14s ease;
       text-align: left;
       color: var(--text);
     }
-    .weapon-card:hover:not(.disabled) {
-      border-color: var(--accent);
-      transform: translateY(-1px);
-    }
+    .weapon-card:hover:not(.disabled) { border-color: var(--accent); transform: translateY(-1px); }
     .weapon-card.mutated {
-      border-color: rgba(250, 204, 21, 0.55);
-      background: linear-gradient(155deg, #172a21 0%, #121f19 100%);
+      border-color: rgba(250, 204, 21, 0.6);
+      background: linear-gradient(155deg, #172d23 0%, #111f19 100%);
     }
     .weapon-card.queued {
       border-color: var(--gold);
-      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.4);
+      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.45);
     }
-    .weapon-card.disabled {
-      opacity: 0.48;
-      cursor: not-allowed;
-    }
-    .wc-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 4px;
-    }
-    .wc-name { font-size: 0.85rem; font-weight: 900; }
+    .weapon-card.disabled { opacity: 0.48; cursor: not-allowed; }
+    .wc-head { display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+    .wc-name { font-size: 0.84rem; font-weight: 900; }
     .wc-lvl {
-      font-size: 0.65rem;
+      font-size: 0.64rem;
       font-weight: 900;
       padding: 1px 6px;
       border-radius: 999px;
-      background: rgba(163, 230, 53, 0.15);
+      background: rgba(163, 230, 53, 0.16);
       color: #bef264;
       border: 1px solid rgba(163, 230, 53, 0.35);
     }
-    .wc-stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      font-size: 0.72rem;
-      font-weight: 800;
-    }
+    .wc-stats { display: flex; flex-wrap: wrap; gap: 5px; font-size: 0.72rem; font-weight: 800; }
     .wc-dmg { color: var(--orange); }
     .wc-cd { color: var(--cyan); }
     .wc-mini {
@@ -403,7 +473,7 @@
       width: 20px;
       height: 18px;
       border-radius: 4px;
-      font-size: 0.66rem;
+      font-size: 0.65rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -414,14 +484,9 @@
     .wm-box.hit { border-color: var(--danger); background: rgba(251, 113, 133, 0.25); }
     .wm-box.mv { border-color: var(--cyan); background: rgba(56, 189, 248, 0.22); }
     .wm-box.sp { border-color: var(--gold); background: rgba(250, 204, 21, 0.2); }
-
-    .wc-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
+    .wc-tags { display: flex; flex-wrap: wrap; gap: 4px; }
     .tag-chip {
-      font-size: 0.64rem;
+      font-size: 0.63rem;
       font-weight: 800;
       padding: 1px 5px;
       border-radius: 5px;
@@ -435,30 +500,55 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 7px 9px;
-      max-height: 92px;
+      max-height: 88px;
       overflow-y: auto;
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       color: var(--muted);
     }
     .combat-log div { margin-bottom: 2px; }
     .combat-log div:first-child { color: var(--text); font-weight: 700; }
 
-    /* ==================== RIGHT: LOOTBOUND 5×4 ORGANISM GRID ==================== */
+    /* ==================== RIGHT: SPORE CHIMERA + LOOTBOUND 5×4 ==================== */
+    .chimera-card {
+      background: linear-gradient(135deg, #10241c 0%, #09120e 100%);
+      border: 1px solid var(--border-hi);
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .chimera-svg-wrap {
+      width: 96px;
+      height: 68px;
+      flex-shrink: 0;
+      background: radial-gradient(circle, rgba(163,230,53,0.12) 0%, rgba(7,12,10,0.9) 75%);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .chimera-meta { flex: 1; min-width: 0; }
+    .chimera-meta h3 { margin: 0 0 2px; font-size: 0.84rem; font-weight: 900; color: #d9f99d; }
+    .chimera-meta p { margin: 0; font-size: 0.71rem; color: var(--muted); }
+
     .inv-toolbar {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 9px;
+      margin-bottom: 8px;
     }
     .holding-bar {
       background: rgba(56, 189, 248, 0.12);
       border: 1px solid var(--cyan);
       color: #bae6fd;
       border-radius: 9px;
-      padding: 7px 10px;
-      font-size: 0.77rem;
+      padding: 7px 9px;
+      font-size: 0.75rem;
       font-weight: 700;
       margin-bottom: 9px;
       display: flex;
@@ -468,22 +558,41 @@
       gap: 6px;
     }
 
+    /* 5×4 GRID WITH SVG SYNAPSE OVERLAY & MERGED SHAPES */
+    .grid-stage {
+      position: relative;
+      margin-bottom: 11px;
+    }
     .grid-5x4 {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 5px;
-      background: #08100c;
+      gap: 4px;
+      background: #070e0b;
       border: 1.5px solid var(--border-hi);
       border-radius: 11px;
       padding: 7px;
-      margin-bottom: 11px;
       user-select: none;
     }
+    .synapse-svg {
+      position: absolute;
+      inset: 7px;
+      width: calc(100% - 14px);
+      height: calc(100% - 14px);
+      pointer-events: none;
+      z-index: 8;
+    }
+    .synapse-line {
+      stroke-width: 2.5;
+      stroke-dasharray: 6 4;
+      stroke-linecap: round;
+      animation: pulseSynapse 1.3s linear infinite;
+    }
+
     .g-cell {
       aspect-ratio: 1 / 1;
-      min-height: 56px;
-      background: #0f1b16;
-      border: 1.5px solid #1f352b;
+      min-height: 54px;
+      background: #0e1915;
+      border: 1.5px solid #1d3228;
       border-radius: 8px;
       position: relative;
       display: flex;
@@ -491,40 +600,45 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.11s ease;
+      transition: background 0.11s ease, border-color 0.11s ease;
       overflow: hidden;
     }
-    .g-cell:hover { border-color: var(--border-hi); }
     .g-cell.organ {
-      background: linear-gradient(145deg, #1d3128 0%, #13211b 100%);
+      background: linear-gradient(145deg, #21362c 0%, #15241e 100%);
       border-color: var(--orange);
     }
     .g-cell.variation {
-      background: linear-gradient(145deg, #21253a 0%, #15192a 100%);
+      background: linear-gradient(145deg, #252942 0%, #171a2d 100%);
       border-color: var(--purple);
     }
+    /* Merged tetromino joints! */
+    .g-cell.join-r { border-top-right-radius: 2px; border-bottom-right-radius: 2px; border-right-style: dashed; border-right-color: rgba(255,255,255,0.22); }
+    .g-cell.join-l { border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-left-style: dashed; border-left-color: rgba(255,255,255,0.22); }
+    .g-cell.join-b { border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; border-bottom-style: dashed; border-bottom-color: rgba(255,255,255,0.22); }
+    .g-cell.join-t { border-top-left-radius: 2px; border-top-right-radius: 2px; border-top-style: dashed; border-top-color: rgba(255,255,255,0.22); }
+
     .g-cell.selected-piece {
       outline: 2.5px solid var(--cyan);
       outline-offset: -2px;
-      filter: brightness(1.18);
+      filter: brightness(1.2);
     }
     .g-cell.ghost-ok {
-      background: rgba(163, 230, 53, 0.25) !important;
+      background: rgba(163, 230, 53, 0.28) !important;
       border-color: var(--accent) !important;
     }
     .g-cell.ghost-bad {
-      background: rgba(251, 113, 133, 0.28) !important;
+      background: rgba(251, 113, 133, 0.3) !important;
       border-color: var(--danger) !important;
     }
     .g-cell.star-projected {
-      box-shadow: inset 0 0 0 2px rgba(250, 204, 21, 0.65);
+      box-shadow: inset 0 0 0 1.5px rgba(250, 204, 21, 0.45);
     }
     .g-cell.star-linked {
-      box-shadow: inset 0 0 0 2.5px var(--gold), 0 0 10px rgba(250, 204, 21, 0.35);
+      box-shadow: inset 0 0 0 2.5px var(--gold), 0 0 12px rgba(250, 204, 21, 0.4);
     }
-    .g-icon { font-size: 1.35rem; line-height: 1; }
+    .g-icon { font-size: 1.32rem; line-height: 1; z-index: 2; }
     .g-lbl {
-      font-size: 0.56rem;
+      font-size: 0.55rem;
       font-weight: 800;
       color: var(--text);
       margin-top: 2px;
@@ -532,6 +646,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      z-index: 2;
     }
     .star-badge {
       position: absolute;
@@ -540,34 +655,36 @@
       font-size: 0.72rem;
       font-weight: 900;
       color: var(--gold);
-      text-shadow: 0 0 5px rgba(250, 204, 21, 0.9);
+      text-shadow: 0 0 6px rgba(250, 204, 21, 0.95);
       pointer-events: none;
+      z-index: 9;
     }
     .star-ghost-badge {
       position: absolute;
       bottom: 2px;
       left: 3px;
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 900;
       color: #fde047;
       pointer-events: none;
+      z-index: 9;
     }
 
-    /* BANDEJA DE LOOT (RESERVA) */
+    /* BANDEJA DE LOOT */
     .reserve-title {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 900;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 7px;
+      margin-bottom: 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .reserve-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
       gap: 7px;
     }
     .res-card {
@@ -587,12 +704,12 @@
     .res-card.active {
       border-color: var(--cyan);
       background: rgba(56, 189, 248, 0.14);
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.45);
     }
     .res-head { display: flex; justify-content: space-between; align-items: center; gap: 4px; }
-    .res-name { font-size: 0.8rem; font-weight: 900; }
+    .res-name { font-size: 0.79rem; font-weight: 900; }
     .res-kind {
-      font-size: 0.58rem;
+      font-size: 0.56rem;
       font-weight: 900;
       padding: 1px 5px;
       border-radius: 999px;
@@ -600,7 +717,7 @@
     }
     .res-kind.organ { background: rgba(251, 146, 60, 0.18); color: #fdba74; border: 1px solid rgba(251, 146, 60, 0.4); }
     .res-kind.variation { background: rgba(192, 132, 252, 0.18); color: #e9d5ff; border: 1px solid rgba(192, 132, 252, 0.4); }
-    .res-desc { font-size: 0.68rem; color: var(--muted); }
+    .res-desc { font-size: 0.67rem; color: var(--muted); }
 
     .mini-shape {
       display: inline-grid;
@@ -623,7 +740,7 @@
     }
     .ms-cell.fill-organ { background: var(--orange); }
     .ms-cell.fill-var { background: var(--purple); }
-    .ms-cell.star { background: rgba(250, 204, 21, 0.2); border: 1px solid var(--gold); color: var(--gold); font-weight: 900; }
+    .ms-cell.star { background: rgba(250, 204, 21, 0.22); border: 1px solid var(--gold); color: var(--gold); font-weight: 900; }
   </style>
 </head>
 <body>
@@ -631,8 +748,8 @@
     <div class="brand">
       <div style="font-size:1.45rem">🧬</div>
       <div>
-        <h1>O Enxerto v7.0 · Tela Dividida (Shogun 1D + Lootbound 5×4)</h1>
-        <div class="sub">Recombine Órgãos e Variações com ★ direcionais durante a luta para gerar golpes estilo Shogun!</div>
+        <h1>O Enxerto v7.5 · Quimera Viva (Shogun 1D + Lootbound 5×4 + Spore)</h1>
+        <div class="sub">Recombine peças com ★ durante a luta, use ⚡ Troca Rápida e molde tanto sua Quimera quanto o Chefe Final!</div>
       </div>
     </div>
     <div class="hud-pills">
@@ -640,17 +757,18 @@
       <span class="pill hp" id="hud-hp">❤️ 14/14</span>
       <span class="pill shield" id="hud-shield">🛡️ 0</span>
       <span class="pill recomb" id="hud-recomb">🧬 Ajustes: 1/1</span>
+      <span class="pill boss" id="hud-boss" title="Genes rejeitados que fortaleceram o Chefe Final">👑 Chefe: 0</span>
       <button class="btn" id="btn-sound">🔊 Som</button>
       <button class="btn" id="btn-restart">🔄 Nova Run</button>
       <a class="btn gold" href="./shogun.html">🎴 De/Para 42 Armas</a>
     </div>
   </header>
 
-  <main class="split-layout">
-    <!-- ==================== ESQUERDA / TOPO: COMBATE 1D (SHOGUN SHOWDOWN) ==================== -->
-    <section class="panel">
+  <main class="split-layout" id="main-workspace">
+    <!-- ==================== ESQUERDA: COMBATE 1D CINÉTICO ==================== -->
+    <section class="panel" id="combat-panel">
       <div class="panel-header">
-        <h2 class="panel-title" id="wave-title">⚔️ Onda 1 · Corredor do Escorpião</h2>
+        <h2 class="panel-title" id="wave-title">⚔️ Onda 1 · Emboscada Explosiva</h2>
         <span style="font-size:0.74rem; color:var(--muted);" id="turn-label">Turno 1</span>
       </div>
 
@@ -660,35 +778,41 @@
       <!-- FAIXA 1D DE 7 CASAS -->
       <div class="strip-grid" id="combat-strip"></div>
 
-      <!-- CONTROLES DE MOVIMENTO + FILA DE COMBO -->
+      <!-- CONTROLES + ASSINATURA TROCA RÁPIDA -->
       <div class="controls-row">
-        <button class="btn" id="btn-left" title="Atalho: A ou ←">⬅ Andar</button>
+        <button class="btn" id="btn-left" title="Atalho: A ou ← (avançar sobre inimigo = ⚡ Troca Rápida!)">⬅ Andar</button>
         <button class="btn" id="btn-flip" title="Atalho: F">🔄 Virar 180°</button>
-        <button class="btn" id="btn-right" title="Atalho: D ou →">Andar ➡</button>
+        <button class="btn" id="btn-right" title="Atalho: D ou → (avançar sobre inimigo = ⚡ Troca Rápida!)">Andar ➡</button>
         <button class="btn" id="btn-wait" title="Atalho: W">🛡️ Esperar (+2 Escudo, -1 CD)</button>
+        <span class="pill shield" id="hud-swap-cd" style="font-size:0.71rem;">⚡ Troca Rápida: PRONTA</span>
       </div>
 
       <div class="queue-bar">
         <div class="queue-slots" id="queue-slots"></div>
-        <div style="display:flex; gap:6px; align-items:center;">
-          <button class="btn primary" id="btn-fire" title="Atalho: Espaço">⚡ DISPARAR FILA</button>
-        </div>
+        <button class="btn primary" id="btn-fire" title="Atalho: Espaço">⚡ DISPARAR FILA</button>
       </div>
 
-      <!-- ARMAS GERADAS AO VIVO PELO ORGANISMO 5×4 -->
-      <div class="panel-header" style="margin-bottom:7px;">
-        <h3 class="panel-title" style="font-size:0.88rem;">⚔️ Golpes Gerados pelo seu Organismo (clique p/ pôr na Fila)</h3>
+      <div class="panel-header" style="margin-bottom:6px;">
+        <h3 class="panel-title" style="font-size:0.86rem;">⚔️ Golpes Gerados pelo seu Organismo (clique p/ enfileirar)</h3>
       </div>
       <div class="weapons-grid" id="weapons-grid"></div>
-
       <div class="combat-log" id="combat-log"></div>
     </section>
 
-    <!-- ==================== DIREITA / BASE: INVENTÁRIO 5×4 (LOOTBOUND + SPORE) ==================== -->
+    <!-- ==================== DIREITA: QUIMERA SPORE + GRADE 5×4 LOOTBOUND ==================== -->
     <section class="panel">
       <div class="panel-header">
         <h2 class="panel-title">🧬 Organismo 5×4 (Recombinação ao Vivo)</h2>
-        <span style="font-size:0.74rem; color:var(--accent); font-weight:800;" id="inv-mode-badge">1 ajuste grátis / turno</span>
+        <span style="font-size:0.73rem; color:var(--accent); font-weight:800;" id="inv-mode-badge">1 ajuste grátis / turno</span>
+      </div>
+
+      <!-- AVATAR PROCEDURAL DA QUIMERA (SPORE!) -->
+      <div class="chimera-card">
+        <div class="chimera-svg-wrap" id="chimera-svg-wrap"></div>
+        <div class="chimera-meta">
+          <h3 id="chimera-title">Quimera Nível 2 · 3 Órgãos</h3>
+          <p id="chimera-desc">Seu monstro evolui visualmente conforme você conecta Órgãos e Variações na grade 5×4!</p>
+        </div>
       </div>
 
       <div class="inv-toolbar">
@@ -697,17 +821,17 @@
           <button class="btn" id="btn-to-reserve">📦 Guardar na Bandeja</button>
           <button class="btn" id="btn-cancel-hold">✕ Soltar</button>
         </div>
-        <span style="font-size:0.72rem; color:var(--muted);">★ dourada no Órgão = Muta o golpe!</span>
+        <span style="font-size:0.71rem; color:var(--muted);">★ dourada no Órgão = Sinapse ativa!</span>
       </div>
 
-      <div class="holding-bar" id="holding-bar">
-        <span>👆 Clique em qualquer peça da Grade ou da Bandeja para mover e girar 90°.</span>
+      <div class="holding-bar" id="holding-bar"></div>
+
+      <!-- GRADE 5×4 COM CONDUÍTES SINÁPTICOS SVG -->
+      <div class="grid-stage">
+        <div class="grid-5x4" id="organism-grid"></div>
+        <svg class="synapse-svg" id="synapse-svg" viewBox="0 0 500 400" preserveAspectRatio="none"></svg>
       </div>
 
-      <!-- GRADE ESPACIAL 5×4 -->
-      <div class="grid-5x4" id="organism-grid"></div>
-
-      <!-- BANDEJA DE LOOT -->
       <div class="reserve-title">
         <span>🎒 Bandeja de Loot (Órgãos &amp; Variações)</span>
         <span id="reserve-count">1 peça</span>
@@ -717,19 +841,22 @@
   </main>
 
   <script>
-/* O Enxerto v7.0 · Motor Unificado "Lootbound 5×4 + Spore + Shogun Showdown 1D"
+/* O Enxerto v7.5 · Motor Unificado "Lootbound 5×4 + Spore + Shogun Showdown 1D"
  *
- * Arquitetura de Tela Dividida sempre viva:
+ * Evolução v7.5 (Dinâmica Cinética, Arquétipos, Assinatura, Explosão em Cadeia & Chefe Adaptativo):
  * 1) ORGANISMO 5×4 (Lootbound + Spore):
- *    - Peças de Órgão (2×1, L, 2×2) encaixadas na grade geram os Golpes utilizáveis no combate.
- *    - Peças de Variação (1×1, 2×1, L, T) possuem ESTRELAS DIRECIONAIS (★) que giram 90° junto com a peça.
- *    - Quando qualquer estrela ★ de uma Variação cai sobre qualquer célula de um Órgão,
- *      aquele Órgão recebe a mutação AO VIVO (Nv.1 → Nv.2 → Nv.3) — até durante a luta!
- * 2) COMBATE 1D EM 7 CASAS (Shogun Showdown):
- *    - Faixa horizontal de 7 casas (0..6), direção (◀ / ▶), telegrafia 100% honesta e Fogo Amigo.
- *    - Fila de Combo (até 3 armas) que disparam em sequência num único turno.
- *    - Cirurgia em Vida: Colisão, Fogo Amigo, Ácido ou Backstab expõem o gene carregado pelo inimigo;
- *      1 clique arranca o loot direto para a sua Bandeja e desarma o inimigo na hora! */
+ *    - Peças assimétricas (1×1, 2×1, L, T, 2×2) com Estrelas Direcionais ★ que giram 90°.
+ *    - Recombinação ao vivo (1 ajuste grátis/turno em combate; ilimitado entre ondas).
+ *    - Cada ligação ★ transforma os Golpes Shogun e muta visualmente a Quimera do jogador!
+ * 2) COMBATE 1D CINÉTICO (Shogun Showdown):
+ *    - Faixa de 7 casas + Fila de Combo (3 slots) com registro detalhado de eventos (frames de coreografia!).
+ *    - Movimento Assinatura (⚡ Troca Rápida, CD 3): andar para cima de um inimigo adjacente TROCA de lugar com ele!
+ *    - Combo Kill (2+ abates no mesmo disparo da Fila): -2 CD em todas as armas + +2 PV!
+ * 3) ARQUÉTIPOS TÁTICOS & CHEFE ADAPTATIVO (Lootbound Guardian):
+ *    - 🛡️ Escudeiro Frontal (bloqueia -2 pela frente — exige costas, giro 180° ou troca!)
+ *    - 🦏 Investida Total (atropela toda a linha à frente — ouro para Fogo Amigo!)
+ *    - 💣 Esporo Volátil (explode por 3 de dano nos vizinhos ao morrer!)
+ *    - 👑 Quimera Soberana (absorve literalmente os genes que você REJEITOU nos drafts entre ondas!) */
 (function (root, factory) {
   const api = factory();
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -737,16 +864,14 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, () => {
   'use strict';
 
-  const VERSION = '7.0.0';
+  const VERSION = '7.5.0';
   const GRID_W = 5;
   const GRID_H = 4;
   const STRIP_LEN = 7;
 
   // ==================== CATÁLOGO DE PEÇAS (ÓRGÃOS + VARIAÇÕES) ====================
-  // cells: coordenadas locais [x, y] em rot=0
-  // stars: coordenadas locais [x, y] das auras direcionais ★ em rot=0 (giram junto com a peça!)
   const PIECES = {
-    // --- ÓRGÃOS (geram Armas estilo Shogun Showdown) ---
+    // --- ÓRGÃOS ---
     MANDIBULA: {
       id: 'MANDIBULA',
       kind: 'ORGAN',
@@ -803,9 +928,9 @@
       stars: [],
       pattern: 'SHADOW_DASH',
       patternViz: ['me', 'hit:⤴', 'mv:🧬'],
-      baseDmg: 1,
+      baseDmg: 2,
       baseCd: 2,
-      desc: 'Atravessa inimigos à frente causando dano e pousa além deles!',
+      desc: 'Atravessa inimigos à frente causando dano e pousa atrás das costas deles!',
     },
     LINGUA: {
       id: 'LINGUA',
@@ -818,7 +943,7 @@
       stars: [],
       pattern: 'GRAPPLE',
       patternViz: ['me', 'sp:⬅', 'hit'],
-      baseDmg: 1,
+      baseDmg: 2,
       baseCd: 2,
       desc: 'Acerta o 1º inimigo à frente e PUXA até encostar em você.',
     },
@@ -835,7 +960,7 @@
       patternViz: ['me', '·', 'hit'],
       baseDmg: 3,
       baseCd: 2,
-      desc: 'Pula a casa adjacente e acerta exatamente a 2ª casa à frente.',
+      desc: 'Pula a casa adjacente e espeta exatamente a 2ª casa à frente (ignora Escudo Frontal!).',
     },
     PINCA: {
       id: 'PINCA',
@@ -853,7 +978,7 @@
       desc: 'Perfura 2 casas seguidas à frente com força brutal!',
     },
 
-    // --- VARIAÇÕES / MUTAÇÕES (projetam Estrelas Direcionais ★ que giram 90°!) ---
+    // --- VARIAÇÕES / MUTAÇÕES (com Estrelas Direcionais ★) ---
     OSSO: {
       id: 'OSSO',
       kind: 'VARIATION',
@@ -862,11 +987,11 @@
       color: '#d6d3d1',
       shapeLabel: 'L (3) · ★ quina',
       cells: [[0, 0], [0, 1], [1, 1]],
-      // Estrela na quina interna [1,0], no topo [0,-1] e à direita [2,1]
       stars: [[1, 0], [0, -1], [2, 1]],
       modId: 'OSSO',
       shortEffect: '+1 Dano + Empurra (Colisão +2!)',
-      desc: '★ na quina interna e pontas: dá +1 Dano e EMPURRA o alvo (colisão causa +2 dano e expõe gene).',
+      bossEffect: '+3 PV Máx & Empurra você ao atacar',
+      desc: '★ na quina interna e pontas: +1 Dano e EMPURRA o alvo (colisão causa +2 dano e expõe gene).',
     },
     TENDAO: {
       id: 'TENDAO',
@@ -876,11 +1001,11 @@
       color: '#f43f5e',
       shapeLabel: '1×1 · ★ ◀ ▶',
       cells: [[0, 0]],
-      // Liga esquerda e direita (gire 90° para cima e baixo!)
       stars: [[-1, 0], [1, 0]],
       modId: 'TENDAO',
       shortEffect: 'Gira 180° (melee) / Troca Lugar (alcance)',
-      desc: '★ em lados opostos: ataques melee GIRAM o inimigo 180° (Fogo Amigo!); ataques à distância TROCAM DE LUGAR!',
+      bossEffect: 'Chefe ganha contra-giro (difícil de flanquear)',
+      desc: '★ em lados opostos: ataques melee GIRAM o inimigo 180°; ataques à distância TROCAM DE LUGAR!',
     },
     PECONHA: {
       id: 'PECONHA',
@@ -890,11 +1015,11 @@
       color: '#a3e635',
       shapeLabel: '2×1 · ★ ▲ ▲',
       cells: [[0, 0], [1, 0]],
-      // Duas estrelas na borda superior (gire para apontar para baixo/lados!)
       stars: [[0, -1], [1, -1]],
       modId: 'PECONHA',
-      shortEffect: '+2 Veneno + Poça Ácida',
-      desc: '★ na face superior: aplica +2 Veneno (dano por turno) e cria 🧪 Poça Ácida no piso do alvo.',
+      shortEffect: '+2 Veneno + Poça Ácida (ignora escudo)',
+      bossEffect: 'Chefe deixa Poças Ácidas quando ataca',
+      desc: '★ na face superior: aplica +2 Veneno (ignora Escudo Frontal!) e cria 🧪 Poça Ácida no piso.',
     },
     NERVO: {
       id: 'NERVO',
@@ -904,10 +1029,10 @@
       color: '#facc15',
       shapeLabel: '1×1 · ★ ▲ ▶',
       cells: [[0, 0]],
-      // Estrelas em ângulo de 90° (Norte + Leste)
       stars: [[0, -1], [1, 0]],
       modId: 'NERVO',
       shortEffect: 'Choque vizinhos + Cancela Mira',
+      bossEffect: 'Chefe ganha +1 Dano Elétrico em seus golpes',
       desc: '★ em quina (▲ ▶): dispara +1 dano elétrico nos vizinhos e CANCELA a ⚠️ Mira preparada do alvo!',
     },
     REPIQUE: {
@@ -918,10 +1043,10 @@
       color: '#c084fc',
       shapeLabel: '1×1 · ★ ▶',
       cells: [[0, 0]],
-      // Uma única seta direcional (precisa girar para apontar no órgão certo!)
       stars: [[1, 0]],
       modId: 'REPIQUE',
       shortEffect: 'Golpe Duplo 2× (+1 CD)',
+      bossEffect: 'Chefe ganha Escudo Frontal (bloqueia -2 pela frente)',
       desc: '★ em 1 única direção: o Órgão apontado executa o golpe 2 VEZES seguidas (+1 CD)!',
     },
     ADRENALINA: {
@@ -932,11 +1057,11 @@
       color: '#2dd4bf',
       shapeLabel: 'T (4) · ★ 3 lados',
       cells: [[0, 0], [1, 0], [2, 0], [1, 1]],
-      // Abraça os 2 bolsos inferiores e o topo central
       stars: [[0, 1], [2, 1], [1, -1]],
       modId: 'ADRENALINA',
       shortEffect: '-1 Recarga (CD) + +1 Dano em Combo',
-      desc: '★ nos 2 bolsos e topo: reduz -1 Recarga (mín. 0) e dá +1 Dano se disparado no 2º ou 3º slot da Fila!',
+      bossEffect: 'Chefe começa a luta já ARMADO (PRIMED)!',
+      desc: '★ nos 2 bolsos e topo: reduz -1 Recarga (mín. 0) e dá +1 Dano no 2º ou 3º slot da Fila!',
     },
   };
 
@@ -1019,7 +1144,6 @@
   }
 
   function computeGeneratedAttacks(state) {
-    // Map cellKey -> organUid
     const cellToOrgan = new Map();
     const organs = state.gridPieces.filter(p => PIECES[p.pieceId].kind === 'ORGAN');
     const variations = state.gridPieces.filter(p => PIECES[p.pieceId].kind === 'VARIATION');
@@ -1030,20 +1154,32 @@
       }
     }
 
-    // Track active star links for UI highlighting
-    const organMods = new Map(); // uid -> Set of modId
-    const activeStarLinks = []; // { varUid, organUid, x, y, modId }
+    const organMods = new Map();
+    const activeStarLinks = [];
     for (const org of organs) organMods.set(org.uid, new Set());
 
     for (const v of variations) {
       const def = PIECES[v.pieceId];
-      const { stars } = getPlacedCells(v);
+      const { cells: vCells, stars } = getPlacedCells(v);
+      const vCenter = {
+        x: vCells.reduce((s, c) => s + c[0], 0) / vCells.length,
+        y: vCells.reduce((s, c) => s + c[1], 0) / vCells.length,
+      };
       for (const [sx, sy] of stars) {
         if (sx < 0 || sx >= GRID_W || sy < 0 || sy >= GRID_H) continue;
         const targetUid = cellToOrgan.get(`${sx},${sy}`);
         if (targetUid) {
           organMods.get(targetUid).add(def.modId);
-          activeStarLinks.push({ varUid: v.uid, organUid: targetUid, x: sx, y: sy, modId: def.modId });
+          activeStarLinks.push({
+            varUid: v.uid,
+            organUid: targetUid,
+            fromX: vCenter.x,
+            fromY: vCenter.y,
+            x: sx,
+            y: sy,
+            modId: def.modId,
+            color: def.color,
+          });
         }
       }
     }
@@ -1069,11 +1205,11 @@
       const tags = [];
       if (push) tags.push('💥Empurra');
       if (flip180) tags.push('🔄Gira 180°');
-      if (swapTarget) tags.push('⇄Troca Lugar');
-      if (poison) tags.push('🧪Veneno+Ácido');
-      if (shockChain) tags.push('⚡Choque+Cancela');
-      if (hits > 1) tags.push('⚔️2× Golpe');
-      if (comboBonus) tags.push('⏱️-1CD/+1Combo');
+      if (swapTarget) tags.push('⇄Troca');
+      if (poison) tags.push('🧪Ácido');
+      if (shockChain) tags.push('⚡Choque');
+      if (hits > 1) tags.push('⚔️2×');
+      if (comboBonus) tags.push('⏱️-1CD/+1');
 
       const curCd = Math.min(cdMax, state.weaponCds[org.uid] || 0);
 
@@ -1103,98 +1239,115 @@
       };
     });
 
-    return { weapons, activeStarLinks };
+    // Lista de partes ativas para renderização procedural da Quimera (Spore!)
+    const activePartIds = Array.from(new Set(state.gridPieces.map(p => p.pieceId)));
+    const activeModIds = Array.from(new Set(activeStarLinks.map(l => l.modId)));
+
+    return { weapons, activeStarLinks, activePartIds, activeModIds };
   }
 
-  // ==================== ONDAS & INIMIGOS ====================
+  // ==================== ONDAS & ARQUÉTIPOS ÚNICOS ====================
+  // trait: 'FRONT_SHIELD' (bloqueia -2 pela frente) | 'EXPLOSIVE' (explode 3 dano nos vizinhos ao morrer)
+  // attackType: 'MELEE_1' | 'SPEAR_2' | 'ARROW' | 'SWIRL' | 'CHARGE' (avança até bater!)
   const WAVES = [
     {
       stage: 1,
-      name: 'Onda 1 · Corredor do Escorpião',
-      hint: 'Dica: Encaixe o 🧲 Tendão (na Bandeja) ao lado do 🎯 Espinho ou 🦷 Mandíbula para girar/trocar inimigos e causar 💥 FOGO AMIGO!',
+      name: 'Onda 1 · Emboscada Explosiva',
+      hint: 'Truque: Encaixe 🧲 Tendão no 5×4 OU clique direto no inimigo adjacente para usar ⚡ TROCA RÁPIDA! Estoure o 💣 Esporo perto do Escorpião!',
       playerPos: 2,
       playerDir: 1,
       acidTiles: [],
       enemies: [
         {
-          id: 'w1_rato', name: 'Rato Batedor', icon: '🐀', pos: 4, dir: -1, hp: 5, maxHp: 5,
-          attackType: 'MELEE_1', dmg: 2, lootPieceId: 'PECONHA', state: 'IDLE',
+          id: 'w1_esporo', name: 'Esporo Volátil', icon: '💣', pos: 4, dir: -1, hp: 4, maxHp: 4,
+          attackType: 'MELEE_1', dmg: 2, trait: 'EXPLOSIVE', traitLabel: '💥 Explode (3)',
+          lootPieceId: 'PECONHA', state: 'IDLE',
         },
         {
           id: 'w1_escorp', name: 'Escorpião Atirador', icon: '🦂', pos: 6, dir: -1, hp: 5, maxHp: 5,
-          attackType: 'ARROW', dmg: 3, lootPieceId: 'NERVO', state: 'IDLE',
+          attackType: 'ARROW', dmg: 3, trait: null, traitLabel: '🎯 Tiro Reto',
+          lootPieceId: 'NERVO', state: 'IDLE',
         },
       ],
-      rewardLoot: ['PECONHA', 'LINGUA'],
+      draftOptions: ['PECONHA', 'LINGUA'],
     },
     {
       stage: 2,
-      name: 'Onda 2 · Muralha de Quitina',
-      hint: 'Atenção: O Besouro perfura 2 casas! Use Troca, Giro 180° ou Patas para fugir e fazê-los se acertarem.',
+      name: 'Onda 2 · Escudo & Atropelo',
+      hint: '🛡️ Besouro bloqueia -2 pela frente (use ⚡ Troca Rápida ou 🔄 Giro 180°)! 🦏 Javali atropela a fila inteira — faça ele atropelar o aliado!',
       playerPos: 2,
       playerDir: 1,
       acidTiles: [4],
       enemies: [
         {
-          id: 'w2_besouro', name: 'Besouro Lanceiro', icon: '🪲', pos: 4, dir: -1, hp: 6, maxHp: 6,
-          attackType: 'SPEAR_2', dmg: 3, lootPieceId: 'OSSO', state: 'PRIMED',
+          id: 'w2_escudeiro', name: 'Besouro Escudeiro', icon: '🛡️', pos: 4, dir: -1, hp: 6, maxHp: 6,
+          attackType: 'SPEAR_2', dmg: 3, trait: 'FRONT_SHIELD', traitLabel: '🛡️ Escudo Frontal',
+          lootPieceId: 'FERRAO_CURVO', state: 'IDLE',
         },
         {
-          id: 'w2_sapo', name: 'Sapo Chicote', icon: '🐸', pos: 0, dir: 1, hp: 5, maxHp: 5,
-          attackType: 'ARROW', dmg: 2, lootPieceId: 'FERRAO_CURVO', state: 'IDLE',
+          id: 'w2_javali', name: 'Javali Investida', icon: '🦏', pos: 0, dir: 1, hp: 5, maxHp: 5,
+          attackType: 'CHARGE', dmg: 3, trait: null, traitLabel: '💨 Atropela Linha',
+          lootPieceId: 'PATAS', state: 'PRIMED',
         },
         {
-          id: 'w2_escorp2', name: 'Escorpião Ácido', icon: '🦂', pos: 6, dir: -1, hp: 5, maxHp: 5,
-          attackType: 'ARROW', dmg: 3, lootPieceId: 'REPIQUE', state: 'IDLE',
+          id: 'w2_esporo2', name: 'Esporo Volátil', icon: '💣', pos: 6, dir: -1, hp: 3, maxHp: 3,
+          attackType: 'MELEE_1', dmg: 2, trait: 'EXPLOSIVE', traitLabel: '💥 Explode (3)',
+          lootPieceId: 'REPIQUE', state: 'IDLE',
         },
       ],
-      rewardLoot: ['REPIQUE', 'PATAS'],
+      draftOptions: ['REPIQUE', 'PATAS'],
     },
     {
       stage: 3,
-      name: 'Onda 3 · Emboscada Voltaica',
-      hint: 'Você começa cercado! A 🦂 Cauda acerta os dois lados — combine com 🪨 Osso ou ⚡ Nervo no 5×4!',
+      name: 'Onda 3 · Cerco Voltaico',
+      hint: 'Cercado! Combine ⚔️ Repique ou ⚡ Nervo na 🦂 Cauda e use Combo Kill (2 abates juntos = recarrega armas +2 PV)!',
       playerPos: 3,
       playerDir: 1,
       acidTiles: [1, 5],
       enemies: [
         {
-          id: 'w3_louva', name: 'Louva-a-Deus', icon: '🦗', pos: 1, dir: 1, hp: 6, maxHp: 6,
-          attackType: 'SWIRL', dmg: 3, lootPieceId: 'ADRENALINA', state: 'IDLE',
+          id: 'w3_louva', name: 'Louva-a-Deus', icon: '🦗', pos: 1, dir: 1, hp: 5, maxHp: 5,
+          attackType: 'SWIRL', dmg: 3, trait: null, traitLabel: '⚔️ Frente+Trás',
+          lootPieceId: 'ADRENALINA', state: 'IDLE',
         },
         {
-          id: 'w3_enguia', name: 'Enguia Voltaica', icon: '⚡', pos: 5, dir: -1, hp: 6, maxHp: 6,
-          attackType: 'ARROW', dmg: 3, lootPieceId: 'NERVO', state: 'PRIMED',
+          id: 'w3_esporo3', name: 'Esporo Volátil', icon: '💣', pos: 4, dir: -1, hp: 4, maxHp: 4,
+          attackType: 'MELEE_1', dmg: 2, trait: 'EXPLOSIVE', traitLabel: '💥 Explode (3)',
+          lootPieceId: 'NERVO', state: 'IDLE',
         },
         {
-          id: 'w3_besouro2', name: 'Besouro Bruto', icon: '🪲', pos: 6, dir: -1, hp: 7, maxHp: 7,
-          attackType: 'SPEAR_2', dmg: 3, lootPieceId: 'PINCA', state: 'IDLE',
+          id: 'w3_javali2', name: 'Javali Blindado', icon: '🦏', pos: 6, dir: -1, hp: 6, maxHp: 6,
+          attackType: 'CHARGE', dmg: 3, trait: 'FRONT_SHIELD', traitLabel: '🛡️ Escudo+Carga',
+          lootPieceId: 'PINCA', state: 'PRIMED',
         },
       ],
-      rewardLoot: ['ADRENALINA', 'PINCA'],
+      draftOptions: ['ADRENALINA', 'PINCA'],
     },
     {
       stage: 4,
       name: 'Onda 4 · CHEFE: Quimera Soberana',
-      hint: 'CHEFE FINAL! Empurre os guardas contra a Quimera, gire os tiros dela e dispare combos de 3 golpes na Fila!',
+      hint: 'CHEFE ADAPTATIVO! Ela absorveu os genes que você rejeitou! Empurre o 💣 Esporo contra ela e encadeie combos de 3 golpes!',
       playerPos: 1,
       playerDir: 1,
       acidTiles: [3],
       enemies: [
         {
-          id: 'w4_guarda1', name: 'Guarda Espinho', icon: '🦂', pos: 3, dir: -1, hp: 5, maxHp: 5,
-          attackType: 'ARROW', dmg: 3, lootPieceId: 'TENDAO', state: 'PRIMED',
+          id: 'w4_esporo', name: 'Esporo Guardião', icon: '💣', pos: 3, dir: -1, hp: 4, maxHp: 4,
+          attackType: 'MELEE_1', dmg: 2, trait: 'EXPLOSIVE', traitLabel: '💥 Explode (3)',
+          lootPieceId: 'TENDAO', state: 'IDLE',
         },
         {
           id: 'w4_boss', name: 'Quimera Soberana', icon: '👑', pos: 5, dir: -1, hp: 14, maxHp: 14,
-          attackType: 'SPEAR_2', dmg: 4, lootPieceId: 'PINCA', state: 'IDLE', isBoss: true,
+          attackType: 'SPEAR_2', dmg: 4, trait: null, traitLabel: '👑 Chefe',
+          lootPieceId: 'PINCA', state: 'IDLE', isBoss: true,
         },
         {
-          id: 'w4_guarda2', name: 'Rato Carniceiro', icon: '🐀', pos: 6, dir: -1, hp: 5, maxHp: 5,
-          attackType: 'MELEE_1', dmg: 3, lootPieceId: 'OSSO', state: 'IDLE',
+          id: 'w4_atirador', name: 'Escorpião Real', icon: '🦂', pos: 6, dir: -1, hp: 5, maxHp: 5,
+          attackType: 'ARROW', dmg: 3, trait: null, traitLabel: '🎯 Tiro Reto',
+          lootPieceId: 'OSSO', state: 'PRIMED',
         },
       ],
-      rewardLoot: [],
+      draftOptions: [],
     },
   ];
 
@@ -1202,6 +1355,23 @@
   function makeUid(state, prefix = 'p') {
     state.uidCounter += 1;
     return `${prefix}_${state.uidCounter}`;
+  }
+
+  function pushEvent(state, ev) {
+    state.lastEvents.push(ev);
+  }
+
+  function applyBossMutations(boss, bossMutations) {
+    if (!boss || !bossMutations || bossMutations.length === 0) return;
+    const labels = ['👑'];
+    for (const pid of bossMutations) {
+      if (pid === 'OSSO' || pid === 'PINCA') { boss.maxHp += 3; boss.hp += 3; labels.push('🪨+3PV'); }
+      else if (pid === 'PECONHA') { boss.leavesAcid = true; labels.push('🧪Ácido'); }
+      else if (pid === 'NERVO' || pid === 'LINGUA') { boss.dmg += 1; labels.push('⚡+1Dano'); }
+      else if (pid === 'REPIQUE') { boss.trait = 'FRONT_SHIELD'; labels.push('🛡️Escudo'); }
+      else if (pid === 'ADRENALINA' || pid === 'PATAS') { boss.state = 'PRIMED'; labels.push('⚡Rápido'); }
+    }
+    boss.traitLabel = labels.join(' ');
   }
 
   function loadWaveIntoState(state, waveIndex) {
@@ -1214,16 +1384,21 @@
     state.player.pos = wave.playerPos;
     state.player.dir = wave.playerDir;
     state.player.shield = 0;
+    state.player.swapCd = 0;
     state.queue = [];
     state.weaponCds = {};
     state.recombinesLeft = 1;
+    state.pendingDraft = null;
     state.acidTiles = [...wave.acidTiles];
     state.enemies = wave.enemies.map(e => ({
       ...e,
       poison: 0,
       exposed: false,
       disarmed: false,
+      leavesAcid: false,
     }));
+    const boss = state.enemies.find(e => e.isBoss);
+    if (boss) applyBossMutations(boss, state.bossMutations);
     state.lastEvents = [];
     state.log.unshift(`⚔️ ${wave.name} começou!`);
   }
@@ -1238,34 +1413,33 @@
       phase: 'COMBAT',
       turn: 1,
       player: {
-        pos: 1,
+        pos: 2,
         dir: 1,
         hp: 14,
         maxHp: 14,
         shield: 0,
+        swapCd: 0, // Movimento Assinatura: Troca Rápida (CD 3)
+        swapCdMax: 3,
       },
-      // Grade 5×4 inicial já com 3 órgãos + 1 variação Osso (L) encaixada na quina!
-      // [0,0][1,0] = MANDIBULA | [0,1][0,2][1,2] = OSSO (★ em [1,1], [0,0], [2,2])
-      // [2,2][3,2] = ESPINHO (recebe ★ de OSSO em [2,2]!)
-      // [3,0][4,0] = CAUDA
       gridPieces: [],
-      reservePieces: [], // Bandeja de Loot (peças livres para encaixar!)
+      reservePieces: [],
+      bossMutations: [], // Genes rejeitados no draft vão para a Quimera Soberana!
+      pendingDraft: null, // [pieceIdA, pieceIdB] durante WAVE_CLEAR
       weaponCds: {},
-      queue: [], // Array de organUids (máx 3)
+      queue: [],
       recombinesLeft: 1,
       acidTiles: [],
       enemies: [],
-      lastEvents: [], // Animações do último turno (para feedback visual)
+      lastEvents: [],
       log: [],
     };
 
     state.gridPieces = [
       { uid: makeUid(state, 'org'), pieceId: 'MANDIBULA', x: 0, y: 0, rot: 0 },
-      { uid: makeUid(state, 'var'), pieceId: 'OSSO', x: 0, y: 1, rot: 0 }, // ★ em (0,0)=MANDIBULA e (2,2)=ESPINHO!
+      { uid: makeUid(state, 'var'), pieceId: 'OSSO', x: 0, y: 1, rot: 0 },
       { uid: makeUid(state, 'org'), pieceId: 'ESPINHO', x: 2, y: 2, rot: 0 },
       { uid: makeUid(state, 'org'), pieceId: 'CAUDA', x: 3, y: 0, rot: 0 },
     ];
-    // Começa com 1 Variação 🧲 Tendão na Bandeja para o jogador já testar a recombinação no Turno 1!
     state.reservePieces = [
       { uid: makeUid(state, 'var'), pieceId: 'TENDAO', rot: 0 },
     ];
@@ -1278,7 +1452,7 @@
     return JSON.parse(JSON.stringify(state));
   }
 
-  // ==================== GESTÃO DE INVENTÁRIO 5×4 (AO VIVO!) ====================
+  // ==================== GESTÃO DE INVENTÁRIO 5×4 ====================
   function canRecombine(state) {
     if (state.phase === 'WAVE_CLEAR') return true;
     if (state.phase !== 'COMBAT') return false;
@@ -1293,23 +1467,21 @@
 
   function placePieceOnGrid(state, uid, x, y, rot) {
     if (!canRecombine(state)) {
-      return { ok: false, reason: 'Sem recombinações restantes neste turno (use no próximo turno ou entre ondas).' };
+      return { ok: false, reason: 'Sem ajustes restantes neste turno (renova no próximo turno ou entre ondas).' };
     }
     const inGridIdx = state.gridPieces.findIndex(p => p.uid === uid);
     const inResIdx = state.reservePieces.findIndex(p => p.uid === uid);
-    if (inGridIdx === -1 && inResIdx === -1) {
-      return { ok: false, reason: 'Peça não encontrada.' };
-    }
+    if (inGridIdx === -1 && inResIdx === -1) return { ok: false, reason: 'Peça não encontrada.' };
+
     const piece = inGridIdx !== -1 ? state.gridPieces[inGridIdx] : state.reservePieces[inResIdx];
     const check = canPlaceOnGrid(state.gridPieces, piece.pieceId, x, y, rot, uid);
     if (!check.ok) return check;
 
-    // No-op check (mesma posição e rotação não gasta recombinação)
-    if (inGridIdx !== -1 && piece.x === x && piece.y === y && piece.rot === (((rot % 4) + 4) % 4)) {
+    const normRot = ((rot % 4) + 4) % 4;
+    if (inGridIdx !== -1 && piece.x === x && piece.y === y && piece.rot === normRot) {
       return { ok: true, noop: true };
     }
 
-    const normRot = ((rot % 4) + 4) % 4;
     if (inResIdx !== -1) {
       state.reservePieces.splice(inResIdx, 1);
       state.gridPieces.push({ uid: piece.uid, pieceId: piece.pieceId, x, y, rot: normRot });
@@ -1326,37 +1498,43 @@
   }
 
   function movePieceToReserve(state, uid) {
-    if (!canRecombine(state)) {
-      return { ok: false, reason: 'Sem recombinações restantes neste turno.' };
-    }
+    if (!canRecombine(state)) return { ok: false, reason: 'Sem ajustes restantes neste turno.' };
     const idx = state.gridPieces.findIndex(p => p.uid === uid);
     if (idx === -1) return { ok: false, reason: 'Peça não está na grade.' };
-
-    // Impede ficar sem nenhum órgão durante o combate
     const piece = state.gridPieces[idx];
     if (PIECES[piece.pieceId].kind === 'ORGAN') {
       const organCount = state.gridPieces.filter(p => PIECES[p.pieceId].kind === 'ORGAN').length;
-      if (organCount <= 1) {
-        return { ok: false, reason: 'Você precisa manter pelo menos 1 Órgão ativo no organismo!' };
-      }
+      if (organCount <= 1) return { ok: false, reason: 'Mantenha pelo menos 1 Órgão ativo no organismo!' };
     }
 
     state.gridPieces.splice(idx, 1);
     state.reservePieces.push({ uid: piece.uid, pieceId: piece.pieceId, rot: piece.rot });
-    // Remove da fila se estivesse enfileirado
     state.queue = state.queue.filter(qid => qid !== uid);
-
     consumeRecombine(state);
     const def = PIECES[piece.pieceId];
-    state.log.unshift(`📦 ${def.icon} ${def.name} guardado na Bandeja de Loot.`);
+    state.log.unshift(`📦 ${def.icon} ${def.name} guardado na Bandeja.`);
     return { ok: true };
   }
 
-  function rotateReservePiece(state, uid) {
-    const p = state.reservePieces.find(x => x.uid === uid);
-    if (!p) return { ok: false };
-    p.rot = (p.rot + 1) % 4;
-    return { ok: true, rot: p.rot };
+  function chooseDraftLoot(state, chosenPieceId) {
+    if (state.phase !== 'WAVE_CLEAR' || !state.pendingDraft) {
+      return { ok: false, reason: 'Nenhum draft pendente.' };
+    }
+    if (!state.pendingDraft.includes(chosenPieceId)) {
+      return { ok: false, reason: 'Escolha inválida.' };
+    }
+    const rejected = state.pendingDraft.filter(id => id !== chosenPieceId);
+    const def = PIECES[chosenPieceId];
+    const uid = makeUid(state, def.kind === 'ORGAN' ? 'org' : 'var');
+    state.reservePieces.push({ uid, pieceId: chosenPieceId, rot: 0 });
+    for (const rej of rejected) {
+      state.bossMutations.push(rej);
+      const rDef = PIECES[rej];
+      state.log.unshift(`👑 A Quimera Soberana absorveu [${rDef.icon} ${rDef.name}] que você rejeitou!`);
+    }
+    state.pendingDraft = null;
+    state.log.unshift(`🎁 Você coletou [${def.icon} ${def.name}] na Bandeja! Recombine no 5×4.`);
+    return { ok: true, uid, pieceId: chosenPieceId };
   }
 
   // ==================== HELPERS DE COMBATE 1D ====================
@@ -1402,10 +1580,15 @@
     } else if (enemy.attackType === 'SWIRL') {
       if (enemy.pos - 1 >= 0) tiles.push(enemy.pos - 1);
       if (enemy.pos + 1 < STRIP_LEN) tiles.push(enemy.pos + 1);
-    } else if (enemy.attackType === 'ARROW') {
+    } else if (enemy.attackType === 'ARROW' || enemy.attackType === 'CHARGE') {
       const hit = firstActorInDir(state, enemy.pos, d);
       if (hit) {
-        tiles.push(hit.type === 'PLAYER' ? state.player.pos : hit.ref.pos);
+        const end = hit.type === 'PLAYER' ? state.player.pos : hit.ref.pos;
+        if (enemy.attackType === 'CHARGE') {
+          for (let p = enemy.pos + d; p !== end + d; p += d) tiles.push(p);
+        } else {
+          tiles.push(end);
+        }
       } else {
         for (let p = enemy.pos + d; p >= 0 && p < STRIP_LEN; p += d) tiles.push(p);
       }
@@ -1413,7 +1596,7 @@
     return tiles;
   }
 
-  function damagePlayer(state, amount, sourceText) {
+  function damagePlayer(state, amount, sourceText, label = null) {
     if (amount <= 0) return 0;
     let rem = amount;
     if (state.player.shield > 0) {
@@ -1421,26 +1604,75 @@
       state.player.shield -= abs;
       rem -= abs;
     }
-    if (rem > 0) {
-      state.player.hp = Math.max(0, state.player.hp - rem);
-    }
-    state.lastEvents.push({ type: 'HIT_PLAYER', pos: state.player.pos, dmg: rem, blocked: amount - rem });
+    if (rem > 0) state.player.hp = Math.max(0, state.player.hp - rem);
+    pushEvent(state, {
+      type: 'HIT_PLAYER',
+      pos: state.player.pos,
+      dmg: rem,
+      blocked: amount - rem,
+      text: label || (rem > 0 ? `-${rem} ❤️` : `🛡️ BLOQ!`),
+      shake: rem >= 2,
+    });
     state.log.unshift(`💢 ${sourceText} causou ${rem} de dano${amount - rem > 0 ? ` (${amount - rem} bloqueado)` : ''}!`);
     return rem;
   }
 
-  function damageEnemy(state, enemy, amount, reason = '', expose = false) {
-    if (!enemy || enemy.hp <= 0 || amount <= 0) return 0;
-    enemy.hp = Math.max(0, enemy.hp - amount);
-    state.lastEvents.push({ type: 'HIT_ENEMY', pos: enemy.pos, dmg: amount, id: enemy.id });
+  function damageEnemy(state, enemy, amount, reason = '', opts = {}) {
+    if (!enemy || enemy.hp <= 0 || amount <= 0) return { dealt: 0, killed: false };
+    const { expose = false, fromDir = null, ignoreFrontShield = false, popupText = null, shake = false } = opts;
+
+    let finalDmg = amount;
+    let shieldBlocked = false;
+    // Escudo Frontal: se golpe veio de frente (direção oposta ao facing do inimigo), bloqueia -2!
+    if (enemy.trait === 'FRONT_SHIELD' && !ignoreFrontShield && fromDir !== null && fromDir === -enemy.dir) {
+      finalDmg = Math.max(0, finalDmg - 2);
+      shieldBlocked = true;
+    }
+
+    enemy.hp = Math.max(0, enemy.hp - finalDmg);
+    pushEvent(state, {
+      type: shieldBlocked && finalDmg === 0 ? 'BLOCKED' : 'HIT_ENEMY',
+      pos: enemy.pos,
+      dmg: finalDmg,
+      id: enemy.id,
+      text: popupText || (shieldBlocked ? (finalDmg === 0 ? '🛡️ BLOQ!' : `-${finalDmg} 🛡️`) : `-${finalDmg}`),
+      shake: shake || finalDmg >= 3,
+    });
+
     if (expose && enemy.hp > 0 && !enemy.disarmed && enemy.lootPieceId) {
       enemy.exposed = true;
     }
-    if (reason) state.log.unshift(reason);
-    if (enemy.hp <= 0) {
-      state.log.unshift(`💀 ${enemy.icon} ${enemy.name} foi abatido!`);
+    if (reason) {
+      state.log.unshift(shieldBlocked ? `${reason} (🛡️ Escudo Frontal reduziu -2!)` : reason);
     }
-    return amount;
+
+    let killed = false;
+    if (enemy.hp <= 0) {
+      killed = true;
+      pushEvent(state, { type: 'KILL', pos: enemy.pos, text: '☠️ ABATE!', shake: true });
+      state.log.unshift(`💀 ${enemy.icon} ${enemy.name} foi abatido!`);
+
+      // Arquétipo 💣 Esporo Volátil: explode nos dois vizinhos!
+      if (enemy.trait === 'EXPLOSIVE') {
+        const boomPos = enemy.pos;
+        pushEvent(state, { type: 'EXPLODE', pos: boomPos, text: '💥 BOOM 3!', shake: true });
+        state.log.unshift(`💣 EXPLOSÃO VOLÁTIL! ${enemy.name} detonou causando 3 de dano nos vizinhos!`);
+        for (const adj of [boomPos - 1, boomPos + 1]) {
+          if (adj < 0 || adj >= STRIP_LEN) continue;
+          if (state.player.pos === adj) {
+            damagePlayer(state, 3, 'Explosão do Esporo Volátil', '💥 -3');
+          } else {
+            const other = enemyAt(state, adj);
+            if (other && other.id !== enemy.id) {
+              damageEnemy(state, other, 3, `💥 Explosão atingiu ${other.icon} ${other.name} por 3 de dano (EXPÕE gene)!`, {
+                expose: true, ignoreFrontShield: true, popupText: '💥 -3!', shake: true,
+              });
+            }
+          }
+        }
+      }
+    }
+    return { dealt: finalDmg, killed };
   }
 
   function pushEnemy(state, enemy, dir, dist = 1) {
@@ -1448,45 +1680,55 @@
     for (let step = 0; step < dist; step++) {
       const next = enemy.pos + dir;
       if (next < 0 || next >= STRIP_LEN) {
-        // Colisão na parede da arena!
-        damageEnemy(state, enemy, 2, `💥 COLISÃO NA PAREDE! ${enemy.icon} ${enemy.name} sofre +2 dano e EXPÕE seu gene!`, true);
+        damageEnemy(state, enemy, 2, `💥 COLISÃO NA PAREDE! ${enemy.icon} ${enemy.name} sofre +2 dano e EXPÕE gene!`, {
+          expose: true, ignoreFrontShield: true, popupText: '💥 PAREDE -2!', shake: true,
+        });
         break;
       }
       const blocker = actorAt(state, next);
       if (blocker) {
-        damageEnemy(state, enemy, 2, `💥 COLISÃO! ${enemy.icon} ${enemy.name} bateu e sofreu +2 dano (gene EXPOSTO)!`, true);
+        damageEnemy(state, enemy, 2, `💥 COLISÃO! ${enemy.icon} ${enemy.name} bateu (+2 dano & EXPÕE)!`, {
+          expose: true, ignoreFrontShield: true, popupText: '💥 COLISÃO -2!', shake: true,
+        });
         if (blocker.type === 'ENEMY') {
-          damageEnemy(state, blocker.ref, 2, `💥 ${blocker.ref.icon} ${blocker.ref.name} também sofreu +2 dano da colisão!`, true);
+          damageEnemy(state, blocker.ref, 2, `💥 ${blocker.ref.icon} ${blocker.ref.name} levou +2 da colisão!`, {
+            expose: true, ignoreFrontShield: true, popupText: '💥 -2!', shake: true,
+          });
         } else {
-          damagePlayer(state, 1, `Colisão com ${enemy.name}`);
+          damagePlayer(state, 1, `Colisão com ${enemy.name}`, '💥 -1');
         }
         break;
       }
+      const from = enemy.pos;
       enemy.pos = next;
+      pushEvent(state, { type: 'PUSH', from, to: next, pos: next, text: dir > 0 ? '➔ EMPURROU!' : '⬅ EMPURROU!' });
       if (state.acidTiles.includes(next)) {
-        damageEnemy(state, enemy, 1, `🧪 ${enemy.icon} ${enemy.name} caiu no Ácido (+1 dano e gene EXPOSTO)!`, true);
+        damageEnemy(state, enemy, 1, `🧪 ${enemy.icon} ${enemy.name} caiu no Ácido (+1 & EXPÕE)!`, {
+          expose: true, ignoreFrontShield: true, popupText: '🧪 -1!',
+        });
       }
     }
   }
 
-  // ==================== CIRURGIA EM VIDA (✂️ ARRANCAR GENE EXPOSTO) ====================
+  // ==================== CIRURGIA EM VIDA ====================
   function extractExposedGene(state, enemyId) {
     if (state.phase !== 'COMBAT') return { ok: false, reason: 'Só durante o combate.' };
     const enemy = state.enemies.find(e => e.id === enemyId && e.hp > 0);
     if (!enemy || !enemy.exposed || enemy.disarmed || !enemy.lootPieceId) {
-      return { ok: false, reason: 'Inimigo não tem gene exposto no momento.' };
+      return { ok: false, reason: 'Inimigo não tem gene exposto.' };
     }
     const pieceDef = PIECES[enemy.lootPieceId];
     const newUid = makeUid(state, pieceDef.kind === 'ORGAN' ? 'org' : 'var');
     state.reservePieces.push({ uid: newUid, pieceId: enemy.lootPieceId, rot: 0 });
     enemy.exposed = false;
     enemy.disarmed = true;
-    enemy.state = 'IDLE'; // Desarma mira imediatamente!
+    enemy.state = 'IDLE';
+    enemy.trait = null; // Arrancar o gene remove também o Escudo Frontal ou Explosivo!
     enemy.dmg = Math.max(1, enemy.dmg - 1);
     state.player.hp = Math.min(state.player.maxHp, state.player.hp + 2);
-    // Dá +1 recombinação extra para já poder encaixar o gene roubado agora!
     state.recombinesLeft = Math.max(1, state.recombinesLeft);
-    state.log.unshift(`✂️ CIRURGIA EM VIDA! Arrancou [${pieceDef.icon} ${pieceDef.name}] de ${enemy.name} (desarmado +2 PV! Já pode encaixar na grade 5×4!)`);
+    pushEvent(state, { type: 'EXTRACT', pos: enemy.pos, text: `✂️ ROUBOU ${pieceDef.icon}!`, shake: true });
+    state.log.unshift(`✂️ CIRURGIA EM VIDA! Arrancou [${pieceDef.icon} ${pieceDef.name}] de ${enemy.name} (desarmado +2 PV! Encaixe já no 5×4!)`);
     return { ok: true, uid: newUid, pieceId: enemy.lootPieceId };
   }
 
@@ -1495,21 +1737,27 @@
     const p = state.player;
     const totalDmg = weapon.dmg + (comboIndex > 0 ? weapon.comboBonus : 0);
 
-    const applyHitEffects = (target, strikeDir) => {
+    const applyHitEffects = (target, strikeDir, bypassShield = false) => {
       if (!target || target.hp <= 0) return;
-      // Backstab (atacando pelas costas do inimigo) expõe gene!
       const isBackstab = target.dir === strikeDir;
       const dealt = totalDmg + (isBackstab ? 1 : 0);
       damageEnemy(
         state,
         target,
         dealt,
-        `${weapon.icon} ${weapon.name} acerta ${target.icon} ${target.name} por ${dealt}${isBackstab ? ' (🗡️Costas +1 & Expõe!)' : ''}!`,
-        isBackstab
+        `${weapon.icon} ${weapon.name} acerta ${target.icon} ${target.name}${isBackstab ? ' pelas COSTAS (+1 & EXPÕE!)' : ''}!`,
+        {
+          expose: isBackstab,
+          fromDir: strikeDir,
+          ignoreFrontShield: bypassShield || isBackstab || weapon.poison > 0,
+          popupText: isBackstab ? `🗡️ -${dealt}!` : `-${dealt}`,
+          shake: isBackstab || dealt >= 3,
+        }
       );
 
       if (target.hp > 0 && weapon.poison > 0) {
         target.poison += weapon.poison;
+        pushEvent(state, { type: 'ACID', pos: target.pos, text: `🧪 +${weapon.poison}` });
         state.log.unshift(`🧪 ${target.name} recebeu +${weapon.poison} Veneno!`);
       }
       if (weapon.acidPool && !state.acidTiles.includes(target.pos)) {
@@ -1518,22 +1766,23 @@
       if (weapon.shockChain) {
         if (target.hp > 0 && target.state === 'PRIMED') {
           target.state = 'IDLE';
+          pushEvent(state, { type: 'SHOCK', pos: target.pos, text: '⚡ CANCELOU!' });
           state.log.unshift(`⚡ ${target.name} levou choque e PERDEU a mira!`);
         }
-        // Choque em inimigos adjacentes ao alvo
-        const leftE = enemyAt(state, target.pos - 1);
-        const rightE = enemyAt(state, target.pos + 1);
-        if (leftE && leftE.id !== target.id) {
-          damageEnemy(state, leftE, 1, `⚡ Choque em cadeia atingiu ${leftE.name} (+1 dano)!`, false);
-        }
-        if (rightE && rightE.id !== target.id) {
-          damageEnemy(state, rightE, 1, `⚡ Choque em cadeia atingiu ${rightE.name} (+1 dano)!`, false);
+        for (const adj of [target.pos - 1, target.pos + 1]) {
+          const near = enemyAt(state, adj);
+          if (near && near.id !== target.id) {
+            damageEnemy(state, near, 1, `⚡ Choque em cadeia atingiu ${near.name} (+1)!`, {
+              ignoreFrontShield: true, popupText: '⚡ -1',
+            });
+          }
         }
       }
       if (target.hp > 0 && weapon.flip180) {
         target.dir *= -1;
         target.exposed = !target.disarmed && !!target.lootPieceId;
-        state.log.unshift(`🔄 ${target.icon} ${target.name} foi GIRADO 180° (mira apontada para o outro lado)!`);
+        pushEvent(state, { type: 'FLIP', pos: target.pos, text: '🔄 VIROU 180°!' });
+        state.log.unshift(`🔄 ${target.icon} ${target.name} foi GIRADO 180°!`);
       }
       if (target.hp > 0 && weapon.push > 0) {
         pushEnemy(state, target, strikeDir, weapon.push);
@@ -1547,7 +1796,6 @@
       } else if (weapon.pattern === 'SPEAR_2') {
         const t1 = enemyAt(state, p.pos + p.dir);
         const t2 = enemyAt(state, p.pos + p.dir * 2);
-        // Se empurra, resolve o mais distante primeiro para não bloquear
         const list = weapon.push > 0 ? [t2, t1] : [t1, t2];
         for (const t of list) if (t && t.hp > 0) applyHitEffects(t, p.dir);
       } else if (weapon.pattern === 'SWIRL') {
@@ -1557,14 +1805,16 @@
         if (tb) applyHitEffects(tb, -p.dir);
       } else if (weapon.pattern === 'SHADOW_KAMA') {
         const t = enemyAt(state, p.pos + p.dir * 2);
-        if (t) applyHitEffects(t, p.dir);
+        if (t) applyHitEffects(t, p.dir, true); // Pula a frente -> ignora escudo frontal!
       } else if (weapon.pattern === 'ARROW') {
         const t = firstEnemyInDir(state, p.pos, p.dir);
         if (t) {
+          pushEvent(state, { type: 'PROJECTILE', from: p.pos, to: t.pos, pos: t.pos, text: '🎯' });
           if (weapon.swapTarget) {
             const oldP = p.pos;
             p.pos = t.pos;
             t.pos = oldP;
+            pushEvent(state, { type: 'SWAP', from: oldP, to: p.pos, pos: t.pos, text: '⇄ TROCA!' });
             state.log.unshift(`⇄ TROCA DE LUGAR com ${t.icon} ${t.name}!`);
             applyHitEffects(t, -p.dir);
           } else {
@@ -1578,46 +1828,44 @@
             const oldP = p.pos;
             p.pos = t.pos;
             t.pos = oldP;
+            pushEvent(state, { type: 'SWAP', from: oldP, to: p.pos, pos: t.pos, text: '⇄ TROCA!' });
             state.log.unshift(`⇄ TROCA QUIMÉRICA com ${t.icon} ${t.name}!`);
             applyHitEffects(t, -p.dir);
           } else {
             const dest = p.pos + p.dir;
             if (dest !== t.pos && !actorAt(state, dest)) {
+              const oldPos = t.pos;
               t.pos = dest;
+              pushEvent(state, { type: 'PUSH', from: oldPos, to: dest, pos: dest, text: '🐸 PUXOU!' });
               state.log.unshift(`🐸 ${t.name} foi PUXADO para a casa ${dest + 1}!`);
               if (state.acidTiles.includes(dest)) {
-                damageEnemy(state, t, 1, `🧪 ${t.name} foi puxado para o Ácido (+1 dano & Expõe)!`, true);
+                damageEnemy(state, t, 1, `🧪 ${t.name} caiu no Ácido (+1 & EXPÕE)!`, { expose: true, ignoreFrontShield: true });
               }
             }
             applyHitEffects(t, p.dir);
           }
         }
       } else if (weapon.pattern === 'SHADOW_DASH') {
-        // Atravessa inimigos contíguos à frente até a 1ª casa vazia além!
         const passed = [];
         let cursor = p.pos + p.dir;
         while (cursor >= 0 && cursor < STRIP_LEN) {
           const e = enemyAt(state, cursor);
-          if (e) {
-            passed.push(e);
-            cursor += p.dir;
-          } else {
-            break;
-          }
+          if (e) { passed.push(e); cursor += p.dir; } else break;
         }
         if (weapon.swapTarget && passed.length > 0) {
           const target = passed[0];
           const oldP = p.pos;
           p.pos = target.pos;
           target.pos = oldP;
+          pushEvent(state, { type: 'SWAP', from: oldP, to: p.pos, pos: target.pos, text: '⇄ TROCA!' });
           state.log.unshift(`⇄ Salto com Troca em ${target.name}!`);
-          applyHitEffects(target, -p.dir);
+          applyHitEffects(target, -p.dir, true);
         } else if (cursor >= 0 && cursor < STRIP_LEN && !actorAt(state, cursor)) {
+          const oldP = p.pos;
           p.pos = cursor;
+          pushEvent(state, { type: 'DASH', from: oldP, to: cursor, pos: cursor, text: '🦗 ATRAVESSOU!' });
           state.log.unshift(`🦗 Patas atravessaram para a casa ${cursor + 1}!`);
-          for (const e of passed) {
-            applyHitEffects(e, p.dir);
-          }
+          for (const e of passed) applyHitEffects(e, p.dir, true);
         } else if (passed.length > 0) {
           applyHitEffects(passed[0], p.dir);
         }
@@ -1627,47 +1875,68 @@
 
   // ==================== FASE DOS INIMIGOS & AVANÇO DE TURNO ====================
   function resolveEnemyPhase(state) {
-    // 1) Dano de veneno nos inimigos vivos
     for (const e of state.enemies) {
       if (e.hp > 0 && e.poison > 0) {
-        damageEnemy(state, e, 1, `☠️ ${e.name} sofre 1 de dano de Veneno.`, false);
+        damageEnemy(state, e, 1, `☠️ ${e.name} sofre 1 de Veneno.`, { ignoreFrontShield: true, popupText: '🧪 -1' });
         e.poison = Math.max(0, e.poison - 1);
       }
     }
 
-    // 2) Cada inimigo vivo age (ordem da esquerda para a direita)
     const ordered = state.enemies.filter(e => e.hp > 0).sort((a, b) => a.pos - b.pos);
     for (const e of ordered) {
       if (e.hp <= 0 || state.player.hp <= 0) continue;
 
       if (e.state === 'PRIMED') {
-        // Executa o golpe telegrafado (PODE CAUSAR FOGO AMIGO!)
-        const threat = getEnemyThreatTiles(state, e);
-        let hitSomething = false;
-        for (const tPos of threat) {
-          if (state.player.pos === tPos) {
-            damagePlayer(state, e.dmg, `${e.icon} ${e.name}`);
-            hitSomething = true;
-          } else {
-            const ally = enemyAt(state, tPos);
-            if (ally && ally.id !== e.id) {
+        if (e.attackType === 'CHARGE') {
+          // Investida total até bater no 1º ator (ou borda)!
+          const hit = firstActorInDir(state, e.pos, e.dir);
+          if (hit) {
+            const targetPos = hit.type === 'PLAYER' ? state.player.pos : hit.ref.pos;
+            const stopPos = targetPos - e.dir;
+            e.pos = stopPos;
+            pushEvent(state, { type: 'DASH', pos: stopPos, text: '🦏 CARGA!' });
+            if (hit.type === 'PLAYER') {
+              damagePlayer(state, e.dmg, `${e.icon} ${e.name} (Investida)`, `🦏 -${e.dmg}!`);
+            } else {
               damageEnemy(
                 state,
-                ally,
+                hit.ref,
                 e.dmg,
-                `💥 FOGO AMIGO! ${e.icon} ${e.name} acertou ${ally.icon} ${ally.name} por ${e.dmg} de dano (gene EXPOSTO)!`,
-                true
+                `💥 FOGO AMIGO! ${e.icon} ${e.name} atropelou ${hit.ref.icon} ${hit.ref.name} por ${e.dmg} (EXPÕE)!`,
+                { expose: true, ignoreFrontShield: true, popupText: `💥 FOGO AMIGO -${e.dmg}!`, shake: true }
               );
+            }
+          } else {
+            e.pos = e.dir > 0 ? STRIP_LEN - 1 : 0;
+            state.log.unshift(`💨 ${e.icon} ${e.name} atravessou no vazio!`);
+          }
+          e.state = 'IDLE';
+        } else {
+          const threat = getEnemyThreatTiles(state, e);
+          let hitSomething = false;
+          for (const tPos of threat) {
+            if (e.leavesAcid && !state.acidTiles.includes(tPos)) state.acidTiles.push(tPos);
+            if (state.player.pos === tPos) {
+              damagePlayer(state, e.dmg, `${e.icon} ${e.name}`);
               hitSomething = true;
+            } else {
+              const ally = enemyAt(state, tPos);
+              if (ally && ally.id !== e.id) {
+                damageEnemy(
+                  state,
+                  ally,
+                  e.dmg,
+                  `💥 FOGO AMIGO! ${e.icon} ${e.name} acertou ${ally.icon} ${ally.name} por ${e.dmg} (gene EXPOSTO)!`,
+                  { expose: true, ignoreFrontShield: true, popupText: `💥 FOGO AMIGO -${e.dmg}!`, shake: true }
+                );
+                hitSomething = true;
+              }
             }
           }
+          if (!hitSomething) state.log.unshift(`💨 ${e.icon} ${e.name} atacou o ar!`);
+          e.state = 'IDLE';
         }
-        if (!hitSomething) {
-          state.log.unshift(`💨 ${e.icon} ${e.name} atacou o ar!`);
-        }
-        e.state = 'IDLE';
       } else {
-        // Decide se arma golpe, vira ou anda
         const dist = state.player.pos - e.pos;
         const facingPlayer = (dist > 0 && e.dir === 1) || (dist < 0 && e.dir === -1);
         const absDist = Math.abs(dist);
@@ -1675,7 +1944,7 @@
           (e.attackType === 'SWIRL' && absDist === 1) ||
           (facingPlayer && e.attackType === 'MELEE_1' && absDist === 1) ||
           (facingPlayer && e.attackType === 'SPEAR_2' && absDist <= 2) ||
-          (facingPlayer && e.attackType === 'ARROW');
+          (facingPlayer && (e.attackType === 'ARROW' || e.attackType === 'CHARGE'));
 
         if (inRange) {
           e.state = 'PRIMED';
@@ -1687,14 +1956,13 @@
           if (stepPos >= 0 && stepPos < STRIP_LEN && !actorAt(state, stepPos)) {
             e.pos = stepPos;
             if (state.acidTiles.includes(stepPos)) {
-              damageEnemy(state, e, 1, `🧪 ${e.name} pisou no Ácido (+1 dano & Expõe)!`, true);
+              damageEnemy(state, e, 1, `🧪 ${e.name} pisou no Ácido (+1 & EXPÕE)!`, { expose: true, ignoreFrontShield: true });
             }
           }
         }
       }
     }
 
-    // 3) Verifica Vitória da Onda ou Derrota
     if (state.player.hp <= 0) {
       state.phase = 'DEFEAT';
       state.log.unshift('💀 Seu organismo sucumbiu!');
@@ -1707,40 +1975,52 @@
         state.phase = 'VICTORY';
         state.log.unshift('🏆 VITÓRIA SUPREMA! Você dominou a Quimera Soberana!');
       } else {
-        // Entrega o loot da onda na Bandeja e abre pausa de montagem livre!
         const wave = WAVES[state.waveIndex];
-        for (const pid of wave.rewardLoot) {
-          const def = PIECES[pid];
-          state.reservePieces.push({
-            uid: makeUid(state, def.kind === 'ORGAN' ? 'org' : 'var'),
-            pieceId: pid,
-            rot: 0,
-          });
-        }
         state.player.hp = Math.min(state.player.maxHp, state.player.hp + 4);
         state.phase = 'WAVE_CLEAR';
+        state.pendingDraft = [...wave.draftOptions];
         state.queue = [];
         state.weaponCds = {};
-        state.log.unshift(`🎉 ${wave.name} vencida! (+4 PV + ${wave.rewardLoot.length} novos loots na Bandeja — recombine livremente no 5×4!)`);
+        state.log.unshift(`🎉 ${wave.name} vencida! (+4 PV) Escolha 1 Loot — o que rejeitar fortalece o Chefe Final!`);
       }
       return;
     }
 
-    // 4) Avança turno e recarrega CDs das armas
     state.turn += 1;
     state.player.shield = 0;
     state.recombinesLeft = 1;
+    if (state.player.swapCd > 0) state.player.swapCd -= 1;
     for (const uid of Object.keys(state.weaponCds)) {
       if (state.weaponCds[uid] > 0) state.weaponCds[uid] -= 1;
     }
   }
 
-  // ==================== AÇÕES DO JOGADOR (1 AÇÃO = 1 TURNO) ====================
+  // ==================== AÇÕES DO JOGADOR ====================
   function movePlayer(state, delta) {
     if (state.phase !== 'COMBAT') return { ok: false, reason: 'Fora de combate.' };
     const target = state.player.pos + delta;
     if (target < 0 || target >= STRIP_LEN) return { ok: false, reason: 'Limite da arena.' };
-    if (enemyAt(state, target)) return { ok: false, reason: 'Casa ocupada por inimigo.' };
+
+    const adjEnemy = enemyAt(state, target);
+    if (adjEnemy) {
+      // MOVIMENTO ASSINATURA (Shogun Wanderer): ⚡ TROCA RÁPIDA ao avançar sobre inimigo adjacente!
+      if (state.player.swapCd > 0) {
+        return { ok: false, reason: `⚡ Troca Rápida em recarga (${state.player.swapCd}t).` };
+      }
+      state.lastEvents = [];
+      const oldP = state.player.pos;
+      state.player.pos = adjEnemy.pos;
+      adjEnemy.pos = oldP;
+      state.player.swapCd = state.player.swapCdMax + 1;
+      pushEvent(state, { type: 'SWAP', from: oldP, to: state.player.pos, pos: adjEnemy.pos, text: '⚡ TROCA RÁPIDA!' });
+      state.log.unshift(`⚡ TROCA RÁPIDA! Você trocou de lugar com ${adjEnemy.icon} ${adjEnemy.name}!`);
+      if (state.acidTiles.includes(adjEnemy.pos)) {
+        damageEnemy(state, adjEnemy, 1, `🧪 ${adjEnemy.name} caiu no Ácido (+1 & EXPÕE)!`, { expose: true, ignoreFrontShield: true });
+      }
+      resolveEnemyPhase(state);
+      return { ok: true, swapped: true };
+    }
+
     state.lastEvents = [];
     state.player.pos = target;
     state.player.dir = delta > 0 ? 1 : -1;
@@ -1762,7 +2042,7 @@
     if (state.phase !== 'COMBAT') return { ok: false, reason: 'Fora de combate.' };
     state.lastEvents = [];
     state.player.shield += 2;
-    // Esperar reduz +1 CD extra de todas as armas
+    if (state.player.swapCd > 0) state.player.swapCd -= 1;
     for (const uid of Object.keys(state.weaponCds)) {
       if (state.weaponCds[uid] > 0) state.weaponCds[uid] -= 1;
     }
@@ -1788,7 +2068,6 @@
   }
 
   function removeQueuedWeapon(state, organUid) {
-    // Permite remover da fila sem custo antes de disparar
     const idx = state.queue.indexOf(organUid);
     if (idx === -1) return { ok: false };
     state.queue.splice(idx, 1);
@@ -1800,6 +2079,7 @@
     if (state.queue.length === 0) return { ok: false, reason: 'Prepare pelo menos 1 arma na Fila!' };
 
     state.lastEvents = [];
+    const aliveBefore = state.enemies.filter(e => e.hp > 0).length;
     const { weapons } = computeGeneratedAttacks(state);
     const toRun = [...state.queue];
     state.queue = [];
@@ -1808,23 +2088,34 @@
       const w = weapons.find(x => x.uid === uid);
       if (!w) return;
       executeSingleWeapon(state, w, idx);
-      // Coloca em recarga (+1 porque resolveEnemyPhase reduz 1 no fim do turno)
       state.weaponCds[uid] = w.cdMax > 0 ? w.cdMax + 1 : 0;
     });
 
+    // COMBO KILL (Shogun magic): matar 2+ inimigos no mesmo disparo recarrega -2 CD e cura +2 PV!
+    const aliveAfter = state.enemies.filter(e => e.hp > 0).length;
+    const kills = aliveBefore - aliveAfter;
+    if (kills >= 2) {
+      state.player.hp = Math.min(state.player.maxHp, state.player.hp + 2);
+      for (const uid of Object.keys(state.weaponCds)) {
+        state.weaponCds[uid] = Math.max(0, state.weaponCds[uid] - 2);
+      }
+      pushEvent(state, { type: 'COMBO_KILL', pos: state.player.pos, text: `🔥 COMBO ×${kills}! +2PV`, shake: true });
+      state.log.unshift(`🔥 COMBO KILL ×${kills}! Todas as armas recarregaram -2 CD e você curou +2 PV!`);
+    }
+
     resolveEnemyPhase(state);
-    return { ok: true };
+    return { ok: true, kills };
   }
 
   function startNextWave(state) {
     if (state.phase !== 'WAVE_CLEAR') return { ok: false, reason: 'Onda atual ainda não terminou.' };
+    if (state.pendingDraft) return { ok: false, reason: 'Escolha 1 dos 2 Loots antes de avançar!' };
     const organCount = state.gridPieces.filter(p => PIECES[p.pieceId].kind === 'ORGAN').length;
-    if (organCount === 0) return { ok: false, reason: 'Encaixe pelo menos 1 Órgão na grade 5×4 antes de lutar!' };
+    if (organCount === 0) return { ok: false, reason: 'Encaixe pelo menos 1 Órgão na grade 5×4!' };
     loadWaveIntoState(state, state.waveIndex + 1);
     return { ok: true };
   }
 
-  // Prévia fiel do disparo da fila (executa num clone)
   function previewExecuteQueue(state) {
     if (state.phase !== 'COMBAT' || state.queue.length === 0) return null;
     const sim = cloneState(state);
@@ -1860,7 +2151,7 @@
     canRecombine,
     placePieceOnGrid,
     movePieceToReserve,
-    rotateReservePiece,
+    chooseDraftLoot,
     getEnemyThreatTiles,
     extractExposedGene,
     movePlayer,
@@ -1876,7 +2167,7 @@
 
 </script>
   <script>
-/* O Enxerto v7.0 · Interface Tela Dividida (Shogun 1D + Lootbound 5×4) */
+/* O Enxerto v7.5 · Quimera Viva (Shogun 1D Cinético + Lootbound 5×4 Sináptico + Spore) */
 (function () {
   'use strict';
 
@@ -1887,9 +2178,7 @@
   let soundOn = true;
   let audioCtx = null;
 
-  // Estado de interação da Grade 5×4
-  // held: { uid, pieceId, rot, fromGrid } | null
-  let held = null;
+  let held = null; // { uid, pieceId, rot, fromGrid } | null
   let hoverCell = null; // { x, y } | null
   let previewFire = false;
 
@@ -1916,20 +2205,27 @@
   }
 
   const sfx = {
-    click: () => playTone(440, 0.06, 'sine', 0.05, 520),
-    rotate: () => playTone(520, 0.07, 'triangle', 0.06, 680),
-    graft: () => { playTone(360, 0.09, 'triangle', 0.08, 620); setTimeout(() => playTone(660, 0.12, 'sine', 0.08, 880), 65); },
-    error: () => playTone(180, 0.12, 'sawtooth', 0.07, 120),
-    hit: () => playTone(210, 0.14, 'sawtooth', 0.09, 90),
-    step: () => playTone(280, 0.05, 'sine', 0.05, 220),
+    click: () => playTone(460, 0.055, 'sine', 0.05, 540),
+    rotate: () => playTone(520, 0.065, 'triangle', 0.06, 700),
+    graft: () => { playTone(380, 0.08, 'triangle', 0.08, 640); setTimeout(() => playTone(680, 0.12, 'sine', 0.08, 920), 65); },
+    error: () => playTone(170, 0.12, 'sawtooth', 0.07, 110),
+    hit: () => playTone(230, 0.13, 'sawtooth', 0.09, 85),
+    boom: () => { playTone(130, 0.24, 'sawtooth', 0.12, 42); setTimeout(() => playTone(95, 0.2, 'square', 0.08, 38), 55); },
+    swap: () => { playTone(340, 0.09, 'sine', 0.07, 720); setTimeout(() => playTone(720, 0.09, 'sine', 0.07, 360), 75); },
+    shock: () => playTone(920, 0.11, 'square', 0.06, 420),
+    step: () => playTone(290, 0.05, 'sine', 0.05, 220),
+    combo: () => { [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => playTone(f, 0.15, 'triangle', 0.09), i * 65)); },
     win: () => { [440, 554, 659, 880].forEach((f, i) => setTimeout(() => playTone(f, 0.16, 'triangle', 0.08), i * 80)); },
   };
 
   // ==================== DOM REFS ====================
+  const elCombatPanel = document.getElementById('combat-panel');
   const elHudWave = document.getElementById('hud-wave');
   const elHudHp = document.getElementById('hud-hp');
   const elHudShield = document.getElementById('hud-shield');
   const elHudRecomb = document.getElementById('hud-recomb');
+  const elHudBoss = document.getElementById('hud-boss');
+  const elHudSwapCd = document.getElementById('hud-swap-cd');
   const elWaveTitle = document.getElementById('wave-title');
   const elTurnLabel = document.getElementById('turn-label');
   const elWaveBanner = document.getElementById('wave-banner-slot');
@@ -1939,8 +2235,12 @@
   const elWeaponsGrid = document.getElementById('weapons-grid');
   const elCombatLog = document.getElementById('combat-log');
   const elInvModeBadge = document.getElementById('inv-mode-badge');
+  const elChimeraSvgWrap = document.getElementById('chimera-svg-wrap');
+  const elChimeraTitle = document.getElementById('chimera-title');
+  const elChimeraDesc = document.getElementById('chimera-desc');
   const elHoldingBar = document.getElementById('holding-bar');
   const elOrgGrid = document.getElementById('organism-grid');
+  const elSynapseSvg = document.getElementById('synapse-svg');
   const elReserveCount = document.getElementById('reserve-count');
   const elReserveGrid = document.getElementById('reserve-grid');
 
@@ -1955,18 +2255,136 @@
   const btnSound = document.getElementById('btn-sound');
   const btnRestart = document.getElementById('btn-restart');
 
+  // ==================== PROCEDURAL SPORE CHIMERA SVG ====================
+  function renderChimeraSVG(activePartIds, activeModIds) {
+    const has = id => activePartIds.includes(id);
+    const mod = id => activeModIds.includes(id);
+
+    const bodyFill = mod('PECONHA') ? '#2c4d1f' : mod('NERVO') ? '#2b3b4e' : mod('TENDAO') ? '#3f1e2e' : '#1f3b2e';
+    const bodyStroke = mod('OSSO') ? '#e7e5e4' : mod('NERVO') ? '#facc15' : '#a3e635';
+
+    let svg = `<svg viewBox="0 0 110 76" width="90" height="62" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Quimera Viva">`;
+
+    // Aura de Repique (eco duplo)
+    if (mod('REPIQUE')) {
+      svg += `<ellipse cx="55" cy="40" rx="34" ry="24" fill="none" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.8"/>`;
+    }
+    // Cauda de Escorpião
+    if (has('CAUDA')) {
+      svg += `<path d="M 33 44 Q 14 40 16 20 Q 19 11 29 14" fill="none" stroke="${mod('OSSO') ? '#e7e5e4' : '#f472b6'}" stroke-width="5" stroke-linecap="round"/>`;
+      svg += `<polygon points="28,10 36,14 29,18" fill="${mod('PECONHA') ? '#a3e635' : '#fb7185'}"/>`;
+    }
+    // Patas Saltadoras (Louva-a-Deus)
+    if (has('PATAS')) {
+      svg += `<path d="M 42 52 L 32 67 L 44 69 M 66 52 L 77 67 L 65 69" fill="none" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+    } else {
+      svg += `<path d="M 44 54 L 41 66 M 64 54 L 67 66" fill="none" stroke="#6ee7b7" stroke-width="3.5" stroke-linecap="round"/>`;
+    }
+    // Espinhos Dorsais
+    if (has('ESPINHO') || has('FERRAO_CURVO')) {
+      svg += `<polygon points="44,23 49,9 54,23" fill="#38bdf8" stroke="#0c1914" stroke-width="1"/>`;
+      svg += `<polygon points="54,22 61,7 65,23" fill="${has('FERRAO_CURVO') ? '#facc15' : '#38bdf8'}" stroke="#0c1914" stroke-width="1"/>`;
+    }
+    // Corpo Principal + Placas Ósseas
+    svg += `<ellipse cx="55" cy="40" rx="23" ry="17" fill="${bodyFill}" stroke="${bodyStroke}" stroke-width="${mod('OSSO') ? 3.2 : 2}"/>`;
+    if (mod('OSSO')) {
+      svg += `<path d="M 41 34 Q 55 25 69 34" fill="none" stroke="#e7e5e4" stroke-width="3" stroke-linecap="round"/>`;
+    }
+    // Bolsas Ácidas
+    if (mod('PECONHA')) {
+      svg += `<circle cx="44" cy="42" r="4.5" fill="#a3e635" opacity="0.9"/><circle cx="53" cy="47" r="3.5" fill="#bef264" opacity="0.9"/>`;
+    }
+    // Pinça Colossal
+    if (has('PINCA')) {
+      svg += `<path d="M 73 46 Q 91 54 96 42 Q 89 44 84 40 Q 92 38 96 31 Q 84 31 74 37" fill="#f97316" stroke="#fed7aa" stroke-width="1.3"/>`;
+    }
+    // Mandíbulas
+    if (has('MANDIBULA')) {
+      svg += `<path d="M 74 33 L 91 27 L 82 37 Z" fill="#fb923c" stroke="#fff" stroke-width="0.9"/>`;
+      svg += `<path d="M 74 45 L 91 50 L 82 41 Z" fill="#fb923c" stroke="#fff" stroke-width="0.9"/>`;
+    }
+    // Língua Chicote
+    if (has('LINGUA')) {
+      svg += `<path d="M 77 39 Q 94 37 104 30" fill="none" stroke="#e879f9" stroke-width="3" stroke-linecap="round"/>`;
+      svg += `<circle cx="104" cy="30" r="3.2" fill="#f0abfc"/>`;
+    }
+    // Olho Biológico
+    svg += `<circle cx="66" cy="35" r="4.2" fill="#070c0a"/><circle cx="67.2" cy="34.2" r="1.8" fill="${mod('TENDAO') ? '#fb7185' : '#facc15'}"/>`;
+
+    // Tendões Rubros
+    if (mod('TENDAO')) {
+      svg += `<path d="M 38 48 Q 55 58 72 48" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="3 2"/>`;
+    }
+    // Arcos Voltaicos
+    if (mod('NERVO')) {
+      svg += `<polyline points="35,24 41,17 44,22 50,14" fill="none" stroke="#facc15" stroke-width="2"/>`;
+      svg += `<polyline points="68,22 75,15 78,20 85,13" fill="none" stroke="#facc15" stroke-width="2"/>`;
+    }
+
+    svg += `</svg>`;
+    return svg;
+  }
+
+  // ==================== KINETIC PLAYBACK (POPUPS + SHAKE + SFX) ====================
+  function triggerShake() {
+    elCombatPanel.classList.remove('shake');
+    void elCombatPanel.offsetWidth;
+    elCombatPanel.classList.add('shake');
+  }
+
+  function spawnCellPopup(pos, text, styleCls = '') {
+    const cell = elCombatStrip.querySelector(`.strip-cell[data-strip="${pos}"]`);
+    if (!cell) return;
+    const pop = document.createElement('div');
+    pop.className = `float-popup ${styleCls}`;
+    pop.textContent = text;
+    cell.appendChild(pop);
+    setTimeout(() => pop.remove(), 980);
+  }
+
+  function playKineticEvents(events) {
+    if (!events || events.length === 0) return;
+    events.forEach((ev, idx) => {
+      setTimeout(() => {
+        const cell = typeof ev.pos === 'number'
+          ? elCombatStrip.querySelector(`.strip-cell[data-strip="${ev.pos}"]`)
+          : null;
+        if (ev.shake) triggerShake();
+
+        if (ev.type === 'EXPLODE') {
+          sfx.boom();
+          if (cell) { cell.classList.add('flash-boom'); setTimeout(() => cell.classList.remove('flash-boom'), 320); }
+        } else if (ev.type === 'COMBO_KILL') {
+          sfx.combo();
+        } else if (ev.type === 'SWAP') {
+          sfx.swap();
+        } else if (ev.type === 'SHOCK') {
+          sfx.shock();
+        } else if (ev.type === 'HIT_ENEMY' || ev.type === 'HIT_PLAYER' || ev.type === 'KILL') {
+          sfx.hit();
+          if (cell) { cell.classList.add('flash-hit'); setTimeout(() => cell.classList.remove('flash-hit'), 240); }
+        }
+
+        if (typeof ev.pos === 'number' && ev.text) {
+          const cls = (ev.type === 'HIT_PLAYER' || ev.type === 'HIT_ENEMY' || ev.type === 'EXPLODE')
+            ? 'dmg'
+            : (ev.type === 'COMBO_KILL' || ev.type === 'EXTRACT' || ev.type === 'SWAP') ? 'good' : '';
+          spawnCellPopup(ev.pos, ev.text, cls);
+        }
+      }, idx * 145);
+    });
+  }
+
   // ==================== HELPERS DE UI ====================
   function renderMiniShapeHTML(pieceId, rot = 0) {
     const def = E.PIECES[pieceId];
     const geo = E.getPieceGeometry(pieceId, rot);
-    // Compute bounding box including cells + stars
     const allPts = [...geo.cells, ...geo.stars];
     const minX = Math.min(...allPts.map(p => p[0]));
     const maxX = Math.max(...allPts.map(p => p[0]));
     const minY = Math.min(...allPts.map(p => p[1]));
     const maxY = Math.max(...allPts.map(p => p[1]));
     const cols = maxX - minX + 1;
-    const rows = maxY - minY + 1;
 
     const cellSet = new Set(geo.cells.map(([x, y]) => `${x},${y}`));
     const starSet = new Set(geo.stars.map(([x, y]) => `${x},${y}`));
@@ -1975,13 +2393,9 @@
     for (let y = minY; y <= maxY; y++) {
       for (let x = minX; x <= maxX; x++) {
         const k = `${x},${y}`;
-        if (cellSet.has(k)) {
-          html += `<div class="ms-cell ${def.kind === 'ORGAN' ? 'fill-organ' : 'fill-var'}"></div>`;
-        } else if (starSet.has(k)) {
-          html += `<div class="ms-cell star">★</div>`;
-        } else {
-          html += `<div class="ms-cell"></div>`;
-        }
+        if (cellSet.has(k)) html += `<div class="ms-cell ${def.kind === 'ORGAN' ? 'fill-organ' : 'fill-var'}"></div>`;
+        else if (starSet.has(k)) html += `<div class="ms-cell star">★</div>`;
+        else html += `<div class="ms-cell"></div>`;
       }
     }
     html += `</div>`;
@@ -2005,11 +2419,16 @@
     renderCombatLog();
   }
 
-  // ==================== RENDER: HUD & BANNERS ====================
+  // ==================== RENDER: HUD, DRAFT & BANNERS ====================
   function renderTopHud() {
     elHudWave.textContent = `Onda ${state.waveIndex + 1}/${E.WAVES.length}`;
     elHudHp.textContent = `❤️ ${state.player.hp}/${state.player.maxHp}`;
     elHudShield.textContent = `🛡️ ${state.player.shield}`;
+    elHudBoss.textContent = `👑 Chefe: ${state.bossMutations.length > 0 ? state.bossMutations.map(id => E.PIECES[id].icon).join('') : 'Base'}`;
+    elHudSwapCd.textContent = state.player.swapCd === 0
+      ? '⚡ Troca Rápida: PRONTA'
+      : `⚡ Troca Rápida: ⏳${state.player.swapCd}t`;
+
     if (state.phase === 'WAVE_CLEAR') {
       elHudRecomb.textContent = '🧬 Ajustes: ∞ (Livre!)';
       elInvModeBadge.textContent = '∞ Recombinação LIVRE entre ondas!';
@@ -2017,37 +2436,72 @@
       elHudRecomb.textContent = `🧬 Ajustes: ${state.recombinesLeft}/1`;
       elInvModeBadge.textContent = state.recombinesLeft > 0
         ? '1 ajuste grátis disponível neste turno!'
-        : 'Ajuste do turno usado (renova no próximo turno)';
+        : 'Ajuste usado (renova no próximo turno)';
     }
 
     elWaveTitle.textContent = `⚔️ ${state.waveName}`;
     elTurnLabel.textContent = `Turno ${state.turn}`;
     elWaveHint.textContent = `💡 ${state.waveHint}`;
 
-    // Banner especial para WAVE_CLEAR / VICTORY / DEFEAT
     if (state.phase === 'WAVE_CLEAR') {
-      elWaveBanner.innerHTML = `
-        <div class="wave-banner">
-          <div>
-            <div style="font-weight:900; color:#bef264;">🎉 ONDA CONCLUÍDA! (+4 PV &amp; Novo Loot na Bandeja)</div>
-            <div style="font-size:0.78rem; color:var(--text);">Recombine peças livremente no Organismo 5×4 à direita e clique quando estiver pronto!</div>
+      if (state.pendingDraft && state.pendingDraft.length > 0) {
+        const cardsHtml = state.pendingDraft.map(pid => {
+          const def = E.PIECES[pid];
+          const otherId = state.pendingDraft.find(x => x !== pid);
+          const otherDef = E.PIECES[otherId];
+          return `
+            <button class="draft-card" data-draft="${pid}">
+              <div class="res-head">
+                <span style="font-weight:900; font-size:0.9rem;">${def.icon} ${def.name}</span>
+                <span class="res-kind ${def.kind === 'ORGAN' ? 'organ' : 'variation'}">${def.kind === 'ORGAN' ? 'Órgão' : 'Variação'}</span>
+              </div>
+              ${renderMiniShapeHTML(pid, 0)}
+              <div style="font-size:0.75rem; color:#d2eae0;">${def.kind === 'ORGAN' ? def.desc : def.shortEffect}</div>
+              <div class="draft-boss-warn">👑 Se você escolher este, o Chefe Final absorve <strong>${otherDef.icon} ${otherDef.name}</strong>!</div>
+            </button>
+          `;
+        }).join('');
+
+        elWaveBanner.innerHTML = `
+          <div class="wave-banner">
+            <div style="font-weight:900; color:#bef264; font-size:0.95rem;">🎁 ONDA VENCIDA (+4 PV)! DILEMA DO ENXERTO (Estilo Lootbound)</div>
+            <div style="font-size:0.77rem; color:var(--text);">Escolha <strong>1 Peça</strong> para sua Bandeja — a peça <strong>rejeitada</strong> será enxertada na 👑 Quimera Soberana!</div>
+            <div class="draft-grid">${cardsHtml}</div>
           </div>
-          <button class="btn primary" id="btn-next-wave">⚔️ Iniciar Onda ${state.waveIndex + 2} ➔</button>
-        </div>
-      `;
-      document.getElementById('btn-next-wave').addEventListener('click', () => {
-        const res = E.startNextWave(state);
-        if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
-        held = null;
-        sfx.graft();
-        renderAll();
-      });
+        `;
+        elWaveBanner.querySelectorAll('[data-draft]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const res = E.chooseDraftLoot(state, btn.dataset.draft);
+            if (!res.ok) { sfx.error(); return; }
+            held = { uid: res.uid, pieceId: res.pieceId, rot: 0, fromGrid: false };
+            sfx.graft();
+            renderAll();
+          });
+        });
+      } else {
+        elWaveBanner.innerHTML = `
+          <div class="wave-banner" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;">
+            <div>
+              <div style="font-weight:900; color:#bef264;">🧬 Recombine seu Organismo 5×4 à vontade!</div>
+              <div style="font-size:0.77rem;">Quando sua Quimera estiver pronta, avance para a próxima onda.</div>
+            </div>
+            <button class="btn primary" id="btn-next-wave">⚔️ Iniciar Onda ${state.waveIndex + 2} ➔</button>
+          </div>
+        `;
+        document.getElementById('btn-next-wave').addEventListener('click', () => {
+          const res = E.startNextWave(state);
+          if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
+          held = null;
+          sfx.graft();
+          renderAll();
+        });
+      }
     } else if (state.phase === 'VICTORY') {
       elWaveBanner.innerHTML = `
-        <div class="wave-banner">
+        <div class="wave-banner" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;">
           <div>
-            <div style="font-weight:900; color:#fde047; font-size:1.05rem;">🏆 VITÓRIA SUPREMA! A Quimera Soberana foi derrotada!</div>
-            <div style="font-size:0.8rem;">Você completou as 4 ondas com ${state.player.hp}/${state.player.maxHp} PV restantes.</div>
+            <div style="font-weight:900; color:#fde047; font-size:1.05rem;">🏆 VITÓRIA SUPREMA! A Quimera Soberana caiu!</div>
+            <div style="font-size:0.8rem;">Sobreviveu às 4 ondas com ${state.player.hp}/${state.player.maxHp} PV!</div>
           </div>
           <button class="btn primary" id="btn-play-again">🔄 Jogar Novamente</button>
         </div>
@@ -2055,10 +2509,10 @@
       document.getElementById('btn-play-again').addEventListener('click', restartGame);
     } else if (state.phase === 'DEFEAT') {
       elWaveBanner.innerHTML = `
-        <div class="wave-banner" style="border-color:var(--danger); background:rgba(251,113,133,0.14);">
+        <div class="wave-banner" style="border-color:var(--danger); background:rgba(251,113,133,0.14); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;">
           <div>
             <div style="font-weight:900; color:#fecdd3; font-size:1.05rem;">💀 ORGANISMO ABATIDO NA ONDA ${state.waveIndex + 1}</div>
-            <div style="font-size:0.8rem;">Dica: recombine 🧲 Tendão ou 🪨 Osso no 5×4 durante a luta para gerar Fogo Amigo!</div>
+            <div style="font-size:0.79rem;">Dica: clique no inimigo adjacente para usar ⚡ Troca Rápida e jogue inimigos na mira do 🦏 Javali ou 💣 Esporo!</div>
           </div>
           <button class="btn primary" id="btn-retry">🔄 Tentar Novamente</button>
         </div>
@@ -2069,9 +2523,8 @@
     }
   }
 
-  // ==================== RENDER: FAIXA DE COMBATE 1D (7 CASAS) ====================
+  // ==================== RENDER: FAIXA 1D ====================
   function renderCombatStrip() {
-    // Coleta ameaças telegrafadas
     const threatByCell = new Map();
     for (const e of state.enemies) {
       if (e.hp <= 0 || e.state !== 'PRIMED') continue;
@@ -2080,15 +2533,12 @@
       }
     }
 
-    // Prévia ao passar mouse em DISPARAR FILA
     const preview = previewFire ? E.previewExecuteQueue(state) : null;
     const previewChangedPos = new Set();
     if (preview) {
       for (const pe of preview.enemies) {
         const cur = state.enemies.find(x => x.id === pe.id);
-        if (cur && (pe.hp < cur.hp || pe.pos !== cur.pos || pe.dir !== cur.dir)) {
-          previewChangedPos.add(cur.pos);
-        }
+        if (cur && (pe.hp < cur.hp || pe.pos !== cur.pos || pe.dir !== cur.dir)) previewChangedPos.add(cur.pos);
       }
     }
 
@@ -2098,7 +2548,9 @@
       const enemy = state.enemies.find(e => e.hp > 0 && e.pos === i);
       const isAcid = state.acidTiles.includes(i);
       const threatDmg = threatByCell.get(i) || 0;
-      const isAdjEmpty = state.phase === 'COMBAT' && !enemy && Math.abs(state.player.pos - i) === 1;
+      const distToPlayer = Math.abs(state.player.pos - i);
+      const isAdjEmpty = state.phase === 'COMBAT' && !enemy && distToPlayer === 1;
+      const isAdjSwap = state.phase === 'COMBAT' && !!enemy && distToPlayer === 1 && state.player.swapCd === 0;
 
       const cls = ['strip-cell'];
       if (isPlayer) cls.push('player-cell');
@@ -2106,6 +2558,7 @@
       if (isAcid) cls.push('acid');
       if (previewChangedPos.has(i)) cls.push('preview-hit');
       if (isAdjEmpty) cls.push('clickable-step');
+      if (isAdjSwap) cls.push('clickable-swap');
 
       const topLeft = `<span>${i + 1}${isAcid ? ' 🧪' : ''}</span>`;
       const topRight = threatDmg > 0 ? `<span class="intent-tag">⚠️${threatDmg}</span>` : `<span></span>`;
@@ -2121,7 +2574,7 @@
             <span>🧬</span>
             ${state.player.dir > 0 ? `<span class="facing-arrow">${arrow}</span>` : ''}
           </div>
-          <div class="actor-name">VOCÊ</div>
+          <div class="actor-name">QUIMERA</div>
         `;
         bottom = `<div class="hp-badge" style="color:#bef264;">${state.player.hp}♥${state.player.shield > 0 ? ` +${state.player.shield}🛡️` : ''}</div>`;
       } else if (enemy) {
@@ -2129,7 +2582,8 @@
         const atkTag = enemy.state === 'PRIMED' ? `⚠️${enemy.dmg}` : `${enemy.dmg}⚔`;
         const lootDef = enemy.lootPieceId && !enemy.disarmed ? E.PIECES[enemy.lootPieceId] : null;
         const prevE = preview ? preview.enemies.find(pe => pe.id === enemy.id) : null;
-        const hpPreview = prevE && prevE.hp < enemy.hp ? ` → ${prevE.hp <= 0 ? '☠️' : `${prevE.hp}♥`}` : '';
+        const hpPreview = prevE && prevE.hp < enemy.hp ? `→${prevE.hp <= 0 ? '☠️' : `${prevE.hp}♥`}` : '';
+        const traitCls = enemy.trait === 'EXPLOSIVE' ? 'trait-chip boom' : enemy.trait === 'FRONT_SHIELD' ? 'trait-chip shield' : 'trait-chip';
 
         body = `
           <div class="actor-sprite">
@@ -2138,7 +2592,7 @@
             ${enemy.dir > 0 ? `<span class="facing-arrow">${arrow}</span>` : ''}
           </div>
           <div class="actor-name">${enemy.name}</div>
-          ${lootDef ? `<div class="loot-chip">${lootDef.icon} ${lootDef.name}</div>` : ''}
+          ${enemy.traitLabel ? `<div class="${traitCls}">${enemy.traitLabel}</div>` : ''}
         `;
 
         if (enemy.exposed && lootDef) {
@@ -2147,7 +2601,10 @@
             <button class="extract-btn" data-extract="${enemy.id}">✂️ Arrancar ${lootDef.icon}</button>
           `;
         } else {
-          bottom = `<div class="hp-badge" style="color:#fecdd3;">${enemy.hp}♥${hpPreview} · ${atkTag}${enemy.poison > 0 ? ` 🧪${enemy.poison}` : ''}</div>`;
+          bottom = `
+            <div class="hp-badge" style="color:#fecdd3;">${enemy.hp}♥${hpPreview} · ${atkTag}${enemy.poison > 0 ? ` 🧪${enemy.poison}` : ''}</div>
+            ${isAdjSwap ? `<div class="swap-hint">⚡ Clique p/ Trocar</div>` : (lootDef ? `<div style="font-size:0.56rem; color:#93b5a6;">Loot: ${lootDef.icon}</div>` : '')}
+          `;
         }
       }
 
@@ -2161,8 +2618,7 @@
     }
     elCombatStrip.innerHTML = html;
 
-    // Bind direct step click on adjacent empty tile
-    elCombatStrip.querySelectorAll('.clickable-step').forEach(cell => {
+    elCombatStrip.querySelectorAll('.clickable-step, .clickable-swap').forEach(cell => {
       cell.addEventListener('click', () => {
         const idx = Number(cell.dataset.strip);
         const delta = idx - state.player.pos;
@@ -2170,42 +2626,42 @@
       });
     });
 
-    // Bind live surgical extraction buttons
     elCombatStrip.querySelectorAll('[data-extract]').forEach(btn => {
       btn.addEventListener('click', ev => {
         ev.stopPropagation();
         const res = E.extractExposedGene(state, btn.dataset.extract);
         if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
-        // Já segura o gene recém-arrancado para o jogador encaixar na grade 5×4!
         held = { uid: res.uid, pieceId: res.pieceId, rot: 0, fromGrid: false };
         sfx.graft();
-        renderAll();
+        renderAll(true);
       });
     });
   }
 
-  // ==================== RENDER: FILA DE COMBO & ARMAS GERADAS ====================
+  // ==================== RENDER: FILA & ARMAS ====================
   function renderQueueAndWeapons() {
     const inCombat = state.phase === 'COMBAT';
     const { weapons } = E.computeGeneratedAttacks(state);
 
-    // Controls disabled state
-    btnLeft.disabled = !inCombat || state.player.pos === 0 || !!state.enemies.find(e => e.hp > 0 && e.pos === state.player.pos - 1);
-    btnRight.disabled = !inCombat || state.player.pos === E.STRIP_LEN - 1 || !!state.enemies.find(e => e.hp > 0 && e.pos === state.player.pos + 1);
+    const leftEnemy = state.enemies.find(e => e.hp > 0 && e.pos === state.player.pos - 1);
+    const rightEnemy = state.enemies.find(e => e.hp > 0 && e.pos === state.player.pos + 1);
+    btnLeft.disabled = !inCombat || state.player.pos === 0 || (!!leftEnemy && state.player.swapCd > 0);
+    btnRight.disabled = !inCombat || state.player.pos === E.STRIP_LEN - 1 || (!!rightEnemy && state.player.swapCd > 0);
+    btnLeft.textContent = leftEnemy && state.player.swapCd === 0 ? '⚡ Trocar ⬅' : '⬅ Andar';
+    btnRight.textContent = rightEnemy && state.player.swapCd === 0 ? '➡ Trocar ⚡' : 'Andar ➡';
+    btnLeft.className = leftEnemy && state.player.swapCd === 0 ? 'btn cyan' : 'btn';
+    btnRight.className = rightEnemy && state.player.swapCd === 0 ? 'btn cyan' : 'btn';
+
     btnFlip.disabled = !inCombat;
     btnWait.disabled = !inCombat;
     btnFire.disabled = !inCombat || state.queue.length === 0;
 
-    // Queue slots (3)
     let qHtml = '';
     for (let i = 0; i < 3; i++) {
       const uid = state.queue[i];
       const w = uid ? weapons.find(x => x.uid === uid) : null;
-      if (w) {
-        qHtml += `<div class="q-slot filled" data-unqueue="${uid}" title="Clique para remover da fila">${i + 1}. ${w.icon} ${w.name}</div>`;
-      } else {
-        qHtml += `<div class="q-slot">Slot ${i + 1}</div>`;
-      }
+      if (w) qHtml += `<div class="q-slot filled" data-unqueue="${uid}" title="Clique para remover da fila">${i + 1}. ${w.icon} ${w.name}</div>`;
+      else qHtml += `<div class="q-slot">Slot ${i + 1}</div>`;
       if (i < 2) qHtml += `<span style="color:var(--muted); font-weight:900;">➔</span>`;
     }
     elQueueSlots.innerHTML = qHtml;
@@ -2213,11 +2669,10 @@
       slot.addEventListener('click', () => {
         E.removeQueuedWeapon(state, slot.dataset.unqueue);
         sfx.click();
-        renderAll();
+        renderAll(false);
       });
     });
 
-    // Generated Weapons Grid (updates LIVE from 5x4!)
     elWeaponsGrid.innerHTML = weapons.map(w => {
       const isQueued = state.queue.includes(w.uid);
       const canQueue = inCombat && !isQueued && w.cd === 0 && state.queue.length < 3;
@@ -2239,12 +2694,12 @@
           <div class="wc-stats">
             <span class="wc-dmg">⚔️ ${dmgText}</span>
             <span class="wc-cd">⏱️ ${cdText}</span>
-            ${isQueued ? `<span style="color:var(--gold)">★ NA FILA</span>` : ''}
+            ${isQueued ? `<span style="color:var(--gold)">★ FILA</span>` : ''}
           </div>
           <div class="wc-tags">
             ${w.tags.length > 0
               ? w.tags.map(t => `<span class="tag-chip">${t}</span>`).join('')
-              : `<span style="font-size:0.66rem; color:var(--muted);">${w.desc}</span>`}
+              : `<span style="font-size:0.65rem; color:var(--muted);">${w.desc}</span>`}
           </div>
         </button>
       `;
@@ -2255,7 +2710,7 @@
         const res = E.queueWeapon(state, btn.dataset.wuid);
         if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
         sfx.click();
-        renderAll();
+        renderAll(true);
       });
     });
   }
@@ -2264,7 +2719,7 @@
     elCombatLog.innerHTML = state.log.slice(0, 12).map(line => `<div>${line}</div>`).join('');
   }
 
-  // ==================== RENDER: ORGANISMO 5×4 (LOOTBOUND + SPORE) ====================
+  // ==================== RENDER: QUIMERA + ORGANISMO 5×4 + SINAPSES SVG ====================
   function updateGridGhostPreview() {
     const ghostCellSet = new Set();
     const ghostStarSet = new Set();
@@ -2283,9 +2738,7 @@
       const existingGhostStar = cell.querySelector('.star-ghost-badge');
       if (existingGhostStar) existingGhostStar.remove();
 
-      if (ghostCellSet.has(k)) {
-        cell.classList.add(ghostOk ? 'ghost-ok' : 'ghost-bad');
-      }
+      if (ghostCellSet.has(k)) cell.classList.add(ghostOk ? 'ghost-ok' : 'ghost-bad');
       if (ghostStarSet.has(k)) {
         const sp = document.createElement('span');
         sp.className = 'star-ghost-badge';
@@ -2296,24 +2749,35 @@
   }
 
   function renderOrganismGrid() {
-    const { activeStarLinks } = E.computeGeneratedAttacks(state);
+    const { weapons, activeStarLinks, activePartIds, activeModIds } = E.computeGeneratedAttacks(state);
     const linkedSet = new Set(activeStarLinks.map(l => `${l.x},${l.y}`));
 
-    // Map occupied cells -> placed piece
+    // Atualiza Avatar Procedural da Quimera (Spore!)
+    elChimeraSvgWrap.innerHTML = renderChimeraSVG(activePartIds, activeModIds);
+    const maxLvl = weapons.length > 0 ? Math.max(...weapons.map(w => w.level)) : 1;
+    elChimeraTitle.textContent = `Quimera Nv.${maxLvl} · ${weapons.length} Órgão(s) · ${activeStarLinks.length} Sinapse(s) ★`;
+    elChimeraDesc.textContent = activeModIds.length > 0
+      ? `Mutações ativas: ${activeModIds.map(id => `${E.PIECES[id].icon} ${E.PIECES[id].name}`).join(' · ')}`
+      : 'Encaixe Variações com ★ apontando para um Órgão para mutar sua Quimera!';
+
+    // Desenha conduítes sinápticos SVG brilhando entre Variações e Órgãos!
+    const toSvgX = gx => gx * 100 + 50;
+    const toSvgY = gy => gy * 100 + 50;
+    elSynapseSvg.innerHTML = activeStarLinks.map(l => `
+      <line class="synapse-line" x1="${toSvgX(l.fromX)}" y1="${toSvgY(l.fromY)}" x2="${toSvgX(l.x)}" y2="${toSvgY(l.y)}" stroke="${l.color || '#facc15'}" />
+      <circle cx="${toSvgX(l.x)}" cy="${toSvgY(l.y)}" r="6" fill="#facc15" opacity="0.9"/>
+    `).join('');
+
     const cellMap = new Map();
     const projectedStarSet = new Set();
-
     for (const p of state.gridPieces) {
       const { cells, stars } = E.getPlacedCells(p);
       for (const [cx, cy] of cells) cellMap.set(`${cx},${cy}`, p);
       for (const [sx, sy] of stars) {
-        if (sx >= 0 && sx < E.GRID_W && sy >= 0 && sy < E.GRID_H) {
-          projectedStarSet.add(`${sx},${sy}`);
-        }
+        if (sx >= 0 && sx < E.GRID_W && sy >= 0 && sy < E.GRID_H) projectedStarSet.add(`${sx},${sy}`);
       }
     }
 
-    // Holding bar text + buttons
     btnRotate.disabled = !held;
     btnToReserve.disabled = !held || !held.fromGrid || !E.canRecombine(state);
     btnCancelHold.disabled = !held;
@@ -2321,12 +2785,12 @@
     if (held) {
       const def = E.PIECES[held.pieceId];
       elHoldingBar.innerHTML = `
-        <span>🖐️ Segurando <strong>${def.icon} ${def.name}</strong> (${def.shapeLabel}) — Clique na grade 5×4 para encaixar ou aperte <strong>R / Girar 90°</strong>!</span>
+        <span>🖐️ Segurando <strong>${def.icon} ${def.name}</strong> (${def.shapeLabel}) — Clique na grade ou aperte <strong>R</strong> para girar!</span>
         ${renderMiniShapeHTML(held.pieceId, held.rot)}
       `;
     } else {
       elHoldingBar.innerHTML = `
-        <span>👆 Clique em qualquer peça da Grade 5×4 ou da Bandeja para mover/girar. Estrelas <strong>★</strong> de Variações precisam cair em cima de um Órgão!</span>
+        <span>👆 Clique em qualquer peça da Grade ou Bandeja para recombinar ao vivo. Alinhe as estrelas <strong>★</strong> nos Órgãos!</span>
       `;
     }
 
@@ -2341,22 +2805,23 @@
         const isProjected = projectedStarSet.has(k);
 
         const cls = ['g-cell'];
-        if (def) cls.push(def.kind === 'ORGAN' ? 'organ' : 'variation');
+        if (def) {
+          cls.push(def.kind === 'ORGAN' ? 'organ' : 'variation');
+          // Fusão visual de bordas entre células da mesma peça!
+          if (cellMap.get(`${x + 1},${y}`)?.uid === placed.uid) cls.push('join-r');
+          if (cellMap.get(`${x - 1},${y}`)?.uid === placed.uid) cls.push('join-l');
+          if (cellMap.get(`${x},${y + 1}`)?.uid === placed.uid) cls.push('join-b');
+          if (cellMap.get(`${x},${y - 1}`)?.uid === placed.uid) cls.push('join-t');
+        }
         if (isHeldPiece) cls.push('selected-piece');
         if (isLinked) cls.push('star-linked');
         else if (isProjected) cls.push('star-projected');
 
-        let inner = '';
-        if (def) {
-          inner = `<div class="g-icon">${def.icon}</div><div class="g-lbl">${def.name}</div>`;
-        } else {
-          inner = `<div style="font-size:0.6rem; color:#2b473a;">${x + 1},${y + 1}</div>`;
-        }
-        if (isLinked) {
-          inner += `<span class="star-badge" title="Aura conectada!">★</span>`;
-        } else if (isProjected) {
-          inner += `<span class="star-badge" style="opacity:0.65;" title="Alcance da Aura ★">☆</span>`;
-        }
+        let inner = def
+          ? `<div class="g-icon">${def.icon}</div><div class="g-lbl">${def.name}</div>`
+          : `<div style="font-size:0.58rem; color:#2b473a;">${x + 1},${y + 1}</div>`;
+        if (isLinked) inner += `<span class="star-badge" title="Sinapse conectada!">★</span>`;
+        else if (isProjected) inner += `<span class="star-badge" style="opacity:0.6;" title="Alcance ★">☆</span>`;
 
         html += `<div class="${cls.join(' ')}" data-gx="${x}" data-gy="${y}">${inner}</div>`;
       }
@@ -2368,10 +2833,7 @@
       const gy = Number(cell.dataset.gy);
 
       cell.addEventListener('mouseenter', () => {
-        if (held) {
-          hoverCell = { x: gx, y: gy };
-          updateGridGhostPreview();
-        }
+        if (held) { hoverCell = { x: gx, y: gy }; updateGridGhostPreview(); }
       });
 
       cell.addEventListener('contextmenu', ev => {
@@ -2382,11 +2844,10 @@
       cell.addEventListener('click', () => {
         const clickedPiece = cellMap.get(`${gx},${gy}`);
         if (!held) {
-          // Seleciona peça já colocada na grade
           if (clickedPiece) {
             if (!E.canRecombine(state)) {
               sfx.error();
-              flashMessage('Sem ajustes restantes neste turno — avance 1 turno ou vença a onda para ajustar de novo!');
+              flashMessage('Sem ajustes restantes neste turno (renova no próximo turno!).');
               return;
             }
             held = { uid: clickedPiece.uid, pieceId: clickedPiece.pieceId, rot: clickedPiece.rot, fromGrid: true };
@@ -2398,10 +2859,8 @@
           return;
         }
 
-        // Tenta encaixar a peça segurada nesta célula
         const res = E.placePieceOnGrid(state, held.uid, gx, gy, held.rot);
         if (!res.ok) {
-          // Se clicou em outra peça válida e não encaixou, troca a seleção para ela
           if (clickedPiece && clickedPiece.uid !== held.uid) {
             held = { uid: clickedPiece.uid, pieceId: clickedPiece.pieceId, rot: clickedPiece.rot, fromGrid: true };
             hoverCell = { x: clickedPiece.x, y: clickedPiece.y };
@@ -2417,7 +2876,7 @@
         held = null;
         hoverCell = null;
         sfx.graft();
-        renderAll();
+        renderAll(false);
       });
     });
 
@@ -2427,7 +2886,7 @@
   function renderReserve() {
     elReserveCount.textContent = `${state.reservePieces.length} peça(s)`;
     if (state.reservePieces.length === 0) {
-      elReserveGrid.innerHTML = `<div style="font-size:0.75rem; color:var(--muted); grid-column:1/-1;">Bandeja vazia. Vença ondas ou ✂️ arranque genes expostos dos inimigos para coletar mais Órgãos e Variações!</div>`;
+      elReserveGrid.innerHTML = `<div style="font-size:0.74rem; color:var(--muted); grid-column:1/-1;">Bandeja vazia. Vença ondas ou ✂️ arranque genes expostos dos inimigos para coletar mais peças!</div>`;
       return;
     }
 
@@ -2451,15 +2910,8 @@
         const uid = card.dataset.ruid;
         const p = state.reservePieces.find(x => x.uid === uid);
         if (!p) return;
-        if (!E.canRecombine(state)) {
-          sfx.error();
-          flashMessage('Sem ajustes restantes neste turno (renova no próximo turno ou entre ondas).');
-          return;
-        }
-        if (held && held.uid === uid) {
-          rotateHeld();
-          return;
-        }
+        if (!E.canRecombine(state)) { sfx.error(); flashMessage('Sem ajustes restantes neste turno.'); return; }
+        if (held && held.uid === uid) { rotateHeld(); return; }
         held = { uid: p.uid, pieceId: p.pieceId, rot: p.rot, fromGrid: false };
         hoverCell = null;
         sfx.click();
@@ -2480,14 +2932,11 @@
 
   function doMove(delta) {
     const res = E.movePlayer(state, delta);
-    if (!res.ok) { sfx.error(); return; }
-    sfx.step();
-    checkVictorySfx();
-    renderAll();
-  }
-
-  function checkVictorySfx() {
+    if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
+    if (res.swapped) sfx.swap();
+    else sfx.step();
     if (state.phase === 'WAVE_CLEAR' || state.phase === 'VICTORY') sfx.win();
+    renderAll(true);
   }
 
   function restartGame() {
@@ -2496,7 +2945,7 @@
     hoverCell = null;
     previewFire = false;
     sfx.click();
-    renderAll();
+    renderAll(false);
   }
 
   // ==================== LISTENERS ====================
@@ -2504,11 +2953,11 @@
   btnRight.addEventListener('click', () => doMove(1));
   btnFlip.addEventListener('click', () => {
     const res = E.turnPlayer(state);
-    if (res.ok) { sfx.step(); checkVictorySfx(); renderAll(); }
+    if (res.ok) { sfx.step(); renderAll(true); }
   });
   btnWait.addEventListener('click', () => {
     const res = E.waitPlayer(state);
-    if (res.ok) { sfx.click(); checkVictorySfx(); renderAll(); }
+    if (res.ok) { sfx.click(); renderAll(true); }
   });
   btnFire.addEventListener('mouseenter', () => { previewFire = true; renderCombatStrip(); });
   btnFire.addEventListener('mouseleave', () => { previewFire = false; renderCombatStrip(); });
@@ -2516,9 +2965,8 @@
     previewFire = false;
     const res = E.executeQueue(state);
     if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
-    sfx.hit();
-    checkVictorySfx();
-    renderAll();
+    if (state.phase === 'WAVE_CLEAR' || state.phase === 'VICTORY') sfx.win();
+    renderAll(true);
   });
 
   btnRotate.addEventListener('click', rotateHeld);
@@ -2529,7 +2977,7 @@
     held = null;
     hoverCell = null;
     sfx.click();
-    renderAll();
+    renderAll(false);
   });
   btnCancelHold.addEventListener('click', () => {
     held = null;
@@ -2544,7 +2992,6 @@
   });
   btnRestart.addEventListener('click', restartGame);
 
-  // Atalhos de teclado
   window.addEventListener('keydown', ev => {
     if (ev.target && (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA')) return;
     const k = ev.key.toLowerCase();
@@ -2557,16 +3004,19 @@
     else if ((k === ' ' || ev.key === 'Enter') && !btnFire.disabled) { ev.preventDefault(); btnFire.click(); }
   });
 
-  function renderAll() {
+  function renderAll(animateEvents = false) {
     renderTopHud();
     renderCombatStrip();
     renderQueueAndWeapons();
     renderCombatLog();
     renderOrganismGrid();
     renderReserve();
+    if (animateEvents && state.lastEvents && state.lastEvents.length > 0) {
+      playKineticEvents(state.lastEvents);
+    }
   }
 
-  renderAll();
+  renderAll(false);
 })();
 
 </script>
