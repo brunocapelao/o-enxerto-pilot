@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>O Enxerto · Arena Tática & Genética v2.0</title>
+<title>O Enxerto · Arena Tática & Genética v3.0</title>
 <style>
 :root{
   color-scheme:dark;
@@ -37,7 +37,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
 .btn-ghost{background:transparent;border-color:var(--edge);color:var(--muted)}
 .btn-sm{min-height:30px;padding:3px 8px;font-size:.74rem;border-radius:8px}
 
-.app{max-width:980px;margin:0 auto;padding:8px 10px 16px;display:flex;flex-direction:column;gap:8px}
+.app{max-width:1000px;margin:0 auto;padding:8px 10px 16px;display:flex;flex-direction:column;gap:7px}
 
 /* Topbar */
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
@@ -77,10 +77,10 @@ button:disabled{opacity:.38;cursor:not-allowed}
   display:inline-flex;
   align-items:center;
   gap:5px;
-  padding:4px 10px;
+  padding:4px 9px;
   border-radius:999px;
   font-weight:900;
-  font-size:.8rem;
+  font-size:.78rem;
   border:1.5px solid var(--edge);
   background:#13211b;
 }
@@ -88,21 +88,39 @@ button:disabled{opacity:.38;cursor:not-allowed}
 .vital-pill.mp{border-color:var(--info);color:#7dd3fc}
 .vital-pill.steps{border-color:var(--accent);color:var(--accent)}
 .vital-pill.shield{border-color:#38bdf8;background:#0c2938;color:#bae6fd}
-.vital-pill.poison{border-color:#a3e635;background:#20300d;color:#d9f99d}
+.vital-pill.ambush{border-color:#a3e635;background:#1a2e0d;color:#d9f99d}
+.vital-pill.poison{border-color:#fb7185;background:#3a101b;color:#fecdd3}
 .gene-stat{
   padding:3px 8px;
   border-radius:7px;
-  font-size:.73rem;
+  font-size:.72rem;
   font-weight:850;
   background:#15231d;
   border:1px solid var(--edge);
   color:#d6e6dc;
 }
 
+/* Ressonâncias Genéticas de Linhagem */
+.synergy-strip{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-bottom:6px;
+}
+.synergy-badge{
+  background:linear-gradient(90deg,#2a123d,#171024);
+  border:1px solid var(--purple);
+  border-radius:8px;
+  padding:3px 8px;
+  font-size:.71rem;
+  color:#f3e8ff;
+}
+.synergy-badge b{color:#d8b4fe}
+
 /* TABULEIRO TÁTICO 7x5 (ESTILO MEWGENICS / INTO THE BREACH) */
 .arena-header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px}
 .arena-header h2{margin:0;font-size:.98rem;color:var(--accent)}
-.arena-header small{color:var(--muted);font-size:.74rem}
+.arena-header small{color:var(--muted);font-size:.73rem}
 
 .board-grid{
   display:grid;
@@ -138,6 +156,10 @@ button:disabled{opacity:.38;cursor:not-allowed}
   border-color:#37413d;
   color:#94a3b8;
 }
+.tile.spikes{
+  background:radial-gradient(circle,#362012 0%,#1a120b 82%);
+  border-color:#f97316;
+}
 .tile.acid{
   background:radial-gradient(circle,#263e10 0%,#13200a 80%);
   border-color:#65a30d;
@@ -145,6 +167,11 @@ button:disabled{opacity:.38;cursor:not-allowed}
 .tile.grass{
   background:radial-gradient(circle,#123524 0%,#0f1f18 85%);
   border-color:#10b981;
+}
+/* ⚠️ MIRA TELEGRAFADA INIMIGA (ZONA DE PERIGO / FOGO AMIGO!) */
+.tile.danger-zone{
+  border:2px dashed #fb923c!important;
+  background:repeating-linear-gradient(135deg,rgba(239,68,68,.18),rgba(239,68,68,.18) 6px,rgba(18,31,26,.92) 6px,rgba(18,31,26,.92) 12px)!important;
 }
 /* Casas alcançáveis p/ andar */
 .tile.reachable{
@@ -185,12 +212,12 @@ button:disabled{opacity:.38;cursor:not-allowed}
   display:flex;
   justify-content:space-between;
   align-items:center;
-  font-size:.62rem;
+  font-size:.61rem;
   font-weight:900;
   line-height:1;
 }
 .tile-sprite{
-  font-size:1.45rem;
+  font-size:1.42rem;
   line-height:1;
   display:flex;
   align-items:center;
@@ -208,19 +235,20 @@ button:disabled{opacity:.38;cursor:not-allowed}
   border:1px solid rgba(255,255,255,.12);
   border-radius:5px;
   padding:1px 3px;
-  font-size:.63rem;
+  font-size:.62rem;
   font-weight:900;
   text-align:center;
   white-space:nowrap;
   overflow:hidden;
 }
 @media(max-width:560px){
-  .tile-sprite{font-size:1.12rem}
-  .tile-top{font-size:.52rem}
-  .tile-hp{font-size:.54rem;padding:1px 2px}
+  .tile-sprite{font-size:1.1rem}
+  .tile-top{font-size:.51rem}
+  .tile-hp{font-size:.53rem;padding:1px 2px}
 }
 .tile-hp.enemy{color:#fda4af;border-color:#881337;background:#280a14}
 .tile-hp.player{color:#bef264;border-color:#3f6212;background:#17290b}
+.tile-hp.danger{color:#fed7aa;border-color:#ea580c;background:#431407}
 .dmg-preview-badge{
   position:absolute;
   top:-7px;
@@ -228,7 +256,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
   z-index:5;
   background:var(--danger);
   color:#fff;
-  font-size:.63rem;
+  font-size:.61rem;
   font-weight:900;
   padding:1px 5px;
   border-radius:99px;
@@ -240,7 +268,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
   border:1px solid #fef08a;
 }
 .backstab-hint{
-  font-size:.58rem;
+  font-size:.56rem;
   font-weight:900;
   color:#fde047;
   background:rgba(180,83,9,.55);
@@ -249,30 +277,29 @@ button:disabled{opacity:.38;cursor:not-allowed}
   padding:1px 3px;
 }
 
-/* Legenda rápida sob a arena */
 .arena-legend{
   margin-top:6px;
   display:flex;
-  gap:10px;
+  gap:8px;
   flex-wrap:wrap;
-  font-size:.72rem;
+  font-size:.71rem;
   color:var(--muted);
   justify-content:space-between;
   align-items:center;
 }
 
-/* BARRA DE HABILIDADES & MUTAÇÕES */
+/* BARRA DE HABILIDADES & ANATOMIA (4 SLOTS CORPORAIS + EXTRAS) */
 .skills-bar{
   margin-top:6px;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(175px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(185px,1fr));
   gap:7px;
 }
 .skill-btn{
   background:var(--well);
   border:2px solid var(--edge);
   border-radius:12px;
-  padding:8px 10px;
+  padding:7px 9px;
   text-align:left;
   display:flex;
   flex-direction:column;
@@ -284,11 +311,12 @@ button:disabled{opacity:.38;cursor:not-allowed}
   background:linear-gradient(155deg,#1d331b,#0f1c15);
   box-shadow:0 0 10px rgba(190,242,100,.25);
 }
+.skill-slot-tag{font-size:.62rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;display:flex;justify-content:space-between}
 .skill-head{display:flex;justify-content:space-between;align-items:center;gap:4px}
-.skill-name{font-size:.83rem;font-weight:900}
-.skill-cost{font-size:.68rem;font-weight:900;padding:1px 6px;border-radius:99px;background:#182c22;color:var(--info);border:1px solid var(--edge-hi)}
+.skill-name{font-size:.82rem;font-weight:900}
+.skill-cost{font-size:.67rem;font-weight:900;padding:1px 6px;border-radius:99px;background:#182c22;color:var(--info);border:1px solid var(--edge-hi)}
 .skill-cost.free{color:var(--accent)}
-.skill-desc{font-size:.7rem;color:#cbdcd2;line-height:1.22}
+.skill-desc{font-size:.69rem;color:#cbdcd2;line-height:1.22}
 
 .turn-footer{margin-top:8px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .end-turn-btn{min-height:44px;padding:8px 18px;font-size:.88rem;border-radius:11px;margin-left:auto}
@@ -307,7 +335,6 @@ button:disabled{opacity:.38;cursor:not-allowed}
 }
 .event-item{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.05)}
 
-/* Floating Combat Toast */
 .combat-toast{
   position:fixed;
   top:12px;
@@ -327,7 +354,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
 
 /* Modais */
 .modal-backdrop{position:fixed;inset:0;background:rgba(4,9,7,.86);display:flex;align-items:center;justify-content:center;padding:12px;z-index:60}
-.modal-card{background:var(--panel);border:2px solid var(--edge-hi);border-radius:16px;padding:14px;max-width:500px;width:100%;display:grid;gap:10px;max-height:92dvh;overflow-y:auto}
+.modal-card{background:var(--panel);border:2px solid var(--edge-hi);border-radius:16px;padding:14px;max-width:520px;width:100%;display:grid;gap:10px;max-height:92dvh;overflow-y:auto}
 .modal-card h3{margin:0;font-size:1.05rem;color:var(--accent)}
 [hidden]{display:none!important}
 </style>
@@ -338,12 +365,12 @@ button:disabled{opacity:.38;cursor:not-allowed}
 <div class="app">
   <header class="topbar">
     <div class="brand">
-      <h1>🧬 O Enxerto · Tática & Genética v2.0</h1>
+      <h1>🧬 O Enxerto · Tática & Genética v3.0</h1>
       <div class="stage-track" id="stage-track"></div>
     </div>
     <div class="top-actions">
       <button type="button" class="btn-sm btn-ghost" id="btn-sfx">🔊 Som</button>
-      <button type="button" class="btn-sm btn-good" id="btn-atlas">📖 Genes (<span id="atlas-count">0</span>)</button>
+      <button type="button" class="btn-sm btn-good" id="btn-atlas">📖 Genoma (<span id="atlas-count">0</span>)</button>
       <button type="button" class="btn-sm btn-ghost" id="btn-how">? Como Jogar</button>
       <button type="button" class="btn-sm btn-ghost" id="btn-restart">Nova Caçada</button>
     </div>
@@ -365,14 +392,17 @@ button:disabled{opacity:.38;cursor:not-allowed}
       <div id="active-skill-banner" style="font-size:.76rem;font-weight:850;color:var(--accent)"></div>
     </div>
 
+    <!-- RESSONÂNCIAS DE LINHAGEM ATIVAS -->
+    <div class="synergy-strip" id="synergy-strip"></div>
+
     <div class="board-grid" id="board-grid" role="grid" aria-label="Tabuleiro Tático 7 por 5"></div>
 
     <div class="arena-legend">
-      <span>🟢 <b>Casa Verde:</b> Clique p/ Andar · 🎯 <b>Casa Vermelha:</b> Clique p/ Atacar · 🗡️ <b>Costas:</b> +4 Dano Crítico!</span>
-      <span>🪨 <b>Rocha:</b> +4 Dano Colisão · 🧪 <b>Ácido:</b> -3 PV + Veneno · 🥩 <b>DNA:</b> Pise p/ Devorar Gene!</span>
+      <span>🟢 <b>Casa Verde:</b> Andar · 🎯 <b>Alvo:</b> Atacar · ⚠️ <b>Mira Inimiga:</b> Saia dela ou empurre outro inimigo p/ causar <b>💥 FOGO AMIGO</b>!</span>
+      <span>🗡️ <b>Costas:</b> +6 Crítico (+1 MP) · 🪨 <b>Rocha:</b> Quebra em 🦴 Espinhos · 🧪 <b>Ácido:</b> Conduz ⚡ Choque · 🥩 <b>DNA:</b> Evolui Gene (★ Nv.2)</span>
     </div>
 
-    <!-- BARRA DE HABILIDADES MUTANTES -->
+    <!-- BARRA DE HABILIDADES ANATÔMICAS (MEMBROS, CAUDA, TORSO, CABEÇA) -->
     <div class="skills-bar" id="skills-bar"></div>
 
     <div class="turn-footer" id="turn-footer">
@@ -389,8 +419,8 @@ button:disabled{opacity:.38;cursor:not-allowed}
 <!-- MODAL: LABORATÓRIO DE EVOLUÇÃO GENÉTICA (ENTRE ARENAS — ESTILO MEWGENICS) -->
 <div class="modal-backdrop" id="evo-modal" role="dialog" aria-modal="true" aria-labelledby="evo-title" hidden>
   <div class="modal-card">
-    <h3 id="evo-title">🧬 Laboratório de Mutação Genética!</h3>
-    <p style="margin:0;font-size:.81rem;color:var(--muted)">Arena dominada! Escolha <b>1 Mutação de Linhagem</b> para evoluir sua Quimera antes da próxima Arena:</p>
+    <h3 id="evo-title">🧬 Câmara de Mutação & Linhagem!</h3>
+    <p style="margin:0;font-size:.81rem;color:var(--muted)">Arena dominada! Escolha <b>1 Mutação ou Transtorno Genético</b> para sua Quimera:</p>
     <div id="evo-list" style="display:grid;gap:8px"></div>
   </div>
 </div>
@@ -399,7 +429,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
 <div class="modal-backdrop" id="atlas-modal" role="dialog" aria-modal="true" aria-labelledby="atlas-title" hidden>
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 id="atlas-title">📖 Banco Genético (Habilidades & Mutações)</h3>
+      <h3 id="atlas-title">📖 Genoma, Órgãos & Ressonâncias</h3>
       <button type="button" class="btn-sm btn-ghost" id="btn-close-atlas">Fechar</button>
     </div>
     <div id="atlas-list" style="display:grid;gap:7px;font-size:.79rem"></div>
@@ -410,21 +440,21 @@ button:disabled{opacity:.38;cursor:not-allowed}
 <div class="modal-backdrop" id="how-modal" role="dialog" aria-modal="true" aria-labelledby="how-title" hidden>
   <div class="modal-card">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 id="how-title">Como jogar O Enxerto (Tática & Genética)</h3>
+      <h3 id="how-title">Como dominar a Arena Tática & Genética v3.0</h3>
       <button type="button" class="btn-sm btn-ghost" id="btn-close-how">Fechar</button>
     </div>
     <div style="display:grid;gap:8px;font-size:.81rem">
       <div style="background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:8px">
-        <b style="color:var(--good);display:block">1. Clique nas Casas Verdes (🟢) para Andar e Flanquear</b>
-        Você tem <b>⚡ Passos</b> por turno (baseado na sua Velocidade). Posicione-se <b>atrás das costas</b> do inimigo (olhe a seta ◀ ▲ ▶ ▼ dele) ou use o <b>🦗 Salto Acrobático</b> para pular por cima dele!
+        <b style="color:var(--warn);display:block">1. ⚠️ Mira Telegrafada & 💥 Fogo Amigo (Into the Breach)</b>
+        Inimigos artilheiros travam uma <b>⚠️ MIRA VERMELHA</b> numa casa do tabuleiro. Se você sair daquela casa, o tiro erra! Melhor ainda: se você <b>empurrar ou puxar outro inimigo para cima da ⚠️ MIRA</b>, o inimigo atira no próprio aliado (<b>💥 FOGO AMIGO</b>)! Empurrar o próprio atirador também desloca a mira dele!
       </div>
       <div style="background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:8px">
-        <b style="color:var(--danger);display:block">2. Backstab Pelas Costas (🗡️ +4 Dano) & Colisão (💥 +4/+5 Dano)</b>
-        Atacar um inimigo <b>pelas costas</b> dá <b>+4 de Dano Crítico</b>! Empurrar um inimigo contra uma <b>Rocha (🪨)</b>, Parede ou outro inimigo causa <b>+4/+5 de Dano de Colisão</b>, e empurrá-lo numa <b>Poça Ácida (🧪)</b> derrete a vida dele!
+        <b style="color:var(--danger);display:block">2. 🗡️ Backstab pelas Costas & Demolição de Terreno (🪨 → 🦴)</b>
+        Atacar um inimigo <b>pelas costas</b> (casa marcada com <b>🗡️ COSTAS</b>) ativa sua Ressonância Predadora: causa <b>+6 de Dano Crítico e recupera +1 MP</b>! Arremessar inimigos contra <b>🪨 Rochas</b> destrói a rocha virando <b>🦴 Escombros de Espinhos</b>!
       </div>
       <div style="background:var(--well);border:1px solid var(--edge);border-radius:9px;padding:8px">
-        <b style="color:var(--accent);display:block">3. Devore o DNA no Chão (🥩) para Mutar em Tempo Real!</b>
-        Quando um inimigo morre, ele deixa uma <b>Carcaça de DNA (🥩)</b> naquela casa. Pise em cima dela para <b>devorar o gene</b>: você cura <b>+6 PV</b>, recupera <b>+2 MP</b>, sobe seus atributos (<b>💪 FOR, ❤️ CON, ⚡ VEL, 🧠 INT</b>) e ganha a <b>Habilidade Mutante</b> daquele monstro!
+        <b style="color:var(--accent);display:block">3. 🥩 Devorar DNA, Anatomia e ★ Alelos Dominantes (Mewgenics)</b>
+        Pisar num <b>🥩 DNA</b> cura <b>+6 PV / +2 MP</b>, sobe seus atributos (<b>💪 FOR, ❤️ CON, ⚡ VEL, 🧠 INT</b>) e enxerta o órgão na sua anatomia (ou evolui um gene repetido para <b>★ Dominante Nv.2 com +3 de Poder</b>)!
       </div>
     </div>
     <button type="button" class="btn-primary" id="btn-ok-how">Entendi, vamos pra Arena!</button>
@@ -432,20 +462,23 @@ button:disabled{opacity:.38;cursor:not-allowed}
 </div>
 
 <script>
-/* O Enxerto (New Genome) · Motor v2.0 "Mewgenics Tactical Arena & Genetics Engine"
- * Inspirado em Mewgenics (Edmund McMillen & Tyler Glaiel) e Into the Breach:
- * 1) ARENA TÁTICA 7x5 VISUAL:
- *    - Você controla sua Quimera Mutante no tabuleiro contra múltiplas criaturas.
- *    - Terreno vivo: Rochas (🪨 bloqueiam e causam +4 Dano de Colisão quando alguém é empurrado nelas!),
- *      Poças Ácidas (🧪 causam 3 dano + 2 Veneno ao pisar/ser empurrado!) e Mato Alto (🌿 +3 Escudo/Esquiva).
- * 2) POSICIONAMENTO, BACKSTAB (GOLPE PELAS COSTAS) E EMPURRÃO (KNOCKBACK):
- *    - Toda criatura olha para uma direção (◀ ▲ ▶ ▼).
- *    - Atacar um inimigo PELAS COSTAS causa +4 de DANO CRÍTICO (🗡️ BACKSTAB!) e empurra o alvo!
- *    - Empurrar um inimigo contra Rocha, Parede ou outro Inimigo causa 💥 COLISÃO (+4 de dano extra)!
- * 3) GENÉTICA MEWGENICS (FOR, CON, VEL, INT + DEVORAR DNA + MUTAÇÕES):
- *    - Quando um inimigo morre, ele deixa uma Carcaça de DNA (🥩) no chão da arena.
- *    - Pisar na carcaça DEVORA o DNA na hora: cura +6 PV, recupera +2 MP, sobe seus atributos genéticos
- *      e enxerta a Habilidade Mutante daquela espécie no seu corpo! */
+/* O Enxerto (New Genome) · Motor v3.0 "Mewgenics Tactical Arena & Deep Genetics Engine"
+ * Os 5 Pilares de Sofisticação Tática & Genética (Mewgenics + Into the Breach):
+ * 1) ANATOMIA DE 4 SLOTS CORPORAIS (🦷 Cabeça, 🐾 Membros, 🛡️ Torso, 🦂 Cauda) + ALELOS DOMINANTES (★ Nv.2):
+ *    - Seu mutante possui 4 partes anatômicas reais. Devorar um 🥩 DNA enxerta o gene no slot correspondente
+ *      (ou evolui o gene para ★ Dominante Nv.2 com +3 Poder se você devorar a mesma espécie de novo!).
+ * 2) SINERGIAS DE BIO-LINHAGEM (🩸 Predador, 💥 Bruto, ☠️ Tóxico, ⚡ Voltaico):
+ *    - Combinar órgãos da mesma linhagem desperta passivas de Genoma (ex.: Backstabs recuperam +1 MP,
+ *      Colisões quebram a defesa inimiga, Veneno explode em ácido ao morrer, Eletricidade conduz nas poças!).
+ * 3) MIRA TELEGRAFADA NO TABULEIRO (⚠️ ZONA DE PERIGO) + FOGO AMIGO (💥 FRIENDLY FIRE):
+ *    - Predadores pesados travam uma MIRA VERMELHA (⚠️) numa casa da arena!
+ *    - Se você sair da casa, ESQUIVA 100% do tiro!
+ *    - Se você EMPURRAR o atirador, a mira dele DESLOCA junto com ele!
+ *    - Se você EMPURRAR OU PUXAR outro inimigo para cima da casa com ⚠️ MIRA, o inimigo ATIRA NO PRÓPRIO ALIADO (💥 FOGO AMIGO)!
+ * 4) FÍSICA DE TERRENO DESTRUTÍVEL & REAÇÕES QUÍMICAS:
+ *    - Arremessar um inimigo numa 🪨 Rocha causa +4/+6 de Colisão e DESTRÓI a rocha virando 🦴 Escombros de Espinhos (+3 dano)!
+ *    - Disparar eletricidade (⚡) num alvo em 🧪 Poça Ácida conduz o choque por todas as poças ácidas da arena!
+ *    - Entrar no 🌿 Mato Alto concede +3 Escudo e EMBOSCADA (+2 dano no próximo ataque)! */
 (function (root, factory) {
   const api = factory();
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -453,42 +486,55 @@ button:disabled{opacity:.38;cursor:not-allowed}
 })(typeof globalThis !== 'undefined' ? globalThis : this, () => {
   'use strict';
 
-  const VERSION = '2.0.0';
+  const VERSION = '3.0.0';
   const GRID_W = 7;
   const GRID_H = 5;
 
-  // Catálogo de Habilidades / Genes Mutantes (estilo Mewgenics)
+  const ANATOMY_SLOTS = {
+    LIMBS: { id: 'LIMBS', label: '🐾 Membros' },
+    TAIL: { id: 'TAIL', label: '🦂 Cauda' },
+    TORSO: { id: 'TORSO', label: '🛡️ Torso' },
+    HEAD: { id: 'HEAD', label: '🦷 Cabeça' },
+  };
+
+  // Catálogo de Habilidades / Genes Anatômicos
   const SKILLS = {
     GARRA: {
       id: 'GARRA',
+      slot: 'LIMBS',
+      lineage: 'PREDADOR',
       name: 'Garra Predadora',
       icon: '🐾',
       mpCost: 0,
-      cooldown: '1×/turno (Grátis)',
+      cooldown: '1×/turno (0 MP)',
       oncePerTurn: true,
-      targetMode: 'enemy_melee', // alcance 1 (ortogonal)
+      targetMode: 'enemy_melee',
       range: 1,
       color: '#fb923c',
-      tag: 'BÁSICO · EMPURRA 1',
-      desc: 'Causa FOR de dano (+4 CRÍTICO pelas costas!) e EMPURRA o alvo 1 casa (+4 dano se bater em Rocha/Parede!).',
-      statBonus: null,
+      tag: 'MEMBROS · 🩸 PREDADOR',
+      desc: 'Causa FOR de dano (+4/+6 CRÍTICO pelas costas!) e EMPURRA 1 casa (+4/+6 dano se colidir em Rocha/Inimigo!).',
+      statBonus: { str: 1, label: '+1 💪 FOR' },
     },
     SALTO: {
       id: 'SALTO',
+      slot: 'TAIL',
+      lineage: 'PREDADOR',
       name: 'Salto Acrobático',
       icon: '🦗',
       mpCost: 1,
       cooldown: '1 MP',
       oncePerTurn: false,
-      targetMode: 'empty_tile', // pula até 2 casas (Manhattan <= 2 ou linha/diagonal)
+      targetMode: 'empty_tile',
       range: 2,
       color: '#38bdf8',
-      tag: 'MOBILIDADE · +3 ESCUDO',
-      desc: 'Salta por cima de obstáculos/inimigos para qualquer casa livre até 2 blocos e ganha +3 Escudo (ideal p/ cair nas costas!).',
-      statBonus: null,
+      tag: 'CAUDA · 🩸 PREDADOR',
+      desc: 'Salta até 2 casas por cima de obstáculos, ganha +3 Escudo e, se pousar nas costas de um inimigo, ganha +2 Dano de Emboscada!',
+      statBonus: { vel: 1, label: '+1 ⚡ VEL' },
     },
     PINCA: {
       id: 'PINCA',
+      slot: 'TORSO',
+      lineage: 'BRUTO',
       name: 'Aríete de Quitina',
       icon: '🦀',
       mpCost: 1,
@@ -497,12 +543,30 @@ button:disabled{opacity:.38;cursor:not-allowed}
       targetMode: 'enemy_melee',
       range: 1,
       color: '#f97316',
-      tag: 'GENE · EMPURRA 2 CASAS',
-      desc: 'Golpe brutal (FOR+2 de dano), ganha +3 Escudo e ARREMESSA o inimigo 2 casas para trás (+5 dano de Colisão!).',
+      tag: 'TORSO · 💥 BRUTO',
+      desc: 'Golpe demolidor (FOR+2 de dano), ganha +3 Escudo e ARREMESSA o alvo 2 casas (quebra 🪨 Rochas em 🦴 Espinhos!).',
       statBonus: { str: 1, con: 1, label: '+1 💪 FOR, +1 ❤️ CON' },
+    },
+    MORDIDA: {
+      id: 'MORDIDA',
+      slot: 'HEAD',
+      lineage: 'TOXICO',
+      name: 'Presas Injetoras',
+      icon: '🦷',
+      mpCost: 1,
+      cooldown: '1 MP',
+      oncePerTurn: false,
+      targetMode: 'enemy_melee',
+      range: 1,
+      color: '#e879f9',
+      tag: 'CABEÇA · ☠️ TÓXICO',
+      desc: 'Morde um inimigo adjacente causando FOR+1 de dano, injeta +3 Veneno e regenera +3 PV seus!',
+      statBonus: { con: 1, label: '+1 ❤️ CON' },
     },
     FERRAO: {
       id: 'FERRAO',
+      slot: 'TAIL',
+      lineage: 'TOXICO',
       name: 'Aguilhão Saltador',
       icon: '🦂',
       mpCost: 1,
@@ -511,12 +575,14 @@ button:disabled{opacity:.38;cursor:not-allowed}
       targetMode: 'enemy_melee',
       range: 1,
       color: '#a3e635',
-      tag: 'GENE · VENENO + CAMBALHOTA',
-      desc: 'Ferroa causando FOR+1 de dano + 3 Veneno e SALTA por cima do inimigo caindo atrás das costas dele!',
+      tag: 'CAUDA · ☠️ TÓXICO',
+      desc: 'Ferroa (FOR+2 de dano + 3 Veneno) e dá uma CAMBALHOTA por cima do inimigo caindo atrás das costas dele (+3 Escudo)!',
       statBonus: { vel: 1, int: 1, label: '+1 ⚡ VEL, +1 🧠 INT' },
     },
     LINGUA: {
       id: 'LINGUA',
+      slot: 'HEAD',
+      lineage: 'PREDADOR',
       name: 'Língua Chicote',
       icon: '🐸',
       mpCost: 1,
@@ -525,12 +591,14 @@ button:disabled{opacity:.38;cursor:not-allowed}
       targetMode: 'enemy_ranged',
       range: 3,
       color: '#f472b6',
-      tag: 'GENE · PUXA INIMIGO',
-      desc: 'Dispara a língua até 3 casas causando FOR de dano e PUXA o inimigo para perto (ótimo p/ puxar p/ Poça Ácida!).',
+      tag: 'CABEÇA · 🩸 PREDADOR',
+      desc: 'Alcance 3: causa FOR+1 de dano e PUXA o inimigo para perto (puxe inimigos para cima de ⚠️ MIRAS ou 🧪 Poças Ácidas!).',
       statBonus: { int: 1, con: 1, label: '+1 🧠 INT, +1 ❤️ CON' },
     },
     CUSPE: {
       id: 'CUSPE',
+      slot: 'HEAD',
+      lineage: 'TOXICO',
       name: 'Cuspe Corrosivo',
       icon: '🧪',
       mpCost: 2,
@@ -539,13 +607,15 @@ button:disabled{opacity:.38;cursor:not-allowed}
       targetMode: 'enemy_ranged',
       range: 3,
       color: '#bef264',
-      tag: 'GENE · CRIA POÇA ÁCIDA',
-      desc: 'Cospe ácido até 3 casas causando FOR+2 de dano, +3 Veneno e derrete o chão virando Poça Ácida (🧪)!',
+      tag: 'CABEÇA · ☠️ TÓXICO',
+      desc: 'Alcance 3: dispara ácido (FOR+2 de dano + 4 Veneno), deixa o alvo Vulnerável e derrete o chão virando Poça Ácida (🧪)!',
       statBonus: { int: 2, label: '+2 🧠 INT' },
     },
     VAMP: {
       id: 'VAMP',
-      name: 'Mordida Vampírica',
+      slot: 'HEAD',
+      lineage: 'PREDADOR',
+      name: 'Mandíbula Vampírica',
       icon: '🦇',
       mpCost: 1,
       cooldown: '1 MP',
@@ -553,12 +623,14 @@ button:disabled{opacity:.38;cursor:not-allowed}
       targetMode: 'enemy_melee',
       range: 1,
       color: '#fb7185',
-      tag: 'GENE · DRENA +5 PV',
-      desc: 'Morde um inimigo adjacente causando FOR+2 de dano, drena +5 PV para você e limpa Veneno!',
+      tag: 'CABEÇA · 🩸 PREDADOR',
+      desc: 'Morde causando FOR+3 de dano, drena +6 PV para você e purifica todo o seu Veneno!',
       statBonus: { str: 1, vel: 1, label: '+1 💪 FOR, +1 ⚡ VEL' },
     },
     CHOQUE: {
       id: 'CHOQUE',
+      slot: 'TORSO',
+      lineage: 'VOLTAICO',
       name: 'Arco Voltaico',
       icon: '⚡',
       mpCost: 2,
@@ -567,74 +639,119 @@ button:disabled{opacity:.38;cursor:not-allowed}
       targetMode: 'enemy_ranged',
       range: 2,
       color: '#facc15',
-      tag: 'GENE · CHOQUE EM CADEIA',
-      desc: 'Eletrocuta o alvo (FOR+3 de dano, paralisa os passos dele por 1 turno) e salta para inimigos próximos!',
+      tag: 'TORSO · ⚡ VOLTAICO',
+      desc: 'Alcance 2: eletrocuta (FOR+3 de dano), PARALISA o alvo (cancela ⚠️ Mira!) e conduz choque por todas as 🧪 Poças Ácidas!',
       statBonus: { str: 1, int: 1, label: '+1 💪 FOR, +1 🧠 INT' },
     },
   };
 
-  // Mutações de Linhagem (escolhidas entre batalhas no Laboratório Genético estilo Mewgenics)
+  // Ressonâncias de Linhagem (ativam automaticamente conforme os genes equipados no corpo!)
+  const LINEAGE_SYNERGIES = [
+    {
+      id: 'SYN_PREDADOR',
+      lineage: 'PREDADOR',
+      minCount: 2,
+      name: 'Ressonância: Instinto Assassino',
+      icon: '🩸',
+      desc: '2+ Genes Predadores: seus Backstabs pelas costas (🗡️) causam +6 de Dano Crítico (em vez de +4) e recuperam +1 MP!',
+    },
+    {
+      id: 'SYN_TOXICO',
+      lineage: 'TOXICO',
+      minCount: 2,
+      name: 'Ressonância: Sangue Xenomorfo',
+      icon: '☠️',
+      desc: '2+ Genes Tóxicos: seus ataques aplicam +2 Veneno extra e inimigos envenenados explodem em Poça Ácida (🧪) ao morrer!',
+    },
+    {
+      id: 'SYN_BRUTO',
+      lineage: 'BRUTO',
+      minCount: 1,
+      name: 'Ressonância: Colosso Demolidor',
+      icon: '💥',
+      desc: 'Gene Bruto ativo: empurrar inimigos contra 🪨 Rochas destrói a rocha virando 🦴 Espinhos (+3 dano extra)!',
+    },
+    {
+      id: 'SYN_VOLTAICO',
+      lineage: 'VOLTAICO',
+      minCount: 1,
+      name: 'Ressonância: Bio-Eletrólise',
+      icon: '⚡',
+      desc: 'Gene Voltaico ativo: qualquer ataque seu contra inimigos em 🧪 Poça Ácida dispara +3 de dano elétrico e paralisa!',
+    },
+  ];
+
+  // Mutações & Transtornos de Linhagem (escolhidos no Laboratório Genético entre Arenas, estilo Mewgenics)
   const MUTATION_PERKS = [
     {
       id: 'MUT_GIGACHAD',
       name: 'Mutação: Musculatura Gigachad',
       icon: '💪',
-      desc: '+2 💪 FOR e +1 ❤️ CON (+4 PV máx). Seus empurrões causam +2 de dano extra na colisão!',
+      desc: '+2 💪 FOR e +1 ❤️ CON (+4 PV máx). Suas Colisões de empurrão causam +3 de dano extra!',
       apply: p => { p.str += 2; p.con += 1; p.maxHp += 4; p.hp = Math.min(p.maxHp, p.hp + 8); },
     },
     {
+      id: 'MUT_FRENESI_CARNICEIRO',
+      name: 'Transtorno: Frenesi Carniceiro',
+      icon: '🩸',
+      desc: '+1 ⚡ VEL e +1 💪 FOR. Sempre que você ABATER um inimigo, ganha imediatamente +2 Passos, +1 MP e reseta sua Garra (0 MP)!',
+      apply: p => { p.vel += 1; p.str += 1; p.hp = Math.min(p.maxHp, p.hp + 6); },
+    },
+    {
       id: 'MUT_REFLEXO_FELINO',
-      name: 'Mutação: Patas Turbo & Sinapse',
+      name: 'Mutação: Córtex Hiper-Sináptico',
       icon: '⚡',
-      desc: '+1 ⚡ VEL (+1 Passo/turno) e +1 🧠 INT (+1 MP/turno). Começa todo turno com +3 Escudo!',
-      apply: p => { p.vel += 1; p.int += 1; p.maxMp += 1; p.hp = Math.min(p.maxHp, p.hp + 6); },
+      desc: '+1 ⚡ VEL (+1 Passo/turno) e +2 🧠 INT (+2 MP/turno). Começa todo turno com +4 de Escudo!',
+      apply: p => { p.vel += 1; p.int += 2; p.maxMp += 2; p.hp = Math.min(p.maxHp, p.hp + 6); },
     },
     {
       id: 'MUT_SANGUE_ACIDO',
       name: 'Mutação: Metabolismo Ácido',
       icon: '🧪',
-      desc: 'Você fica IMUNE a Poças Ácidas (pisar no ácido cura +3 PV!) e ganha +2 ❤️ CON (+6 PV máx)!',
+      desc: 'Você fica IMUNE a Poças Ácidas (pisar no ácido cura +4 PV e dá +2 Dano!) e ganha +2 ❤️ CON (+6 PV máx)!',
       apply: p => { p.con += 2; p.maxHp += 6; p.hp = Math.min(p.maxHp, p.hp + 8); },
     },
   ];
 
-  // 4 Arenas Táticas (7x5) com Terreno e Inimigos
+  // 4 Arenas Táticas (7x5) com Inimigos Perseguidores + Inimigos com Mira Telegrafada (⚠️)!
   const ENCOUNTERS = [
     {
       id: 'beco_lodo',
       stage: 1,
       name: 'Arena 1: Fosso do Escorpião',
-      subtitle: 'Caçada 1 de 4 · Dica: pule para trás do inimigo (🗡️ Backstab!) ou empurre-o na Rocha (🪨)!',
+      subtitle: 'Dica Tática: Suba até a casa acima do 🐀 Rato e empurre-o para baixo na ⚠️ MIRA VERMELHA p/ o Escorpião matá-lo com 💥 FOGO AMIGO!',
       playerStart: { x: 1, y: 2, facing: 'right' },
-      rocks: [{ x: 3, y: 1 }, { x: 5, y: 2 }],
+      rocks: [{ x: 3, y: 1 }, { x: 6, y: 2 }],
       acids: [{ x: 3, y: 3 }],
-      grass: [{ x: 2, y: 1 }, { x: 2, y: 3 }],
+      grass: [{ x: 1, y: 1 }, { x: 2, y: 3 }],
       enemies: [
         {
           id: 'rato_esgoto',
           name: 'Rato Carniceiro',
           icon: '🐀',
-          hp: 10,
+          hp: 12,
           str: 4,
           move: 2,
-          x: 3,
-          y: 2,
+          x: 2,
+          y: 1,
           facing: 'left',
           dropSkill: 'FERRAO',
+          aiType: 'stalker',
           intentName: 'Mordida Rápida',
         },
         {
           id: 'escorpiao_rei',
-          name: 'Escorpião Blindado',
+          name: 'Escorpião Artilheiro',
           icon: '🦂',
-          hp: 15,
-          str: 5,
+          hp: 18,
+          str: 6,
           move: 1,
-          x: 4,
+          x: 5,
           y: 2,
           facing: 'left',
           dropSkill: 'PINCA',
-          intentName: 'Tenaz Venenosa',
+          aiType: 'artillery', // Trava ⚠️ MIRA em (2, 2) logo abaixo do Rato!
+          intentName: 'Disparo de Ferrão',
           poisonOnHit: 2,
         },
       ],
@@ -643,7 +760,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
       id: 'pantano_sapo',
       stage: 2,
       name: 'Arena 2: Charco Peçonhento',
-      subtitle: 'Caçada 2 de 4 · Cuidado com as Poças Ácidas (🧪) — empurre os predadores para dentro delas!',
+      subtitle: 'Dica Tática: Desvie da ⚠️ MIRA do Sapo ou empurre o Louva-a-Deus para a linha de tiro e Poças Ácidas (🧪)!',
       playerStart: { x: 1, y: 2, facing: 'right' },
       rocks: [{ x: 2, y: 0 }, { x: 4, y: 4 }, { x: 6, y: 2 }],
       acids: [{ x: 3, y: 1 }, { x: 3, y: 3 }, { x: 4, y: 2 }],
@@ -651,16 +768,18 @@ button:disabled{opacity:.38;cursor:not-allowed}
       enemies: [
         {
           id: 'sapo_lodo',
-          name: 'Sapo Chicoteador',
+          name: 'Sapo Bombardeiro',
           icon: '🐸',
-          hp: 16,
-          str: 5,
-          move: 2,
+          hp: 17,
+          str: 6,
+          move: 1,
           x: 4,
           y: 1,
           facing: 'left',
           dropSkill: 'LINGUA',
-          intentName: 'Investida Viscosa',
+          aiType: 'artillery',
+          intentName: 'Bomba de Muco',
+          poisonOnHit: 2,
         },
         {
           id: 'louva_deus',
@@ -673,6 +792,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
           y: 3,
           facing: 'left',
           dropSkill: 'VAMP',
+          aiType: 'stalker',
           intentName: 'Ceifa Sanguinária',
           lifesteal: 3,
         },
@@ -682,7 +802,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
       id: 'reator_enguia',
       stage: 3,
       name: 'Arena 3: Conduto de Alta Tensão',
-      subtitle: 'Caçada 3 de 4 · Devore as carcaças (🥩) no chão para curar PV, ganhar MP e roubar genes!',
+      subtitle: 'Dica Tática: Devore o 🥩 DNA para ganhar habilidades Nv.2 (★) e use as Poças Ácidas como armadilha!',
       playerStart: { x: 0, y: 2, facing: 'right' },
       rocks: [{ x: 2, y: 2 }, { x: 4, y: 0 }, { x: 4, y: 4 }, { x: 6, y: 1 }],
       acids: [{ x: 3, y: 2 }, { x: 5, y: 3 }],
@@ -690,29 +810,31 @@ button:disabled{opacity:.38;cursor:not-allowed}
       enemies: [
         {
           id: 'larva_acida',
-          name: 'Larva Corrosiva',
+          name: 'Larva Morteiro',
           icon: '🐛',
-          hp: 15,
-          str: 5,
-          move: 2,
+          hp: 16,
+          str: 6,
+          move: 1,
           x: 3,
           y: 0,
           facing: 'left',
           dropSkill: 'CUSPE',
-          intentName: 'Cuspe Ácido',
-          poisonOnHit: 2,
+          aiType: 'artillery',
+          intentName: 'Morteiro Ácido',
+          poisonOnHit: 3,
         },
         {
           id: 'enguia_alfa',
           name: 'Enguia Voltaica',
           icon: '⚡',
-          hp: 22,
+          hp: 23,
           str: 7,
           move: 2,
           x: 5,
           y: 2,
           facing: 'left',
           dropSkill: 'CHOQUE',
+          aiType: 'stalker',
           intentName: 'Descarga Abissal',
         },
       ],
@@ -721,7 +843,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
       id: 'ninho_quimera',
       stage: 4,
       name: 'Arena Final 4: Covil da Quimera Alfa',
-      subtitle: 'Caçada Final 4 de 4 · Use seus Saltos, Backstabs e Colisões para derrotar o Apex Genético!',
+      subtitle: 'Caçada Final · Combine Backstabs (🗡️), Fogo Amigo (💥) e Destruição de Rochas (🦴) contra o Boss!',
       playerStart: { x: 1, y: 2, facing: 'right' },
       rocks: [{ x: 3, y: 1 }, { x: 3, y: 3 }, { x: 6, y: 2 }],
       acids: [{ x: 2, y: 0 }, { x: 2, y: 4 }, { x: 4, y: 2 }],
@@ -729,15 +851,16 @@ button:disabled{opacity:.38;cursor:not-allowed}
       enemies: [
         {
           id: 'guardiao_vamp',
-          name: ' carniçal Alado',
+          name: 'Carniçal Alado',
           icon: '🦇',
-          hp: 18,
+          hp: 19,
           str: 6,
           move: 2,
           x: 4,
           y: 1,
           facing: 'left',
           dropSkill: 'VAMP',
+          aiType: 'stalker',
           intentName: 'Rasgo Vampírico',
           lifesteal: 3,
         },
@@ -745,15 +868,16 @@ button:disabled{opacity:.38;cursor:not-allowed}
           id: 'quimera_boss',
           name: 'Quimera Alfa (Boss)',
           icon: '🐉',
-          hp: 34,
+          hp: 36,
           str: 8,
-          move: 2,
+          move: 1,
           x: 5,
           y: 2,
           facing: 'left',
-          dropSkill: 'PINCA',
-          intentName: 'Esmagamento Quimérico',
-          poisonOnHit: 2,
+          dropSkill: 'CHOQUE',
+          aiType: 'artillery',
+          intentName: 'Canhão Bio-Plasma',
+          poisonOnHit: 3,
         },
       ],
     },
@@ -783,17 +907,29 @@ button:disabled{opacity:.38;cursor:not-allowed}
     return { dx: 0, dy: -1 };
   }
 
-  // Verifica se o atacante em `attackerPos` está atacando PELAS COSTAS do alvo em `target`
   function isBackstab(attackerPos, target) {
     const d = dirDelta(target.facing || 'left');
-    // As costas do alvo ficam na direção OPOSTA para onde ele olha (-d.dx, -d.dy)
     const backX = target.x - d.dx;
     const backY = target.y - d.dy;
     if (attackerPos.x === backX && attackerPos.y === backY) return true;
-    // Para ataques à distância na mesma coluna/linha por trás
     if (d.dx !== 0 && Math.sign(attackerPos.x - target.x) === -d.dx) return true;
     if (d.dy !== 0 && Math.sign(attackerPos.y - target.y) === -d.dy) return true;
     return false;
+  }
+
+  function detectActiveSynergies(skills) {
+    const counts = {};
+    for (const skId of skills) {
+      const sk = SKILLS[skId];
+      if (sk && sk.lineage) {
+        counts[sk.lineage] = (counts[sk.lineage] || 0) + 1;
+      }
+    }
+    return LINEAGE_SYNERGIES.filter(syn => (counts[syn.lineage] || 0) >= syn.minCount);
+  }
+
+  function hasSynergy(state, synId) {
+    return detectActiveSynergies(state.skills).some(s => s.id === synId);
   }
 
   function buildInitialGrid(enc) {
@@ -817,6 +953,37 @@ button:disabled{opacity:.38;cursor:not-allowed}
     return tiles;
   }
 
+  // Define a ⚠️ MIRA TELEGRAFADA dos inimigos artilheiros para o turno atual
+  function assignEnemyTelegraphs(s) {
+    for (const en of s.enemies) {
+      if (!en.alive || en.stunned) {
+        en.aimedTile = null;
+        continue;
+      }
+      if (en.aiType === 'artillery') {
+        // No Turno 1 da Arena 1, o Escorpião mira em (2, 2) (logo à frente do Rato e na rota do jogador!),
+        // permitindo ao jogador desviar OU empurrar/puxar um inimigo para a mira!
+        let tx = s.player.x;
+        let ty = s.player.y;
+        if (s.turn === 1 && s.stageIndex === 0 && en.id === 'escorpiao_rei') {
+          tx = 2;
+          ty = 2;
+        }
+        en.aimedTile = {
+          x: tx,
+          y: ty,
+          dmg: en.str,
+          poison: en.poisonOnHit || 0,
+          enemyId: en.id,
+          enemyName: en.name,
+          intentName: en.intentName,
+        };
+      } else {
+        en.aimedTile = null;
+      }
+    }
+  }
+
   function createRunState(stageIndex = 0, carry = null) {
     const enc = ENCOUNTERS[stageIndex];
     const grid = buildInitialGrid(enc);
@@ -829,8 +996,9 @@ button:disabled{opacity:.38;cursor:not-allowed}
           facing: enc.playerStart.facing || 'right',
           hp: Math.min(carry.player.maxHp, carry.player.hp + 10),
           mp: carry.player.maxMp,
-          shield: carry.mutations?.includes('MUT_REFLEXO_FELINO') ? 3 : 0,
+          shield: carry.mutations?.includes('MUT_REFLEXO_FELINO') ? 4 : 0,
           poison: 0,
+          ambushBonus: 0,
         }
       : {
           x: enc.playerStart.x,
@@ -842,17 +1010,29 @@ button:disabled{opacity:.38;cursor:not-allowed}
           maxMp: 5,
           shield: 0,
           poison: 0,
+          ambushBonus: 0,
           str: 5,
           con: 5,
           vel: 3,
           int: 2,
         };
 
-    const skills = carry?.skills ? [...carry.skills] : ['GARRA', 'SALTO', 'PINCA'];
+    const anatomy = carry?.anatomy
+      ? { ...carry.anatomy }
+      : { LIMBS: 'GARRA', TAIL: 'SALTO', TORSO: 'PINCA', HEAD: 'MORDIDA' };
+
+    const skills = carry?.skills
+      ? [...carry.skills]
+      : ['GARRA', 'SALTO', 'PINCA', 'MORDIDA'];
+
+    const geneLevels = carry?.geneLevels
+      ? { ...carry.geneLevels }
+      : { GARRA: 1, SALTO: 1, PINCA: 1, MORDIDA: 1 };
+
     const mutations = carry?.mutations ? [...carry.mutations] : [];
     const atlas = carry?.atlas
       ? new Set(carry.atlas)
-      : new Set(['SKILL:GARRA', 'SKILL:SALTO', 'SKILL:PINCA']);
+      : new Set(['SKILL:GARRA', 'SKILL:SALTO', 'SKILL:PINCA', 'SKILL:MORDIDA']);
 
     for (const sk of skills) atlas.add(`SKILL:${sk}`);
     for (const m of mutations) atlas.add(`MUT:${m}`);
@@ -861,17 +1041,21 @@ button:disabled{opacity:.38;cursor:not-allowed}
       ...e,
       maxHp: e.hp,
       poison: 0,
+      vulnerable: 0,
       stunned: false,
       alive: true,
+      aimedTile: null,
     }));
 
-    return {
+    const state = {
       version: VERSION,
       stageIndex,
       encounterId: enc.id,
       turn: 1,
       grid,
       player: basePlayer,
+      anatomy,
+      geneLevels,
       stepsLeft: basePlayer.vel,
       basicAttackUsed: false,
       skills,
@@ -879,14 +1063,17 @@ button:disabled{opacity:.38;cursor:not-allowed}
       mutations,
       enemies,
       atlas: [...atlas],
-      outcome: 'ongoing', // 'ongoing' | 'win' | 'loss'
+      outcome: 'ongoing',
       evolutionPending: false,
       lastAction: null,
       turnLog: [
-        `🧬 ${enc.name}! Clique nas casas verdes (🟢) para andar (${basePlayer.vel} Passos) e clique num inimigo adjacente para atacar!`,
-        `💡 Dica Mewgenics: Flanqueie para atacar PELAS COSTAS (🗡️ +4 Dano Crítico!) ou empurre inimigos contra Rochas (🪨 +4 Dano) e Poças Ácidas (🧪)!`,
+        `🧬 ${enc.name}! Veja a ⚠️ MIRA VERMELHA no chão: saia dela para esquivar, ou EMPURRE um inimigo para cima dela para causar 💥 FOGO AMIGO!`,
+        `🗡️ Atacar PELAS COSTAS ativa a Ressonância Predadora (+6 Dano Crítico e +1 MP)!`,
       ],
     };
+
+    assignEnemyTelegraphs(state);
+    return state;
   }
 
   function cloneState(s) {
@@ -894,9 +1081,11 @@ button:disabled{opacity:.38;cursor:not-allowed}
       ...s,
       grid: s.grid.map(row => row.map(cell => ({ ...cell, corpse: cell.corpse ? { ...cell.corpse } : null }))),
       player: { ...s.player },
+      anatomy: { ...(s.anatomy || {}) },
+      geneLevels: { ...(s.geneLevels || {}) },
       skills: [...s.skills],
       mutations: [...s.mutations],
-      enemies: s.enemies.map(e => ({ ...e })),
+      enemies: s.enemies.map(e => ({ ...e, aimedTile: e.aimedTile ? { ...e.aimedTile } : null })),
       atlas: [...s.atlas],
       turnLog: [...s.turnLog],
     };
@@ -904,6 +1093,12 @@ button:disabled{opacity:.38;cursor:not-allowed}
 
   function enemyAt(s, x, y) {
     return s.enemies.find(e => e.alive && e.x === x && e.y === y) || null;
+  }
+
+  function aimedTelegraphsAt(s, x, y) {
+    return s.enemies.filter(
+      e => e.alive && !e.stunned && e.aimedTile && e.aimedTile.x === x && e.aimedTile.y === y
+    );
   }
 
   function isBlocked(s, x, y, { ignorePlayer = false } = {}) {
@@ -914,7 +1109,6 @@ button:disabled{opacity:.38;cursor:not-allowed}
     return false;
   }
 
-  // Calcula todas as casas alcançáveis com `s.stepsLeft` passos usando BFS (apenas ortogonal)
   function getReachableTiles(state) {
     if (state.outcome !== 'ongoing' || state.stepsLeft <= 0) return [];
     const dist = Array.from({ length: GRID_H }, () => Array(GRID_W).fill(Infinity));
@@ -951,7 +1145,6 @@ button:disabled{opacity:.38;cursor:not-allowed}
     return true;
   }
 
-  // Retorna as casas que são alvos válidos para a habilidade selecionada
   function getSkillTargets(state, skillId = state.selectedSkill) {
     const sk = SKILLS[skillId];
     if (!sk || !canUseSkill(state, skillId)) return [];
@@ -979,19 +1172,28 @@ button:disabled{opacity:.38;cursor:not-allowed}
     return targets;
   }
 
-  // Pré-calcula o resultado de atacar o inimigo em (tx, ty) com `skillId` para mostrar preview na UI!
+  function getSkillBaseBonus(state, skillId) {
+    const lvl = (state.geneLevels && state.geneLevels[skillId]) || 1;
+    const domBonus = (lvl - 1) * 3; // ★ Nível 2 dá +3 de dano base!
+    let extra = domBonus + (state.player.ambushBonus || 0);
+    if (skillId === 'PINCA' || skillId === 'CUSPE' || skillId === 'FERRAO') extra += 2;
+    if (skillId === 'MORDIDA' || skillId === 'LINGUA') extra += 1;
+    if (skillId === 'VAMP' || skillId === 'CHOQUE') extra += 3;
+    return extra;
+  }
+
   function previewSkillOnEnemy(state, skillId, enemy) {
     const sk = SKILLS[skillId];
     if (!sk || !enemy) return null;
     const backstab = isBackstab(state.player, enemy);
-    const backBonus = backstab ? 4 : 0;
-    let baseDmg = state.player.str + backBonus;
-    if (skillId === 'PINCA' || skillId === 'CUSPE' || skillId === 'VAMP') baseDmg += 2;
-    if (skillId === 'FERRAO') baseDmg += 1;
-    if (skillId === 'CHOQUE') baseDmg += 3;
+    const predSynergy = hasSynergy(state, 'SYN_PREDADOR');
+    const backBonus = backstab ? (predSynergy ? 6 : 4) : 0;
+    const vulnBonus = enemy.vulnerable > 0 ? 2 : 0;
+    const baseDmg = state.player.str + getSkillBaseBonus(state, skillId) + backBonus + vulnBonus;
 
     let collisionDmg = 0;
     let acidBonus = 0;
+    let pushedIntoAim = false;
     const pushDist = skillId === 'PINCA' ? 2 : skillId === 'GARRA' ? 1 : 0;
     if (pushDist > 0) {
       const dir = getDirection(state.player, enemy);
@@ -1002,13 +1204,19 @@ button:disabled{opacity:.38;cursor:not-allowed}
         const nx = cx + dx;
         const ny = cy + dy;
         if (!inBounds(nx, ny) || state.grid[ny][nx].type === 'rock' || enemyAt(state, nx, ny)) {
-          collisionDmg = (skillId === 'PINCA' ? 5 : 4) + (state.mutations.includes('MUT_GIGACHAD') ? 2 : 0);
+          collisionDmg = (skillId === 'PINCA' ? 5 : 4) + (state.mutations.includes('MUT_GIGACHAD') ? 3 : 0);
+          if (inBounds(nx, ny) && state.grid[ny][nx].type === 'rock' && hasSynergy(state, 'SYN_BRUTO')) {
+            collisionDmg += 2;
+          }
           break;
         }
         cx = nx;
         cy = ny;
-        if (state.grid[cy][cx].type === 'acid') {
-          acidBonus = 3;
+        if (state.grid[cy][cx].type === 'acid' || state.grid[cy][cx].type === 'spikes') {
+          acidBonus += 3;
+        }
+        if (aimedTelegraphsAt(state, cx, cy).length > 0) {
+          pushedIntoAim = true;
         }
       }
     }
@@ -1019,6 +1227,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
       backBonus,
       collisionDmg,
       acidBonus,
+      pushedIntoAim,
       totalDmg: baseDmg + collisionDmg + acidBonus,
     };
   }
@@ -1031,7 +1240,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
     return s;
   }
 
-  // Devora uma carcaça de DNA em (x, y) se houver
+  // Devora uma carcaça de DNA em (x, y): enxerta no slot anatômico OU evolui para ★ Dominante Nv.2!
   function checkDevourCorpse(s, x, y, events) {
     const corpse = s.grid[y][x].corpse;
     if (!corpse) return;
@@ -1060,17 +1269,26 @@ button:disabled{opacity:.38;cursor:not-allowed}
     }
 
     const atlasSet = new Set(s.atlas);
-    if (sk && !s.skills.includes(sk.id)) {
-      s.skills.push(sk.id);
+    if (sk) {
       atlasSet.add(`SKILL:${sk.id}`);
-      events.unshift(`🧬 ENXERTO DEVORADO! Você consumiu o DNA de ${corpse.enemyName}, recuperou +6 PV/+2 MP${statMsg} e aprendeu [${sk.icon} ${sk.name}]!`);
-    } else {
-      events.unshift(`🥩 DNA DEVORADO! Você consumiu a carcaça de ${corpse.enemyName} (+6 PV, +2 MP${statMsg})!`);
+      if (s.skills.includes(sk.id)) {
+        // Evolui para ★ Alelo Dominante Nv.2!
+        s.geneLevels[sk.id] = (s.geneLevels[sk.id] || 1) + 1;
+        events.unshift(
+          `★ MUTAÇÃO DOMINANTE (Nv.${s.geneLevels[sk.id]})! Você devorou outro DNA de ${corpse.enemyName}: [${sk.icon} ${sk.name}] ganhou +3 de Poder permanente e você recuperou +6 PV/+2 MP${statMsg}!`
+        );
+      } else {
+        s.skills.push(sk.id);
+        s.geneLevels[sk.id] = 1;
+        if (sk.slot) s.anatomy[sk.slot] = sk.id;
+        events.unshift(
+          `🧬 ENXERTO ANATÔMICO (${ANATOMY_SLOTS[sk.slot]?.label || 'Corpo'})! Você devorou o DNA de ${corpse.enemyName} (+6 PV/+2 MP${statMsg}) e enxertou [${sk.icon} ${sk.name}]!`
+        );
+      }
     }
     s.atlas = [...atlasSet];
   }
 
-  // Move o jogador até uma casa alcançável (tx, ty)
   function movePlayer(state, tx, ty) {
     if (state.outcome !== 'ongoing') return state;
     const reach = getReachableTiles(state).find(r => r.x === tx && r.y === ty);
@@ -1085,21 +1303,26 @@ button:disabled{opacity:.38;cursor:not-allowed}
 
     const events = [`🐾 Você moveu para (${tx + 1},${ty + 1}) [${s.stepsLeft} passo(s) restante(s)].`];
 
-    // Verifica terreno (Ácido ou Carcaça de DNA)
     checkDevourCorpse(s, tx, ty, events);
 
-    if (s.grid[ty][tx].type === 'acid') {
+    const tileType = s.grid[ty][tx].type;
+    if (tileType === 'acid') {
       if (s.mutations.includes('MUT_SANGUE_ACIDO')) {
-        s.player.hp = Math.min(s.player.maxHp, s.player.hp + 3);
-        events.unshift(`🧪 Metabolismo Ácido: a poça ácida regenerou +3 PV seus!`);
+        s.player.hp = Math.min(s.player.maxHp, s.player.hp + 4);
+        s.player.ambushBonus = 2;
+        events.unshift(`🧪 Metabolismo Ácido: a poça ácida curou +4 PV e deu +2 Dano ao próximo golpe!`);
       } else {
         s.player.hp = Math.max(1, s.player.hp - 2);
         s.player.poison += 1;
         events.unshift(`🧪 Você pisou na Poça Ácida (-2 PV e +1 Veneno)!`);
       }
-    } else if (s.grid[ty][tx].type === 'grass') {
-      s.player.shield += 2;
-      events.unshift(`🌿 Camuflagem no Mato Alto: +2 Escudo!`);
+    } else if (tileType === 'grass') {
+      s.player.shield += 3;
+      s.player.ambushBonus = 2;
+      events.unshift(`🌿 Emboscada no Mato Alto: +3 Escudo e +2 de Dano no próximo ataque!`);
+    } else if (tileType === 'spikes') {
+      s.player.hp = Math.max(1, s.player.hp - 2);
+      events.unshift(`🦴 Você pisou nos Escombros de Espinhos (-2 PV)!`);
     }
 
     s.lastAction = { type: 'move', x: tx, y: ty };
@@ -1111,57 +1334,125 @@ button:disabled{opacity:.38;cursor:not-allowed}
     if (enemy.hp > 0 || !enemy.alive) return false;
     enemy.hp = 0;
     enemy.alive = false;
-    // Dropa Carcaça de DNA na casa onde morreu!
+    enemy.aimedTile = null;
+
     s.grid[enemy.y][enemy.x].corpse = {
       enemyName: enemy.name,
       skillId: enemy.dropSkill || 'PINCA',
     };
-    events.push(`💀 ${enemy.icon} ${enemy.name} foi abatido e deixou [🥩 DNA: ${SKILLS[enemy.dropSkill || 'PINCA'].name}] no chão! Pise lá para devorar!`);
+    events.push(
+      `💀 ${enemy.icon} ${enemy.name} foi abatido e deixou [🥩 DNA: ${SKILLS[enemy.dropSkill || 'PINCA'].name}] no chão!`
+    );
+
+    // Ressonância Sangue Xenomorfo: inimigo envenenado explode em Poça Ácida ao morrer!
+    if (enemy.poison > 0 && hasSynergy(s, 'SYN_TOXICO')) {
+      s.grid[enemy.y][enemy.x].type = 'acid';
+      events.push(`☠️ Sangue Xenomorfo: o cadáver envenenado de ${enemy.name} derreteu o chão em Poça Ácida (🧪)!`);
+    }
+
+    // Transtorno Frenesi Carniceiro: matar um inimigo dá +2 Passos, +1 MP e reseta Garra!
+    if (s.mutations.includes('MUT_FRENESI_CARNICEIRO')) {
+      s.stepsLeft += 2;
+      s.player.mp = Math.min(s.player.maxMp, s.player.mp + 1);
+      s.basicAttackUsed = false;
+      events.push(`🩸 FRENESI CARNICEIRO! O abate concedeu +2 Passos, +1 MP e resetou sua Garra Predadora!`);
+    }
 
     if (s.enemies.every(e => !e.alive)) {
+      for (let cy = 0; cy < GRID_H; cy++) {
+        for (let cx = 0; cx < GRID_W; cx++) {
+          if (s.grid[cy][cx].corpse) {
+            checkDevourCorpse(s, cx, cy, events);
+          }
+        }
+      }
       s.outcome = 'win';
       s.evolutionPending = s.stageIndex < ENCOUNTERS.length - 1;
-      events.unshift(`🏆 ARENA DOMINADA! Todos os predadores foram eliminados!`);
+      events.unshift(`🏆 ARENA DOMINADA! Todos os predadores foram eliminados e você colheu o DNA restante!`);
     }
     return true;
   }
 
-  // Empurra um inimigo `pushDist` casas na direção (dx, dy)
+  // Empurra ou puxa um inimigo e DESLOCA a ⚠️ MIRA dele se ele estiver mirando!
+  function displaceEnemyStep(s, enemy, dx, dy, collisionBaseDmg, events) {
+    const nx = enemy.x + dx;
+    const ny = enemy.y + dy;
+    const otherEnemy = enemyAt(s, nx, ny);
+
+    if (!inBounds(nx, ny) || s.grid[ny][nx].type === 'rock' || otherEnemy) {
+      let colDmg = collisionBaseDmg + (s.mutations.includes('MUT_GIGACHAD') ? 3 : 0);
+      const hitRock = inBounds(nx, ny) && s.grid[ny][nx].type === 'rock';
+
+      if (hitRock && hasSynergy(s, 'SYN_BRUTO')) {
+        colDmg += 2;
+        s.grid[ny][nx].type = 'spikes';
+        events.push(`🦴 DEMOLIÇÃO BRUTA! A Rocha em (${nx + 1},${ny + 1}) explodiu virando Escombros de Espinhos (+2 dano)!`);
+      }
+
+      enemy.hp = Math.max(0, enemy.hp - colDmg);
+      enemy.vulnerable += 1;
+      const obstacleName = !inBounds(nx, ny)
+        ? 'a Parede da Arena'
+        : otherEnemy
+          ? otherEnemy.name
+          : 'uma Rocha (🪨)';
+      events.push(`💥 COLISÃO BRUTAL! ${enemy.name} bateu contra ${obstacleName} e sofreu +${colDmg} de dano!`);
+
+      if (otherEnemy) {
+        otherEnemy.hp = Math.max(0, otherEnemy.hp - colDmg);
+        otherEnemy.vulnerable += 1;
+        events.push(`💥 ${otherEnemy.name} também sofreu ${colDmg} de dano no impacto!`);
+        handleEnemyDeathIfZero(s, otherEnemy, events);
+      }
+      return false;
+    }
+
+    enemy.x = nx;
+    enemy.y = ny;
+
+    // Se o inimigo deslocado tinha uma ⚠️ MIRA travada, a mira desloca junto com ele!
+    if (enemy.aimedTile) {
+      const aimNx = enemy.aimedTile.x + dx;
+      const aimNy = enemy.aimedTile.y + dy;
+      if (inBounds(aimNx, aimNy)) {
+        enemy.aimedTile.x = aimNx;
+        enemy.aimedTile.y = aimNy;
+        events.push(`🎯 O empurrão desviou a ⚠️ MIRA de ${enemy.name} para (${aimNx + 1},${aimNy + 1})!`);
+      } else {
+        enemy.aimedTile = null;
+        events.push(`🎯 O empurrão jogou a ⚠️ MIRA de ${enemy.name} para fora da arena (Tiro Cancelado)!`);
+      }
+    }
+
+    const tileType = s.grid[ny][nx].type;
+    if (tileType === 'acid') {
+      enemy.hp = Math.max(0, enemy.hp - 3);
+      enemy.poison += 2;
+      enemy.vulnerable += 1;
+      events.push(`🧪 ${enemy.name} caiu na Poça Ácida (-3 PV, +2 Veneno e Vulnerável)!`);
+    } else if (tileType === 'spikes') {
+      enemy.hp = Math.max(0, enemy.hp - 3);
+      events.push(`🦴 ${enemy.name} foi rasgado pelos Escombros de Espinhos (-3 PV)!`);
+    }
+
+    const aimsHere = aimedTelegraphsAt(s, nx, ny);
+    if (aimsHere.length > 0) {
+      events.push(`⚠️ ARMADILHA TÁTICA! ${enemy.name} foi jogado em cima da MIRA de ${aimsHere[0].name} (vai sofrer 💥 FOGO AMIGO no fim do turno)!`);
+    }
+    return true;
+  }
+
   function pushEnemy(s, enemy, dx, dy, pushDist, collisionBaseDmg, events) {
     let pushed = 0;
     for (let step = 1; step <= pushDist; step++) {
-      const nx = enemy.x + dx;
-      const ny = enemy.y + dy;
-      const otherEnemy = enemyAt(s, nx, ny);
-      if (!inBounds(nx, ny) || s.grid[ny][nx].type === 'rock' || otherEnemy) {
-        const colDmg = collisionBaseDmg + (s.mutations.includes('MUT_GIGACHAD') ? 2 : 0);
-        enemy.hp = Math.max(0, enemy.hp - colDmg);
-        const obstacleName = !inBounds(nx, ny)
-          ? 'a Parede da Arena'
-          : otherEnemy
-            ? otherEnemy.name
-            : 'uma Rocha (🪨)';
-        events.push(`💥 COLISÃO BRUTAL! ${enemy.name} bateu contra ${obstacleName} e sofreu +${colDmg} de dano!`);
-        if (otherEnemy) {
-          otherEnemy.hp = Math.max(0, otherEnemy.hp - colDmg);
-          events.push(`💥 ${otherEnemy.name} também sofreu ${colDmg} de dano no impacto!`);
-          handleEnemyDeathIfZero(s, otherEnemy, events);
-        }
-        break;
-      }
-      enemy.x = nx;
-      enemy.y = ny;
+      if (enemy.hp <= 0) break;
+      const moved = displaceEnemyStep(s, enemy, dx, dy, collisionBaseDmg, events);
+      if (!moved) break;
       pushed++;
-      if (s.grid[ny][nx].type === 'acid') {
-        enemy.hp = Math.max(0, enemy.hp - 3);
-        enemy.poison += 2;
-        events.push(`🧪 ${enemy.name} caiu na Poça Ácida (-3 PV e +2 Veneno)!`);
-      }
     }
     return pushed;
   }
 
-  // Executa a habilidade `skillId` na casa alvo (tx, ty)
   function useSkillOnTile(state, tx, ty, skillOverride = null) {
     if (state.outcome !== 'ongoing') return state;
     const skillId = skillOverride || state.selectedSkill;
@@ -1183,7 +1474,14 @@ button:disabled{opacity:.38;cursor:not-allowed}
       s.player.x = tx;
       s.player.y = ty;
       s.player.shield += 3;
-      events.unshift(`🦗 Salto Acrobático para (${tx + 1},${ty + 1})! Você ganhou +3 Escudo!`);
+      // Verifica se pousou nas costas de algum inimigo!
+      const backTarget = s.enemies.find(e => e.alive && manhattan(s.player, e) === 1 && isBackstab(s.player, e));
+      if (backTarget) {
+        s.player.ambushBonus = 2;
+        events.unshift(`🦗 Salto Acrobático para (${tx + 1},${ty + 1}) atrás de ${backTarget.name}! +3 Escudo e +2 Dano de Emboscada!`);
+      } else {
+        events.unshift(`🦗 Salto Acrobático para (${tx + 1},${ty + 1}) (+3 Escudo)!`);
+      }
       checkDevourCorpse(s, tx, ty, events);
       s.lastAction = { type: 'jump', x: tx, y: ty };
       s.selectedSkill = 'GARRA';
@@ -1195,19 +1493,29 @@ button:disabled{opacity:.38;cursor:not-allowed}
     if (!enemy) return s;
 
     const backstab = isBackstab(s.player, enemy);
-    const backBonus = backstab ? 4 : 0;
+    const predSynergy = hasSynergy(s, 'SYN_PREDADOR');
+    const toxSynergy = hasSynergy(s, 'SYN_TOXICO');
+    const voltSynergy = hasSynergy(s, 'SYN_VOLTAICO');
+
+    const backBonus = backstab ? (predSynergy ? 6 : 4) : 0;
+    const vulnBonus = enemy.vulnerable > 0 ? 2 : 0;
     const dir = getDirection(s.player, enemy);
     const { dx, dy } = dirDelta(dir);
 
-    let dmg = s.player.str + backBonus;
-    if (skillId === 'PINCA' || skillId === 'CUSPE' || skillId === 'VAMP') dmg += 2;
-    if (skillId === 'FERRAO') dmg += 1;
-    if (skillId === 'CHOQUE') dmg += 3;
+    const dmg = s.player.str + getSkillBaseBonus(s, skillId) + backBonus + vulnBonus;
+    s.player.ambushBonus = 0;
 
     enemy.hp = Math.max(0, enemy.hp - dmg);
     events.unshift(
-      `${sk.icon} ${sk.name} atinge ${enemy.name} causando ${dmg} de dano${backstab ? ' (🗡️ BACKSTAB CRÍTICO PELAS COSTAS +4!)' : ''}!`
+      `${sk.icon} ${sk.name} atinge ${enemy.name} causando ${dmg} de dano${backstab ? ` (🗡️ BACKSTAB CRÍTICO +${backBonus}!)` : ''}!`
     );
+
+    if (backstab && predSynergy) {
+      s.player.mp = Math.min(s.player.maxMp, s.player.mp + 1);
+      events.push(`🩸 Instinto Assassino: Backstab recuperou +1 MP!`);
+    }
+
+    const extraPoison = toxSynergy ? 2 : 0;
 
     if (skillId === 'GARRA' && enemy.hp > 0) {
       pushEnemy(s, enemy, dx, dy, 1, 4, events);
@@ -1216,53 +1524,73 @@ button:disabled{opacity:.38;cursor:not-allowed}
       if (enemy.hp > 0) {
         pushEnemy(s, enemy, dx, dy, 2, 5, events);
       }
+    } else if (skillId === 'MORDIDA') {
+      const pGain = 3 + extraPoison;
+      enemy.poison += pGain;
+      s.player.hp = Math.min(s.player.maxHp, s.player.hp + 3);
+      events.push(`🦷 Presas Injetoras: +${pGain} Veneno em ${enemy.name} e +3 PV regenerados!`);
     } else if (skillId === 'FERRAO') {
-      enemy.poison += 3;
-      events.push(`☠️ +3 de Veneno injetado em ${enemy.name}!`);
-      // Salto cambalhota para trás do inimigo se a casa estiver livre!
+      const pGain = 3 + extraPoison;
+      enemy.poison += pGain;
+      s.player.shield += 3;
+      events.push(`☠️ +${pGain} de Veneno injetado em ${enemy.name} (+3 Escudo)!`);
       const behindX = enemy.x + dx;
       const behindY = enemy.y + dy;
       if (inBounds(behindX, behindY) && !isBlocked(s, behindX, behindY)) {
         s.player.x = behindX;
         s.player.y = behindY;
         s.player.facing = getDirection(s.player, enemy);
-        events.push(`🤸 Cambalhota Predadora! Você pousou atrás das costas de ${enemy.name}!`);
+        events.push(`🤸 Cambalhota Predadora! Você saltou por cima e caiu nas costas de ${enemy.name}!`);
         checkDevourCorpse(s, behindX, behindY, events);
       }
     } else if (skillId === 'LINGUA' && enemy.hp > 0) {
-      // Puxa o inimigo para a casa adjacente ao jogador na linha do puxão
-      const pullX = s.player.x + dx;
-      const pullY = s.player.y + dy;
-      if (inBounds(pullX, pullY) && !isBlocked(s, pullX, pullY) && (pullX !== enemy.x || pullY !== enemy.y)) {
-        enemy.x = pullX;
-        enemy.y = pullY;
-        events.push(`🐸 ${enemy.name} foi PUXADO para (${pullX + 1},${pullY + 1})!`);
-        if (s.grid[pullY][pullX].type === 'acid') {
-          enemy.hp = Math.max(0, enemy.hp - 3);
-          enemy.poison += 2;
-          events.push(`🧪 ${enemy.name} foi puxado para dentro da Poça Ácida (-3 PV e +2 Veneno)!`);
-        }
+      // Puxa o inimigo na direção oposta (-dx, -dy) até ficar adjacente ao jogador
+      const pullSteps = Math.max(1, manhattan(s.player, enemy) - 1);
+      for (let i = 0; i < pullSteps; i++) {
+        const moved = displaceEnemyStep(s, enemy, -dx, -dy, 3, events);
+        if (!moved) break;
       }
+      events.push(`🐸 ${enemy.name} foi PUXADO pela Língua Chicote para (${enemy.x + 1},${enemy.y + 1})!`);
     } else if (skillId === 'CUSPE') {
-      enemy.poison += 3;
+      const pGain = 4 + extraPoison;
+      enemy.poison += pGain;
+      enemy.vulnerable += 1;
       s.grid[enemy.y][enemy.x].type = 'acid';
-      events.push(`🧪 O chão em (${enemy.x + 1},${enemy.y + 1}) derreteu virando Poça Ácida (+3 Veneno)!`);
+      events.push(`🧪 O chão em (${enemy.x + 1},${enemy.y + 1}) derreteu virando Poça Ácida (+${pGain} Veneno e Vulnerável)!`);
     } else if (skillId === 'VAMP') {
-      s.player.hp = Math.min(s.player.maxHp, s.player.hp + 5);
+      s.player.hp = Math.min(s.player.maxHp, s.player.hp + 6);
       s.player.poison = 0;
-      events.push(`🩸 Você drenou +5 PV e purificou seu sangue!`);
+      events.push(`🩸 Você drenou +6 PV e purificou seu sangue!`);
     } else if (skillId === 'CHOQUE') {
       enemy.stunned = true;
-      events.push(`⚡ ${enemy.name} ficou PARALISADO por 1 turno!`);
-      // Salta para qualquer outro inimigo até 2 casas do alvo
+      enemy.aimedTile = null;
+      events.push(`⚡ ${enemy.name} ficou PARALISADO por 1 turno (Mira Cancelada)!`);
+      // Conduz choque para inimigos próximos OU qualquer inimigo pisando em Poça Ácida!
       for (const other of s.enemies) {
-        if (other.alive && other.id !== enemy.id && manhattan(enemy, other) <= 2) {
-          const arcDmg = Math.max(3, s.player.str);
+        if (!other.alive || other.id === enemy.id) continue;
+        const near = manhattan(enemy, other) <= 2;
+        const inAcid = s.grid[other.y][other.x].type === 'acid';
+        if (near || inAcid) {
+          const arcDmg = Math.max(4, s.player.str);
           other.hp = Math.max(0, other.hp - arcDmg);
-          events.push(`⚡ Arco Voltaico saltou para ${other.name} causando ${arcDmg} de dano!`);
+          if (inAcid) {
+            other.stunned = true;
+            other.aimedTile = null;
+          }
+          events.push(
+            `⚡ Arco Voltaico conduziu até ${other.name}${inAcid ? ' via Poça Ácida (PARALISADO!)' : ''} causando ${arcDmg} de dano!`
+          );
           handleEnemyDeathIfZero(s, other, events);
         }
       }
+    }
+
+    // Ressonância Bio-Eletrólise: atacar inimigo em Poça Ácida dispara choque extra!
+    if (enemy.hp > 0 && voltSynergy && skillId !== 'CHOQUE' && s.grid[enemy.y][enemy.x].type === 'acid') {
+      enemy.hp = Math.max(0, enemy.hp - 3);
+      enemy.stunned = true;
+      enemy.aimedTile = null;
+      events.push(`⚡ Bio-Eletrólise: a Poça Ácida eletrocutou ${enemy.name} (+3 dano e PARALISADO)!`);
     }
 
     const died = handleEnemyDeathIfZero(s, enemy, events);
@@ -1275,7 +1603,6 @@ button:disabled{opacity:.38;cursor:not-allowed}
       killed: died,
     };
 
-    // Se a habilidade básica acabou de ser usada, seleciona automaticamente a próxima habilidade com MP disponível
     if (s.basicAttackUsed && s.selectedSkill === 'GARRA') {
       const nextReady = s.skills.find(id => id !== 'GARRA' && canUseSkill(s, id));
       if (nextReady) s.selectedSkill = nextReady;
@@ -1285,16 +1612,51 @@ button:disabled{opacity:.38;cursor:not-allowed}
     return s;
   }
 
-  // Turno dos Inimigos na Arena: Veneno queima, cada inimigo vivo caminha até você e ataca!
   function endTurn(state) {
     if (state.outcome !== 'ongoing') return state;
     const s = cloneState(state);
     const events = [];
 
+    // FASE 1: DISPARO DAS ⚠️ MIRAS TELEGRAFADAS (Artillery & Friendly Fire!)
+    for (const shooter of s.enemies) {
+      if (!shooter.alive || shooter.stunned || !shooter.aimedTile) continue;
+      const aim = shooter.aimedTile;
+      shooter.aimedTile = null;
+
+      const victimEnemy = enemyAt(s, aim.x, aim.y);
+      if (victimEnemy && victimEnemy.id !== shooter.id) {
+        // 💥 FOGO AMIGO! O tiro atinge o outro inimigo que foi empurrado para a mira!
+        victimEnemy.hp = Math.max(0, victimEnemy.hp - aim.dmg);
+        if (aim.poison) victimEnemy.poison += aim.poison;
+        events.unshift(
+          `💥 FOGO AMIGO! ${shooter.icon} ${shooter.name} disparou ${aim.intentName} em (${aim.x + 1},${aim.y + 1}) e ACERTOU ${victimEnemy.name} causando ${aim.dmg} de dano!`
+        );
+        handleEnemyDeathIfZero(s, victimEnemy, events);
+      } else if (s.player.x === aim.x && s.player.y === aim.y) {
+        const abs = Math.min(s.player.shield, aim.dmg);
+        s.player.shield -= abs;
+        const net = aim.dmg - abs;
+        s.player.hp = Math.max(0, s.player.hp - net);
+        if (aim.poison && net > 0) s.player.poison += aim.poison;
+        events.push(
+          net > 0
+            ? `💥 ${shooter.icon} ${shooter.name} disparou ${aim.intentName} na mira (${aim.x + 1},${aim.y + 1}) causando ${net} de dano!`
+            : `🛡️ Seu Escudo bloqueou o disparo telegrafado de ${shooter.name}!`
+        );
+      } else {
+        events.push(`💨 ESQUIVA TÁTICA! ${shooter.icon} ${shooter.name} atirou em (${aim.x + 1},${aim.y + 1}) e acertou o vazio!`);
+      }
+    }
+
+    if (s.outcome === 'win') {
+      s.turnLog = [...events, ...s.turnLog].slice(0, 14);
+      return s;
+    }
+
+    // FASE 2: VENENO, MOVIMENTO E ATAQUE CORPO A CORPO DOS INIMIGOS VIVOS
     for (const en of s.enemies) {
       if (!en.alive) continue;
 
-      // 1. Veneno no inimigo
       if (en.poison > 0) {
         en.hp = Math.max(0, en.hp - en.poison);
         events.push(`☠️ ${en.name} sofre ${en.poison} de dano de Veneno.`);
@@ -1303,11 +1665,10 @@ button:disabled{opacity:.38;cursor:not-allowed}
 
       if (en.stunned) {
         en.stunned = false;
-        events.push(`⚡ ${en.name} estava paralisado pelo choque e perdeu a ação!`);
+        events.push(`⚡ ${en.name} estava paralisado pelo choque e perdeu o turno!`);
         continue;
       }
 
-      // 2. Movimento do inimigo em direção ao jogador
       let steps = en.move || 1;
       while (steps > 0 && manhattan(en, s.player) > 1) {
         steps--;
@@ -1338,23 +1699,17 @@ button:disabled{opacity:.38;cursor:not-allowed}
       }
 
       if (!en.alive) continue;
-
-      // Viro o inimigo para olhar na direção do jogador
       en.facing = getDirection(en, s.player);
 
-      // 3. Se estiver adjacente ao jogador, ataca!
-      if (manhattan(en, s.player) === 1) {
+      // Stalkers atacam adjacente; Artilheiros só batem adjacente se não tinham atirado
+      if (en.aiType === 'stalker' && manhattan(en, s.player) === 1) {
         const raw = en.str;
         const abs = Math.min(s.player.shield, raw);
         s.player.shield -= abs;
         const net = raw - abs;
         s.player.hp = Math.max(0, s.player.hp - net);
-        if (en.poisonOnHit && net > 0) {
-          s.player.poison += en.poisonOnHit;
-        }
-        if (en.lifesteal && net > 0) {
-          en.hp = Math.min(en.maxHp, en.hp + en.lifesteal);
-        }
+        if (en.poisonOnHit && net > 0) s.player.poison += en.poisonOnHit;
+        if (en.lifesteal && net > 0) en.hp = Math.min(en.maxHp, en.hp + en.lifesteal);
         events.push(
           net > 0
             ? `💥 ${en.icon} ${en.name} usa ${en.intentName} e causa ${net} de dano${abs > 0 ? ` (${abs} bloqueado)` : ''}!`
@@ -1363,7 +1718,6 @@ button:disabled{opacity:.38;cursor:not-allowed}
       }
     }
 
-    // Veneno no jogador
     if (s.player.hp > 0 && s.outcome === 'ongoing' && s.player.poison > 0) {
       s.player.hp = Math.max(0, s.player.hp - s.player.poison);
       events.push(`☠️ Você sofreu ${s.player.poison} de dano de Veneno.`);
@@ -1375,7 +1729,6 @@ button:disabled{opacity:.38;cursor:not-allowed}
       events.unshift(`💀 Sua Quimera tombou na arena.`);
     }
 
-    // Prepara o próximo turno do jogador
     if (s.outcome === 'ongoing') {
       s.turn += 1;
       s.stepsLeft = s.player.vel;
@@ -1383,8 +1736,9 @@ button:disabled{opacity:.38;cursor:not-allowed}
       s.selectedSkill = 'GARRA';
       s.player.mp = Math.min(s.player.maxMp, s.player.mp + s.player.int);
       const onGrass = s.grid[s.player.y][s.player.x].type === 'grass';
-      const reflexBonus = s.mutations.includes('MUT_REFLEXO_FELINO') ? 3 : 0;
+      const reflexBonus = s.mutations.includes('MUT_REFLEXO_FELINO') ? 4 : 0;
       s.player.shield = (onGrass ? 3 : 0) + reflexBonus;
+      assignEnemyTelegraphs(s);
     }
 
     s.lastAction = { type: 'endTurn' };
@@ -1392,7 +1746,6 @@ button:disabled{opacity:.38;cursor:not-allowed}
     return s;
   }
 
-  // Escolhe uma Mutação de Linhagem no Laboratório Genético e avança para a próxima Arena!
   function chooseEvolutionAndAdvance(state, mutationId) {
     const s = cloneState(state);
     const perk = MUTATION_PERKS.find(m => m.id === mutationId);
@@ -1408,10 +1761,14 @@ button:disabled{opacity:.38;cursor:not-allowed}
     VERSION,
     GRID_W,
     GRID_H,
+    ANATOMY_SLOTS,
     SKILLS,
+    LINEAGE_SYNERGIES,
     MUTATION_PERKS,
     ENCOUNTERS,
     isBackstab,
+    detectActiveSynergies,
+    aimedTelegraphsAt,
     createRunState,
     getReachableTiles,
     canUseSkill,
@@ -1427,7 +1784,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
 
 </script>
 <script>
-/* O Enxerto · Controlador v2.0 (Mewgenics Tactical Arena 7x5 + Backstab + Colisão + Genética) */
+/* O Enxerto · Controlador v3.0 (Arena Tática 7x5 + Mira Telegrafada & Fogo Amigo + Anatomia & Ressonâncias) */
 (function () {
   'use strict';
 
@@ -1521,7 +1878,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
     if (toastTimer) clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
       t.hidden = true;
-    }, 1600);
+    }, 1650);
   }
 
   function triggerShake(elId) {
@@ -1552,6 +1909,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
       el('span', `🐾 Passos ${state.stepsLeft}/${p.vel}`, 'vital-pill steps')
     );
     if (p.shield > 0) vitals.append(el('span', `🛡️ Escudo ${p.shield}`, 'vital-pill shield'));
+    if (p.ambushBonus > 0) vitals.append(el('span', `🌿 Emboscada +${p.ambushBonus}`, 'vital-pill ambush'));
     if (p.poison > 0) vitals.append(el('span', `☠️ Veneno ${p.poison}`, 'vital-pill poison'));
 
     const genes = by('genes-group');
@@ -1562,9 +1920,18 @@ button:disabled{opacity:.38;cursor:not-allowed}
       el('span', `⚡ VEL ${p.vel}`, 'gene-stat'),
       el('span', `🧠 INT ${p.int}`, 'gene-stat')
     );
+
+    // Ressonâncias de Linhagem ativas
+    const strip = by('synergy-strip');
+    strip.replaceChildren();
+    const activeSyns = C.detectActiveSynergies(state.skills);
+    for (const syn of activeSyns) {
+      const b = el('div', '', 'synergy-badge');
+      b.innerHTML = `<b>${syn.icon} ${syn.name}:</b> ${syn.desc}`;
+      strip.append(b);
+    }
   }
 
-  // Verifica se a casa (x, y) é exatamente as costas de algum inimigo vivo
   function isBehindAnyEnemy(x, y) {
     for (const en of state.enemies) {
       if (!en.alive) continue;
@@ -1602,11 +1969,15 @@ button:disabled{opacity:.38;cursor:not-allowed}
         const reach = reachMap.get(key);
         const skTarget = targetMap.get(key);
         const backEnemy = !isPlayer && !enemy && cell.type !== 'rock' ? isBehindAnyEnemy(x, y) : null;
+        const telegraphs = C.aimedTelegraphsAt(state, x, y);
+        const hasDanger = telegraphs.length > 0;
 
         const classes = ['tile'];
         if (cell.type === 'rock') classes.push('rock');
+        if (cell.type === 'spikes') classes.push('spikes');
         if (cell.type === 'acid') classes.push('acid');
         if (cell.type === 'grass') classes.push('grass');
+        if (hasDanger) classes.push('danger-zone');
         if (isPlayer) classes.push('player-tile');
         if (skTarget && skTarget.kind === 'tile') classes.push('jump-target');
         else if (reach && !isPlayer) classes.push('reachable');
@@ -1617,19 +1988,26 @@ button:disabled{opacity:.38;cursor:not-allowed}
         tileEl.dataset.x = String(x);
         tileEl.dataset.y = String(y);
 
-        // Topo da célula (Terreno / Seta de Direção / Costas)
+        // Topo da célula
         const top = el('div', '', 'tile-top');
         let terrainTag = '';
-        if (cell.corpse) terrainTag = '🥩 DNA';
+        if (hasDanger) {
+          const tDmg = telegraphs.reduce((acc, e) => acc + (e.aimedTile?.dmg || 0), 0);
+          terrainTag = enemy ? `💥 FOGO AMIGO!` : `⚠️ MIRA ${tDmg}💥`;
+        } else if (cell.corpse) terrainTag = '🥩 DNA';
         else if (cell.type === 'rock') terrainTag = '🪨 Rocha';
+        else if (cell.type === 'spikes') terrainTag = '🦴 Espinhos';
         else if (cell.type === 'acid') terrainTag = '🧪 Ácido';
         else if (cell.type === 'grass') terrainTag = '🌿 Mato';
 
-        top.append(el('span', terrainTag));
+        const tagSpan = el('span', terrainTag);
+        if (hasDanger) tagSpan.style.color = '#fdba74';
+        top.append(tagSpan);
+
         if (isPlayer) {
           top.append(el('span', FACING_ARROW[state.player.facing] || '▶', 'facing-arrow'));
         } else if (enemy) {
-          top.append(el('span', `${FACING_ARROW[enemy.facing] || '◀'}`, 'facing-arrow'));
+          top.append(el('span', `${enemy.stunned ? '⚡' : FACING_ARROW[enemy.facing] || '◀'}`, 'facing-arrow'));
         } else if (backEnemy) {
           top.append(el('span', '🗡️ COSTAS', 'backstab-hint'));
         }
@@ -1645,10 +2023,14 @@ button:disabled{opacity:.38;cursor:not-allowed}
           sprite.textContent = '🥩';
         } else if (cell.type === 'rock') {
           sprite.textContent = '🪨';
+        } else if (cell.type === 'spikes') {
+          sprite.textContent = '🦴';
         } else if (cell.type === 'acid') {
           sprite.textContent = '🧪';
         } else if (cell.type === 'grass') {
           sprite.textContent = '🌿';
+        } else if (hasDanger) {
+          sprite.textContent = '🎯';
         } else if (skTarget && skTarget.kind === 'tile') {
           sprite.textContent = '🦗';
         } else if (reach) {
@@ -1657,36 +2039,42 @@ button:disabled{opacity:.38;cursor:not-allowed}
         }
         tileEl.append(sprite);
 
-        // Rodapé da célula (PV ou Ação)
+        // Rodapé da célula
         if (isPlayer) {
-          tileEl.append(el('div', `VOCÊ ${state.player.hp}❤️`, 'tile-hp player'));
+          tileEl.append(
+            el('div', hasDanger ? `⚠️ SAIA DA MIRA!` : `VOCÊ ${state.player.hp}❤️`, `tile-hp ${hasDanger ? 'danger' : 'player'}`)
+          );
         } else if (enemy) {
-          const eLabel = `${enemy.hp}❤️ ⚔️${enemy.str}${enemy.poison ? ` ☠️${enemy.poison}` : ''}`;
+          const eLabel = `${enemy.hp}❤️ ⚔️${enemy.str}${enemy.poison ? ` ☠️${enemy.poison}` : ''}${enemy.vulnerable ? ' 💔' : ''}`;
           tileEl.append(el('div', eLabel, 'tile-hp enemy'));
 
-          // Se este inimigo está na mira da habilidade ativa, mostra badge de DANO PREVISTO!
           if (skTarget && skTarget.kind === 'enemy') {
             const prev = C.previewSkillOnEnemy(state, state.selectedSkill, enemy);
             if (prev) {
               const tags = [];
               if (prev.backstab) tags.push('🗡️COSTAS');
               if (prev.collisionDmg > 0) tags.push('💥COLISÃO');
+              if (prev.pushedIntoAim) tags.push('⚠️FOGO AMIGO');
               const txt = `-${prev.totalDmg} PV${tags.length ? ' ' + tags.join('+') : ''}`;
-              tileEl.append(el('div', txt, `dmg-preview-badge${prev.backstab || prev.collisionDmg ? ' crit' : ''}`));
+              tileEl.append(el('div', txt, `dmg-preview-badge${prev.backstab || prev.collisionDmg || prev.pushedIntoAim ? ' crit' : ''}`));
             }
           }
         } else if (cell.corpse) {
           const cSk = C.SKILLS[cell.corpse.skillId];
-          tileEl.append(el('div', `+${cSk ? cSk.icon + ' Gene' : 'Gene'}`, 'tile-hp player'));
+          const hasAlready = state.skills.includes(cell.corpse.skillId);
+          tileEl.append(
+            el('div', hasAlready ? `★ Evoluir Nv.2` : `+${cSk ? cSk.icon + ' Gene' : 'Gene'}`, 'tile-hp player')
+          );
         } else if (skTarget && skTarget.kind === 'tile') {
           tileEl.append(el('div', '🦗 Pular', 'tile-hp player'));
         } else if (reach) {
           tileEl.append(el('div', `🐾 ${reach.cost}`, 'tile-hp'));
+        } else if (hasDanger) {
+          tileEl.append(el('div', 'Zona de Tiro', 'tile-hp danger'));
         } else {
           tileEl.append(el('div', '', ''));
         }
 
-        // Clique inteligente na célula!
         tileEl.onclick = () => onTileClick(x, y, { skTarget, reach, enemy });
         board.append(tileEl);
       }
@@ -1696,7 +2084,6 @@ button:disabled{opacity:.38;cursor:not-allowed}
   function onTileClick(x, y, { skTarget, reach, enemy }) {
     if (state.outcome !== 'ongoing') return;
 
-    // 1. Se a casa é alvo direto da habilidade selecionada (ataque ou salto)
     if (skTarget) {
       const prevSkillsCount = state.skills.length;
       state = C.useSkillOnTile(state, x, y);
@@ -1707,7 +2094,10 @@ button:disabled{opacity:.38;cursor:not-allowed}
       } else if (la && la.type === 'attack') {
         if (la.backstab || la.killed) {
           playSfx('crit');
-          showToast(la.backstab ? '🗡️ BACKSTAB CRÍTICO PELAS COSTAS!' : '💀 PREDADOR ABATIDO! Pise no 🥩 DNA!', 'var(--warn)');
+          showToast(
+            la.backstab ? '🗡️ BACKSTAB CRÍTICO (+1 MP)!' : '💀 PREDADOR ABATIDO! Pise no 🥩 DNA!',
+            'var(--warn)'
+          );
         } else {
           playSfx('slash');
         }
@@ -1720,11 +2110,11 @@ button:disabled{opacity:.38;cursor:not-allowed}
       return;
     }
 
-    // 2. Se clicou num inimigo mas a habilidade atual não alcança (ou já foi usada), verifica se outra habilidade pronta alcança!
     if (enemy) {
-      const fallbackSkill = state.skills.find(skId =>
-        C.canUseSkill(state, skId) &&
-        C.getSkillTargets(state, skId).some(t => t.x === x && t.y === y && t.kind === 'enemy')
+      const fallbackSkill = state.skills.find(
+        skId =>
+          C.canUseSkill(state, skId) &&
+          C.getSkillTargets(state, skId).some(t => t.x === x && t.y === y && t.kind === 'enemy')
       );
       if (fallbackSkill) {
         state = C.selectSkill(state, fallbackSkill);
@@ -1736,14 +2126,13 @@ button:disabled{opacity:.38;cursor:not-allowed}
       }
     }
 
-    // 3. Se clicou numa casa verde alcançável, move o jogador!
     if (reach) {
       const prevSkillsCount = state.skills.length;
       const hadCorpse = Boolean(state.grid[y][x].corpse);
       state = C.movePlayer(state, x, y);
       if (hadCorpse || state.skills.length > prevSkillsCount) {
         playSfx('devour');
-        showToast('🥩 DNA DEVORADO! +6 PV, +2 MP e Nova Mutação!', 'var(--good)');
+        showToast('🥩 DNA DEVORADO! +6 PV, +2 MP e Mutação Anatômica!', 'var(--good)');
       } else {
         playSfx('step');
       }
@@ -1760,13 +2149,22 @@ button:disabled{opacity:.38;cursor:not-allowed}
       if (!sk) continue;
       const usable = C.canUseSkill(state, skId);
       const selected = state.selectedSkill === skId && usable;
+      const lvl = (state.geneLevels && state.geneLevels[skId]) || 1;
+      const isEquippedSlot = state.anatomy && state.anatomy[sk.slot] === skId;
+
       const btn = el('button', '', `skill-btn${selected ? ' selected' : ''}`);
       btn.type = 'button';
       btn.disabled = !usable;
       btn.style.borderTop = `3px solid ${sk.color}`;
 
+      const slotTag = el('div', '', 'skill-slot-tag');
+      slotTag.append(
+        el('span', `${C.ANATOMY_SLOTS[sk.slot]?.label || 'Órgão'}${isEquippedSlot ? ' · ATIVO' : ''}`),
+        el('span', lvl > 1 ? `★ DOMINANTE Nv.${lvl} (+${(lvl - 1) * 3} Dano)` : sk.lineage)
+      );
+
       const head = el('div', '', 'skill-head');
-      const nameEl = el('span', `${sk.icon} ${sk.name}`, 'skill-name');
+      const nameEl = el('span', `${sk.icon} ${sk.name}${lvl > 1 ? ' ★' : ''}`, 'skill-name');
       nameEl.style.color = sk.color;
 
       let costLabel = sk.mpCost === 0 ? '0 MP (1×/turno)' : `${sk.mpCost} MP`;
@@ -1775,7 +2173,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
       head.append(nameEl, el('span', costLabel, `skill-cost${sk.mpCost === 0 ? ' free' : ''}`));
       const desc = el('div', sk.desc, 'skill-desc');
 
-      btn.append(head, desc);
+      btn.append(slotTag, head, desc);
       btn.onclick = () => {
         state = C.selectSkill(state, skId);
         render();
@@ -1783,7 +2181,6 @@ button:disabled{opacity:.38;cursor:not-allowed}
       bar.append(btn);
     }
 
-    // Mutações de Linhagem ativas
     const mutBox = by('mutations-badges');
     mutBox.replaceChildren();
     for (const mId of state.mutations) {
@@ -1805,7 +2202,7 @@ button:disabled{opacity:.38;cursor:not-allowed}
       if (state.outcome === 'win') {
         if (state.stageIndex < C.ENCOUNTERS.length - 1) {
           const nextEnc = C.ENCOUNTERS[state.stageIndex + 1];
-          const bEvo = el('button', `🧬 Abrir Laboratório Genético & Ir para ${nextEnc.name} →`, 'btn-primary');
+          const bEvo = el('button', `🧬 Abrir Câmara de Mutação & Ir para ${nextEnc.name} →`, 'btn-primary');
           bEvo.style.width = '100%';
           bEvo.onclick = () => openEvolutionModal();
           outBar.append(bEvo);
@@ -1830,6 +2227,8 @@ button:disabled{opacity:.38;cursor:not-allowed}
         bRetry.onclick = () => {
           state = C.createRunState(state.stageIndex, {
             player: { ...state.player, hp: state.player.maxHp },
+            anatomy: state.anatomy,
+            geneLevels: state.geneLevels,
             skills: state.skills,
             mutations: state.mutations,
             atlas: state.atlas,
@@ -1842,15 +2241,18 @@ button:disabled{opacity:.38;cursor:not-allowed}
       footer.hidden = false;
       outBar.hidden = true;
       evoModal.hidden = true;
-      const anySkillUsable = state.skills.some(id => C.canUseSkill(state, id) && C.getSkillTargets(state, id).length > 0);
+      const anySkillUsable = state.skills.some(
+        id => C.canUseSkill(state, id) && C.getSkillTargets(state, id).length > 0
+      );
       const endBtn = by('btn-end-turn');
-      endBtn.className = (state.stepsLeft === 0 && !anySkillUsable) ? 'btn-primary end-turn-btn' : 'btn-warn end-turn-btn';
-      endBtn.textContent = (state.stepsLeft === 0 && !anySkillUsable)
-        ? '⏭️ Turno Concluído · Passar Vez →'
-        : `⏭️ Encerrar Turno (${state.stepsLeft} Passos, ${state.player.mp} MP)`;
+      endBtn.className =
+        state.stepsLeft === 0 && !anySkillUsable ? 'btn-primary end-turn-btn' : 'btn-warn end-turn-btn';
+      endBtn.textContent =
+        state.stepsLeft === 0 && !anySkillUsable
+          ? '⏭️ Turno Concluído · Passar Vez →'
+          : `⏭️ Encerrar Turno (${state.stepsLeft} Passos, ${state.player.mp} MP)`;
     }
 
-    // Feed de Eventos
     const feed = by('event-feed');
     feed.replaceChildren();
     for (const line of state.turnLog) {
@@ -1887,6 +2289,13 @@ button:disabled{opacity:.38;cursor:not-allowed}
     const list = by('atlas-list');
     list.replaceChildren();
     const seen = new Set(state.atlas);
+
+    for (const syn of C.LINEAGE_SYNERGIES) {
+      const d = el('div', '', '');
+      d.style.cssText = 'background:var(--well);border:1px solid var(--purple);border-radius:8px;padding:7px 9px';
+      d.innerHTML = `<b style="color:#d8b4fe">${syn.icon} ${syn.name}</b><div>${syn.desc}</div>`;
+      list.append(d);
+    }
 
     for (const sk of Object.values(C.SKILLS)) {
       const ok = seen.has(`SKILL:${sk.id}`);
