@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>O Enxerto · Bíblia Completa de Regras, Dinâmicas &amp; Gerador de Ataques (448 Variantes)</title>
+  <title>O Enxerto · Apresentação &amp; Análise Didática Completa da Dinâmica</title>
   <style>
     :root {
       --bg: #060b09;
@@ -73,9 +73,8 @@
     .btn.primary { background: var(--accent); color: #07120c; border-color: var(--accent); }
     .btn.gold { border-color: var(--gold); color: #fef08a; background: rgba(250, 204, 21, 0.12); }
 
-    /* Sticky Section Nav */
     nav.toc {
-      background: rgba(13, 23, 19, 0.92);
+      background: rgba(13, 23, 19, 0.94);
       border-bottom: 1px solid var(--border);
       padding: 8px 16px;
       display: flex;
@@ -84,7 +83,7 @@
       justify-content: center;
     }
     nav.toc a {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 800;
       color: var(--muted);
       text-decoration: none;
@@ -101,6 +100,45 @@
       margin: 0 auto;
       padding: 18px 14px 64px;
     }
+
+    /* HERO THESIS */
+    .hero {
+      background: linear-gradient(140deg, #10261d 0%, #0b1410 58%, #151424 100%);
+      border: 1.5px solid var(--border-hi);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+    .hero-kicker {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      background: rgba(163, 230, 53, 0.12);
+      border: 1px solid rgba(163, 230, 53, 0.35);
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .hero h2 { margin: 0 0 8px; font-size: 1.48rem; font-weight: 900; line-height: 1.22; }
+    .hero p { margin: 0 0 14px; font-size: 0.92rem; color: #d1eae0; max-width: 920px; }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    @media (max-width: 820px) { .pillars-grid { grid-template-columns: 1fr; } }
+    .pillar {
+      background: rgba(8, 15, 12, 0.72);
+      border: 1px solid var(--border-hi);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .pillar h3 { margin: 0 0 4px; font-size: 0.92rem; color: var(--gold); }
+    .pillar p { margin: 0; font-size: 0.79rem; color: #c4dfd3; }
 
     section.card {
       background: var(--panel);
@@ -158,6 +196,111 @@
       color: #fef08a;
     }
 
+    /* STORYBOARD: 4-STEP REAL TURN WALKTHROUGH */
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 860px) { .story-grid { grid-template-columns: 1fr; } }
+    .story-card {
+      background: var(--panel-2);
+      border: 1px solid var(--border-hi);
+      border-radius: 11px;
+      padding: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .story-head { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+    .story-badge {
+      font-size: 0.69rem;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(163, 230, 53, 0.16);
+      border: 1px solid rgba(163, 230, 53, 0.4);
+      color: #d9f99d;
+    }
+    .story-strip {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 4px;
+      background: #070e0b;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px;
+    }
+    .ss-cell {
+      min-height: 44px;
+      border-radius: 6px;
+      background: #0f1b16;
+      border: 1px solid #1d3228;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-align: center;
+      padding: 2px;
+    }
+    .ss-cell.me { border-color: var(--accent); background: rgba(163, 230, 53, 0.14); }
+    .ss-cell.hit { border-color: var(--danger); background: rgba(251, 113, 133, 0.22); }
+    .ss-cell.sp { border-color: var(--gold); background: rgba(250, 204, 21, 0.16); }
+    .ss-cell small { font-size: 0.56rem; color: var(--muted); }
+
+    /* 5x4 BLUEPRINTS (3 REAL BUILDS SIDE BY SIDE) */
+    .bp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 960px) { .bp-grid { grid-template-columns: 1fr; } }
+    .bp-card {
+      background: var(--panel-2);
+      border: 1px solid var(--border-hi);
+      border-radius: 11px;
+      padding: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .bp-card h3 { margin: 0; font-size: 0.96rem; color: var(--gold); }
+    .bp-mini-5x4 {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 3px;
+      background: #070e0b;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px;
+    }
+    .bp-c {
+      aspect-ratio: 1 / 1;
+      border-radius: 5px;
+      background: #0e1915;
+      border: 1px solid #1b3026;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      position: relative;
+    }
+    .bp-c.org { background: #20342a; border-color: var(--orange); }
+    .bp-c.var { background: #23263e; border-color: var(--purple); }
+    .bp-c.lnk { box-shadow: inset 0 0 0 2px var(--gold); }
+    .bp-c .st { position: absolute; top: 1px; right: 2px; font-size: 0.56rem; color: var(--gold); }
+    .bp-result {
+      font-size: 0.77rem;
+      color: #d2eae0;
+      background: #08100c;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+    }
+
     /* Pieces Catalog Grid */
     .sub-heading {
       margin: 16px 0 10px;
@@ -201,12 +344,7 @@
     .badge.ok { border-color: var(--accent); color: #d9f99d; }
     .badge.danger { border-color: var(--danger); color: #fecdd3; }
 
-    .pc-mid {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
+    .pc-mid { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .mini-shape {
       display: inline-grid;
       gap: 2px;
@@ -279,11 +417,7 @@
       display: flex;
       justify-content: space-between;
     }
-    .pick-list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
+    .pick-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
     .pick-btn {
       border: 1px solid var(--border);
       background: #0b1410;
@@ -295,16 +429,8 @@
       transition: all 0.13s ease;
     }
     .pick-btn:hover { border-color: var(--border-hi); }
-    .pick-btn.on {
-      border-color: var(--accent);
-      background: rgba(163, 230, 53, 0.15);
-      box-shadow: 0 0 0 1px rgba(163, 230, 53, 0.35);
-    }
-    .pick-btn.on-var {
-      border-color: var(--gold);
-      background: rgba(250, 204, 21, 0.14);
-      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.35);
-    }
+    .pick-btn.on { border-color: var(--accent); background: rgba(163, 230, 53, 0.15); box-shadow: 0 0 0 1px rgba(163, 230, 53, 0.35); }
+    .pick-btn.on-var { border-color: var(--gold); background: rgba(250, 204, 21, 0.14); box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.35); }
     .lab-out {
       background: linear-gradient(145deg, #11251c 0%, #0a130f 100%);
       border: 1.5px solid var(--accent);
@@ -344,63 +470,37 @@
       vertical-align: top;
       text-align: left;
     }
-    table.matrix th {
-      background: #112019;
-      font-weight: 900;
-    }
-    table.matrix td.m-cell {
-      background: #0b1410;
-      cursor: pointer;
-      transition: background 0.12s ease;
-    }
+    table.matrix th { background: #112019; font-weight: 900; }
+    table.matrix td.m-cell { background: #0b1410; cursor: pointer; transition: background 0.12s ease; }
     table.matrix td.m-cell:hover { background: #162b22; }
-    table.matrix td.m-cell.active {
-      background: rgba(163, 230, 53, 0.16);
-      outline: 2px solid var(--accent);
-      outline-offset: -2px;
-    }
+    table.matrix td.m-cell.active { background: rgba(163, 230, 53, 0.16); outline: 2px solid var(--accent); outline-offset: -2px; }
     .mc-title { font-weight: 900; color: var(--text); display: block; margin-bottom: 2px; }
     .mc-stat { font-size: 0.71rem; color: var(--gold); font-weight: 800; display: block; }
     .mc-eff { font-size: 0.7rem; color: var(--muted); }
 
-    /* Rules & Archetypes Tables */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
 
-    table.rules-tbl {
-      width: 100%;
-      border-collapse: collapse;
+    table.rules-tbl { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    table.rules-tbl th, table.rules-tbl td { border-bottom: 1px solid var(--border); padding: 8px 9px; text-align: left; vertical-align: top; }
+    table.rules-tbl th { background: #112019; color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    /* Critical Analysis & Diagnosis */
+    .diag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+    @media (max-width: 820px) { .diag-grid { grid-template-columns: 1fr; } }
+    .diag-box {
+      border-radius: 10px;
+      padding: 13px;
       font-size: 0.81rem;
     }
-    table.rules-tbl th, table.rules-tbl td {
-      border-bottom: 1px solid var(--border);
-      padding: 8px 9px;
-      text-align: left;
-      vertical-align: top;
-    }
-    table.rules-tbl th {
-      background: #112019;
-      color: var(--muted);
-      font-size: 0.73rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
+    .diag-box.good { background: rgba(163, 230, 53, 0.07); border: 1px solid rgba(163, 230, 53, 0.35); }
+    .diag-box.warn { background: rgba(251, 113, 133, 0.08); border: 1px solid rgba(251, 113, 133, 0.35); }
+    .diag-box h3 { margin: 0 0 7px; font-size: 0.94rem; }
+    .diag-box ul { margin: 0; padding-left: 18px; }
+    .diag-box li { margin-bottom: 5px; }
 
-    .ideas-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 10px;
-    }
-    .idea-card {
-      background: var(--panel-2);
-      border: 1px solid var(--border-hi);
-      border-radius: 10px;
-      padding: 12px;
-    }
+    .ideas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+    .idea-card { background: var(--panel-2); border: 1px solid var(--border-hi); border-radius: 10px; padding: 12px; }
     .idea-card h4 { margin: 0 0 5px; font-size: 0.92rem; color: var(--gold); }
     .idea-card p { margin: 0; font-size: 0.79rem; color: #cbe3d8; }
   </style>
@@ -408,95 +508,200 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <div style="font-size:1.5rem">📖</div>
+      <div style="font-size:1.5rem">🧬</div>
       <div>
-        <h1>O Enxerto · Bíblia Completa de Regras, Dinâmicas &amp; Variantes de Ataque</h1>
-        <div class="sub">7 Órgãos × 6 Variações (64 estados por órgão = 448 ataques possíveis) · Grade 5×4 (Lootbound) · Combate 1D (Shogun) · Evolução (Spore)</div>
+        <h1>O Enxerto · Análise &amp; Apresentação Didática da Dinâmica Completa</h1>
+        <div class="sub">Documento vivo de Game Design: Pilares, Anatomia 5×4, Storyboard de Turno, 448 Variantes de Ataque, Balanço &amp; Diagnóstico</div>
       </div>
     </div>
     <div class="top-links">
-      <a class="btn primary" href="./jogo.html">🎮 Jogar Protótipo v7.5</a>
-      <a class="btn gold" href="./shogun.html">🎴 De/Para 42 Armas Shogun</a>
+      <a class="btn primary" href="./jogo.html">🎮 Protótipo Jogável v7.5</a>
+      <a class="btn gold" href="./shogun.html">🎴 De/Para 42 Armas</a>
       <a class="btn" href="./combinacoes.html">🧪 Matriz v0.7.1</a>
     </div>
   </header>
 
   <nav class="toc">
-    <a href="#sec-loop">1. Loop &amp; Regras de Turno</a>
-    <a href="#sec-pecas">2. Peças (7 Órgãos + 6 Variações)</a>
-    <a href="#sec-lab">3. Gerador de 448 Variantes</a>
-    <a href="#sec-matriz">4. Matriz 7×6 (42 Base)</a>
-    <a href="#sec-combate">5. Dinâmicas de Combate 1D</a>
-    <a href="#sec-inimigos">6. Inimigos &amp; Chefe Adaptativo</a>
-    <a href="#sec-variar">7. Banco de Variantes p/ Evoluir</a>
+    <a href="#sec-tese">Tese &amp; Pilares</a>
+    <a href="#sec-loop">1. Loop &amp; Turno</a>
+    <a href="#sec-storyboard">2. Turno Passo a Passo</a>
+    <a href="#sec-blueprints">3. 3 Builds no 5×4</a>
+    <a href="#sec-pecas">4. Peças &amp; Estrelas ★</a>
+    <a href="#sec-lab">5. Gerador (448)</a>
+    <a href="#sec-matriz">6. Matriz 7×6</a>
+    <a href="#sec-balanco">7. Balanço &amp; Inimigos</a>
+    <a href="#sec-diagnostico">8. Diagnóstico &amp; Próximo Salto</a>
   </nav>
 
   <main>
-    <!-- ==================== 1. VISÃO & LOOP ==================== -->
+    <!-- ==================== HERO: TESE DE DESIGN ==================== -->
+    <section class="hero" id="sec-tese">
+      <span class="hero-kicker">Análise Sistêmica · O Enxerto (New Genome)</span>
+      <h2>Seu inventário espacial <em>é</em> o corpo do seu monstro — e cada rotação de 90° reinventa seus golpes no meio da luta.</h2>
+      <p>
+        <strong>O Enxerto</strong> resolve o maior ponto fraco dos jogos de inventário (<em>combate passivo ou raso</em>) combinando o <strong>puzzle espacial de auras direcionais de <em>Lootbound</em></strong>, a <strong>criação orgânica de ataques de <em>Spore</em></strong> e o <strong>combate 1D ultra-legível de fila e Fogo Amigo de <em>Shogun Showdown</em></strong> — tudo visível ao mesmo tempo em tela dividida.
+      </p>
+      <div class="pillars-grid">
+        <div class="pillar">
+          <h3>🧩 Pilar 1 · Inventário Vivo 5×4 (Lootbound)</h3>
+          <p>Sem slots fixos nem árvores de talentos abstratas. Peças assimétricas (<code>2×1</code>, <code>L</code>, <code>T</code>, <code>2×2</code>) disputam 20 células, e <strong>Estrelas Direcionais ★</strong> exigem girar as peças para o lado certo.</p>
+        </div>
+        <div class="pillar">
+          <h3>🧬 Pilar 2 · Síntese &amp; Roubo (Spore + O Enxerto)</h3>
+          <p>Órgãos geram a geometria dos golpes; Variações conectadas por <strong>★</strong> mutam esses golpes ao vivo (<code>448</code> combinações). Colisões e Fogo Amigo <strong>expõem genes de inimigos vivos</strong> para você arrancar e enxertar na hora.</p>
+        </div>
+        <div class="pillar">
+          <h3>⚔️ Pilar 3 · Coreografia 1D (Shogun Showdown)</h3>
+          <p>Faixa horizontal de 7 casas com informação 100% determinística: intenção inimiga visível, <strong>Fila de Combo (3 golpes)</strong>, <strong>Troca Rápida</strong>, Giro 180°, Explosões e <strong>Fogo Amigo</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 1. LOOP & ORDEM DE TURNO ==================== -->
     <section class="card" id="sec-loop">
-      <h2>1. Arquitetura do Jogo &amp; Regras de Turno (Tela Dividida)</h2>
-      <p class="sec-sub">Como as 3 referências se fundem em uma única tela sem poluição, onde o inventário é o motor de ataques ao vivo.</p>
+      <h2>1. O Loop Completo &amp; Ordem Exata de Resolução</h2>
+      <p class="sec-sub">Como as duas metades da tela conversam sem sobrecarregar o jogador com recursos extras (zero MP, zero RNG de acerto).</p>
 
       <div class="loop-grid">
         <div class="loop-step">
-          <div class="loop-num">Camada 1 · Lootbound</div>
-          <h3>🧬 Organismo 5×4</h3>
-          <p>Grade espacial de 20 células. <strong>Órgãos</strong> ocupam espaço (<code>2×1</code>, <code>L</code>, <code>2×2</code>) e geram seus golpes. <strong>Variações</strong> projetam <strong>Estrelas Direcionais ★</strong> que giram 90° junto com a peça.</p>
+          <div class="loop-num">Passo A · Preparação ao Vivo</div>
+          <h3>🧬 Recombinar no 5×4</h3>
+          <p>Antes da sua ação de combate, você tem <strong>1 Ajuste grátis por turno</strong> (mover, girar 90° ou encaixar loot) — e <strong>ajustes ilimitados</strong> entre ondas. Os golpes na barra mudam no mesmo milissegundo.</p>
         </div>
         <div class="loop-step">
-          <div class="loop-num">Camada 2 · Spore</div>
-          <h3>⚡ Síntese ao Vivo</h3>
-          <p>Sempre que uma estrela <strong>★</strong> cai sobre qualquer célula de um Órgão, uma sinapse acende e <strong>transforma o golpe na hora</strong> (<code>Nv.1 → Nv.2 → Nv.3+</code>), mutando também o visual da Quimera.</p>
+          <div class="loop-num">Passo B · Decisão Tática 1D</div>
+          <h3>⚔️ 1 Ação de Combate</h3>
+          <p>Escolha 1 ação: <code>Andar / ⚡Troca Rápida</code>, <code>🔄 Virar 180°</code>, <code>🛡️ Esperar (+2 Escudo, -1 CD)</code>, <code>📥 Enfileirar Arma</code> ou <code>⚡ DISPARAR FILA</code> (1→2→3 em sequência).</p>
         </div>
         <div class="loop-step">
-          <div class="loop-num">Camada 3 · Shogun 1D</div>
-          <h3>⚔️ Faixa de 7 Casas</h3>
-          <p>Combate 100% determinístico em linha (casas 1 a 7). Você anda, vira 180°, prepara até <strong>3 armas na Fila</strong> e dispara combos provocando <strong>Colisões</strong>, <strong>Explosões</strong> e <strong>Fogo Amigo</strong>.</p>
+          <div class="loop-num">Passo C · Reação em Cadeia</div>
+          <h3>💥 Colisão, Explosão &amp; Fogo Amigo</h3>
+          <p>Sua Fila dispara <em>antes</em> dos inimigos. Empurrões, trocas e giros 180° fazem inimigos acertarem uns aos outros e detonarem 💣 Esporos — <strong>abrindo brechas cirúrgicas</strong>!</p>
         </div>
         <div class="loop-step">
-          <div class="loop-num">Camada 4 · O Enxerto</div>
-          <h3>✂️ Cirurgia &amp; Draft</h3>
-          <p>Colisão, Fogo Amigo, Costas ou Ácido <strong>expõem o gene do inimigo VIVO</strong> — 1 clique arranca o loot para sua Bandeja! Entre ondas, escolha 1 de 2 peças: <strong>a rejeitada fortalece o Chefe Final!</strong></p>
+          <div class="loop-num">Passo D · Evolução &amp; Chefe</div>
+          <h3>✂️ Roubo Vivo &amp; Draft</h3>
+          <p>Arranque genes expostos de inimigos vivos (desarmando-os +2 PV). Ao limpar a onda, escolha <strong>1 de 2 peças raras</strong> — a peça <strong>rejeitada</strong> fortalece a <strong>👑 Quimera Soberana</strong>!</p>
         </div>
       </div>
 
       <div class="rule-callout">
-        <strong>⏱️ Ordem Exata de Resolução do Turno:</strong><br/>
-        <strong>(A) Antes da ação (grátis):</strong> Você pode fazer <strong>1 Recombinação no 5×4 por turno</strong> em combate (ou <strong>∞ ilimitadas</strong> entre ondas) e usar <strong>✂️ Cirurgia em Vida</strong> em qualquer inimigo exposto sem gastar turno.<br/>
-        <strong>(B) Sua Ação (consome o turno):</strong> 1 escolha entre <code>⬅/➡ Andar</code> (ou <code>⚡ Troca Rápida</code> se houver inimigo adjacente), <code>🔄 Virar 180°</code>, <code>🛡️ Esperar (+2 Escudo, -1 CD extra)</code>, <code>📥 Enfileirar 1 Arma</code> ou <code>⚡ DISPARAR FILA</code>.<br/>
-        <strong>(C) Resolução:</strong> <code>1. Sua Fila dispara em ordem (1→2→3)</code> → <code>2. Checa 🔥 Combo Kill (2+ abates)</code> → <code>3. Veneno nos inimigos</code> → <code>4. Inimigos agem da esquerda p/ direita (Fogo Amigo ativo!)</code> → <code>5. Recarga (-1 CD) &amp; renova 1 Ajuste no 5×4</code>.
+        <strong>📐 Fórmula de Fluxo do Turno (Determinismo 100%):</strong>
+        <code>[1 Ajuste 5×4 Grátis + ✂️ Cirurgias Grátis]</code> ➔ <code>[1 Ação na Faixa 1D]</code> ➔ <code>[🔥 Checa Combo Kill (2+ abates = -2 CD &amp; +2 PV)]</code> ➔ <code>[🧪 Dano de Veneno]</code> ➔ <code>[👹 Inimigos agem da Esquerda p/ Direita]</code> ➔ <code>[⏱️ Recarga -1 CD &amp; Renova 1 Ajuste]</code>.
       </div>
     </section>
 
-    <!-- ==================== 2. CATÁLOGO DE PEÇAS ==================== -->
-    <section class="card" id="sec-pecas">
-      <h2>2. Catálogo Completo de Peças (7 Órgãos + 6 Variações com ★ Rotacionáveis)</h2>
-      <p class="sec-sub">Cada Órgão define a <strong>geometria do golpe na linha 1D</strong>. Cada Variação tem um formato próprio e <strong>estrelas direcionais ★</strong> — clique em <strong>↻ Girar 90°</strong> em qualquer Variação abaixo para ver exatamente para onde as estrelas giram!</p>
+    <!-- ==================== 2. STORYBOARD DE 1 JOGADA REAL ==================== -->
+    <section class="card" id="sec-storyboard">
+      <h2>2. Storyboard Didático: Anatomia de Uma Jogada Brilhante na Onda 1</h2>
+      <p class="sec-sub">Veja em 4 quadros como a <strong>rotação de 1 peça no 5×4</strong> cria uma reação em cadeia na Faixa 1D que vence sem levar dano.</p>
 
-      <div class="sub-heading">🟠 7 Peças de Órgão (Geram os Golpes na Barra)</div>
+      <div class="story-grid">
+        <div class="story-card">
+          <div class="story-head">
+            <span class="story-badge">QUADRO 1 · RECOMBINAÇÃO AO VIVO</span>
+            <span style="font-size:0.74rem; color:var(--gold); font-weight:800;">0 turnos gastos!</span>
+          </div>
+          <div class="story-strip">
+            <div class="ss-cell"><small>1</small>·</div>
+            <div class="ss-cell"><small>2</small>·</div>
+            <div class="ss-cell me"><small>3</small>🧬▶</div>
+            <div class="ss-cell"><small>4</small>·</div>
+            <div class="ss-cell sp"><small>5</small>◀💣<small>4♥</small></div>
+            <div class="ss-cell"><small>6</small>·</div>
+            <div class="ss-cell"><small>7</small>◀🦂<small>5♥</small></div>
+          </div>
+          <p style="margin:0; font-size:0.79rem; color:#cbe3d8;">Você pega o <strong>🧲 Tendão</strong> (<code>★ ◀ ▶</code>) da Bandeja e encaixa em <code>(3,1)</code> entre a <code>🦷 Mandíbula</code> e a <code>🦂 Cauda</code>. Sua Mandíbula já tocava o <code>🪨 Osso</code> — vira <strong>Mandíbula Óssea Giratória Nv.3</strong> (<code>3 dano + Empurra + Gira 180°</code>)!</p>
+        </div>
+
+        <div class="story-card">
+          <div class="story-head">
+            <span class="story-badge">QUADRO 2 · PREPARAR NA FILA</span>
+            <span style="font-size:0.74rem; color:var(--cyan); font-weight:800;">Turno 1</span>
+          </div>
+          <div class="story-strip">
+            <div class="ss-cell"><small>1</small>·</div>
+            <div class="ss-cell"><small>2</small>·</div>
+            <div class="ss-cell me"><small>3</small>🧬▶</div>
+            <div class="ss-cell sp"><small>4</small>◀💣<small>4♥</small></div>
+            <div class="ss-cell"><small>5</small>·</div>
+            <div class="ss-cell"><small>6</small>·</div>
+            <div class="ss-cell hit"><small>7</small>◀🦂<small>⚠️3</small></div>
+          </div>
+          <p style="margin:0; font-size:0.79rem; color:#cbe3d8;">Você clica na <strong>Mandíbula Nv.3</strong> para carregá-la na Fila (Slot 1). Na vez deles, o <strong>💣 Esporo Volátil</strong> avança para a casa 4 (colado em você) e o <strong>🦂 Escorpião</strong> arma <strong>⚠️ Tiro Reto (3 dano)</strong>.</p>
+        </div>
+
+        <div class="story-card">
+          <div class="story-head">
+            <span class="story-badge">QUADRO 3 · DISPARAR FILA (EMPURRA + GIRA!)</span>
+            <span style="font-size:0.74rem; color:var(--orange); font-weight:800;">Turno 2 (Você age antes!)</span>
+          </div>
+          <div class="story-strip">
+            <div class="ss-cell"><small>1</small>·</div>
+            <div class="ss-cell"><small>2</small>·</div>
+            <div class="ss-cell me"><small>3</small>🧬▶</div>
+            <div class="ss-cell"><small>4</small>💨</div>
+            <div class="ss-cell sp"><small>5</small>💣▶<small>1♥ 🔄</small></div>
+            <div class="ss-cell"><small>6</small>·</div>
+            <div class="ss-cell hit"><small>7</small>◀🦂<small>⚠️3</small></div>
+          </div>
+          <p style="margin:0; font-size:0.79rem; color:#cbe3d8;">Você dispara! A Mandíbula Nv.3 causa <strong>3 dano</strong> no Esporo (cai para <code>1♥</code>), <strong>GIRA ele 180°</strong> e <strong>EMPURRA</strong> ele da casa 4 → 5 — deixando-o exatamente no meio da linha de tiro do Escorpião!</p>
+        </div>
+
+        <div class="story-card">
+          <div class="story-head">
+            <span class="story-badge">QUADRO 4 · FOGO AMIGO + EXPLOSÃO EM CADEIA!</span>
+            <span style="font-size:0.74rem; color:var(--accent); font-weight:800;">0 dano sofrido!</span>
+          </div>
+          <div class="story-strip">
+            <div class="ss-cell"><small>1</small>·</div>
+            <div class="ss-cell"><small>2</small>·</div>
+            <div class="ss-cell me"><small>3</small>🧬▶</div>
+            <div class="ss-cell"><small>4</small>·</div>
+            <div class="ss-cell hit"><small>5</small>💥<small>BOOM!</small></div>
+            <div class="ss-cell"><small>6</small>·</div>
+            <div class="ss-cell"><small>7</small>◀🦂<small>5♥ (ou 2♥!)</small></div>
+          </div>
+          <p style="margin:0; font-size:0.79rem; color:#cbe3d8;">O <strong>🦂 Escorpião</strong> dispara sua flecha <code>⚠️3</code> direto nas costas do <strong>💣 Esporo</strong> (<strong>💥 FOGO AMIGO!</strong>), matando o próprio aliado e poupando 100% da sua vida! Se o Esporo estiver na casa 6, a explosão ainda tira <strong>-3 PV do Escorpião</strong> e <strong>EXPÕE o ⚡ Nervo</strong> dele!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. 3 MONTAGENS REAIS NO 5×4 ==================== -->
+    <section class="card" id="sec-blueprints">
+      <h2>3. Anatomia do Puzzle 5×4: 3 Arquétipos de Montagem Real</h2>
+      <p class="sec-sub">Como o <strong>formato das peças</strong> e a <strong>orientação das estrelas ★</strong> criam builds completamente diferentes dentro das mesmas 20 células.</p>
+
+      <div class="bp-grid" id="blueprints-grid"></div>
+    </section>
+
+    <!-- ==================== 4. CATÁLOGO DE PEÇAS ==================== -->
+    <section class="card" id="sec-pecas">
+      <h2>4. Catálogo Completo de Peças (7 Órgãos + 6 Variações com ★ Rotacionáveis)</h2>
+      <p class="sec-sub">Clique em <strong>↻ Girar 90°</strong> em qualquer Variação para inspecionar exatamente como a forma geométrica e as estrelas direcionais giram juntas.</p>
+
+      <div class="sub-heading">🟠 7 Órgãos (Definem a Geometria na Faixa 1D)</div>
       <div class="pieces-grid" id="organs-catalog"></div>
 
-      <div class="sub-heading">🟣 6 Peças de Variação / Mutação (Projetam Estrelas ★ Direcionais)</div>
+      <div class="sub-heading">🟣 6 Variações (Definem as Mutações via Estrelas ★ Direcionais)</div>
       <div class="pieces-grid" id="vars-catalog"></div>
     </section>
 
-    <!-- ==================== 3. LABORATÓRIO GERADOR (448 VARIANTES) ==================== -->
+    <!-- ==================== 5. LABORATÓRIO GERADOR (448 VARIANTES) ==================== -->
     <section class="card" id="sec-lab">
-      <h2>3. Laboratório Interativo: Como Cada Ataque é Gerado (7 × 64 = 448 Variantes!)</h2>
-      <p class="sec-sub">
-        Como um Órgão pode ser tocado por <strong>0, 1, 2, 3, 4, 5 ou até todas as 6 Variações ao mesmo tempo</strong> no <code>5×4</code>, cada um dos 7 Órgãos possui <strong>2⁶ = 64 estados possíveis</strong> (<strong>448 golpes distintos</strong>). Monte qualquer combinação abaixo e veja a matemática exata:
-      </p>
+      <h2>5. Gerador Interativo de Ataques (7 Órgãos × 2⁶ Variações = 448 Variantes)</h2>
+      <p class="sec-sub">A composição é 100% determinística: um Órgão acumula TODAS as Variações cujas estrelas <strong>★</strong> tocam qualquer uma de suas células no <code>5×4</code>.</p>
 
       <div class="lab-grid">
         <div class="lab-box">
-          <div class="lab-label"><span>1. Escolha o Órgão Base</span><span>7 opções</span></div>
+          <div class="lab-label"><span>1. Órgão Base</span><span>7 opções</span></div>
           <div class="pick-list" id="lab-organs"></div>
         </div>
         <div class="lab-box">
-          <div class="lab-label"><span>2. Ligue/Desligue Variações (★)</span><span>Empilháveis!</span></div>
+          <div class="lab-label"><span>2. Variações Conectadas (★)</span><span>Empilháveis</span></div>
           <div class="pick-list" id="lab-vars"></div>
           <div style="margin-top:8px; display:flex; gap:6px;">
-            <button class="btn" id="btn-lab-clear">Limpar Variações</button>
+            <button class="btn" id="btn-lab-clear">Limpar</button>
             <button class="btn gold" id="btn-lab-random">🎲 Aleatório</button>
           </div>
         </div>
@@ -504,123 +709,131 @@
       </div>
     </section>
 
-    <!-- ==================== 4. MATRIZ 7x6 (42 COMBINAÇÕES BASE) ==================== -->
+    <!-- ==================== 6. MATRIZ 7x6 (42 COMBINAÇÕES BASE) ==================== -->
     <section class="card" id="sec-matriz">
-      <h2>4. Matriz 7 × 6 — Todas as 42 Combinações Diretas (1 Órgão + 1 Variação)</h2>
-      <p class="sec-sub">Clique em qualquer célula da tabela para inspecioná-la no Laboratório acima (onde você pode inclusive somar uma 2ª ou 3ª Variação para evoluir ao Nv.3 / Nv.4!). Repare na regra dual do <strong>🧲 Tendão</strong>: vira <strong>🔄 Giro 180°</strong> em órgãos melee e <strong>⇄ Troca de Lugar</strong> em órgãos de alcance/movimento.</p>
+      <h2>6. Matriz Completa 7 × 6 (Todas as 42 Combinações Diretas Nv.2)</h2>
+      <p class="sec-sub">Clique em qualquer célula para carregá-la no Gerador acima e somar uma 2ª/3ª Variação. Observe a regra dual do <strong>🧲 Tendão</strong>: <code>🔄 Giro 180°</code> em melee vs. <code>⇄ Troca de Lugar</code> em alcance/movimento.</p>
       <div class="table-scroll">
         <table class="matrix" id="matrix-7x6"></table>
       </div>
     </section>
 
-    <!-- ==================== 5. DINÂMICAS DE COMBATE 1D ==================== -->
-    <section class="card" id="sec-combate">
-      <h2>5. Todas as Dinâmicas de Combate 1D, Gatilhos &amp; Fórmulas</h2>
-      <p class="sec-sub">Regras determinísticas (zero RNG de acerto) que governam cada interação na faixa de 7 casas.</p>
+    <!-- ==================== 7. BALANÇO, ESPAÇO, INIMIGOS & CHEFE ==================== -->
+    <section class="card" id="sec-balanco">
+      <h2>7. Análise de Balanço: Economia de Espaço, Inimigos &amp; Chefe Adaptativo</h2>
+      <p class="sec-sub">Por que cada decisão espacial tem custo de oportunidade real e como os arquétipos de inimigos impedem estratégias repetitivas.</p>
 
-      <div class="two-col">
+      <div class="two-col" style="margin-bottom:14px;">
         <div>
-          <h3 style="margin:0 0 8px; font-size:0.95rem; color:#d9f99d;">⚡ Regras de Movimento, Fila &amp; Bônus</h3>
+          <h3 style="margin:0 0 8px; font-size:0.94rem; color:#d9f99d;">📐 Análise de Eficiência Espacial no 5×4 (20 Células)</h3>
           <table class="rules-tbl">
-            <thead><tr><th>Dinâmica</th><th>Regra Exata</th></tr></thead>
+            <thead><tr><th>Peça</th><th>Células</th><th>Auras ★</th><th>Trade-off Espacial</th></tr></thead>
             <tbody>
-              <tr><td><strong>⚡ Troca Rápida (Assinatura)</strong></td><td>Andar na direção de um inimigo adjacente <strong>troca de lugar</strong> com ele (<code>CD 3</code>). Se o inimigo cair em <code>🧪 Ácido</code>, toma +1 dano e expõe gene!</td></tr>
-              <tr><td><strong>📥 Fila de Combo (até 3)</strong></td><td>Preparar 1 arma na fila gasta 1 turno. Disparar a fila executa <strong>1→2→3 em sequência</strong> antes de os inimigos agirem.</td></tr>
-              <tr><td><strong>🔥 Combo Kill</strong></td><td>Matar <strong>2 ou mais inimigos</strong> no mesmo disparo da Fila reduz <strong>-2 CD</strong> em todas as suas armas e cura <strong>+2 PV</strong>!</td></tr>
-              <tr><td><strong>🗡️ Backstab (Costas)</strong></td><td>Acertar um inimigo na mesma direção para a qual ele olha (pelas costas) dá <strong>+1 Dano</strong>, <strong>ignora Escudo Frontal</strong> e <strong>EXPÕE o gene</strong>!</td></tr>
-              <tr><td><strong>💥 Colisão (Empurrão)</strong></td><td>Empurrar inimigo contra parede ou outro inimigo causa <strong>+2 dano de colisão</strong> (em ambos se forem 2 inimigos), ignora escudo e <strong>EXPÕE o gene</strong>!</td></tr>
-              <tr><td><strong>💥 Fogo Amigo</strong></td><td>Inimigos armados (<code>⚠️</code>) atacam qualquer alvo na mira — se você girar, empurrar ou trocar um aliado deles na frente, eles se acertam com 100% do dano e <strong>EXPÕEM o gene</strong>!</td></tr>
-              <tr><td><strong>🛡️ Esperar (Guarda)</strong></td><td>Gasta o turno para ganhar <strong>+2 Escudo</strong> (absorve dano até o próximo turno) e reduz <strong>-1 CD extra</strong> em todas as armas e na Troca Rápida.</td></tr>
+              <tr><td><strong>🦷/🦂/🎯/🐸</strong></td><td><code>2</code> (2×1)</td><td>Recebe até 6 lados</td><td>Coringa compacto: fácil de encostar em 2–3 Variações ao mesmo tempo.</td></tr>
+              <tr><td><strong>🦗 Patas / 🗡️ Ferrão</strong></td><td><code>3</code> (L)</td><td>Recebe na quina!</td><td>A quina interna do <code>L</code> encaixa perfeitamente peças <code>1×1</code> (Tendão, Nervo, Repique).</td></tr>
+              <tr><td><strong>🦀 Pinça Colossal</strong></td><td><code>4</code> (2×2)</td><td>Alto custo espacial</td><td>Ocupa 20% da grade inteira, mas dá <code>3 dano</code> em 2 casas — exige build focada.</td></tr>
+              <tr><td><strong>🧲 Tendão / ⚡ Nervo</strong></td><td><code>1</code> (1×1)</td><td><code>2 ★</code> (eixo / quina)</td><td>Melhor "cola" do inventário: 1 célula bufando 2 Órgãos simultaneamente!</td></tr>
+              <tr><td><strong>🪨 Osso (L) / ⏱️ Adren. (T)</strong></td><td><code>3–4</code></td><td><code>3 ★</code> (bolsos)</td><td>Grandes, mas abraçam até 3 Órgãos se colocadas no miolo do <code>5×4</code>!</td></tr>
             </tbody>
           </table>
         </div>
 
         <div>
-          <h3 style="margin:0 0 8px; font-size:0.95rem; color:#fde047;">✂️ Cirurgia em Vida (Como Expor &amp; Arrancar Genes)</h3>
+          <h3 style="margin:0 0 8px; font-size:0.94rem; color:#fde047;">✂️ Regras de Cirurgia em Vida &amp; 🔥 Combo Kill</h3>
           <table class="rules-tbl">
-            <thead><tr><th>Gatilho que EXPÕE Gene</th><th>Efeito ao Clicar ✂️ Arrancar (Grátis!)</th></tr></thead>
+            <thead><tr><th>Mecânica</th><th>Gatilho</th><th>Recompensa Imediata</th></tr></thead>
             <tbody>
-              <tr><td>1. <strong>💥 Colisão</strong> (empurrão contra parede/aliado)</td><td rowspan="5">
-                • <strong>Rouba a peça real</strong> (Órgão ou Variação) direto para sua Bandeja de Loot.<br/><br/>
-                • <strong>Desarma o inimigo na hora:</strong> cancela <code>⚠️ Mira</code>, remove <code>🛡️ Escudo Frontal</code> / <code>💣 Explosivo</code> e reduz <code>-1 Dano</code>.<br/><br/>
-                • <strong>Cura +2 PV</strong> e garante <strong>1 Ajuste imediato no 5×4</strong> para você já encaixar o gene roubado no mesmo turno!
-              </td></tr>
-              <tr><td>2. <strong>💥 Fogo Amigo</strong> (tiro/investida de aliado)</td></tr>
-              <tr><td>3. <strong>🗡️ Backstab</strong> (ataque pelas costas)</td></tr>
-              <tr><td>4. <strong>🔄 Giro 180°</strong> (golpe com 🧲 Tendão melee)</td></tr>
-              <tr><td>5. <strong>🧪 Ácido / 💣 Explosão</strong> de vizinho</td></tr>
+              <tr><td><strong>✂️ Cirurgia em Vida</strong></td><td>Colisão, Fogo Amigo, Costas, Giro 180°, Ácido ou Explosão</td><td>Rouba o loot real do inimigo vivo, <strong>cancela mira e trait</strong>, reduz <code>-1 dano</code>, cura <code>+2 PV</code> e dá <code>+1 Ajuste</code> no 5×4.</td></tr>
+              <tr><td><strong>⚡ Troca Rápida</strong></td><td>Andar contra inimigo adjacente (<code>CD 3</code>)</td><td>Troca de posição instantânea — fuga de emergência ou armadilha de Fogo Amigo!</td></tr>
+              <tr><td><strong>🔥 Combo Kill</strong></td><td>Matar <code>2+</code> inimigos no mesmo disparo da Fila</td><td>Reduz <code>-2 CD</code> de TODAS as armas e cura <code>+2 PV</code>!</td></tr>
+              <tr><td><strong>👑 Draft do Chefe</strong></td><td>Fim das Ondas 1, 2 e 3 (escolhe 1 de 2 loots)</td><td>Peça escolhida vai p/ Bandeja; peça <strong>rejeitada</strong> muta a Quimera Soberana na Onda 4!</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3 style="margin:0 0 8px; font-size:0.94rem; color:#fecdd3;">👹 Matriz de Contra-Jogadas dos Inimigos</h3>
+          <table class="rules-tbl">
+            <thead><tr><th>Arquétipo</th><th>Ameaça</th><th>Como Quebrar</th></tr></thead>
+            <tbody>
+              <tr><td><strong>💣 Esporo Volátil</strong></td><td>Explode <code>3 dano</code> nos vizinhos ao morrer</td><td>Empurre (🪨) p/ perto de aliados ou deixe o Atirador detoná-lo.</td></tr>
+              <tr><td><strong>🛡️ Besouro Escudeiro</strong></td><td>Bloqueia <code>-2 dano</code> pela frente</td><td>⚡ Troca Rápida, 🔄 Giro 180°, 🦗 Patas, 🗡️ Ferrão Curvo ou 🧪 Peçonha.</td></tr>
+              <tr><td><strong>🦏 Javali Investida</strong></td><td>Atropela toda a linha à frente (<code>3 dano</code>)</td><td>Saia da frente ou troque colocando um aliado dele no trajeto!</td></tr>
+              <tr><td><strong>🦂 Escorpião Atirador</strong></td><td>Tiro reto de alcance infinito (<code>3 dano</code>)</td><td>Use a mira dele contra os próprios aliados (Fogo Amigo).</td></tr>
+              <tr><td><strong>🦗 Louva-a-Deus</strong></td><td>Golpeia frente E trás (<code>3 dano</code>)</td><td>Empurre p/ longe, cancele mira com ⚡ Nervo ou acerte à distância.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h3 style="margin:0 0 8px; font-size:0.94rem; color:#f3e8ff;">👑 Mutações do Chefe Final (Loot Rejeitado)</h3>
+          <table class="rules-tbl">
+            <thead><tr><th>Se você rejeitar...</th><th>A 👑 Quimera Soberana ganha:</th></tr></thead>
+            <tbody>
+              <tr><td><strong>🪨 Osso</strong> ou <strong>🦀 Pinça</strong></td><td><code>+3 PV Máximo</code> (mais tanque)</td></tr>
+              <tr><td><strong>🧪 Peçonha</strong></td><td>Ataques deixam <strong>🧪 Poças Ácidas</strong> na faixa</td></tr>
+              <tr><td><strong>⚡ Nervo</strong> ou <strong>🐸 Língua</strong></td><td><code>+1 Dano</code> permanente em todos os ataques</td></tr>
+              <tr><td><strong>⚔️ Repique</strong></td><td>Ganha <strong>🛡️ Escudo Frontal</strong> (-2 pela frente)</td></tr>
+              <tr><td><strong>⏱️ Adrenalina</strong> ou <strong>🦗 Patas</strong></td><td>Começa a luta já <strong>⚠️ ARMADA (PRIMED)</strong> no Turno 1</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- ==================== 6. INIMIGOS & CHEFE ADAPTATIVO ==================== -->
-    <section class="card" id="sec-inimigos">
-      <h2>6. Arquétipos de Inimigos &amp; Chefe Final Adaptativo (Estilo Lootbound)</h2>
-      <p class="sec-sub">Cada inimigo exige uma resposta tática diferente; entre ondas, a peça que você REJEITA no Draft é enxertada na <strong>👑 Quimera Soberana</strong>.</p>
+    <!-- ==================== 8. DIAGNÓSTICO CRÍTICO & PRÓXIMO SALTO ==================== -->
+    <section class="card" id="sec-diagnostico">
+      <h2>8. Diagnóstico Franco de Game Design &amp; Alavancas para o Próximo Salto</h2>
+      <p class="sec-sub">Análise pragmática do que já está forte na mecânica vs. os pontos exatos onde a jogabilidade atual ainda perde ritmo — e como evoluir.</p>
 
-      <div class="two-col">
-        <div>
-          <h3 style="margin:0 0 8px; font-size:0.95rem; color:#fecdd3;">👹 Os 5 Arquétipos + Chefe</h3>
-          <table class="rules-tbl">
-            <thead><tr><th>Inimigo</th><th>Ataque &amp; Trait</th><th>Contra-Jogada Ideal</th></tr></thead>
-            <tbody>
-              <tr><td><strong>💣 Esporo Volátil</strong></td><td>Melee (2) · <strong>Explode 3 dano nos vizinhos ao morrer</strong></td><td>Empurre (🪨 Osso) para colar em outro inimigo antes de estourar — ou faça o atirador detoná-lo!</td></tr>
-              <tr><td><strong>🛡️ Besouro Escudeiro</strong></td><td>Lança 2 casas (3) · <strong>Escudo Frontal (-2 dano pela frente)</strong></td><td>Use ⚡ Troca Rápida, 🔄 Giro 180°, 🦗 Patas, 🗡️ Ferrão Curvo ou 🧪 Peçonha (todos ignoram escudo!).</td></tr>
-              <tr><td><strong>🦏 Javali Investida</strong></td><td><strong>Carga (3)</strong> — atropela toda a linha à frente até bater</td><td>Saia da linha ou troque de lugar colocando um aliado dele no caminho para Fogo Amigo!</td></tr>
-              <tr><td><strong>🦂 Escorpião Atirador</strong></td><td><strong>Tiro Reto (3)</strong> no 1º alvo à frente</td><td>Use como "canhão grátis" alinhando outros inimigos na linha de tiro dele.</td></tr>
-              <tr><td><strong>🦗 Louva-a-Deus</strong></td><td><strong>Giro Frente+Trás (3)</strong> — acerta os dois lados</td><td>Empurre para longe, paralise com ⚡ Nervo ou use 🐸 Língua / 🎯 Espinho à distância.</td></tr>
-              <tr><td><strong>👑 Quimera Soberana</strong></td><td>Lança 2 casas (4) · <strong>14 PV + Mutações Rejeitadas!</strong></td><td>Planeje o Draft das Ondas 1–3 para dar ao Chefe apenas mutações que sua build countera!</td></tr>
-            </tbody>
-          </table>
+      <div class="diag-grid">
+        <div class="diag-box good">
+          <h3 style="color:#bef264;">✅ O que JÁ funciona muito bem na dinâmica</h3>
+          <ul>
+            <li><strong>Identidade Única Clara:</strong> Tela dividida (Combate 1D + Grade 5×4 sempre viva) une <em>Lootbound</em>, <em>Spore</em> e <em>Shogun</em> sem parecer cópia de nenhum dos três.</li>
+            <li><strong>Gramática Limpa (448 variantes sem decorar manual):</strong> Aprende 7 Órgãos + 6 Variações e entende qualquer combinação na hora.</li>
+            <li><strong>Recombinação com Consequência Real:</strong> Girar 1 peça <code>1×1</code> (<code>🧲 Tendão</code> ou <code>⚔️ Repique</code>) no meio da luta muda o resultado do turno inteiro.</li>
+            <li><strong>Dilema do Chefe Adaptativo:</strong> O Draft entre ondas cria tensão estratégica de longo prazo com 1 clique.</li>
+          </ul>
         </div>
-
-        <div>
-          <h3 style="margin:0 0 8px; font-size:0.95rem; color:#f3e8ff;">👑 Tabela de Evolução do Chefe (O que você rejeita no Draft)</h3>
-          <table class="rules-tbl">
-            <thead><tr><th>Peça Rejeitada por Você</th><th>Mutação que o Chefe Ganha na Onda 4</th></tr></thead>
-            <tbody>
-              <tr><td><strong>🪨 Osso</strong> ou <strong>🦀 Pinça Colossal</strong></td><td><strong>+3 PV Máximo</strong> (tanque mais resistente)</td></tr>
-              <tr><td><strong>🧪 Peçonha</strong></td><td>Ataques do Chefe deixam <strong>🧪 Poças Ácidas</strong> no piso</td></tr>
-              <tr><td><strong>⚡ Nervo</strong> ou <strong>🐸 Língua</strong></td><td><strong>+1 Dano</strong> permanente em todos os golpes do Chefe</td></tr>
-              <tr><td><strong>⚔️ Repique</strong></td><td>Chefe ganha <strong>🛡️ Escudo Frontal</strong> (-2 dano pela frente)</td></tr>
-              <tr><td><strong>⏱️ Adrenalina</strong> ou <strong>🦗 Patas</strong></td><td>Chefe começa a luta já <strong>ARMADO (PRIMED)</strong> no Turno 1!</td></tr>
-            </tbody>
-          </table>
+        <div class="diag-box warn">
+          <h3 style="color:#fecdd3;">⚠️ Por que a jogabilidade do teste ainda parece "travada"</h3>
+          <ul>
+            <li><strong>Ritmo pesado de 2 turnos p/ bater:</strong> No modelo <em>Shogun</em> estrito, andar gasta turno, virar gasta turno, carregar na fila gasta turno e só depois você dispara — num protótipo web rápido, isso dá sensação de "lento demais".</li>
+            <li><strong>Manipulação no 5×4 por 2 cliques:</strong> Sem <em>Drag-and-Drop</em> real (arrastar e soltar girando com clique direito/scroll), mexer na mochila parece menos tátil do que no <em>Lootbound</em>.</li>
+            <li><strong>Falta de sinergia Variação + Variação:</strong> Hoje Variações só falam com Órgãos; faltam <strong>Reações Alquímicas</strong> quando duas Variações se tocam!</li>
+            <li><strong>Escala visual da Faixa 1D:</strong> Caixas de texto/emoji ainda passam sensação de "protótipo de formulário" em vez de uma arena com sprites animados e projéteis viajando.</li>
+          </ul>
         </div>
       </div>
-    </section>
 
-    <!-- ==================== 7. BANCO DE VARIANTES PARA VARIAR / MELHORAR JOGABILIDADE ==================== -->
-    <section class="card" id="sec-variar">
-      <h2>7. Laboratório de Ideias — Como Variar &amp; Melhorar a Jogabilidade a Partir Daqui</h2>
-      <p class="sec-sub">Se a jogabilidade ainda parece "travada" ou "genérica", aqui estão as <strong>6 alavancas de design</strong> mais fortes que podemos ligar/testar para transformar completamente a sensação do jogo:</p>
-
+      <div class="sub-heading">🚀 6 Alavancas Concretas para Variar &amp; Elevar a Jogabilidade</div>
       <div class="ideas-grid">
         <div class="idea-card">
-          <h4>1. Turno Fluido (Mover Grátis vs. Shogun Estrito)</h4>
-          <p>Hoje, <strong>andar 1 casa gasta o turno</strong> e <strong>enfileirar 1 arma também gasta o turno</strong> — isso pode parecer lento. <em>Variante:</em> Dar <strong>1 Movimento + 1 Ação por turno</strong> (ou preparar arma ser instantâneo e só disparar passar o turno), deixando o ritmo 2× mais ágil!</p>
+          <h4>1. Ritmo Híbrido (1 Movimento + 1 Ação por Turno)</h4>
+          <p>Andar/Virar passa a ser <strong>1 Passo grátis por turno</strong> antes de carregar ou disparar a Fila. Elimina turnos "mortos" e deixa o combate 2× mais fluido e gostoso!</p>
         </div>
         <div class="idea-card">
           <h4>2. Reação Alquímica (Variação ★ Variação)</h4>
-          <p>Hoje só <code>Variação → Órgão</code> funciona. <em>Variante:</em> Se duas Variações diferentes conectarem suas <code>★</code> entre si no <code>5×4</code>, elas geram uma <strong>Super-Reação</strong> (ex: <code>🧪 Peçonha + ⚡ Nervo = ☣️ Plasma</code> que eletrocuta TODAS as poças ácidas da arena!).</p>
+          <p>Quando duas Variações se conectam na grade <code>5×4</code>, nasce uma <strong>Super-Mutação</strong>: <code>🧪+⚡ = ☣️ Plasma</code> (eletrocuta todas as poças), <code>🪨+🧲 = 🌀 Arremesso p/ Trás</code> (Suplex!), <code>🧪+⚔️ = 💣 Esporo Contagioso</code>.</p>
         </div>
         <div class="idea-card">
-          <h4>3. Peças "Selvagens" com Trade-Off Espacial</h4>
-          <p>Inspirado no melhor do <em>Lootbound</em>: peças super fortes com formato maluco ou regra de risco (ex: <em>Glândula Instável</em> dá <code>+3 Dano</code> em 3 lados, mas <strong>machuca você por 1 PV</strong> se ficar na borda da grade).</p>
+          <h4>3. Drag-and-Drop Tátil no 5×4</h4>
+          <p>Arrastar peças direto com o mouse/toque, som de encaixe orgânico ("snap") e giro instantâneo no botão direito ou roda do mouse — a sensação física do <em>Lootbound</em>.</p>
         </div>
         <div class="idea-card">
-          <h4>4. Órgãos Defensivos / Armadilhas na Grade</h4>
-          <p>Adicionar 2 Órgãos novos inspirados no Shogun: <strong>🪤 Bolsa-Armadilha</strong> (planta mina no chão à frente) e <strong>🪞 Membrana Espelho</strong> (teleporta para o lado oposto da arena e inverte direção).</p>
+          <h4>4. Animação de Projétil &amp; Coreografia em Etapas</h4>
+          <p>Ao disparar a Fila de 3 golpes, executar com pausa real de <code>350ms</code> entre Golpe 1 → Golpe 2 → Golpe 3 → Inimigo 1 → Inimigo 2, para o jogador <strong>assistir o filme do próprio combo</strong>!</p>
         </div>
         <div class="idea-card">
-          <h4>5. Arrastar &amp; Soltar Real (Drag-and-Drop + Giro no Scroll)</h4>
-          <p>Trocar o esquema "clicar para segurar → clicar para soltar" por <strong>arrastar direto com o mouse/dedo</strong> na grade <code>5×4</code> (com clique direito ou roda do mouse girando a peça no ar), deixando o puzzle 5× mais tátil!</p>
+          <h4>5. Peças Selvagens / Amaldiçoadas</h4>
+          <p>Peças raras de alto risco/recompensa: ex. <em>Glândula Voraz</em> (<code>+2 Dano</code> em 3 lados, mas <strong>consome 1 PV</strong> se disparar 2×) ou <em>Núcleo Espelho</em> (copia a estrela da peça oposta).</p>
         </div>
         <div class="idea-card">
-          <h4>6. Combate em 2D Pequeno (5×3 ou 5×5) com a Mesma Grade 5×4</h4>
-          <p>Se você sentiu falta da liberdade espacial do <em>Into the Breach</em> (empurrar p/ cima/baixo contra rochas), podemos usar <strong>exatamente esta grade 5×4 + gerador de ataques</strong> num mini-tabuleiro <code>5×3</code> ou <code>5×4</code>!</p>
+          <h4>6. Testar a Mesma Grade 5×4 em Mini-Arena 2D (5×3)</h4>
+          <p>Se a linha 1D ainda parecer restrita demais comparada a <em>Into the Breach</em>, podemos plugar exatamente este motor de <strong>448 ataques + 5×4</strong> em uma mini-grade <code>5×3</code> com rochas e empurrões em 4 direções!</p>
         </div>
       </div>
     </section>
@@ -648,6 +861,66 @@
         { id: 'REPIQUE', icon: '⚔️', name: 'Repique', shape: '1×1 · ★ ▶', cells: [[0,0]], stars: [[1,0]], short: 'Golpe Duplo 2× (+1 CD)', rule: 'Executa o ataque do órgão 2 vezes seguidas (+1 Recarga). Dobra efeitos de empurrão/veneno!' },
         { id: 'ADRENALINA', icon: '⏱️', name: 'Adrenalina', shape: 'T (4) · ★ 3 bolsos', cells: [[0,0],[1,0],[2,0],[1,1]], stars: [[0,1],[2,1],[1,-1]], short: '-1 Recarga (mín. 0) + +1 Dano em Combo', rule: 'Reduz -1 CD (pode zerar a recarga!) e soma +1 Dano quando disparado no 2º ou 3º slot da Fila.' },
       ];
+
+      // 3 Real 5x4 Build Blueprints
+      const BLUEPRINTS = [
+        {
+          title: 'Build 1 · Maestro do Fogo Amigo',
+          subtitle: 'Tendão no meio (3,1) + Osso na quina (1,2) mutam 3 órgãos simultaneamente.',
+          cells: {
+            '0,0': ['🦷','org',true], '1,0': ['🦷','org',true], '2,0': ['🧲','var',false], '3,0': ['🦂','org',true], '4,0': ['🦂','org',false],
+            '0,1': ['🪨','var',false], '2,1': ['⚡','var',false], '3,1': ['🎯','org',true], '4,1': ['🎯','org',false],
+            '0,2': ['🪨','var',false], '1,2': ['🪨','var',false], '2,2': ['🐸','org',true], '3,2': ['🐸','org',false],
+          },
+          result: '<strong>Golpes gerados:</strong><br/>• <strong>🦷 Mandíbula Nv.3</strong> (3 dano + Empurra + Gira 180°)<br/>• <strong>🦂 Cauda Nv.2</strong> (2 dano 2 lados + Gira 180°)<br/>• <strong>🎯 Espinho Nv.2</strong> (2 dano + ⚡Choque & Cancela Mira)<br/>• <strong>🐸 Língua Nv.2</strong> (3 dano + Puxa + Empurra!)'
+        },
+        {
+          title: 'Build 2 · Metralhadora de Combo Kill',
+          subtitle: 'Adrenalina (T) no miolo abraça 3 órgãos zerando CD + Repique (★ ▶) dobra a Pinça 2×2!',
+          cells: {
+            '1,0': ['🦷','org',true], '2,0': ['🦷','org',false],
+            '0,1': ['⏱️','var',false], '1,1': ['⏱️','var',false], '2,1': ['⏱️','var',false], '3,1': ['🦀','org',true], '4,1': ['🦀','org',false],
+            '0,2': ['🦂','org',true], '1,2': ['⏱️','var',false], '2,2': ['⚔️','var',false], '3,2': ['🦀','org',true], '4,2': ['🦀','org',false],
+            '0,3': ['🦂','org',false],
+          },
+          result: '<strong>Golpes gerados:</strong><br/>• <strong>🦷 Mandíbula Veloz</strong> (<code>CD 0!</code> +1 em Combo)<br/>• <strong>🦂 Cauda Veloz</strong> (<code>CD 1</code> +1 em Combo)<br/>• <strong>🦀 Pinça Dupla</strong> (<code>2×3 = 6 dano</code> perfurando 2 casas!)<br/>→ Dispara os 3 na Fila toda hora ativando <strong>🔥 Combo Kill</strong>!'
+        },
+        {
+          title: 'Build 3 · Assassino Ácido & Voltaico',
+          subtitle: 'Peçonha (★ ▲ ▲) e Nervo (★ ▲ ▶) cobrem Patas (L) e Ferrão Curvo (L) p/ ignorar 100% dos escudos.',
+          cells: {
+            '0,0': ['🦗','org',false], '2,0': ['🗡️','org',true], '3,0': ['🗡️','org',false],
+            '0,1': ['🦗','org',true], '1,1': ['🦗','org',true], '2,1': ['⚡','var',false], '3,1': ['🗡️','org',true],
+            '0,2': ['🧪','var',false], '1,2': ['🧪','var',false], '2,2': ['🧲','var',false], '3,2': ['🎯','org',true], '4,2': ['🎯','org',false],
+          },
+          result: '<strong>Golpes gerados:</strong><br/>• <strong>🦗 Patas Ácidas</strong> (atravessa deixando rastro 🧪 + Veneno)<br/>• <strong>🗡️ Ferrão Voltaico</strong> (pula escudo, 3 dano + ⚡Choque)<br/>• <strong>🎯 Espinho Troca-Lugar</strong> (troca de posição à distância!)'
+        }
+      ];
+
+      document.getElementById('blueprints-grid').innerHTML = BLUEPRINTS.map(bp => {
+        let gridHtml = '<div class="bp-mini-5x4">';
+        for (let y = 0; y < 4; y++) {
+          for (let x = 0; x < 5; x++) {
+            const d = bp.cells[`${x},${y}`];
+            if (d) {
+              gridHtml += `<div class="bp-c ${d[1]} ${d[2] ? 'lnk' : ''}">${d[0]}${d[2] ? '<span class="st">★</span>' : ''}</div>`;
+            } else {
+              gridHtml += `<div class="bp-c"></div>`;
+            }
+          }
+        }
+        gridHtml += '</div>';
+        return `
+          <div class="bp-card">
+            <div>
+              <h3>${bp.title}</h3>
+              <div style="font-size:0.76rem; color:var(--muted); margin-top:2px;">${bp.subtitle}</div>
+            </div>
+            ${gridHtml}
+            <div class="bp-result">${bp.result}</div>
+          </div>
+        `;
+      }).join('');
 
       const varRots = {};
       VARS.forEach(v => { varRots[v.id] = 0; });
@@ -690,7 +963,6 @@
         }).join('')}</div>`;
       }
 
-      // Render Catalog
       document.getElementById('organs-catalog').innerHTML = ORGANS.map(o => `
         <div class="piece-card organ">
           <div class="pc-top">
@@ -734,7 +1006,6 @@
       }
       renderVarsCatalog();
 
-      // Synthesis Function (mirrors v7.5 engine!)
       function synthesize(organId, modSet) {
         const o = ORGANS.find(x => x.id === organId);
         const mods = Array.from(modSet);
@@ -767,7 +1038,6 @@
         return { o, name, level: 1 + mods.length, dmg, hits, cd, mods, effects };
       }
 
-      // Interactive Lab
       let labOrgan = 'MANDIBULA';
       let labMods = new Set(['OSSO', 'TENDAO']);
 
@@ -834,7 +1104,6 @@
         renderLab(); renderMatrix();
       });
 
-      // Render 7x6 Matrix
       function renderMatrix() {
         let html = `<thead><tr><th style="width:140px;">Órgão ↓ / Variação →</th>`;
         VARS.forEach(v => {
