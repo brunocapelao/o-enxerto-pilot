@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O Enxerto · Catálogo Completo de Combinações de Genes & Ataques Gerados</title>
+  <style>
+    :root {
+      --bg: #080d0b;
+      --panel: #0f1915;
+      --panel-2: #15241e;
+      --border: #243d32;
+      --border-hi: #386350;
+      --text: #e6f4ee;
+      --muted: #93b5a6;
+      --accent: #a3e635;
+      --gold: #facc15;
+      --danger: #fb7185;
+      --cyan: #38bdf8;
+      --orange: #fb923c;
+      --purple: #c084fc;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 20% 0%, #10241b 0%, var(--bg) 60%);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    header.topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(8, 13, 11, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .brand .sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border-hi);
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 7px 12px;
+      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn:hover {
+      border-color: var(--accent);
+      background: #1b3128;
+    }
+    .btn.active {
+      background: var(--accent);
+      color: #08120c;
+      border-color: var(--accent);
+      font-weight: 800;
+    }
+    .btn.gold {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .btn.gold:hover {
+      background: rgba(250, 204, 21, 0.14);
+    }
+
+    main {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 18px 16px 48px;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .tab-btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover { color: var(--text); border-color: var(--border-hi); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(163,230,53,0.18), rgba(56,189,248,0.12));
+      border-color: var(--accent);
+      color: var(--text);
+      box-shadow: 0 0 0 1px rgba(163,230,53,0.25);
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .panel-title {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-sub {
+      margin: 0 0 14px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* Interactive Workbench */
+    .workbench {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.25fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    @media (max-width: 960px) {
+      .workbench { grid-template-columns: 1fr; }
+    }
+
+    .selector-box {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .selector-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .gene-pill-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .gene-pill {
+      border: 1px solid var(--border);
+      background: #0d1713;
+      color: var(--text);
+      border-radius: 9px;
+      padding: 9px 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.14s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .gene-pill:hover { border-color: var(--border-hi); background: #14241d; }
+    .gene-pill.selected {
+      border-color: var(--accent);
+      background: rgba(163, 230, 53, 0.14);
+      box-shadow: 0 0 0 1px rgba(163,230,53,0.35);
+    }
+    .gene-pill .g-name { font-weight: 800; font-size: 0.86rem; }
+    .gene-pill .g-meta { font-size: 0.72rem; color: var(--muted); }
+
+    .result-box {
+      background: linear-gradient(145deg, #12241c 0%, #0d1613 100%);
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .result-formula {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .result-title {
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin: 2px 0 0;
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border-hi);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .badge.mp { border-color: #38bdf8; color: #7dd3fc; }
+    .badge.dmg { border-color: #fb923c; color: #fdba74; }
+    .badge.role { border-color: #c084fc; color: #e9d5ff; }
+    .badge.ok { border-color: #a3e635; color: #bef264; }
+    .badge.warn { border-color: #facc15; color: #fde047; }
+
+    /* Mini Tactical Board SVG */
+    .mini-board-wrap {
+      background: #070d0a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mini-board-wrap svg {
+      width: 100%;
+      max-width: 260px;
+      height: auto;
+      display: block;
+    }
+
+    /* 6x6 Matrix Table */
+    .matrix-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    table.matrix {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    table.matrix th, table.matrix td {
+      border: 1px solid var(--border);
+      padding: 8px;
+      vertical-align: top;
+    }
+    table.matrix th {
+      background: #12201a;
+      font-weight: 800;
+      text-align: left;
+      color: var(--text);
+    }
+    table.matrix th.corner {
+      width: 135px;
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+    table.matrix td.cell-btn {
+      background: #0d1612;
+      cursor: pointer;
+      transition: background 0.12s ease, border-color 0.12s ease;
+    }
+    table.matrix td.cell-btn:hover {
+      background: #172a22;
+    }
+    table.matrix td.cell-btn.active-cell {
+      background: rgba(163, 230, 53, 0.16);
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+    .m-name {
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 3px;
+      display: block;
+    }
+    .m-stat {
+      font-size: 0.72rem;
+      color: var(--gold);
+      font-weight: 700;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .m-short {
+      font-size: 0.71rem;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    /* Filter Bar & Cards Grid */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .search-input, .select-input {
+      background: #0c1411;
+      border: 1px solid var(--border-hi);
+      color: var(--text);
+      border-radius: 9px;
+      padding: 8px 11px;
+      font-size: 0.84rem;
+    }
+    .search-input { flex: 1; min-width: 200px; }
+    .count-pill {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(163,230,53,0.1);
+      border: 1px solid rgba(163,230,53,0.3);
+      padding: 5px 10px;
+      border-radius: 999px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 12px;
+    }
+    .combo-card {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.12s ease, border-color 0.12s ease;
+      cursor: pointer;
+    }
+    .combo-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .combo-card.highlighted {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px rgba(250,204,21,0.35);
+    }
+    .combo-card h3 {
+      margin: 0;
+      font-size: 0.98rem;
+      font-weight: 800;
+    }
+    .combo-card p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #c5ded3;
+    }
+    .tactical-tip {
+      font-size: 0.74rem;
+      color: var(--gold);
+      background: rgba(250, 204, 21, 0.08);
+      border: 1px solid rgba(250, 204, 21, 0.22);
+      border-radius: 7px;
+      padding: 5px 8px;
+    }
+
+    /* Tab 2: v0.7.1 Exact Tables & Simulator */
+    .v7-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 900px) {
+      .v7-grid { grid-template-columns: 1fr; }
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    table.data-table th, table.data-table td {
+      border-bottom: 1px solid var(--border);
+      padding: 8px 9px;
+      text-align: left;
+    }
+    table.data-table th {
+      background: #12201a;
+      color: var(--muted);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    table.data-table tr:hover td {
+      background: rgba(163, 230, 53, 0.06);
+    }
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 700;
+    }
+    .sim-box {
+      background: #0d1612;
+      border: 1px solid var(--border-hi);
+      border-radius: 10px;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .sim-box { grid-template-columns: 1fr; }
+    }
+    .check-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .chip-toggle {
+      border: 1px solid var(--border-hi);
+      background: #13211b;
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .chip-toggle.on {
+      background: var(--accent);
+      color: #08120c;
+      border-color: var(--accent);
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div style="font-size:1.5rem">🧬</div>
+      <div>
+        <h1>O Enxerto · Combinações de Genes &amp; Ataques Gerados</h1>
+        <div class="sub">Catálogo completo: 36 Fusões Táticas (Tabuleiro Into the Breach) + 73 Combinações Exatas do Motor v0.7.1</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <a class="btn gold" href="./arena.html">🎮 Abrir Arena Jogável (v6.0)</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="tactical" id="tab-tactical">
+        ⚔️ 36 Fusões Táticas (6 Núcleos × 6 Modificadores)
+      </button>
+      <button class="tab-btn" data-tab="v071" id="tab-v071">
+        📐 Motor Congelado v0.7.1 (9 Ataques + 64 Defesas = 73 Combinações)
+      </button>
+    </div>
+
+    <!-- ==================== ABA 1: 36 FUSÕES TÁTICAS ==================== -->
+    <section id="sec-tactical">
+      <div class="panel">
+        <h2 class="panel-title">🧪 Bancada de Combinação ao Vivo (Gene de Forma + Gene Modificador)</h2>
+        <p class="panel-sub">
+          Escolha qualquer <strong>Gene de Forma</strong> (como o ataque é entregue no tabuleiro) e qualquer <strong>Gene Modificador</strong> (qual mutação ele ganha) para inspecionar o ataque gerado, o diagrama tático e o papel no combate.
+        </p>
+
+        <div class="workbench">
+          <div class="selector-box">
+            <div class="selector-label">
+              <span>1. Gene de Forma (Núcleo)</span>
+              <span>6 opções</span>
+            </div>
+            <div class="gene-pill-grid" id="core-picker"></div>
+          </div>
+
+          <div class="selector-box">
+            <div class="selector-label">
+              <span>2. Gene Modificador (Mutação)</span>
+              <span>6 opções</span>
+            </div>
+            <div class="gene-pill-grid" id="mod-picker"></div>
+          </div>
+
+          <div class="result-box" id="workbench-result"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">📊 Matriz Completa 6 × 6 (Todas as 36 Combinações)</h2>
+        <p class="panel-sub">Clique em qualquer célula da matriz para carregar o ataque na Bancada acima e destacar o card detalhado abaixo.</p>
+        <div class="matrix-scroll">
+          <table class="matrix" id="combo-matrix"></table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">🃏 Todos os 36 Ataques Gerados (com Diagrama Tático)</h2>
+        <div class="filter-bar">
+          <input type="text" class="search-input" id="search-input" placeholder="Buscar por nome, efeito (ex: Fogo Amigo, Veneno, Paralisia, Troca, Rocha)..." />
+          <select class="select-input" id="filter-core">
+            <option value="ALL">Todos os Núcleos (6)</option>
+          </select>
+          <select class="select-input" id="filter-mod">
+            <option value="ALL">Todos os Modificadores (6)</option>
+          </select>
+          <select class="select-input" id="filter-role">
+            <option value="ALL">Todos os Papéis Táticos</option>
+            <option value="Deslocamento / Fogo Amigo">Deslocamento / Fogo Amigo</option>
+            <option value="Dano / Execução">Dano / Execução</option>
+            <option value="Controle / Paralisia">Controle / Paralisia</option>
+            <option value="Veneno / Terreno">Veneno / Terreno</option>
+            <option value="Mobilidade / Flanco">Mobilidade / Flanco</option>
+            <option value="Defesa / Reação">Defesa / Reação</option>
+          </select>
+          <span class="count-pill" id="cards-count">36 / 36 ataques</span>
+        </div>
+        <div class="cards-grid" id="cards-grid"></div>
+      </div>
+    </section>
+
+    <!-- ==================== ABA 2: SPEC CONGELADA v0.7.1 ==================== -->
+    <section id="sec-v071" class="hidden">
+      <div class="panel">
+        <h2 class="panel-title">🧮 Simulador Exato do Motor v0.7.1 (Ataque × Defesa)</h2>
+        <p class="panel-sub">
+          Liga/desliga os genes conectados em <strong>I (Impulso)</strong> no Atacante e em <strong>T (Trama)</strong> no Defensor para ver exatamente a expressão gerada e o dano líquido (ordem: <code>B</code> por golpe → <code>M</code> por ataque → <code>Guarda</code> → <code>Riposta</code> → <code>V</code> → <code>T→A</code>).
+        </p>
+        <div class="sim-box">
+          <div>
+            <div class="selector-label"><span>Genes de Ataque (Núcleo I)</span></div>
+            <div class="check-row" id="v7-atk-toggles"></div>
+            <div style="margin-top:10px; font-size:0.82rem;" id="v7-atk-summary"></div>
+          </div>
+          <div>
+            <div class="selector-label"><span>Genes de Defesa (Núcleo T)</span></div>
+            <div class="check-row" id="v7-def-toggles"></div>
+            <div style="margin-top:10px; font-size:0.82rem;" id="v7-def-summary"></div>
+          </div>
+          <div style="background:#12201a; border:1px solid var(--border); border-radius:9px; padding:12px;" id="v7-sim-output"></div>
+        </div>
+      </div>
+
+      <div class="v7-grid">
+        <div class="panel">
+          <h2 class="panel-title">⚔️ Todas as 9 Combinações de Ataque (v0.7.1)</h2>
+          <p class="panel-sub">Todos os subconjuntos de <code>{F, R, Q}</code> ligados ao núcleo <code>I</code> (mais o fallback sem <code>I</code>).</p>
+          <div class="matrix-scroll">
+            <table class="data-table" id="v7-atk-table"></table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2 class="panel-title">🛡️ Todas as 64 Combinações de Defesa (v0.7.1)</h2>
+          <p class="panel-sub">Todos os <code>2⁶ = 64</code> subconjuntos de <code>{F, Q, B, M, V, A}</code> ligados ao núcleo <code>T</code>.</p>
+          <div class="filter-bar" style="margin-bottom:10px;">
+            <input type="text" class="search-input" id="v7-def-search" placeholder="Filtrar genes (ex: B+M, Q, Riposta, Extração)..." />
+            <span class="count-pill" id="v7-def-count">64 / 64</span>
+          </div>
+          <div class="matrix-scroll" style="max-height:520px; overflow-y:auto;">
+            <table class="data-table" id="v7-def-table"></table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* =====================================================================
+         DADOS — ABA 1: 6 NÚCLEOS × 6 MODIFICADORES = 36 ATAQUES TÁTICOS
+      ===================================================================== */
+      const CORES = [
+        { id: 'GARRA', icon: '🐾', name: 'Garra', meta: 'Corpo-a-corpo · Alcance 1' },
+        { id: 'ARIETE', icon: '🦀', name: 'Aríete', meta: 'Investida · Empurrão Linha 2' },
+        { id: 'LINGUA', icon: '🐸', name: 'Língua', meta: 'Chicote · Alcance 3 + Puxão' },
+        { id: 'SALTO', icon: '🦗', name: 'Salto', meta: 'Pulo · Alcance 2 sobre obstáculos' },
+        { id: 'DISPARO', icon: '🎯', name: 'Espinho', meta: 'Projétil · Alcance 3 em linha' },
+        { id: 'CARAPACA', icon: '🛡️', name: 'Carapaça', meta: 'Guarda · Escudo & Contra-ataque' },
+      ];
+
+      const MODS = [
+        { id: 'RIGIDEZ', icon: '🪨', name: 'Rigidez', meta: '+Dano, Empurrão, Quebra Rocha' },
+        { id: 'REPIQUE', icon: '⚔️', name: 'Repique', meta: 'Multigolpe 2×/3×, Ricochete' },
+        { id: 'PECONHA', icon: '🧪', name: 'Peçonha', meta: 'Veneno, Poça Ácida, Corrosão' },
+        { id: 'VOLTAICO', icon: '⚡', name: 'Voltaico', meta: 'Paralisia, Cancela Mira, Cadeia' },
+        { id: 'VAMPIRICO', icon: '🦇', name: 'Vampírico', meta: 'Dreno PV, Backstab, Purifica' },
+        { id: 'GANCHO', icon: '🧲', name: 'Gancho', meta: 'Troca, Giro 180°, Fogo Amigo' },
+      ];
+
+      // Padrões visuais para o mini-diagrama 5x3 (col 0..4, row 0..2)
+      const COMBOS = [
+        // --- GARRA (6) ---
+        {
+          core: 'GARRA', mod: 'RIGIDEZ', name: 'Esmagamento Ósseo', mp: '0 MP', dmg: '6 dano', range: 'Alcance 1',
+          role: 'Deslocamento / Fogo Amigo',
+          short: '6 dano + empurra 1 casa (quebra Rocha)',
+          desc: 'Golpe brutal adjacente que causa 6 de dano e empurra o inimigo 1 casa. Se bater em 🪨 Rocha, destrói virando 🦴 Espinhos (+3 dano) e expõe o gene.',
+          tip: 'Use para jogar inimigos contra rochas ou empurrar para dentro de ⚠️ Miras inimigas.',
+          viz: { player: [1,1], enemies: [[2,1]], push: [[2,1,3,1]], rock: [3,1] }
+        },
+        {
+          core: 'GARRA', mod: 'REPIQUE', name: 'Corte Duplo', mp: '1 MP', dmg: '2× 3 dano (6)', range: 'Alcance 1',
+          role: 'Dano / Execução',
+          short: '2 golpes de 3 + ganha +1 Passo ao abater',
+          desc: 'Desfere 2 cortes rápidos de 3 de dano cada. Se causar colisão ou abater o alvo, você ganha +1 Passo grátis para sair de perigo.',
+          tip: 'Ótimo contra inimigos com escudos finos ou para finalizar e recuar.',
+          viz: { player: [1,1], enemies: [[2,1]], hits: [[2,1,'2×3']] }
+        },
+        {
+          core: 'GARRA', mod: 'PECONHA', name: 'Garra Corrosiva', mp: '1 MP', dmg: '4 dano + 3 Veneno', range: 'Alcance 1',
+          role: 'Veneno / Terreno',
+          short: '4 dano + 3 Veneno + zera Armadura',
+          desc: 'Rasga a carapaça do inimigo causando 4 de dano, aplica 3 de Veneno e reduz a Armadura do alvo para 0 até o fim do combate.',
+          tip: 'Essencial para derreter tanques blindados antes do golpe principal.',
+          viz: { player: [1,1], enemies: [[2,1]], acid: [[2,1]], hits: [[2,1,'🧪3']] }
+        },
+        {
+          core: 'GARRA', mod: 'VOLTAICO', name: 'Toque Desfibrilador', mp: '1 MP', dmg: '4 dano + Paralisia', range: 'Alcance 1',
+          role: 'Controle / Paralisia',
+          short: '4 dano + cancela ⚠️ Mira do alvo',
+          desc: 'Descarga elétrica à queima-roupa: causa 4 de dano e PARALISA o inimigo, cancelando imediatamente a ⚠️ Mira telegrafada dele neste turno.',
+          tip: 'Botão de emergência perfeito quando não dá para sair da mira de um chefe.',
+          viz: { player: [1,1], enemies: [[2,1]], stun: [[2,1]], hits: [[2,1,'⚡STUN']] }
+        },
+        {
+          core: 'GARRA', mod: 'VAMPIRICO', name: 'Mordida Sanguinária', mp: '1 MP', dmg: '5 dano (+4 Costas)', range: 'Alcance 1',
+          role: 'Dano / Execução',
+          short: '5 dano (+4 Backstab) + cura +4 PV',
+          desc: 'Morde o alvo causando 5 de dano (+4 crítico se atacar pelas costas 🗡️) e drena +4 PV para você, limpando 1 acúmulo de Veneno.',
+          tip: 'Sustentação agressiva: ataque pelas costas para 9 de dano + cura.',
+          viz: { player: [3,1], enemies: [[2,1]], hits: [[2,1,'🗡️9 / +4PV']] }
+        },
+        {
+          core: 'GARRA', mod: 'GANCHO', name: 'Chave de Articulação', mp: '1 MP', dmg: '4 dano + Giro 180°', range: 'Alcance 1',
+          role: 'Deslocamento / Fogo Amigo',
+          short: '4 dano + gira a ⚠️ Mira do inimigo 180°',
+          desc: 'Golpe de precisão que causa 4 de dano e GIRA o inimigo em 180°. A ⚠️ Mira dele passa a apontar para trás, acertando os próprios aliados!',
+          tip: 'Um dos golpes mais estilosos de Into the Breach: redirecione tiros sem precisar empurrar.',
+          viz: { player: [1,1], enemies: [[2,1],[3,1]], aim: [3,1], hits: [[2,1,'🔄180°']] }
+        },
+
+        // --- ARIETE (6) ---
+        {
+          core: 'ARIETE', mod: 'RIGIDEZ', name: 'Demolidor Colossal', mp: '1 MP', dmg: '7 dano + Empurra 2', range: 'Linha 2',
+          role: 'Deslocamento / Fogo Amigo',
+          short: '7 dano + arremessa 2 casas (+4 Colisão)',
+          desc: 'Avança em linha reta, causa 7 de dano e arremessa o inimigo 2 casas para trás. Colisões contra rochas ou outros inimigos causam +4 de dano extra.',
+          tip: 'Maior potencial de dano explosivo por colisão do jogo.',
+          viz: { player: [0,1], move: [1,1], enemies: [[2,1]], push: [[2,1,4,1]], rock: [4,1] }
+        },
+        {
+          core: 'ARIETE', mod: 'REPIQUE', name: 'Bate-Estaca Duplo', mp: '2 MP', dmg: '2× 4 dano + Empurra', range: 'Linha 2',
+          role: 'Dano / Execução',
+          short: 'Empurra 1 casa, avança junto e bate de novo',
+          desc: 'Atinge por 4 de dano empurrando 1 casa, acompanha o movimento do inimigo e desfere um segundo impacto de 4 de dano + 1 casa de empurrão.',
+          tip: 'Carrega o inimigo pelo tabuleiro inteiro até jogá-lo numa armadilha ou borda.',
+          viz: { player: [0,1], move: [2,1], enemies: [[1,1]], push: [[1,1,3,1]], hits: [[3,1,'2×4']] }
+        },
+        {
+          core: 'ARIETE', mod: 'PECONHA', name: 'Trilha Ácida', mp: '1 MP', dmg: '5 dano + 2 Poças', range: 'Linha 2',
+          role: 'Veneno / Terreno',
+          short: 'Investe 2 casas deixando 🧪 Ácido no chão',
+          desc: 'Investida tóxica que causa 5 de dano, empurra 1 casa e converte o caminho percorrido em 🧪 Poças Ácidas (3 dano/turno + expõe genes).',
+          tip: 'Prepara o terreno inteiro para condução elétrica ou controle de área.',
+          viz: { player: [0,1], move: [1,1], enemies: [[2,1]], push: [[2,1,3,1]], acid: [[0,1],[1,1],[3,1]] }
+        },
+        {
+          core: 'ARIETE', mod: 'VOLTAICO', name: 'Carga de Raio', mp: '2 MP', dmg: '5 dano + Onda ⚡', range: 'Linha 2',
+          role: 'Controle / Paralisia',
+          short: 'Investe, empurra 1 e paralisa adjacentes',
+          desc: 'Investida eletrificada: causa 5 de dano e empurra 1 casa o alvo principal, enquanto libera choque de 3 de dano + Paralisia em todos os adjacentes.',
+          tip: 'Quebra formações agrupadas e desarma múltiplos inimigos num único turno.',
+          viz: { player: [0,1], move: [1,1], enemies: [[2,1],[2,0],[2,2]], stun: [[2,0],[2,2]], push: [[2,1,3,1]] }
+        },
+        {
+          core: 'ARIETE', mod: 'VAMPIRICO', name: 'Chifre Voraz', mp: '1 MP', dmg: '6 dano + 4 Escudo', range: 'Linha 2',
+          role: 'Defesa / Reação',
+          short: '6 dano + 4 Escudo (+3 PV se houver colisão)',
+          desc: 'Investida blindada que causa 6 de dano, empurra 1 casa e gera +4 Escudo. Se o inimigo colidir contra algo, você ainda cura +3 PV.',
+          tip: 'Perfeito para iniciar o combate no meio dos inimigos sem perder vida.',
+          viz: { player: [0,1], move: [1,1], enemies: [[2,1]], push: [[2,1,3,1]], hits: [[1,1,'🛡️+4']] }
+        },
+        {
+          core: 'ARIETE', mod: 'GANCHO', name: 'Suplex Quimérico', mp: '1 MP', dmg: '5 dano + Joga p/ Trás', range: 'Alcance 1',
+          role: 'Deslocamento / Fogo Amigo',
+          short: 'Arremessa o inimigo POR CIMA de você!',
+          desc: 'Agarra o inimigo à sua frente, causa 5 de dano e o arremessa por cima do seu corpo até a casa logo atrás de você.',
+          tip: 'Ficou encurralado na parede ou numa ⚠️ Mira? Jogue o inimigo atrás de você direto na mira!',
+          viz: { player: [2,1], enemies: [[3,1]], push: [[3,1,1,1]], aim: [1,1] }
+        },
+
+        // --- LINGUA (6) ---
+        {
+          core: 'LINGUA', mod: 'RIGIDEZ', name: 'Chicote de Impacto', mp: '1 MP', dmg: '5 dano + Puxa 2', range: 'Alcance 3',
+          role: 'Deslocamento / Fogo Amigo',
+          short: 'Puxa 2 casas causando +3 Colisão no choque',
+          desc: 'Alcance 3: causa 5 de dano e puxa o inimigo até 2 casas em sua direção. Se bater em você ou em obstáculo no caminho, causa +3 de dano de colisão.',
+          tip: 'Arranca atiradores escondidos no fundo da arena para o alcance da sua Garra.',
+          viz: { player: [0,1], enemies: [[3,1]], push: [[3,1,1,1]], hits: [[1,1,'💥+3']] }
+        },
+        {
+          core: 'LINGUA', mod: 'REPIQUE', name: 'Língua Bifurcada', mp: '2 MP', dmg: '2× 3 dano (2 alvos)', range: 'Alcance 3',
+          role: 'Deslocamento / Fogo Amigo',
+          short: 'Puxa 2 inimigos simultaneamente (ou bate 2×)',
+          desc: 'Língua dupla de alcance 3: puxa até 2 inimigos 1 casa cada (3 dano em cada) — se puxar um contra o outro, ambos sofrem +3 de Colisão!',
+          tip: 'Faça dois inimigos baterem cabeça um no outro no meio da arena.',
+          viz: { player: [2,2], enemies: [[1,0],[3,0]], push: [[1,0,1,1],[3,0,3,1]] }
+        },
+        {
+          core: 'LINGUA', mod: 'PECONHA', name: 'Laço Viscoso', mp: '1 MP', dmg: '3 dano + 3 Veneno', range: 'Alcance 3',
+          role: 'Veneno / Terreno',
+          short: 'Puxa 1 casa + cria 🧪 Poça Ácida no pouso',
+          desc: 'Alcance 3: causa 3 de dano, aplica 3 de Veneno, puxa o inimigo 1 casa e derrete a casa de destino virando 🧪 Poça Ácida.',
+          tip: 'Puxa o alvo direto para dentro do ácido que acabou de criar.',
+          viz: { player: [0,1], enemies: [[3,1]], push: [[3,1,2,1]], acid: [[2,1]] }
+        },
+        {
+          core: 'LINGUA', mod: 'VOLTAICO', name: 'Cabo de Alta Tensão', mp: '1 MP', dmg: '4 dano + Puxa + ⚡', range: 'Alcance 3',
+          role: 'Controle / Paralisia',
+          short: 'Puxa 1 casa + desliga ⚠️ Mira à distância',
+          desc: 'Alcance 3: puxa o inimigo 1 casa causando 4 de dano elétrico e PARALISA o alvo, cancelando qualquer disparo telegrafado.',
+          tip: 'Neutraliza artilheiros à distância sem precisar gastar passos.',
+          viz: { player: [0,1], enemies: [[3,1]], push: [[3,1,2,1]], stun: [[2,1]] }
+        },
+        {
+          core: 'LINGUA', mod: 'VAMPIRICO', name: 'Sifão Parasita', mp: '1 MP', dmg: '4 dano + Cura 4 PV', range: 'Alcance 3',
+          role: 'Dano / Execução',
+          short: 'Drena +4 PV à distância + puxa 1 casa',
+          desc: 'Crava uma ventosa à distância (Alcance 3): causa 4 de dano, drena +4 PV para você e puxa o alvo 1 casa se ele estiver com menos de 50% PV.',
+          tip: 'Mantém seu PV cheio enquanto posiciona inimigos feridos para cirurgia.',
+          viz: { player: [0,1], enemies: [[3,1]], push: [[3,1,2,1]], hits: [[0,1,'+4PV']] }
+        },
+        {
+          core: 'LINGUA', mod: 'GANCHO', name: 'Troca Quimérica', mp: '1 MP', dmg: '3 dano + TROCA', range: 'Alcance 3',
+          role: 'Deslocamento / Fogo Amigo',
+          short: 'TROCA DE LUGAR com o inimigo no tabuleiro!',
+          desc: 'Alcance 3: causa 3 de dano e TROCA instantaneamente sua posição com a do inimigo. Se você estava numa ⚠️ Mira, agora o inimigo está nela!',
+          tip: 'Jogada assinatura de gênio: fique na mira de propósito e troque de lugar com o chefe.',
+          viz: { player: [1,1], enemies: [[4,1]], aim: [1,1], push: [[4,1,1,1],[1,1,4,1]] }
+        },
+
+        // --- SALTO (6) ---
+        {
+          core: 'SALTO', mod: 'RIGIDEZ', name: 'Queda Sísmica', mp: '1 MP', dmg: '4 dano em Cruz', range: 'Pulo 2',
+          role: 'Deslocamento / Fogo Amigo',
+          short: 'Pula 2 casas e empurra TODOS adjacentes',
+          desc: 'Salta por cima de obstáculos até 2 casas. Ao pousar, gera onda de choque em cruz (4 de dano + empurra todos os inimigos adjacentes 1 casa para fora).',
+          tip: 'Empurre 2 ou 3 inimigos de uma só vez contra rochas, ácido ou miras.',
+          viz: { player: [0,1], move: [2,1], enemies: [[2,0],[3,1]], push: [[2,0,2,0],[3,1,4,1]], hits: [[2,1,'💥CRUZ']] }
+        },
+        {
+          core: 'SALTO', mod: 'REPIQUE', name: 'Ricochete Acrobático', mp: '1 MP', dmg: '4 dano + 2º Pulo', range: 'Pulo 2 + 1',
+          role: 'Mobilidade / Flanco',
+          short: 'Salta sobre inimigo (4 dano) e ganha +1 Pulo',
+          desc: 'Salta por cima de um inimigo causando 4 de dano no trajeto e desbloqueia imediatamente um segundo salto gratuito de 1 casa para reposicionar.',
+          tip: 'Atravessa a linha de frente inteira e ainda cai seguro fora de todas as miras.',
+          viz: { player: [0,1], move: [3,1], enemies: [[1,1]], hits: [[1,1,'4 dano']] }
+        },
+        {
+          core: 'SALTO', mod: 'PECONHA', name: 'Nuvem de Esporos', mp: '1 MP', dmg: '3 Veneno em área', range: 'Pulo 2',
+          role: 'Veneno / Terreno',
+          short: 'Deixa 🧪 Ácido na saída + Veneno no pouso',
+          desc: 'Pula até 2 casas deixando uma 🧪 Poça Ácida na casa onde você estava e espalhando +3 Veneno em todos os inimigos adjacentes ao pouso.',
+          tip: 'Escapa de cercos deixando armadilha tóxica para trás.',
+          viz: { player: [1,1], move: [3,1], acid: [[1,1]], enemies: [[4,1]], hits: [[4,1,'🧪3']] }
+        },
+        {
+          core: 'SALTO', mod: 'VOLTAICO', name: 'Relâmpago Relocalizador', mp: '2 MP', dmg: '4 dano em Linha', range: 'Pulo 2',
+          role: 'Controle / Paralisia',
+          short: 'Pula 2 casas e eletrocuta quem estiver no meio',
+          desc: 'Teleporta em arco elétrico por até 2 casas. Todos os inimigos na linha entre a decolagem e o pouso sofrem 4 de dano e ficam PARALISADOS.',
+          tip: 'Mobilidade + controle de grupo numa única ação.',
+          viz: { player: [1,1], move: [3,1], enemies: [[2,1]], stun: [[2,1]], hits: [[2,1,'⚡4']] }
+        },
+        {
+          core: 'SALTO', mod: 'VAMPIRICO', name: 'Bote Predatório', mp: '1 MP', dmg: '6 dano + 3 PV', range: 'Pulo 2',
+          role: 'Mobilidade / Flanco',
+          short: 'Pula nas costas (🗡️) e já morde causando 6',
+          desc: 'Salta até 2 casas; se pousar atrás das costas (🗡️) de qualquer inimigo, desfere um bote automático de 6 de dano, expõe o gene dele e cura +3 PV!',
+          tip: 'Combo de assassino: movimento + Backstab + abertura cirúrgica num único clique.',
+          viz: { player: [0,1], move: [3,1], enemies: [[2,1]], hits: [[2,1,'🗡️6']] }
+        },
+        {
+          core: 'SALTO', mod: 'GANCHO', name: 'Salto com Rapel', mp: '1 MP', dmg: '3 dano + Carrega', range: 'Pulo 2',
+          role: 'Deslocamento / Fogo Amigo',
+          short: 'Pula levando 1 inimigo adjacente junto!',
+          desc: 'Agarra 1 inimigo adjacente e salta até 2 casas levando-o junto com você, largando-o numa casa livre ao lado do pouso (3 dano + expõe gene).',
+          tip: 'Sequestre um inimigo e solte-o exatamente em cima de uma Poça Ácida ou Mira!',
+          viz: { player: [1,1], move: [3,1], enemies: [[1,0]], push: [[1,0,3,0]], aim: [3,0] }
+        },
+
+        // --- DISPARO / ESPINHO (6) ---
+        {
+          core: 'DISPARO', mod: 'RIGIDEZ', name: 'Espinho Balístico', mp: '1 MP', dmg: '6 dano + Empurra 1', range: 'Linha 3',
+          role: 'Deslocamento / Fogo Amigo',
+          short: 'Tiro pesado alcance 3 que empurra 1 casa',
+          desc: 'Dispara um projétil ósseo em linha reta (alcance 3): causa 6 de dano e empurra o alvo 1 casa para trás — deslocando a ⚠️ Mira dele!',
+          tip: 'Clássico de Into the Breach: desvie o tiro inimigo do outro lado do mapa.',
+          viz: { player: [0,1], enemies: [[3,1]], push: [[3,1,4,1]], hits: [[3,1,'6 dano']] }
+        },
+        {
+          core: 'DISPARO', mod: 'REPIQUE', name: 'Rajada de Espinhos', mp: '1 MP', dmg: '3× 2 dano (6)', range: 'Linha 3',
+          role: 'Dano / Execução',
+          short: 'Dispara 3 espinhos [2, 2, 2] à distância',
+          desc: 'Alcance 3: dispara 3 espinhos consecutivos de 2 de dano cada (`[2, 2, 2]`). Cada espinho pode quebrar escudos ou ativar bônus de Veneno/Ácido.',
+          tip: 'Homenagem direta à Rajada + Repique da spec v0.7.1, agora no tabuleiro!',
+          viz: { player: [0,1], enemies: [[3,1]], hits: [[3,1,'3×2']] }
+        },
+        {
+          core: 'DISPARO', mod: 'PECONHA', name: 'Morteiro Ácido', mp: '2 MP', dmg: '4 dano + 4 Veneno', range: 'Arco 3',
+          role: 'Veneno / Terreno',
+          short: 'Passa por cima de rochas + cria 🧪 Ácido',
+          desc: 'Disparo em arco (ignora obstáculos no caminho, alcance 3): causa 4 de dano, aplica 4 Veneno, expõe o gene e derrete o piso em 🧪 Poça Ácida.',
+          tip: 'Atinge artilheiros atrás de rochas sem precisar se expor.',
+          viz: { player: [0,1], rock: [2,1], enemies: [[3,1]], acid: [[3,1]], hits: [[3,1,'🧪4']] }
+        },
+        {
+          core: 'DISPARO', mod: 'VOLTAICO', name: 'Arco Voltaico', mp: '2 MP', dmg: '4 dano em Cadeia', range: 'Alcance 3',
+          role: 'Controle / Paralisia',
+          short: 'Salta por inimigos adjacentes e 🧪 Poças Ácidas',
+          desc: 'Dispara raio de 4 de dano + Paralisia. A eletricidade salta automaticamente para qualquer inimigo adjacente ou conectado por 🧪 Poças Ácidas!',
+          tip: 'Sinergia suprema com Trilha Ácida ou Morteiro Ácido: frite a arena inteira.',
+          viz: { player: [0,1], enemies: [[2,1],[3,1],[3,0]], acid: [[2,1]], stun: [[2,1],[3,1],[3,0]] }
+        },
+        {
+          core: 'DISPARO', mod: 'VAMPIRICO', name: 'Agulha Sanguessuga', mp: '1 MP', dmg: '5 dano + Cura 4 PV', range: 'Linha 3',
+          role: 'Dano / Execução',
+          short: 'Tiro alcance 3 que drena +4 PV (+2 se tóxico)',
+          desc: 'Dispara uma agulha orgânica (alcance 3) causando 5 de dano e drenando +4 PV (+2 PV extras se o alvo estiver envenenado ou exposto).',
+          tip: 'Permite jogar de sniper sustentável mantendo distância segura.',
+          viz: { player: [0,1], enemies: [[3,1]], hits: [[3,1,'5 / +4PV']] }
+        },
+        {
+          core: 'DISPARO', mod: 'GANCHO', name: 'Arpão Lateral', mp: '1 MP', dmg: '4 dano + Desvio Lateral', range: 'Linha 3',
+          role: 'Deslocamento / Fogo Amigo',
+          short: 'Empurra o alvo 1 casa para o LADO (↑ ou ↓)!',
+          desc: 'Dispara um arpão curvado (alcance 3) que causa 4 de dano e empurra o alvo 1 casa PERPENDICULARMENTE (para cima ou para baixo) — perfeito para alinhar Fogo Amigo!',
+          tip: 'Move inimigos para a fila de cima/baixo onde está a ⚠️ Mira de outro monstro.',
+          viz: { player: [0,1], enemies: [[3,1]], push: [[3,1,3,0]], aim: [3,0] }
+        },
+
+        // --- CARAPACA (6) ---
+        {
+          core: 'CARAPACA', mod: 'RIGIDEZ', name: 'Muralha de Quitina', mp: '1 MP', dmg: '+6 Escudo + Empurra', range: 'Próprio',
+          role: 'Defesa / Reação',
+          short: '+6 Escudo, -2 dano recebido e empurra atacante',
+          desc: 'Erga +6 Escudo e reduza em -2 todo dano recebido até seu próximo turno. Quem te atacar corpo-a-corpo é empurrado 1 casa para trás!',
+          tip: 'Tanque puro: absorve golpes pesados e ainda abre espaço no tabuleiro.',
+          viz: { player: [2,1], enemies: [[3,1]], push: [[3,1,4,1]], hits: [[2,1,'🛡️6']] }
+        },
+        {
+          core: 'CARAPACA', mod: 'REPIQUE', name: 'Riposta Dupla', mp: '1 MP', dmg: '+4 Escudo + 2×3 Riposta', range: 'Próprio',
+          role: 'Defesa / Reação',
+          short: 'Bloqueio total devolve [3, 3] ignorando armadura',
+          desc: 'Ganha +4 Escudo. Se bloquear 100% do ataque inimigo, dispara Riposta Dupla (`[3, 3]`, total 6) que ignora armadura e abre brecha cirúrgica!',
+          tip: 'Tradução direta do combo T + Q (Trama + Repique) da v0.7.1!',
+          viz: { player: [2,1], enemies: [[3,1]], hits: [[3,1,'↩️2×3']] }
+        },
+        {
+          core: 'CARAPACA', mod: 'PECONHA', name: 'Espinhos Peçonhentos', mp: '1 MP', dmg: '+4 Escudo + 4 Veneno', range: 'Próprio',
+          role: 'Defesa / Reação',
+          short: 'Atacantes sofrem +4 Veneno + 🧪 Poça Ácida',
+          desc: 'Ganha +4 Escudo. Todo inimigo que te atacar neste turno sofre imediatamente +4 de Veneno e gera uma 🧪 Poça Ácida sob os próprios pés.',
+          tip: 'Pune severamente inimigos de multigolpe e prepara combos elétricos.',
+          viz: { player: [2,1], enemies: [[3,1]], acid: [[3,1]], hits: [[2,1,'🛡️4']] }
+        },
+        {
+          core: 'CARAPACA', mod: 'VOLTAICO', name: 'Campo Estático', mp: '1 MP', dmg: '+5 Escudo + Paralisia', range: 'Próprio',
+          role: 'Defesa / Reação',
+          short: '+5 Escudo, -3 no ataque inimigo + ⚡ Paralisia',
+          desc: 'Ativa campo magnético de +5 Escudo que reduz em -3 o dano do próximo ataque inimigo e paralisa qualquer atacante corpo-a-corpo.',
+          tip: 'Anula ataques letais de chefes enquanto trava o inimigo no lugar.',
+          viz: { player: [2,1], enemies: [[3,1]], stun: [[3,1]], hits: [[2,1,'⚡🛡️5']] }
+        },
+        {
+          core: 'CARAPACA', mod: 'VAMPIRICO', name: 'Casulo Regenerativo', mp: '1 MP', dmg: '+4 Escudo + Cura 5 PV', range: 'Próprio',
+          role: 'Defesa / Reação',
+          short: '+4 Escudo, limpa Veneno e cura +5 PV',
+          desc: 'Envolve-se em tecido regenerativo: +4 Escudo imediato, limpa 100% do seu Veneno e recupera +5 PV se sobreviver ao turno inimigo.',
+          tip: 'Botão de recuperação total contra arenas de veneno e desgaste.',
+          viz: { player: [2,1], hits: [[2,1,'🛡️4 +5PV']] }
+        },
+        {
+          core: 'CARAPACA', mod: 'GANCHO', name: 'Escudo Defletor', mp: '1 MP', dmg: '+4 Escudo + Reflete', range: 'Próprio',
+          role: 'Deslocamento / Fogo Amigo',
+          short: 'Reflete projétil de volta ao atirador!',
+          desc: 'Ganha +4 Escudo e prepara uma membrana elástica: o primeiro projétil que te atingir é REFLETIDO de volta causando 100% do dano ao próprio atirador!',
+          tip: 'Deixe o Escorpião Artilheiro atirar em você de propósito e devolva o tiro na cara dele.',
+          viz: { player: [1,1], enemies: [[4,1]], push: [[1,1,4,1]], hits: [[1,1,'🪞REFLETE']] }
+        },
+      ];
+
+      /* =====================================================================
+         RENDERIZADOR DE MINI-TABULEIRO SVG (5x3)
+      ===================================================================== */
+      function renderMiniBoard(viz) {
+        const W = 250, H = 132, cols = 5, rows = 3;
+        const cw = 46, ch = 40, ox = 10, oy = 6;
+        let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama tático 5x3">`;
+        svg += `<defs>
+          <marker id="arr-gold" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#facc15" />
+          </marker>
+          <marker id="arr-cyan" markerWidth="6" markerHeight="6" refX="4.5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8" />
+          </marker>
+        </defs>`;
+
+        const acidSet = new Set((viz.acid || []).map(p => `${p[0]},${p[1]}`));
+        const stunSet = new Set((viz.stun || []).map(p => `${p[0]},${p[1]}`));
+        const aimKey = viz.aim ? `${viz.aim[0]},${viz.aim[1]}` : null;
+        const rockKey = viz.rock ? `${viz.rock[0]},${viz.rock[1]}` : null;
+
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const x = ox + c * cw, y = oy + r * ch;
+            const k = `${c},${r}`;
+            let fill = '#0f1c16', stroke = '#233b30';
+            if (acidSet.has(k)) { fill = '#1e2f12'; stroke = '#84cc16'; }
+            if (aimKey === k) { fill = '#351419'; stroke = '#fb7185'; }
+            svg += `<rect x="${x+2}" y="${y+2}" width="${cw-4}" height="${ch-4}" rx="5" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>`;
+            if (aimKey === k) {
+              svg += `<text x="${x+cw/2}" y="${y+13}" text-anchor="middle" font-size="8" font-weight="800" fill="#fda4af">⚠️MIRA</text>`;
+            }
+            if (rockKey === k) {
+              svg += `<text x="${x+cw/2}" y="${y+25}" text-anchor="middle" font-size="14">🪨</text>`;
+            }
+            if (acidSet.has(k) && !((viz.enemies || []).some(e => e[0] === c && e[1] === r))) {
+              svg += `<text x="${x+cw/2}" y="${y+25}" text-anchor="middle" font-size="12">🧪</text>`;
+            }
+          }
+        }
+
+        const cx = c => ox + c * cw + cw / 2;
+        const cy = r => oy + r * ch + ch / 2;
+
+        // Movement arrow
+        if (viz.move && viz.player) {
+          svg += `<line x1="${cx(viz.player[0])}" y1="${cy(viz.player[1])}" x2="${cx(viz.move[0])}" y2="${cy(viz.move[1])}" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4 3" marker-end="url(#arr-cyan)" />`;
+          svg += `<circle cx="${cx(viz.move[0])}" cy="${cy(viz.move[1])}" r="11" fill="rgba(56,189,248,0.22)" stroke="#38bdf8" stroke-width="1.5"/>`;
+        }
+
+        // Push / Pull arrows
+        (viz.push || []).forEach(([c1, r1, c2, r2]) => {
+          if (c1 === c2 && r1 === r2) return;
+          svg += `<line x1="${cx(c1)}" y1="${cy(r1)}" x2="${cx(c2)}" y2="${cy(r2)}" stroke="#facc15" stroke-width="2.6" marker-end="url(#arr-gold)" />`;
+        });
+
+        // Player
+        if (viz.player) {
+          const [pc, pr] = viz.player;
+          svg += `<circle cx="${cx(pc)}" cy="${cy(pr)}" r="12" fill="#173326" stroke="#a3e635" stroke-width="2"/>`;
+          svg += `<text x="${cx(pc)}" y="${cy(pr)+4}" text-anchor="middle" font-size="13">🧬</text>`;
+        }
+
+        // Enemies
+        (viz.enemies || []).forEach(([ec, er]) => {
+          const k = `${ec},${er}`;
+          const st = stunSet.has(k);
+          svg += `<circle cx="${cx(ec)}" cy="${cy(er)}" r="12" fill="#31141a" stroke="${st ? '#facc15' : '#fb7185'}" stroke-width="2"/>`;
+          svg += `<text x="${cx(ec)}" y="${cy(er)+4}" text-anchor="middle" font-size="12">${st ? '⚡' : '🦂'}</text>`;
+        });
+
+        // Labels
+        (viz.hits || []).forEach(([hc, hr, label]) => {
+          const x = cx(hc), y = oy + hr * ch + 35;
+          svg += `<rect x="${x-22}" y="${y-10}" width="44" height="13" rx="4" fill="rgba(8,13,11,0.9)" stroke="#facc15" stroke-width="0.9"/>`;
+          svg += `<text x="${x}" y="${y-1}" text-anchor="middle" font-size="7.5" font-weight="800" fill="#fde047">${label}</text>`;
+        });
+
+        svg += `</svg>`;
+        return svg;
+      }
+
+      /* =====================================================================
+         ESTADO & RENDERIZAÇÃO — ABA 1
+      ===================================================================== */
+      let selectedCore = 'GARRA';
+      let selectedMod = 'RIGIDEZ';
+
+      const corePicker = document.getElementById('core-picker');
+      const modPicker = document.getElementById('mod-picker');
+      const wbResult = document.getElementById('workbench-result');
+      const matrixTable = document.getElementById('combo-matrix');
+      const cardsGrid = document.getElementById('cards-grid');
+      const cardsCount = document.getElementById('cards-count');
+      const searchInput = document.getElementById('search-input');
+      const filterCore = document.getElementById('filter-core');
+      const filterMod = document.getElementById('filter-mod');
+      const filterRole = document.getElementById('filter-role');
+
+      // Populate dropdowns
+      CORES.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = `${c.icon} ${c.name}`;
+        filterCore.appendChild(opt);
+      });
+      MODS.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.id;
+        opt.textContent = `${m.icon} ${m.name}`;
+        filterMod.appendChild(opt);
+      });
+
+      function findCombo(coreId, modId) {
+        return COMBOS.find(c => c.core === coreId && c.mod === modId);
+      }
+
+      function renderPickers() {
+        corePicker.innerHTML = CORES.map(c => `
+          <button class="gene-pill ${c.id === selectedCore ? 'selected' : ''}" data-core="${c.id}">
+            <span class="g-name">${c.icon} ${c.name}</span>
+            <span class="g-meta">${c.meta}</span>
+          </button>
+        `).join('');
+
+        modPicker.innerHTML = MODS.map(m => `
+          <button class="gene-pill ${m.id === selectedMod ? 'selected' : ''}" data-mod="${m.id}">
+            <span class="g-name">${m.icon} ${m.name}</span>
+            <span class="g-meta">${m.meta}</span>
+          </button>
+        `).join('');
+
+        corePicker.querySelectorAll('[data-core]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            selectedCore = btn.dataset.core;
+            renderTacticalAll();
+          });
+        });
+        modPicker.querySelectorAll('[data-mod]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            selectedMod = btn.dataset.mod;
+            renderTacticalAll();
+          });
+        });
+      }
+
+      function renderWorkbench() {
+        const core = CORES.find(c => c.id === selectedCore);
+        const mod = MODS.find(m => m.id === selectedMod);
+        const combo = findCombo(selectedCore, selectedMod);
+        wbResult.innerHTML = `
+          <div>
+            <div class="result-formula">${core.icon} ${core.name} + ${mod.icon} ${mod.name}</div>
+            <div class="result-title">${combo.name}</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge mp">${combo.mp}</span>
+            <span class="badge dmg">${combo.dmg}</span>
+            <span class="badge">${combo.range}</span>
+            <span class="badge role">${combo.role}</span>
+          </div>
+          <div class="mini-board-wrap">${renderMiniBoard(combo.viz)}</div>
+          <p style="margin:0; font-size:0.84rem; color:#d9eee5;">${combo.desc}</p>
+          <div class="tactical-tip">💡 <strong>Dica tática:</strong> ${combo.tip}</div>
+        `;
+      }
+
+      function renderMatrix() {
+        let html = `<thead><tr><th class="corner">Forma ↓ / Mutação →</th>`;
+        MODS.forEach(m => {
+          html += `<th>${m.icon} ${m.name}<div style="font-size:0.68rem; color:var(--muted); font-weight:500;">${m.meta}</div></th>`;
+        });
+        html += `</tr></thead><tbody>`;
+        CORES.forEach(c => {
+          html += `<tr><th>${c.icon} ${c.name}<div style="font-size:0.68rem; color:var(--muted); font-weight:500;">${c.meta}</div></th>`;
+          MODS.forEach(m => {
+            const combo = findCombo(c.id, m.id);
+            const active = c.id === selectedCore && m.id === selectedMod;
+            html += `<td class="cell-btn ${active ? 'active-cell' : ''}" data-c="${c.id}" data-m="${m.id}">
+              <span class="m-name">${combo.name}</span>
+              <span class="m-stat">${combo.mp} · ${combo.dmg}</span>
+              <span class="m-short">${combo.short}</span>
+            </td>`;
+          });
+          html += `</tr>`;
+        });
+        html += `</tbody>`;
+        matrixTable.innerHTML = html;
+
+        matrixTable.querySelectorAll('td.cell-btn').forEach(td => {
+          td.addEventListener('click', () => {
+            selectedCore = td.dataset.c;
+            selectedMod = td.dataset.m;
+            renderTacticalAll();
+          });
+        });
+      }
+
+      function renderCards() {
+        const q = searchInput.value.trim().toLowerCase();
+        const fc = filterCore.value;
+        const fm = filterMod.value;
+        const fr = filterRole.value;
+
+        const filtered = COMBOS.filter(item => {
+          if (fc !== 'ALL' && item.core !== fc) return false;
+          if (fm !== 'ALL' && item.mod !== fm) return false;
+          if (fr !== 'ALL' && item.role !== fr) return false;
+          if (q) {
+            const hay = `${item.name} ${item.desc} ${item.tip} ${item.short} ${item.role} ${item.core} ${item.mod}`.toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        cardsCount.textContent = `${filtered.length} / ${COMBOS.length} ataques`;
+        cardsGrid.innerHTML = filtered.map(item => {
+          const core = CORES.find(c => c.id === item.core);
+          const mod = MODS.find(m => m.id === item.mod);
+          const isSel = item.core === selectedCore && item.mod === selectedMod;
+          return `
+            <article class="combo-card ${isSel ? 'highlighted' : ''}" data-c="${item.core}" data-m="${item.mod}">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+                <span style="font-size:0.72rem; font-weight:800; color:var(--accent);">${core.icon} ${core.name} + ${mod.icon} ${mod.name}</span>
+                <span class="badge mp">${item.mp}</span>
+              </div>
+              <h3>${item.name}</h3>
+              <div class="badge-row">
+                <span class="badge dmg">${item.dmg}</span>
+                <span class="badge">${item.range}</span>
+                <span class="badge role">${item.role}</span>
+              </div>
+              <div class="mini-board-wrap">${renderMiniBoard(item.viz)}</div>
+              <p>${item.desc}</p>
+              <div class="tactical-tip">💡 ${item.tip}</div>
+            </article>
+          `;
+        }).join('');
+
+        cardsGrid.querySelectorAll('.combo-card').forEach(card => {
+          card.addEventListener('click', () => {
+            selectedCore = card.dataset.c;
+            selectedMod = card.dataset.m;
+            renderTacticalAll();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        });
+      }
+
+      function renderTacticalAll() {
+        renderPickers();
+        renderWorkbench();
+        renderMatrix();
+        renderCards();
+      }
+
+      searchInput.addEventListener('input', renderCards);
+      filterCore.addEventListener('change', renderCards);
+      filterMod.addEventListener('change', renderCards);
+      filterRole.addEventListener('change', renderCards);
+
+      /* =====================================================================
+         ABA 2: MOTOR EXATO v0.7.1 (9 ATAQUES + 64 DEFESAS + SIMULADOR)
+      ===================================================================== */
+      function expressAtk(hasI, F, R, Q) {
+        if (!hasI) {
+          return {
+            genes: 'Sem I',
+            impacto: null,
+            rajada: null,
+            basal: [2],
+            bestName: 'Patada (basal)',
+            bestHits: [2],
+            maxTotal: 2,
+          };
+        }
+        const base = 3 + (F ? 1 : 0);
+        const imp = Q ? [base, base] : [base];
+        let raj = null;
+        if (R) {
+          const rHit = Math.max(1, base - 1);
+          raj = Q ? [rHit, rHit, rHit] : [rHit, rHit];
+        }
+        const sumImp = imp.reduce((a, b) => a + b, 0);
+        const sumRaj = raj ? raj.reduce((a, b) => a + b, 0) : 0;
+        const genes = ['I', F ? 'F' : null, R ? 'R' : null, Q ? 'Q' : null].filter(Boolean).join(' + ');
+        return {
+          genes,
+          impacto: imp,
+          rajada: raj,
+          basal: null,
+          bestName: raj && sumRaj > sumImp ? 'Rajada' : 'Impacto',
+          bestHits: raj && sumRaj > sumImp ? raj : imp,
+          maxTotal: Math.max(sumImp, sumRaj),
+        };
+      }
+
+      function expressDef(F, Q, B, M, V, A) {
+        const genes = ['T', F ? 'F' : null, Q ? 'Q' : null, B ? 'B' : null, M ? 'M' : null, V ? 'V' : null, A ? 'A' : null].filter(Boolean).join(' + ');
+        return {
+          genes,
+          guarda: 3 + (F ? 2 : 0),
+          riposta: Q ? [2, 2] : [2],
+          redGolpe: B ? 1 : 0,
+          redAtaque: M ? 2 : 0,
+          curaV: V,
+          extracaoA: A,
+        };
+      }
+
+      function resolveV7Combat(hits, def, useGuard) {
+        const afterB = hits.map(h => Math.max(0, h - def.redGolpe));
+        const sumB = afterB.reduce((a, b) => a + b, 0);
+        const preGuard = Math.max(0, sumB - def.redAtaque);
+        const absorvido = useGuard ? Math.min(def.guarda, preGuard) : 0;
+        const danoLiquido = preGuard - absorvido;
+        const ripostaDispara = useGuard && preGuard > 0 && danoLiquido === 0;
+        const ripostaDano = ripostaDispara ? def.riposta.reduce((a, b) => a + b, 0) : 0;
+        const abreJanela = useGuard && absorvido >= 1 && def.extracaoA;
+        const curaV = useGuard && absorvido >= 1 && def.curaV;
+        return { afterB, preGuard, absorvido, danoLiquido, ripostaDispara, ripostaDano, abreJanela, curaV };
+      }
+
+      // Build all 9 attack combos
+      const v7Atks = [expressAtk(false, false, false, false)];
+      for (let mask = 0; mask < 8; mask++) {
+        v7Atks.push(expressAtk(true, !!(mask & 1), !!(mask & 2), !!(mask & 4)));
+      }
+
+      // Build all 64 defense combos
+      const v7Defs = [];
+      for (let mask = 0; mask < 64; mask++) {
+        v7Defs.push(expressDef(
+          !!(mask & 1), !!(mask & 2), !!(mask & 4),
+          !!(mask & 8), !!(mask & 16), !!(mask & 32)
+        ));
+      }
+
+      const v7AtkTable = document.getElementById('v7-atk-table');
+      v7AtkTable.innerHTML = `
+        <thead><tr>
+          <th>Combinação</th><th>Impacto</th><th>Rajada</th><th>Dano Máx</th>
+        </tr></thead>
+        <tbody>
+          ${v7Atks.map(a => `
+            <tr>
+              <td class="mono">${a.genes}</td>
+              <td class="mono">${a.impacto ? `[${a.impacto.join(', ')}]` : 'Patada [2]'}</td>
+              <td class="mono">${a.rajada ? `[${a.rajada.join(', ')}]` : '—'}</td>
+              <td class="mono" style="color:var(--gold)">${a.maxTotal}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      `;
+
+      const v7DefTable = document.getElementById('v7-def-table');
+      const v7DefSearch = document.getElementById('v7-def-search');
+      const v7DefCount = document.getElementById('v7-def-count');
+
+      function renderV7DefTable() {
+        const q = v7DefSearch.value.trim().toLowerCase();
+        const rows = v7Defs.filter(d => {
+          if (!q) return true;
+          const txt = `${d.genes} guarda ${d.guarda} riposta ${d.riposta.join(',')} ${d.extracaoA ? 'extração' : ''} ${d.curaV ? 'cura' : ''}`.toLowerCase();
+          return txt.includes(q);
+        });
+        v7DefCount.textContent = `${rows.length} / 64`;
+        v7DefTable.innerHTML = `
+          <thead><tr>
+            <th>Combinação</th><th>Guarda</th><th>Riposta</th><th>Redução (B / M)</th><th>Efeitos</th>
+          </tr></thead>
+          <tbody>
+            ${rows.map(d => `
+              <tr>
+                <td class="mono">${d.genes}</td>
+                <td class="mono" style="color:var(--cyan)">${d.guarda}</td>
+                <td class="mono" style="color:var(--orange)">[${d.riposta.join(',')}]</td>
+                <td class="mono">-${d.redGolpe}/g · -${d.redAtaque}/atk</td>
+                <td>
+                  ${d.extracaoA ? '<span class="badge ok">Extração T→A</span>' : ''}
+                  ${d.curaV ? '<span class="badge mp">+1 PV (V)</span>' : ''}
+                  ${!d.extracaoA && !d.curaV ? '<span style="color:var(--muted)">—</span>' : ''}
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        `;
+      }
+      v7DefSearch.addEventListener('input', renderV7DefTable);
+
+      // Interactive v0.7.1 Simulator
+      const simState = {
+        I: true, aF: true, aR: false, aQ: true, atkType: 'Impacto',
+        dF: false, dQ: false, dB: true, dM: true, dV: true, dA: true, useGuard: true
+      };
+
+      const v7AtkToggles = document.getElementById('v7-atk-toggles');
+      const v7DefToggles = document.getElementById('v7-def-toggles');
+      const v7AtkSummary = document.getElementById('v7-atk-summary');
+      const v7DefSummary = document.getElementById('v7-def-summary');
+      const v7SimOutput = document.getElementById('v7-sim-output');
+
+      function renderV7Sim() {
+        const atkOpts = [
+          ['I', 'I · Impulso'], ['aF', 'F · Rigidez (+1)'], ['aR', 'R · Ritmo (Rajada)'], ['aQ', 'Q · Repique (Eco)']
+        ];
+        const defOpts = [
+          ['dF', 'F · +2 Guarda'], ['dQ', 'Q · Riposta [2,2]'], ['dB', 'B · -1/golpe'],
+          ['dM', 'M · -2/ataque'], ['dV', 'V · +1 PV'], ['dA', 'A · Extração'], ['useGuard', '🛡️ Usar Guarda']
+        ];
+
+        v7AtkToggles.innerHTML = atkOpts.map(([k, lbl]) =>
+          `<button class="chip-toggle ${simState[k] ? 'on' : ''}" data-sk="${k}">${lbl}</button>`
+        ).join('');
+        v7DefToggles.innerHTML = defOpts.map(([k, lbl]) =>
+          `<button class="chip-toggle ${simState[k] ? 'on' : ''}" data-sk="${k}">${lbl}</button>`
+        ).join('');
+
+        [v7AtkToggles, v7DefToggles].forEach(el => {
+          el.querySelectorAll('[data-sk]').forEach(b => {
+            b.addEventListener('click', () => {
+              simState[b.dataset.sk] = !simState[b.dataset.sk];
+              renderV7Sim();
+            });
+          });
+        });
+
+        const atk = expressAtk(simState.I, simState.aF, simState.aR, simState.aQ);
+        const def = expressDef(simState.dF, simState.dQ, simState.dB, simState.dM, simState.dV, simState.dA);
+
+        const hits = atk.rajada && simState.atkType === 'Rajada' ? atk.rajada : (atk.impacto || [2]);
+        const res = resolveV7Combat(hits, def, simState.useGuard);
+
+        v7AtkSummary.innerHTML = `
+          <div><strong>Ações geradas:</strong>
+            ${atk.impacto ? `<span class="badge dmg">Impacto [${atk.impacto.join(', ')}]</span>` : `<span class="badge">Patada [2]</span>`}
+            ${atk.rajada ? `<span class="badge role">Rajada [${atk.rajada.join(', ')}]</span>` : ''}
+          </div>
+          ${atk.rajada ? `<div style="margin-top:6px;"><button class="btn" id="toggle-atk-mode">Alternar golpe testado: ${simState.atkType}</button></div>` : ''}
+        `;
+        const tbtn = document.getElementById('toggle-atk-mode');
+        if (tbtn) {
+          tbtn.addEventListener('click', () => {
+            simState.atkType = simState.atkType === 'Impacto' ? 'Rajada' : 'Impacto';
+            renderV7Sim();
+          });
+        }
+
+        v7DefSummary.innerHTML = `
+          <span class="badge mp">Guarda ${def.guarda}</span>
+          <span class="badge dmg">Riposta [${def.riposta.join(',')}]</span>
+          <span class="badge">-${def.redGolpe}/golpe</span>
+          <span class="badge">-${def.redAtaque}/ataque</span>
+        `;
+
+        v7SimOutput.innerHTML = `
+          <div style="font-size:0.75rem; font-weight:800; color:var(--accent); text-transform:uppercase;">Resolução Determinística</div>
+          <div style="margin-top:6px; font-size:0.84rem;">
+            <div>Golpes brutos: <span class="mono">[${hits.join(', ')}]</span></div>
+            <div>Após B (-${def.redGolpe}/golpe): <span class="mono">[${res.afterB.join(', ')}]</span></div>
+            <div>Após M (-${def.redAtaque}/ataque): <span class="mono">${res.preGuard}</span></div>
+            <div>Absorvido pela Guarda: <span class="mono" style="color:var(--cyan)">${res.absorvido}</span></div>
+            <div style="margin-top:6px; font-size:1rem;"><strong>Dano Líquido: <span class="mono" style="color:${res.danoLiquido > 0 ? 'var(--danger)' : 'var(--accent)'}">${res.danoLiquido}</span></strong></div>
+          </div>
+          <div class="badge-row" style="margin-top:8px;">
+            ${res.ripostaDispara ? `<span class="badge warn">↩️ Riposta dispara: ${res.ripostaDano} dano (ignora B/M)</span>` : ''}
+            ${res.abreJanela ? `<span class="badge ok">🧬 Janela de Extração ABERTA!</span>` : ''}
+            ${res.curaV ? `<span class="badge mp">❤️ Reserva V cura +1 PV</span>` : ''}
+          </div>
+        `;
+      }
+
+      /* =====================================================================
+         NAVEGAÇÃO DE ABAS
+      ===================================================================== */
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const t = btn.dataset.tab;
+          document.getElementById('sec-tactical').classList.toggle('hidden', t !== 'tactical');
+          document.getElementById('sec-v071').classList.toggle('hidden', t !== 'v071');
+        });
+      });
+
+      renderTacticalAll();
+      renderV7DefTable();
+      renderV7Sim();
+    })();
+  </script>
+</body>
+</html>
