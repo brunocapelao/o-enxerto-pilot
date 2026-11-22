@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O Enxerto · Bíblia Completa de Regras, Dinâmicas &amp; Gerador de Ataques (448 Variantes)</title>
+  <style>
+    :root {
+      --bg: #060b09;
+      --panel: #0d1713;
+      --panel-2: #13221c;
+      --border: #213a2f;
+      --border-hi: #386552;
+      --text: #eaf7f1;
+      --muted: #8fb5a4;
+      --accent: #a3e635;
+      --gold: #facc15;
+      --danger: #fb7185;
+      --cyan: #38bdf8;
+      --orange: #fb923c;
+      --purple: #c084fc;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 18% 0%, #10271d 0%, var(--bg) 60%);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    header.topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(6, 11, 9, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand h1 { margin: 0; font-size: 1.02rem; font-weight: 900; }
+    .brand .sub { font-size: 0.74rem; color: var(--muted); }
+
+    .top-links { display: flex; flex-wrap: wrap; gap: 7px; }
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border-hi);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 9px;
+      padding: 6px 11px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.14s ease;
+    }
+    .btn:hover { border-color: var(--accent); background: #1a3228; }
+    .btn.primary { background: var(--accent); color: #07120c; border-color: var(--accent); }
+    .btn.gold { border-color: var(--gold); color: #fef08a; background: rgba(250, 204, 21, 0.12); }
+
+    /* Sticky Section Nav */
+    nav.toc {
+      background: rgba(13, 23, 19, 0.92);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+    nav.toc a {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #0a130f;
+      transition: all 0.13s ease;
+    }
+    nav.toc a:hover { color: var(--text); border-color: var(--accent); }
+
+    main {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 18px 14px 64px;
+    }
+
+    section.card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 18px;
+      scroll-margin-top: 76px;
+    }
+    section.card h2 {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sec-sub {
+      margin: 0 0 14px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* Loop Flow */
+    .loop-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 820px) { .loop-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 520px) { .loop-grid { grid-template-columns: 1fr; } }
+    .loop-step {
+      background: var(--panel-2);
+      border: 1px solid var(--border-hi);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .loop-num {
+      font-size: 0.68rem;
+      font-weight: 900;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .loop-step h3 { margin: 3px 0 5px; font-size: 0.94rem; }
+    .loop-step p { margin: 0; font-size: 0.79rem; color: #cbe3d8; }
+
+    .rule-callout {
+      background: rgba(250, 204, 21, 0.08);
+      border: 1px solid rgba(250, 204, 21, 0.32);
+      border-radius: 10px;
+      padding: 11px 13px;
+      font-size: 0.83rem;
+      color: #fef08a;
+    }
+
+    /* Pieces Catalog Grid */
+    .sub-heading {
+      margin: 16px 0 10px;
+      font-size: 0.92rem;
+      font-weight: 900;
+      color: #d9f99d;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .pieces-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+    }
+    .piece-card {
+      background: var(--panel-2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .piece-card.organ { border-color: rgba(251, 146, 60, 0.45); }
+    .piece-card.var { border-color: rgba(192, 132, 252, 0.45); }
+    .pc-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+    .pc-name { font-size: 0.93rem; font-weight: 900; }
+    .badge {
+      font-size: 0.67rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--border-hi);
+      background: rgba(255, 255, 255, 0.04);
+      white-space: nowrap;
+    }
+    .badge.organ { border-color: var(--orange); color: #fdba74; }
+    .badge.var { border-color: var(--purple); color: #e9d5ff; }
+    .badge.gold { border-color: var(--gold); color: #fde047; }
+    .badge.cyan { border-color: var(--cyan); color: #bae6fd; }
+    .badge.ok { border-color: var(--accent); color: #d9f99d; }
+    .badge.danger { border-color: var(--danger); color: #fecdd3; }
+
+    .pc-mid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .mini-shape {
+      display: inline-grid;
+      gap: 2px;
+      background: #070e0b;
+      padding: 5px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+    }
+    .ms-cell {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      background: #0f1c16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.66rem;
+    }
+    .ms-cell.fill-organ { background: var(--orange); }
+    .ms-cell.fill-var { background: var(--purple); }
+    .ms-cell.star { background: rgba(250, 204, 21, 0.22); border: 1px solid var(--gold); color: var(--gold); font-weight: 900; }
+
+    .pat-strip {
+      display: flex;
+      gap: 3px;
+      background: #070e0b;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 4px 6px;
+      align-items: center;
+    }
+    .pat-cell {
+      width: 22px;
+      height: 20px;
+      border-radius: 4px;
+      background: #101e18;
+      border: 1px solid #21392e;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
+    .pat-cell.me { border-color: var(--accent); background: #193829; }
+    .pat-cell.hit { border-color: var(--danger); background: rgba(251, 113, 133, 0.25); }
+    .pat-cell.mv { border-color: var(--cyan); background: rgba(56, 189, 248, 0.22); }
+    .pat-cell.sp { border-color: var(--gold); background: rgba(250, 204, 21, 0.2); }
+
+    /* Interactive Multi-Variation Attack Lab */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.25fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+    @media (max-width: 960px) { .lab-grid { grid-template-columns: 1fr; } }
+    .lab-box {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .lab-label {
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 9px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .pick-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .pick-btn {
+      border: 1px solid var(--border);
+      background: #0b1410;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.13s ease;
+    }
+    .pick-btn:hover { border-color: var(--border-hi); }
+    .pick-btn.on {
+      border-color: var(--accent);
+      background: rgba(163, 230, 53, 0.15);
+      box-shadow: 0 0 0 1px rgba(163, 230, 53, 0.35);
+    }
+    .pick-btn.on-var {
+      border-color: var(--gold);
+      background: rgba(250, 204, 21, 0.14);
+      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.35);
+    }
+    .lab-out {
+      background: linear-gradient(145deg, #11251c 0%, #0a130f 100%);
+      border: 1.5px solid var(--accent);
+      border-radius: 10px;
+      padding: 13px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 9px;
+    }
+    .formula-box {
+      background: #070e0b;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.76rem;
+      color: #bef264;
+    }
+
+    /* 7x6 Full Matrix */
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    table.matrix {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+    table.matrix th, table.matrix td {
+      border: 1px solid var(--border);
+      padding: 8px;
+      vertical-align: top;
+      text-align: left;
+    }
+    table.matrix th {
+      background: #112019;
+      font-weight: 900;
+    }
+    table.matrix td.m-cell {
+      background: #0b1410;
+      cursor: pointer;
+      transition: background 0.12s ease;
+    }
+    table.matrix td.m-cell:hover { background: #162b22; }
+    table.matrix td.m-cell.active {
+      background: rgba(163, 230, 53, 0.16);
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+    .mc-title { font-weight: 900; color: var(--text); display: block; margin-bottom: 2px; }
+    .mc-stat { font-size: 0.71rem; color: var(--gold); font-weight: 800; display: block; }
+    .mc-eff { font-size: 0.7rem; color: var(--muted); }
+
+    /* Rules & Archetypes Tables */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
+
+    table.rules-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.81rem;
+    }
+    table.rules-tbl th, table.rules-tbl td {
+      border-bottom: 1px solid var(--border);
+      padding: 8px 9px;
+      text-align: left;
+      vertical-align: top;
+    }
+    table.rules-tbl th {
+      background: #112019;
+      color: var(--muted);
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .ideas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 10px;
+    }
+    .idea-card {
+      background: var(--panel-2);
+      border: 1px solid var(--border-hi);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .idea-card h4 { margin: 0 0 5px; font-size: 0.92rem; color: var(--gold); }
+    .idea-card p { margin: 0; font-size: 0.79rem; color: #cbe3d8; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div style="font-size:1.5rem">📖</div>
+      <div>
+        <h1>O Enxerto · Bíblia Completa de Regras, Dinâmicas &amp; Variantes de Ataque</h1>
+        <div class="sub">7 Órgãos × 6 Variações (64 estados por órgão = 448 ataques possíveis) · Grade 5×4 (Lootbound) · Combate 1D (Shogun) · Evolução (Spore)</div>
+      </div>
+    </div>
+    <div class="top-links">
+      <a class="btn primary" href="./jogo.html">🎮 Jogar Protótipo v7.5</a>
+      <a class="btn gold" href="./shogun.html">🎴 De/Para 42 Armas Shogun</a>
+      <a class="btn" href="./combinacoes.html">🧪 Matriz v0.7.1</a>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <a href="#sec-loop">1. Loop &amp; Regras de Turno</a>
+    <a href="#sec-pecas">2. Peças (7 Órgãos + 6 Variações)</a>
+    <a href="#sec-lab">3. Gerador de 448 Variantes</a>
+    <a href="#sec-matriz">4. Matriz 7×6 (42 Base)</a>
+    <a href="#sec-combate">5. Dinâmicas de Combate 1D</a>
+    <a href="#sec-inimigos">6. Inimigos &amp; Chefe Adaptativo</a>
+    <a href="#sec-variar">7. Banco de Variantes p/ Evoluir</a>
+  </nav>
+
+  <main>
+    <!-- ==================== 1. VISÃO & LOOP ==================== -->
+    <section class="card" id="sec-loop">
+      <h2>1. Arquitetura do Jogo &amp; Regras de Turno (Tela Dividida)</h2>
+      <p class="sec-sub">Como as 3 referências se fundem em uma única tela sem poluição, onde o inventário é o motor de ataques ao vivo.</p>
+
+      <div class="loop-grid">
+        <div class="loop-step">
+          <div class="loop-num">Camada 1 · Lootbound</div>
+          <h3>🧬 Organismo 5×4</h3>
+          <p>Grade espacial de 20 células. <strong>Órgãos</strong> ocupam espaço (<code>2×1</code>, <code>L</code>, <code>2×2</code>) e geram seus golpes. <strong>Variações</strong> projetam <strong>Estrelas Direcionais ★</strong> que giram 90° junto com a peça.</p>
+        </div>
+        <div class="loop-step">
+          <div class="loop-num">Camada 2 · Spore</div>
+          <h3>⚡ Síntese ao Vivo</h3>
+          <p>Sempre que uma estrela <strong>★</strong> cai sobre qualquer célula de um Órgão, uma sinapse acende e <strong>transforma o golpe na hora</strong> (<code>Nv.1 → Nv.2 → Nv.3+</code>), mutando também o visual da Quimera.</p>
+        </div>
+        <div class="loop-step">
+          <div class="loop-num">Camada 3 · Shogun 1D</div>
+          <h3>⚔️ Faixa de 7 Casas</h3>
+          <p>Combate 100% determinístico em linha (casas 1 a 7). Você anda, vira 180°, prepara até <strong>3 armas na Fila</strong> e dispara combos provocando <strong>Colisões</strong>, <strong>Explosões</strong> e <strong>Fogo Amigo</strong>.</p>
+        </div>
+        <div class="loop-step">
+          <div class="loop-num">Camada 4 · O Enxerto</div>
+          <h3>✂️ Cirurgia &amp; Draft</h3>
+          <p>Colisão, Fogo Amigo, Costas ou Ácido <strong>expõem o gene do inimigo VIVO</strong> — 1 clique arranca o loot para sua Bandeja! Entre ondas, escolha 1 de 2 peças: <strong>a rejeitada fortalece o Chefe Final!</strong></p>
+        </div>
+      </div>
+
+      <div class="rule-callout">
+        <strong>⏱️ Ordem Exata de Resolução do Turno:</strong><br/>
+        <strong>(A) Antes da ação (grátis):</strong> Você pode fazer <strong>1 Recombinação no 5×4 por turno</strong> em combate (ou <strong>∞ ilimitadas</strong> entre ondas) e usar <strong>✂️ Cirurgia em Vida</strong> em qualquer inimigo exposto sem gastar turno.<br/>
+        <strong>(B) Sua Ação (consome o turno):</strong> 1 escolha entre <code>⬅/➡ Andar</code> (ou <code>⚡ Troca Rápida</code> se houver inimigo adjacente), <code>🔄 Virar 180°</code>, <code>🛡️ Esperar (+2 Escudo, -1 CD extra)</code>, <code>📥 Enfileirar 1 Arma</code> ou <code>⚡ DISPARAR FILA</code>.<br/>
+        <strong>(C) Resolução:</strong> <code>1. Sua Fila dispara em ordem (1→2→3)</code> → <code>2. Checa 🔥 Combo Kill (2+ abates)</code> → <code>3. Veneno nos inimigos</code> → <code>4. Inimigos agem da esquerda p/ direita (Fogo Amigo ativo!)</code> → <code>5. Recarga (-1 CD) &amp; renova 1 Ajuste no 5×4</code>.
+      </div>
+    </section>
+
+    <!-- ==================== 2. CATÁLOGO DE PEÇAS ==================== -->
+    <section class="card" id="sec-pecas">
+      <h2>2. Catálogo Completo de Peças (7 Órgãos + 6 Variações com ★ Rotacionáveis)</h2>
+      <p class="sec-sub">Cada Órgão define a <strong>geometria do golpe na linha 1D</strong>. Cada Variação tem um formato próprio e <strong>estrelas direcionais ★</strong> — clique em <strong>↻ Girar 90°</strong> em qualquer Variação abaixo para ver exatamente para onde as estrelas giram!</p>
+
+      <div class="sub-heading">🟠 7 Peças de Órgão (Geram os Golpes na Barra)</div>
+      <div class="pieces-grid" id="organs-catalog"></div>
+
+      <div class="sub-heading">🟣 6 Peças de Variação / Mutação (Projetam Estrelas ★ Direcionais)</div>
+      <div class="pieces-grid" id="vars-catalog"></div>
+    </section>
+
+    <!-- ==================== 3. LABORATÓRIO GERADOR (448 VARIANTES) ==================== -->
+    <section class="card" id="sec-lab">
+      <h2>3. Laboratório Interativo: Como Cada Ataque é Gerado (7 × 64 = 448 Variantes!)</h2>
+      <p class="sec-sub">
+        Como um Órgão pode ser tocado por <strong>0, 1, 2, 3, 4, 5 ou até todas as 6 Variações ao mesmo tempo</strong> no <code>5×4</code>, cada um dos 7 Órgãos possui <strong>2⁶ = 64 estados possíveis</strong> (<strong>448 golpes distintos</strong>). Monte qualquer combinação abaixo e veja a matemática exata:
+      </p>
+
+      <div class="lab-grid">
+        <div class="lab-box">
+          <div class="lab-label"><span>1. Escolha o Órgão Base</span><span>7 opções</span></div>
+          <div class="pick-list" id="lab-organs"></div>
+        </div>
+        <div class="lab-box">
+          <div class="lab-label"><span>2. Ligue/Desligue Variações (★)</span><span>Empilháveis!</span></div>
+          <div class="pick-list" id="lab-vars"></div>
+          <div style="margin-top:8px; display:flex; gap:6px;">
+            <button class="btn" id="btn-lab-clear">Limpar Variações</button>
+            <button class="btn gold" id="btn-lab-random">🎲 Aleatório</button>
+          </div>
+        </div>
+        <div class="lab-out" id="lab-output"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. MATRIZ 7x6 (42 COMBINAÇÕES BASE) ==================== -->
+    <section class="card" id="sec-matriz">
+      <h2>4. Matriz 7 × 6 — Todas as 42 Combinações Diretas (1 Órgão + 1 Variação)</h2>
+      <p class="sec-sub">Clique em qualquer célula da tabela para inspecioná-la no Laboratório acima (onde você pode inclusive somar uma 2ª ou 3ª Variação para evoluir ao Nv.3 / Nv.4!). Repare na regra dual do <strong>🧲 Tendão</strong>: vira <strong>🔄 Giro 180°</strong> em órgãos melee e <strong>⇄ Troca de Lugar</strong> em órgãos de alcance/movimento.</p>
+      <div class="table-scroll">
+        <table class="matrix" id="matrix-7x6"></table>
+      </div>
+    </section>
+
+    <!-- ==================== 5. DINÂMICAS DE COMBATE 1D ==================== -->
+    <section class="card" id="sec-combate">
+      <h2>5. Todas as Dinâmicas de Combate 1D, Gatilhos &amp; Fórmulas</h2>
+      <p class="sec-sub">Regras determinísticas (zero RNG de acerto) que governam cada interação na faixa de 7 casas.</p>
+
+      <div class="two-col">
+        <div>
+          <h3 style="margin:0 0 8px; font-size:0.95rem; color:#d9f99d;">⚡ Regras de Movimento, Fila &amp; Bônus</h3>
+          <table class="rules-tbl">
+            <thead><tr><th>Dinâmica</th><th>Regra Exata</th></tr></thead>
+            <tbody>
+              <tr><td><strong>⚡ Troca Rápida (Assinatura)</strong></td><td>Andar na direção de um inimigo adjacente <strong>troca de lugar</strong> com ele (<code>CD 3</code>). Se o inimigo cair em <code>🧪 Ácido</code>, toma +1 dano e expõe gene!</td></tr>
+              <tr><td><strong>📥 Fila de Combo (até 3)</strong></td><td>Preparar 1 arma na fila gasta 1 turno. Disparar a fila executa <strong>1→2→3 em sequência</strong> antes de os inimigos agirem.</td></tr>
+              <tr><td><strong>🔥 Combo Kill</strong></td><td>Matar <strong>2 ou mais inimigos</strong> no mesmo disparo da Fila reduz <strong>-2 CD</strong> em todas as suas armas e cura <strong>+2 PV</strong>!</td></tr>
+              <tr><td><strong>🗡️ Backstab (Costas)</strong></td><td>Acertar um inimigo na mesma direção para a qual ele olha (pelas costas) dá <strong>+1 Dano</strong>, <strong>ignora Escudo Frontal</strong> e <strong>EXPÕE o gene</strong>!</td></tr>
+              <tr><td><strong>💥 Colisão (Empurrão)</strong></td><td>Empurrar inimigo contra parede ou outro inimigo causa <strong>+2 dano de colisão</strong> (em ambos se forem 2 inimigos), ignora escudo e <strong>EXPÕE o gene</strong>!</td></tr>
+              <tr><td><strong>💥 Fogo Amigo</strong></td><td>Inimigos armados (<code>⚠️</code>) atacam qualquer alvo na mira — se você girar, empurrar ou trocar um aliado deles na frente, eles se acertam com 100% do dano e <strong>EXPÕEM o gene</strong>!</td></tr>
+              <tr><td><strong>🛡️ Esperar (Guarda)</strong></td><td>Gasta o turno para ganhar <strong>+2 Escudo</strong> (absorve dano até o próximo turno) e reduz <strong>-1 CD extra</strong> em todas as armas e na Troca Rápida.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h3 style="margin:0 0 8px; font-size:0.95rem; color:#fde047;">✂️ Cirurgia em Vida (Como Expor &amp; Arrancar Genes)</h3>
+          <table class="rules-tbl">
+            <thead><tr><th>Gatilho que EXPÕE Gene</th><th>Efeito ao Clicar ✂️ Arrancar (Grátis!)</th></tr></thead>
+            <tbody>
+              <tr><td>1. <strong>💥 Colisão</strong> (empurrão contra parede/aliado)</td><td rowspan="5">
+                • <strong>Rouba a peça real</strong> (Órgão ou Variação) direto para sua Bandeja de Loot.<br/><br/>
+                • <strong>Desarma o inimigo na hora:</strong> cancela <code>⚠️ Mira</code>, remove <code>🛡️ Escudo Frontal</code> / <code>💣 Explosivo</code> e reduz <code>-1 Dano</code>.<br/><br/>
+                • <strong>Cura +2 PV</strong> e garante <strong>1 Ajuste imediato no 5×4</strong> para você já encaixar o gene roubado no mesmo turno!
+              </td></tr>
+              <tr><td>2. <strong>💥 Fogo Amigo</strong> (tiro/investida de aliado)</td></tr>
+              <tr><td>3. <strong>🗡️ Backstab</strong> (ataque pelas costas)</td></tr>
+              <tr><td>4. <strong>🔄 Giro 180°</strong> (golpe com 🧲 Tendão melee)</td></tr>
+              <tr><td>5. <strong>🧪 Ácido / 💣 Explosão</strong> de vizinho</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. INIMIGOS & CHEFE ADAPTATIVO ==================== -->
+    <section class="card" id="sec-inimigos">
+      <h2>6. Arquétipos de Inimigos &amp; Chefe Final Adaptativo (Estilo Lootbound)</h2>
+      <p class="sec-sub">Cada inimigo exige uma resposta tática diferente; entre ondas, a peça que você REJEITA no Draft é enxertada na <strong>👑 Quimera Soberana</strong>.</p>
+
+      <div class="two-col">
+        <div>
+          <h3 style="margin:0 0 8px; font-size:0.95rem; color:#fecdd3;">👹 Os 5 Arquétipos + Chefe</h3>
+          <table class="rules-tbl">
+            <thead><tr><th>Inimigo</th><th>Ataque &amp; Trait</th><th>Contra-Jogada Ideal</th></tr></thead>
+            <tbody>
+              <tr><td><strong>💣 Esporo Volátil</strong></td><td>Melee (2) · <strong>Explode 3 dano nos vizinhos ao morrer</strong></td><td>Empurre (🪨 Osso) para colar em outro inimigo antes de estourar — ou faça o atirador detoná-lo!</td></tr>
+              <tr><td><strong>🛡️ Besouro Escudeiro</strong></td><td>Lança 2 casas (3) · <strong>Escudo Frontal (-2 dano pela frente)</strong></td><td>Use ⚡ Troca Rápida, 🔄 Giro 180°, 🦗 Patas, 🗡️ Ferrão Curvo ou 🧪 Peçonha (todos ignoram escudo!).</td></tr>
+              <tr><td><strong>🦏 Javali Investida</strong></td><td><strong>Carga (3)</strong> — atropela toda a linha à frente até bater</td><td>Saia da linha ou troque de lugar colocando um aliado dele no caminho para Fogo Amigo!</td></tr>
+              <tr><td><strong>🦂 Escorpião Atirador</strong></td><td><strong>Tiro Reto (3)</strong> no 1º alvo à frente</td><td>Use como "canhão grátis" alinhando outros inimigos na linha de tiro dele.</td></tr>
+              <tr><td><strong>🦗 Louva-a-Deus</strong></td><td><strong>Giro Frente+Trás (3)</strong> — acerta os dois lados</td><td>Empurre para longe, paralise com ⚡ Nervo ou use 🐸 Língua / 🎯 Espinho à distância.</td></tr>
+              <tr><td><strong>👑 Quimera Soberana</strong></td><td>Lança 2 casas (4) · <strong>14 PV + Mutações Rejeitadas!</strong></td><td>Planeje o Draft das Ondas 1–3 para dar ao Chefe apenas mutações que sua build countera!</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h3 style="margin:0 0 8px; font-size:0.95rem; color:#f3e8ff;">👑 Tabela de Evolução do Chefe (O que você rejeita no Draft)</h3>
+          <table class="rules-tbl">
+            <thead><tr><th>Peça Rejeitada por Você</th><th>Mutação que o Chefe Ganha na Onda 4</th></tr></thead>
+            <tbody>
+              <tr><td><strong>🪨 Osso</strong> ou <strong>🦀 Pinça Colossal</strong></td><td><strong>+3 PV Máximo</strong> (tanque mais resistente)</td></tr>
+              <tr><td><strong>🧪 Peçonha</strong></td><td>Ataques do Chefe deixam <strong>🧪 Poças Ácidas</strong> no piso</td></tr>
+              <tr><td><strong>⚡ Nervo</strong> ou <strong>🐸 Língua</strong></td><td><strong>+1 Dano</strong> permanente em todos os golpes do Chefe</td></tr>
+              <tr><td><strong>⚔️ Repique</strong></td><td>Chefe ganha <strong>🛡️ Escudo Frontal</strong> (-2 dano pela frente)</td></tr>
+              <tr><td><strong>⏱️ Adrenalina</strong> ou <strong>🦗 Patas</strong></td><td>Chefe começa a luta já <strong>ARMADO (PRIMED)</strong> no Turno 1!</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 7. BANCO DE VARIANTES PARA VARIAR / MELHORAR JOGABILIDADE ==================== -->
+    <section class="card" id="sec-variar">
+      <h2>7. Laboratório de Ideias — Como Variar &amp; Melhorar a Jogabilidade a Partir Daqui</h2>
+      <p class="sec-sub">Se a jogabilidade ainda parece "travada" ou "genérica", aqui estão as <strong>6 alavancas de design</strong> mais fortes que podemos ligar/testar para transformar completamente a sensação do jogo:</p>
+
+      <div class="ideas-grid">
+        <div class="idea-card">
+          <h4>1. Turno Fluido (Mover Grátis vs. Shogun Estrito)</h4>
+          <p>Hoje, <strong>andar 1 casa gasta o turno</strong> e <strong>enfileirar 1 arma também gasta o turno</strong> — isso pode parecer lento. <em>Variante:</em> Dar <strong>1 Movimento + 1 Ação por turno</strong> (ou preparar arma ser instantâneo e só disparar passar o turno), deixando o ritmo 2× mais ágil!</p>
+        </div>
+        <div class="idea-card">
+          <h4>2. Reação Alquímica (Variação ★ Variação)</h4>
+          <p>Hoje só <code>Variação → Órgão</code> funciona. <em>Variante:</em> Se duas Variações diferentes conectarem suas <code>★</code> entre si no <code>5×4</code>, elas geram uma <strong>Super-Reação</strong> (ex: <code>🧪 Peçonha + ⚡ Nervo = ☣️ Plasma</code> que eletrocuta TODAS as poças ácidas da arena!).</p>
+        </div>
+        <div class="idea-card">
+          <h4>3. Peças "Selvagens" com Trade-Off Espacial</h4>
+          <p>Inspirado no melhor do <em>Lootbound</em>: peças super fortes com formato maluco ou regra de risco (ex: <em>Glândula Instável</em> dá <code>+3 Dano</code> em 3 lados, mas <strong>machuca você por 1 PV</strong> se ficar na borda da grade).</p>
+        </div>
+        <div class="idea-card">
+          <h4>4. Órgãos Defensivos / Armadilhas na Grade</h4>
+          <p>Adicionar 2 Órgãos novos inspirados no Shogun: <strong>🪤 Bolsa-Armadilha</strong> (planta mina no chão à frente) e <strong>🪞 Membrana Espelho</strong> (teleporta para o lado oposto da arena e inverte direção).</p>
+        </div>
+        <div class="idea-card">
+          <h4>5. Arrastar &amp; Soltar Real (Drag-and-Drop + Giro no Scroll)</h4>
+          <p>Trocar o esquema "clicar para segurar → clicar para soltar" por <strong>arrastar direto com o mouse/dedo</strong> na grade <code>5×4</code> (com clique direito ou roda do mouse girando a peça no ar), deixando o puzzle 5× mais tátil!</p>
+        </div>
+        <div class="idea-card">
+          <h4>6. Combate em 2D Pequeno (5×3 ou 5×5) com a Mesma Grade 5×4</h4>
+          <p>Se você sentiu falta da liberdade espacial do <em>Into the Breach</em> (empurrar p/ cima/baixo contra rochas), podemos usar <strong>exatamente esta grade 5×4 + gerador de ataques</strong> num mini-tabuleiro <code>5×3</code> ou <code>5×4</code>!</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const ORGANS = [
+        { id: 'MANDIBULA', icon: '🦷', name: 'Mandíbula', shape: '2×1', cells: [[0,0],[1,0]], pat: ['me','hit'], dmg: 2, cd: 1, mode: 'melee', desc: 'Acerta 1 casa à frente (ataque rápido de baixa recarga).' },
+        { id: 'CAUDA', icon: '🦂', name: 'Cauda', shape: '2×1', cells: [[0,0],[1,0]], pat: ['hit','me','hit'], dmg: 2, cd: 2, mode: 'melee', desc: 'Acerta 1 casa à frente E 1 casa atrás simultaneamente.' },
+        { id: 'ESPINHO', icon: '🎯', name: 'Espinho', shape: '2×1', cells: [[0,0],[1,0]], pat: ['me','·','·','hit'], dmg: 2, cd: 2, mode: 'ranged', desc: 'Projétil reto que atinge o 1º inimigo à sua frente.' },
+        { id: 'PATAS', icon: '🦗', name: 'Patas', shape: 'L (3)', cells: [[0,0],[0,1],[1,1]], pat: ['me','hit:⤴','mv:🧬'], dmg: 2, cd: 2, mode: 'move', desc: 'Atravessa inimigos seguidos à frente e pousa nas costas deles.' },
+        { id: 'LINGUA', icon: '🐸', name: 'Língua', shape: '2×1', cells: [[0,0],[1,0]], pat: ['me','sp:⬅','hit'], dmg: 2, cd: 2, mode: 'ranged', desc: 'Acerta o 1º inimigo à frente e puxa até encostar em você.' },
+        { id: 'FERRAO_CURVO', icon: '🗡️', name: 'Ferrão Curvo', shape: 'L (3)', cells: [[0,0],[1,0],[1,1]], pat: ['me','·','hit'], dmg: 3, cd: 2, mode: 'melee', desc: 'Pula a 1ª casa e acerta exatamente a 2ª casa à frente (ignora Escudo Frontal).' },
+        { id: 'PINCA', icon: '🦀', name: 'Pinça Colossal', shape: '2×2', cells: [[0,0],[1,0],[0,1],[1,1]], pat: ['me','hit','hit'], dmg: 3, cd: 3, mode: 'melee', desc: 'Perfura 2 casas consecutivas à frente com alto dano.' },
+      ];
+
+      const VARS = [
+        { id: 'OSSO', icon: '🪨', name: 'Osso', shape: 'L (3) · ★ quina', cells: [[0,0],[0,1],[1,1]], stars: [[1,0],[0,-1],[2,1]], short: '+1 Dano + Empurra 1 casa (Colisão +2!)', rule: 'Soma +1 dano e empurra o alvo 1 casa; colisão em parede/inimigo dá +2 dano e expõe gene.' },
+        { id: 'TENDAO', icon: '🧲', name: 'Tendão', shape: '1×1 · ★ ◀ ▶', cells: [[0,0]], stars: [[-1,0],[1,0]], short: 'Gira 180° (melee) / Troca Lugar (alcance)', rule: 'Em órgãos melee GIRA o inimigo 180° (Fogo Amigo!); em alcance/movimento TROCA de lugar!' },
+        { id: 'PECONHA', icon: '🧪', name: 'Peçonha', shape: '2×1 · ★ ▲ ▲', cells: [[0,0],[1,0]], stars: [[0,-1],[1,-1]], short: '+2 Veneno + Poça Ácida (ignora escudo)', rule: 'Aplica +2 Veneno (1 dano/t), ignora Escudo Frontal e cria 🧪 Poça Ácida no piso.' },
+        { id: 'NERVO', icon: '⚡', name: 'Nervo', shape: '1×1 · ★ ▲ ▶', cells: [[0,0]], stars: [[0,-1],[1,0]], short: 'Choque vizinhos (+1) + Cancela Mira', rule: 'Cancela a ⚠️ Mira armada do alvo e dispara +1 dano elétrico nos vizinhos adjacentes.' },
+        { id: 'REPIQUE', icon: '⚔️', name: 'Repique', shape: '1×1 · ★ ▶', cells: [[0,0]], stars: [[1,0]], short: 'Golpe Duplo 2× (+1 CD)', rule: 'Executa o ataque do órgão 2 vezes seguidas (+1 Recarga). Dobra efeitos de empurrão/veneno!' },
+        { id: 'ADRENALINA', icon: '⏱️', name: 'Adrenalina', shape: 'T (4) · ★ 3 bolsos', cells: [[0,0],[1,0],[2,0],[1,1]], stars: [[0,1],[2,1],[1,-1]], short: '-1 Recarga (mín. 0) + +1 Dano em Combo', rule: 'Reduz -1 CD (pode zerar a recarga!) e soma +1 Dano quando disparado no 2º ou 3º slot da Fila.' },
+      ];
+
+      const varRots = {};
+      VARS.forEach(v => { varRots[v.id] = 0; });
+
+      function rotPt(x, y, rot) {
+        let rx = x, ry = y;
+        for (let i = 0; i < ((rot % 4) + 4) % 4; i++) { const nx = -ry; ry = rx; rx = nx; }
+        return [rx, ry];
+      }
+
+      function renderShape(cells, stars, rot, kind) {
+        const rc = cells.map(([x,y]) => rotPt(x,y,rot));
+        const minCX = Math.min(...rc.map(c => c[0])), minCY = Math.min(...rc.map(c => c[1]));
+        const nc = rc.map(([x,y]) => [x - minCX, y - minCY]);
+        const ns = (stars || []).map(([x,y]) => { const [rx,ry] = rotPt(x,y,rot); return [rx - minCX, ry - minCY]; });
+        const all = [...nc, ...ns];
+        const minX = Math.min(...all.map(p => p[0])), maxX = Math.max(...all.map(p => p[0]));
+        const minY = Math.min(...all.map(p => p[1])), maxY = Math.max(...all.map(p => p[1]));
+        const cols = maxX - minX + 1;
+        const cSet = new Set(nc.map(p => `${p[0]},${p[1]}`));
+        const sSet = new Set(ns.map(p => `${p[0]},${p[1]}`));
+        let html = `<div class="mini-shape" style="grid-template-columns:repeat(${cols}, 16px);">`;
+        for (let y = minY; y <= maxY; y++) {
+          for (let x = minX; x <= maxX; x++) {
+            const k = `${x},${y}`;
+            if (cSet.has(k)) html += `<div class="ms-cell ${kind === 'ORGAN' ? 'fill-organ' : 'fill-var'}"></div>`;
+            else if (sSet.has(k)) html += `<div class="ms-cell star">★</div>`;
+            else html += `<div class="ms-cell"></div>`;
+          }
+        }
+        return html + `</div>`;
+      }
+
+      function renderPat(pat) {
+        return `<div class="pat-strip">${pat.map(c => {
+          if (c === 'me') return `<span class="pat-cell me">🧬</span>`;
+          if (c === '·') return `<span class="pat-cell" style="color:#4b6d5e">·</span>`;
+          const [k, l] = c.includes(':') ? c.split(':') : [c, ''];
+          return `<span class="pat-cell ${k}">${l || '■'}</span>`;
+        }).join('')}</div>`;
+      }
+
+      // Render Catalog
+      document.getElementById('organs-catalog').innerHTML = ORGANS.map(o => `
+        <div class="piece-card organ">
+          <div class="pc-top">
+            <span class="pc-name">${o.icon} ${o.name}</span>
+            <span class="badge organ">${o.shape}</span>
+          </div>
+          <div class="pc-mid">
+            ${renderShape(o.cells, [], 0, 'ORGAN')}
+            <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-end;">
+              ${renderPat(o.pat)}
+              <div style="font-size:0.74rem; font-weight:800;">
+                <span style="color:var(--orange)">⚔️ ${o.dmg} dano</span> · <span style="color:var(--cyan)">⏱️ CD ${o.cd}</span>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:0.77rem; color:#cbe3d8;">${o.desc}</div>
+        </div>
+      `).join('');
+
+      function renderVarsCatalog() {
+        document.getElementById('vars-catalog').innerHTML = VARS.map(v => `
+          <div class="piece-card var">
+            <div class="pc-top">
+              <span class="pc-name">${v.icon} ${v.name}</span>
+              <span class="badge var">${v.shape}</span>
+            </div>
+            <div class="pc-mid">
+              ${renderShape(v.cells, v.stars, varRots[v.id], 'VAR')}
+              <button class="btn gold" data-rotvar="${v.id}">↻ Girar (${varRots[v.id] * 90}°)</button>
+            </div>
+            <div style="font-size:0.76rem; font-weight:800; color:#fde047;">${v.short}</div>
+            <div style="font-size:0.75rem; color:#cbe3d8;">${v.rule}</div>
+          </div>
+        `).join('');
+        document.querySelectorAll('[data-rotvar]').forEach(b => {
+          b.addEventListener('click', () => {
+            varRots[b.dataset.rotvar] = (varRots[b.dataset.rotvar] + 1) % 4;
+            renderVarsCatalog();
+          });
+        });
+      }
+      renderVarsCatalog();
+
+      // Synthesis Function (mirrors v7.5 engine!)
+      function synthesize(organId, modSet) {
+        const o = ORGANS.find(x => x.id === organId);
+        const mods = Array.from(modSet);
+        const has = m => modSet.has(m);
+        const isMasc = o.id === 'ESPINHO' || o.id === 'FERRAO_CURVO';
+        const pmap = isMasc
+          ? { OSSO:'Ósseo', TENDAO:'Giratório', PECONHA:'Ácido', NERVO:'Voltaico', REPIQUE:'Duplo', ADRENALINA:'Veloz' }
+          : { OSSO:'Óssea', TENDAO:'Giratória', PECONHA:'Ácida', NERVO:'Voltaica', REPIQUE:'Dupla', ADRENALINA:'Veloz' };
+
+        let name = o.name;
+        if (mods.length === 1 && o.id === 'ESPINHO' && has('TENDAO')) name = 'Espinho Troca-Lugar';
+        else if (mods.length === 1 && o.id === 'MANDIBULA' && has('OSSO')) name = 'Clava Mandibular';
+        else if (mods.length === 1 && o.id === 'CAUDA' && has('OSSO')) name = 'Chicote Sísmico';
+        else if (mods.length === 1 && o.id === 'PATAS' && has('NERVO')) name = 'Salto Relâmpago';
+        else if (mods.length === 1 && o.id === 'LINGUA' && has('TENDAO')) name = 'Troca Quimérica';
+        else if (mods.length > 0) name = `${o.name} ${mods.slice(0,2).map(m => pmap[m]).join(' ')}${mods.length > 2 ? ' ★' : ''}`;
+
+        const dmg = o.dmg + (has('OSSO') ? 1 : 0);
+        const hits = has('REPIQUE') ? 2 : 1;
+        const cd = Math.max(0, o.cd + (has('REPIQUE') ? 1 : 0) - (has('ADRENALINA') ? 1 : 0));
+        const isRangedOrMove = o.mode !== 'melee';
+        const effects = [];
+        if (has('OSSO')) effects.push('💥 Empurra 1 casa (Colisão +2 dano & Expõe)');
+        if (has('TENDAO')) effects.push(isRangedOrMove ? '⇄ TROCA DE LUGAR com o alvo!' : '🔄 GIRA o alvo 180° (Fogo Amigo & Expõe!)');
+        if (has('PECONHA')) effects.push('🧪 +2 Veneno (ignora Escudo) + cria Poça Ácida');
+        if (has('NERVO')) effects.push('⚡ Cancela ⚠️ Mira do alvo + 1 dano elétrico nos vizinhos');
+        if (has('REPIQUE')) effects.push('⚔️ Executa o ataque 2 VEZES seguidas');
+        if (has('ADRENALINA')) effects.push('⏱️ -1 Recarga + +1 Dano no 2º/3º slot da Fila');
+
+        return { o, name, level: 1 + mods.length, dmg, hits, cd, mods, effects };
+      }
+
+      // Interactive Lab
+      let labOrgan = 'MANDIBULA';
+      let labMods = new Set(['OSSO', 'TENDAO']);
+
+      function renderLab() {
+        document.getElementById('lab-organs').innerHTML = ORGANS.map(o => `
+          <button class="pick-btn ${o.id === labOrgan ? 'on' : ''}" data-lo="${o.id}">
+            <div style="font-weight:900; font-size:0.82rem;">${o.icon} ${o.name}</div>
+            <div style="font-size:0.69rem; color:var(--muted);">Base ${o.dmg} · CD ${o.cd}</div>
+          </button>
+        `).join('');
+
+        document.getElementById('lab-vars').innerHTML = VARS.map(v => `
+          <button class="pick-btn ${labMods.has(v.id) ? 'on-var' : ''}" data-lv="${v.id}">
+            <div style="font-weight:900; font-size:0.82rem;">${v.icon} ${v.name}</div>
+            <div style="font-size:0.67rem; color:var(--muted);">${v.shape}</div>
+          </button>
+        `).join('');
+
+        document.querySelectorAll('[data-lo]').forEach(b => b.addEventListener('click', () => { labOrgan = b.dataset.lo; renderLab(); renderMatrix(); }));
+        document.querySelectorAll('[data-lv]').forEach(b => b.addEventListener('click', () => {
+          const id = b.dataset.lv;
+          if (labMods.has(id)) labMods.delete(id); else labMods.add(id);
+          renderLab(); renderMatrix();
+        }));
+
+        const s = synthesize(labOrgan, labMods);
+        const totalMax = (s.dmg + (labMods.has('ADRENALINA') ? 1 : 0)) * s.hits;
+        document.getElementById('lab-output').innerHTML = `
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+              <span style="font-size:0.72rem; font-weight:900; color:var(--accent);">${s.o.icon} ${s.o.name}${s.mods.length ? ' + ' + s.mods.map(m => VARS.find(v=>v.id===m).icon).join(' + ') : ' (Puro)'}</span>
+              <span class="badge ok">Nível ${s.level}</span>
+            </div>
+            <div style="font-size:1.22rem; font-weight:900; margin-top:3px;">${s.o.icon} ${s.name}</div>
+          </div>
+
+          <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
+            ${renderPat(s.o.pat)}
+            <span class="badge gold">⚔️ ${s.hits > 1 ? `${s.hits}× ${s.dmg} (${s.hits * s.dmg})` : `${s.dmg} dano`}</span>
+            <span class="badge cyan">⏱️ CD ${s.cd}</span>
+          </div>
+
+          <div class="formula-box">
+            Dano/golpe = ${s.o.dmg} (base)${labMods.has('OSSO') ? ' + 1 (Osso)' : ''} = ${s.dmg}<br/>
+            Golpes = ${s.hits}×${labMods.has('REPIQUE') ? ' (Repique)' : ''} | CD = max(0, ${s.o.cd}${labMods.has('REPIQUE') ? '+1' : ''}${labMods.has('ADRENALINA') ? '-1' : ''}) = ${s.cd}<br/>
+            Teto em Combo/Costas = até ${totalMax + s.hits} dano (+ colisões!)
+          </div>
+
+          <div style="font-size:0.8rem; color:#d8eee4;">
+            ${s.effects.length > 0
+              ? s.effects.map(e => `<div style="margin-bottom:3px;">• ${e}</div>`).join('')
+              : `<div>• ${s.o.desc} (Conecte Variações ★ no 5×4 para evoluir!)</div>`}
+          </div>
+        `;
+      }
+
+      document.getElementById('btn-lab-clear').addEventListener('click', () => { labMods.clear(); renderLab(); renderMatrix(); });
+      document.getElementById('btn-lab-random').addEventListener('click', () => {
+        labOrgan = ORGANS[Math.floor(Math.random() * ORGANS.length)].id;
+        labMods.clear();
+        const count = 1 + Math.floor(Math.random() * 3);
+        const shuffled = [...VARS].sort(() => Math.random() - 0.5).slice(0, count);
+        shuffled.forEach(v => labMods.add(v.id));
+        renderLab(); renderMatrix();
+      });
+
+      // Render 7x6 Matrix
+      function renderMatrix() {
+        let html = `<thead><tr><th style="width:140px;">Órgão ↓ / Variação →</th>`;
+        VARS.forEach(v => {
+          html += `<th>${v.icon} ${v.name}<div style="font-size:0.66rem; color:var(--muted); font-weight:600;">${v.shape}</div></th>`;
+        });
+        html += `</tr></thead><tbody>`;
+
+        ORGANS.forEach(o => {
+          html += `<tr><th>${o.icon} ${o.name}<div style="font-size:0.66rem; color:var(--muted); font-weight:600;">${o.shape} · Base ${o.dmg} · CD ${o.cd}</div></th>`;
+          VARS.forEach(v => {
+            const s = synthesize(o.id, new Set([v.id]));
+            const isActive = labOrgan === o.id && labMods.size === 1 && labMods.has(v.id);
+            const effShort = v.id === 'TENDAO'
+              ? (o.mode === 'melee' ? '🔄 Gira inimigo 180°' : '⇄ TROCA DE LUGAR')
+              : v.short;
+            html += `<td class="m-cell ${isActive ? 'active' : ''}" data-mo="${o.id}" data-mv="${v.id}">
+              <span class="mc-title">${s.name}</span>
+              <span class="mc-stat">${s.hits > 1 ? `${s.hits}×${s.dmg}` : `${s.dmg} dano`} · CD ${s.cd}</span>
+              <span class="mc-eff">${effShort}</span>
+            </td>`;
+          });
+          html += `</tr>`;
+        });
+        html += `</tbody>`;
+        const tbl = document.getElementById('matrix-7x6');
+        tbl.innerHTML = html;
+        tbl.querySelectorAll('td.m-cell').forEach(td => {
+          td.addEventListener('click', () => {
+            labOrgan = td.dataset.mo;
+            labMods = new Set([td.dataset.mv]);
+            renderLab();
+            renderMatrix();
+            document.getElementById('sec-lab').scrollIntoView({ behavior: 'smooth' });
+          });
+        });
+      }
+
+      renderLab();
+      renderMatrix();
+    })();
+  </script>
+</body>
+</html>

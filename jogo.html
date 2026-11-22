@@ -1,0 +1,3024 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O Enxerto v7.5 · Quimera Viva (Shogun 1D + Lootbound 5×4 + Spore)</title>
+  <style>
+    :root {
+      --bg: #060b09;
+      --panel: #0d1713;
+      --panel-2: #13221c;
+      --border: #213a2f;
+      --border-hi: #386552;
+      --text: #eaf7f1;
+      --muted: #8cb2a1;
+      --accent: #a3e635;
+      --gold: #facc15;
+      --danger: #fb7185;
+      --cyan: #38bdf8;
+      --orange: #fb923c;
+      --purple: #c084fc;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 20% 0%, #10271d 0%, var(--bg) 62%);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.4;
+      min-height: 100vh;
+    }
+
+    @keyframes screenShake {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-5px, 2px); }
+      40% { transform: translate(5px, -2px); }
+      60% { transform: translate(-3px, -1px); }
+      80% { transform: translate(3px, 1px); }
+    }
+    .shake { animation: screenShake 0.28s ease-in-out; }
+
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translate(-50%, 6px) scale(0.8); }
+      18% { opacity: 1; transform: translate(-50%, -6px) scale(1.1); }
+      80% { opacity: 1; transform: translate(-50%, -26px) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -40px) scale(0.92); }
+    }
+
+    @keyframes pulseWarn {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(251, 113, 133, 0.5); }
+      50% { box-shadow: 0 0 0 5px rgba(251, 113, 133, 0); }
+    }
+
+    @keyframes pulseSynapse {
+      0%, 100% { opacity: 0.72; stroke-dashoffset: 0; }
+      50% { opacity: 1; stroke-dashoffset: -12; }
+    }
+
+    header.topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(6, 11, 9, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 9px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand h1 { margin: 0; font-size: 0.98rem; font-weight: 900; letter-spacing: -0.01em; }
+    .brand .sub { font-size: 0.72rem; color: var(--muted); }
+
+    .hud-pills { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .pill {
+      background: var(--panel-2);
+      border: 1px solid var(--border-hi);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .pill.hp { border-color: #fb7185; color: #fecdd3; }
+    .pill.shield { border-color: #38bdf8; color: #bae6fd; }
+    .pill.recomb { border-color: #a3e635; color: #d9f99d; }
+    .pill.wave { border-color: #facc15; color: #fef08a; }
+    .pill.boss { border-color: #c084fc; color: #f3e8ff; }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border-hi);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 9px;
+      padding: 7px 11px;
+      font-size: 0.79rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      text-decoration: none;
+      transition: all 0.13s ease;
+    }
+    .btn:hover:not(:disabled) { border-color: var(--accent); background: #1a3228; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn.primary { background: var(--accent); color: #07120c; border-color: var(--accent); }
+    .btn.primary:hover:not(:disabled) { background: #bef264; }
+    .btn.gold { background: rgba(250, 204, 21, 0.16); border-color: var(--gold); color: #fef08a; }
+    .btn.gold:hover:not(:disabled) { background: rgba(250, 204, 21, 0.28); }
+    .btn.cyan { background: rgba(56, 189, 248, 0.16); border-color: var(--cyan); color: #bae6fd; }
+
+    /* SPLIT-SCREEN WORKSPACE */
+    .split-layout {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 12px 12px 36px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.24fr) minmax(0, 0.96fr);
+      gap: 13px;
+      align-items: start;
+    }
+    @media (max-width: 980px) {
+      .split-layout { grid-template-columns: 1fr; padding: 10px 8px 32px; gap: 12px; }
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px;
+      min-width: 0;
+    }
+    .panel-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 9px;
+    }
+    .panel-title { margin: 0; font-size: 0.96rem; font-weight: 900; display: flex; align-items: center; gap: 6px; }
+    .hint-bar {
+      background: rgba(250, 204, 21, 0.08);
+      border: 1px solid rgba(250, 204, 21, 0.28);
+      color: #fef08a;
+      border-radius: 9px;
+      padding: 7px 10px;
+      font-size: 0.77rem;
+      margin-bottom: 10px;
+    }
+
+    /* WAVE CLEAR & LOOTBOUND BOSS DRAFT */
+    .wave-banner {
+      background: linear-gradient(135deg, rgba(163, 230, 53, 0.16), rgba(192, 132, 252, 0.12));
+      border: 1.5px solid var(--accent);
+      border-radius: 11px;
+      padding: 12px;
+      margin-bottom: 11px;
+    }
+    .draft-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    @media (max-width: 600px) {
+      .draft-grid { grid-template-columns: 1fr; }
+    }
+    .draft-card {
+      background: #0d1814;
+      border: 1.5px solid var(--border-hi);
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      color: var(--text);
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .draft-card:hover {
+      border-color: var(--gold);
+      background: #142720;
+      transform: translateY(-2px);
+    }
+    .draft-boss-warn {
+      font-size: 0.7rem;
+      color: #f3e8ff;
+      background: rgba(192, 132, 252, 0.14);
+      border: 1px solid rgba(192, 132, 252, 0.35);
+      border-radius: 6px;
+      padding: 4px 6px;
+    }
+
+    /* ==================== LEFT: SHOGUN 1D COMBAT STRIP ==================== */
+    .strip-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .strip-cell {
+      min-width: 0;
+      min-height: 124px;
+      background: #0a1410;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 5px 3px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      text-align: center;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+    .strip-cell.threat {
+      background: repeating-linear-gradient(-45deg, rgba(251, 113, 133, 0.19), rgba(251, 113, 133, 0.19) 6px, rgba(10, 20, 16, 0.92) 6px, rgba(10, 20, 16, 0.92) 12px);
+      border-color: var(--danger);
+    }
+    .strip-cell.acid {
+      box-shadow: inset 0 -12px 16px rgba(163, 230, 53, 0.25);
+    }
+    .strip-cell.player-cell {
+      border-color: var(--accent);
+      background: linear-gradient(180deg, rgba(163, 230, 53, 0.14), #0a1410);
+    }
+    .strip-cell.preview-hit {
+      outline: 2.5px solid var(--gold);
+      outline-offset: -2px;
+    }
+    .strip-cell.clickable-step { cursor: pointer; }
+    .strip-cell.clickable-step:hover {
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.14);
+    }
+    .strip-cell.clickable-swap {
+      cursor: pointer;
+      border-color: var(--cyan);
+      box-shadow: inset 0 0 12px rgba(56, 189, 248, 0.22);
+    }
+    .strip-cell.clickable-swap:hover {
+      background: rgba(56, 189, 248, 0.2);
+      transform: translateY(-2px);
+    }
+    .strip-cell.flash-hit {
+      background: rgba(251, 113, 133, 0.42) !important;
+      border-color: #fff !important;
+      transform: scale(1.05);
+    }
+    .strip-cell.flash-boom {
+      background: rgba(250, 204, 21, 0.45) !important;
+      border-color: var(--gold) !important;
+      transform: scale(1.08);
+    }
+
+    .float-popup {
+      position: absolute;
+      left: 50%;
+      top: 18px;
+      z-index: 25;
+      pointer-events: none;
+      font-size: 0.78rem;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 7px;
+      background: rgba(6, 11, 9, 0.94);
+      border: 1.5px solid var(--gold);
+      color: #fef08a;
+      white-space: nowrap;
+      animation: floatUp 0.95s ease-out forwards;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+    .float-popup.dmg { border-color: var(--danger); color: #fecdd3; }
+    .float-popup.good { border-color: var(--accent); color: #d9f99d; }
+
+    .s-top {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.62rem;
+      color: var(--muted);
+      padding: 0 2px;
+    }
+    .intent-tag {
+      background: rgba(251, 113, 133, 0.28);
+      border: 1px solid var(--danger);
+      color: #fecdd3;
+      border-radius: 5px;
+      padding: 1px 4px;
+      font-size: 0.62rem;
+      font-weight: 900;
+      animation: pulseWarn 1.2s infinite;
+    }
+    .actor-sprite {
+      font-size: 1.7rem;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .facing-arrow { font-size: 0.74rem; font-weight: 900; color: var(--gold); }
+    .actor-name {
+      font-size: 0.61rem;
+      font-weight: 800;
+      color: var(--text);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .trait-chip {
+      font-size: 0.56rem;
+      font-weight: 900;
+      padding: 1px 4px;
+      border-radius: 5px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #bae6fd;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .trait-chip.boom { background: rgba(251, 146, 60, 0.18); border-color: rgba(251, 146, 60, 0.45); color: #fed7aa; }
+    .trait-chip.shield { background: rgba(250, 204, 21, 0.16); border-color: rgba(250, 204, 21, 0.45); color: #fef08a; }
+    .hp-badge {
+      font-size: 0.65rem;
+      font-weight: 900;
+      background: rgba(0, 0, 0, 0.58);
+      border-radius: 5px;
+      padding: 1px 5px;
+      white-space: nowrap;
+    }
+    .swap-hint {
+      font-size: 0.58rem;
+      font-weight: 900;
+      color: #7dd3fc;
+      background: rgba(56, 189, 248, 0.16);
+      border-radius: 4px;
+      padding: 0 4px;
+    }
+    .extract-btn {
+      width: 100%;
+      border: 1px solid var(--gold);
+      background: var(--gold);
+      color: #090e0b;
+      border-radius: 6px;
+      font-size: 0.61rem;
+      font-weight: 900;
+      padding: 3px 2px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .strip-grid { gap: 3px; }
+      .strip-cell { min-height: 98px; padding: 3px 1px; }
+      .actor-sprite { font-size: 1.25rem; }
+      .actor-name { display: none; }
+      .trait-chip { font-size: 0.5rem; padding: 0 2px; }
+      .hp-badge { font-size: 0.54rem; padding: 1px 2px; }
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .queue-bar {
+      background: #0a130f;
+      border: 1px solid var(--border-hi);
+      border-radius: 10px;
+      padding: 8px 9px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .queue-slots { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .q-slot {
+      min-width: 82px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1.5px dashed var(--border-hi);
+      background: rgba(255, 255, 255, 0.02);
+      font-size: 0.73rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-align: center;
+    }
+    .q-slot.filled {
+      border-style: solid;
+      border-color: var(--gold);
+      background: rgba(250, 204, 21, 0.16);
+      color: #fef08a;
+      cursor: pointer;
+    }
+
+    /* GENERATED WEAPON CARDS */
+    .weapons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .weapon-card {
+      background: var(--panel-2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.14s ease;
+      text-align: left;
+      color: var(--text);
+    }
+    .weapon-card:hover:not(.disabled) { border-color: var(--accent); transform: translateY(-1px); }
+    .weapon-card.mutated {
+      border-color: rgba(250, 204, 21, 0.6);
+      background: linear-gradient(155deg, #172d23 0%, #111f19 100%);
+    }
+    .weapon-card.queued {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.45);
+    }
+    .weapon-card.disabled { opacity: 0.48; cursor: not-allowed; }
+    .wc-head { display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+    .wc-name { font-size: 0.84rem; font-weight: 900; }
+    .wc-lvl {
+      font-size: 0.64rem;
+      font-weight: 900;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: rgba(163, 230, 53, 0.16);
+      color: #bef264;
+      border: 1px solid rgba(163, 230, 53, 0.35);
+    }
+    .wc-stats { display: flex; flex-wrap: wrap; gap: 5px; font-size: 0.72rem; font-weight: 800; }
+    .wc-dmg { color: var(--orange); }
+    .wc-cd { color: var(--cyan); }
+    .wc-mini {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+      background: #08100c;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 5px;
+    }
+    .wm-box {
+      width: 20px;
+      height: 18px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #12211a;
+      border: 1px solid #223b2f;
+    }
+    .wm-box.me { border-color: var(--accent); background: #193829; }
+    .wm-box.hit { border-color: var(--danger); background: rgba(251, 113, 133, 0.25); }
+    .wm-box.mv { border-color: var(--cyan); background: rgba(56, 189, 248, 0.22); }
+    .wm-box.sp { border-color: var(--gold); background: rgba(250, 204, 21, 0.2); }
+    .wc-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .tag-chip {
+      font-size: 0.63rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 5px;
+      background: rgba(250, 204, 21, 0.14);
+      border: 1px solid rgba(250, 204, 21, 0.35);
+      color: #fde047;
+    }
+
+    .combat-log {
+      background: #080f0c;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 9px;
+      max-height: 88px;
+      overflow-y: auto;
+      font-size: 0.73rem;
+      color: var(--muted);
+    }
+    .combat-log div { margin-bottom: 2px; }
+    .combat-log div:first-child { color: var(--text); font-weight: 700; }
+
+    /* ==================== RIGHT: SPORE CHIMERA + LOOTBOUND 5×4 ==================== */
+    .chimera-card {
+      background: linear-gradient(135deg, #10241c 0%, #09120e 100%);
+      border: 1px solid var(--border-hi);
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .chimera-svg-wrap {
+      width: 96px;
+      height: 68px;
+      flex-shrink: 0;
+      background: radial-gradient(circle, rgba(163,230,53,0.12) 0%, rgba(7,12,10,0.9) 75%);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .chimera-meta { flex: 1; min-width: 0; }
+    .chimera-meta h3 { margin: 0 0 2px; font-size: 0.84rem; font-weight: 900; color: #d9f99d; }
+    .chimera-meta p { margin: 0; font-size: 0.71rem; color: var(--muted); }
+
+    .inv-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .holding-bar {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid var(--cyan);
+      color: #bae6fd;
+      border-radius: 9px;
+      padding: 7px 9px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 9px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    /* 5×4 GRID WITH SVG SYNAPSE OVERLAY & MERGED SHAPES */
+    .grid-stage {
+      position: relative;
+      margin-bottom: 11px;
+    }
+    .grid-5x4 {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 4px;
+      background: #070e0b;
+      border: 1.5px solid var(--border-hi);
+      border-radius: 11px;
+      padding: 7px;
+      user-select: none;
+    }
+    .synapse-svg {
+      position: absolute;
+      inset: 7px;
+      width: calc(100% - 14px);
+      height: calc(100% - 14px);
+      pointer-events: none;
+      z-index: 8;
+    }
+    .synapse-line {
+      stroke-width: 2.5;
+      stroke-dasharray: 6 4;
+      stroke-linecap: round;
+      animation: pulseSynapse 1.3s linear infinite;
+    }
+
+    .g-cell {
+      aspect-ratio: 1 / 1;
+      min-height: 54px;
+      background: #0e1915;
+      border: 1.5px solid #1d3228;
+      border-radius: 8px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.11s ease, border-color 0.11s ease;
+      overflow: hidden;
+    }
+    .g-cell.organ {
+      background: linear-gradient(145deg, #21362c 0%, #15241e 100%);
+      border-color: var(--orange);
+    }
+    .g-cell.variation {
+      background: linear-gradient(145deg, #252942 0%, #171a2d 100%);
+      border-color: var(--purple);
+    }
+    /* Merged tetromino joints! */
+    .g-cell.join-r { border-top-right-radius: 2px; border-bottom-right-radius: 2px; border-right-style: dashed; border-right-color: rgba(255,255,255,0.22); }
+    .g-cell.join-l { border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-left-style: dashed; border-left-color: rgba(255,255,255,0.22); }
+    .g-cell.join-b { border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; border-bottom-style: dashed; border-bottom-color: rgba(255,255,255,0.22); }
+    .g-cell.join-t { border-top-left-radius: 2px; border-top-right-radius: 2px; border-top-style: dashed; border-top-color: rgba(255,255,255,0.22); }
+
+    .g-cell.selected-piece {
+      outline: 2.5px solid var(--cyan);
+      outline-offset: -2px;
+      filter: brightness(1.2);
+    }
+    .g-cell.ghost-ok {
+      background: rgba(163, 230, 53, 0.28) !important;
+      border-color: var(--accent) !important;
+    }
+    .g-cell.ghost-bad {
+      background: rgba(251, 113, 133, 0.3) !important;
+      border-color: var(--danger) !important;
+    }
+    .g-cell.star-projected {
+      box-shadow: inset 0 0 0 1.5px rgba(250, 204, 21, 0.45);
+    }
+    .g-cell.star-linked {
+      box-shadow: inset 0 0 0 2.5px var(--gold), 0 0 12px rgba(250, 204, 21, 0.4);
+    }
+    .g-icon { font-size: 1.32rem; line-height: 1; z-index: 2; }
+    .g-lbl {
+      font-size: 0.55rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-top: 2px;
+      max-width: 94%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      z-index: 2;
+    }
+    .star-badge {
+      position: absolute;
+      top: 2px;
+      right: 3px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 6px rgba(250, 204, 21, 0.95);
+      pointer-events: none;
+      z-index: 9;
+    }
+    .star-ghost-badge {
+      position: absolute;
+      bottom: 2px;
+      left: 3px;
+      font-size: 0.7rem;
+      font-weight: 900;
+      color: #fde047;
+      pointer-events: none;
+      z-index: 9;
+    }
+
+    /* BANDEJA DE LOOT */
+    .reserve-title {
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .reserve-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+      gap: 7px;
+    }
+    .res-card {
+      background: var(--panel-2);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 8px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      transition: all 0.12s ease;
+      color: var(--text);
+      text-align: left;
+    }
+    .res-card:hover { border-color: var(--accent); }
+    .res-card.active {
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.14);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.45);
+    }
+    .res-head { display: flex; justify-content: space-between; align-items: center; gap: 4px; }
+    .res-name { font-size: 0.79rem; font-weight: 900; }
+    .res-kind {
+      font-size: 0.56rem;
+      font-weight: 900;
+      padding: 1px 5px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+    .res-kind.organ { background: rgba(251, 146, 60, 0.18); color: #fdba74; border: 1px solid rgba(251, 146, 60, 0.4); }
+    .res-kind.variation { background: rgba(192, 132, 252, 0.18); color: #e9d5ff; border: 1px solid rgba(192, 132, 252, 0.4); }
+    .res-desc { font-size: 0.67rem; color: var(--muted); }
+
+    .mini-shape {
+      display: inline-grid;
+      gap: 2px;
+      background: #08100c;
+      padding: 4px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      align-self: flex-start;
+    }
+    .ms-cell {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      background: #101b16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+    }
+    .ms-cell.fill-organ { background: var(--orange); }
+    .ms-cell.fill-var { background: var(--purple); }
+    .ms-cell.star { background: rgba(250, 204, 21, 0.22); border: 1px solid var(--gold); color: var(--gold); font-weight: 900; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div style="font-size:1.45rem">🧬</div>
+      <div>
+        <h1>O Enxerto v7.5 · Quimera Viva (Shogun 1D + Lootbound 5×4 + Spore)</h1>
+        <div class="sub">Recombine peças com ★ durante a luta, use ⚡ Troca Rápida e molde tanto sua Quimera quanto o Chefe Final!</div>
+      </div>
+    </div>
+    <div class="hud-pills">
+      <span class="pill wave" id="hud-wave">Onda 1/4</span>
+      <span class="pill hp" id="hud-hp">❤️ 14/14</span>
+      <span class="pill shield" id="hud-shield">🛡️ 0</span>
+      <span class="pill recomb" id="hud-recomb">🧬 Ajustes: 1/1</span>
+      <span class="pill boss" id="hud-boss" title="Genes rejeitados que fortaleceram o Chefe Final">👑 Chefe: 0</span>
+      <button class="btn" id="btn-sound">🔊 Som</button>
+      <button class="btn" id="btn-restart">🔄 Nova Run</button>
+      <a class="btn gold" href="./shogun.html">🎴 De/Para 42 Armas</a>
+    </div>
+  </header>
+
+  <main class="split-layout" id="main-workspace">
+    <!-- ==================== ESQUERDA: COMBATE 1D CINÉTICO ==================== -->
+    <section class="panel" id="combat-panel">
+      <div class="panel-header">
+        <h2 class="panel-title" id="wave-title">⚔️ Onda 1 · Emboscada Explosiva</h2>
+        <span style="font-size:0.74rem; color:var(--muted);" id="turn-label">Turno 1</span>
+      </div>
+
+      <div id="wave-banner-slot"></div>
+      <div class="hint-bar" id="wave-hint"></div>
+
+      <!-- FAIXA 1D DE 7 CASAS -->
+      <div class="strip-grid" id="combat-strip"></div>
+
+      <!-- CONTROLES + ASSINATURA TROCA RÁPIDA -->
+      <div class="controls-row">
+        <button class="btn" id="btn-left" title="Atalho: A ou ← (avançar sobre inimigo = ⚡ Troca Rápida!)">⬅ Andar</button>
+        <button class="btn" id="btn-flip" title="Atalho: F">🔄 Virar 180°</button>
+        <button class="btn" id="btn-right" title="Atalho: D ou → (avançar sobre inimigo = ⚡ Troca Rápida!)">Andar ➡</button>
+        <button class="btn" id="btn-wait" title="Atalho: W">🛡️ Esperar (+2 Escudo, -1 CD)</button>
+        <span class="pill shield" id="hud-swap-cd" style="font-size:0.71rem;">⚡ Troca Rápida: PRONTA</span>
+      </div>
+
+      <div class="queue-bar">
+        <div class="queue-slots" id="queue-slots"></div>
+        <button class="btn primary" id="btn-fire" title="Atalho: Espaço">⚡ DISPARAR FILA</button>
+      </div>
+
+      <div class="panel-header" style="margin-bottom:6px;">
+        <h3 class="panel-title" style="font-size:0.86rem;">⚔️ Golpes Gerados pelo seu Organismo (clique p/ enfileirar)</h3>
+      </div>
+      <div class="weapons-grid" id="weapons-grid"></div>
+      <div class="combat-log" id="combat-log"></div>
+    </section>
+
+    <!-- ==================== DIREITA: QUIMERA SPORE + GRADE 5×4 LOOTBOUND ==================== -->
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">🧬 Organismo 5×4 (Recombinação ao Vivo)</h2>
+        <span style="font-size:0.73rem; color:var(--accent); font-weight:800;" id="inv-mode-badge">1 ajuste grátis / turno</span>
+      </div>
+
+      <!-- AVATAR PROCEDURAL DA QUIMERA (SPORE!) -->
+      <div class="chimera-card">
+        <div class="chimera-svg-wrap" id="chimera-svg-wrap"></div>
+        <div class="chimera-meta">
+          <h3 id="chimera-title">Quimera Nível 2 · 3 Órgãos</h3>
+          <p id="chimera-desc">Seu monstro evolui visualmente conforme você conecta Órgãos e Variações na grade 5×4!</p>
+        </div>
+      </div>
+
+      <div class="inv-toolbar">
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button class="btn gold" id="btn-rotate" title="Atalho: R ou Botão Direito">↻ Girar 90° (R)</button>
+          <button class="btn" id="btn-to-reserve">📦 Guardar na Bandeja</button>
+          <button class="btn" id="btn-cancel-hold">✕ Soltar</button>
+        </div>
+        <span style="font-size:0.71rem; color:var(--muted);">★ dourada no Órgão = Sinapse ativa!</span>
+      </div>
+
+      <div class="holding-bar" id="holding-bar"></div>
+
+      <!-- GRADE 5×4 COM CONDUÍTES SINÁPTICOS SVG -->
+      <div class="grid-stage">
+        <div class="grid-5x4" id="organism-grid"></div>
+        <svg class="synapse-svg" id="synapse-svg" viewBox="0 0 500 400" preserveAspectRatio="none"></svg>
+      </div>
+
+      <div class="reserve-title">
+        <span>🎒 Bandeja de Loot (Órgãos &amp; Variações)</span>
+        <span id="reserve-count">1 peça</span>
+      </div>
+      <div class="reserve-grid" id="reserve-grid"></div>
+    </section>
+  </main>
+
+  <script>
+/* O Enxerto v7.5 · Motor Unificado "Lootbound 5×4 + Spore + Shogun Showdown 1D"
+ *
+ * Evolução v7.5 (Dinâmica Cinética, Arquétipos, Assinatura, Explosão em Cadeia & Chefe Adaptativo):
+ * 1) ORGANISMO 5×4 (Lootbound + Spore):
+ *    - Peças assimétricas (1×1, 2×1, L, T, 2×2) com Estrelas Direcionais ★ que giram 90°.
+ *    - Recombinação ao vivo (1 ajuste grátis/turno em combate; ilimitado entre ondas).
+ *    - Cada ligação ★ transforma os Golpes Shogun e muta visualmente a Quimera do jogador!
+ * 2) COMBATE 1D CINÉTICO (Shogun Showdown):
+ *    - Faixa de 7 casas + Fila de Combo (3 slots) com registro detalhado de eventos (frames de coreografia!).
+ *    - Movimento Assinatura (⚡ Troca Rápida, CD 3): andar para cima de um inimigo adjacente TROCA de lugar com ele!
+ *    - Combo Kill (2+ abates no mesmo disparo da Fila): -2 CD em todas as armas + +2 PV!
+ * 3) ARQUÉTIPOS TÁTICOS & CHEFE ADAPTATIVO (Lootbound Guardian):
+ *    - 🛡️ Escudeiro Frontal (bloqueia -2 pela frente — exige costas, giro 180° ou troca!)
+ *    - 🦏 Investida Total (atropela toda a linha à frente — ouro para Fogo Amigo!)
+ *    - 💣 Esporo Volátil (explode por 3 de dano nos vizinhos ao morrer!)
+ *    - 👑 Quimera Soberana (absorve literalmente os genes que você REJEITOU nos drafts entre ondas!) */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  if (root) root.EnxertoV7 = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, () => {
+  'use strict';
+
+  const VERSION = '7.5.0';
+  const GRID_W = 5;
+  const GRID_H = 4;
+  const STRIP_LEN = 7;
+
+  // ==================== CATÁLOGO DE PEÇAS (ÓRGÃOS + VARIAÇÕES) ====================
+  const PIECES = {
+    // --- ÓRGÃOS ---
+    MANDIBULA: {
+      id: 'MANDIBULA',
+      kind: 'ORGAN',
+      name: 'Mandíbula',
+      icon: '🦷',
+      color: '#fb923c',
+      shapeLabel: '2×1',
+      cells: [[0, 0], [1, 0]],
+      stars: [],
+      pattern: 'MELEE_1',
+      patternViz: ['me', 'hit'],
+      baseDmg: 2,
+      baseCd: 1,
+      desc: 'Acerta 1 casa à frente (rápido).',
+    },
+    CAUDA: {
+      id: 'CAUDA',
+      kind: 'ORGAN',
+      name: 'Cauda',
+      icon: '🦂',
+      color: '#f472b6',
+      shapeLabel: '2×1',
+      cells: [[0, 0], [1, 0]],
+      stars: [],
+      pattern: 'SWIRL',
+      patternViz: ['hit', 'me', 'hit'],
+      baseDmg: 2,
+      baseCd: 2,
+      desc: 'Acerta 1 casa à frente E 1 casa atrás ao mesmo tempo.',
+    },
+    ESPINHO: {
+      id: 'ESPINHO',
+      kind: 'ORGAN',
+      name: 'Espinho',
+      icon: '🎯',
+      color: '#38bdf8',
+      shapeLabel: '2×1',
+      cells: [[0, 0], [1, 0]],
+      stars: [],
+      pattern: 'ARROW',
+      patternViz: ['me', '·', '·', 'hit'],
+      baseDmg: 2,
+      baseCd: 2,
+      desc: 'Disparo reto no 1º inimigo à sua frente.',
+    },
+    PATAS: {
+      id: 'PATAS',
+      kind: 'ORGAN',
+      name: 'Patas',
+      icon: '🦗',
+      color: '#34d399',
+      shapeLabel: 'L (3)',
+      cells: [[0, 0], [0, 1], [1, 1]],
+      stars: [],
+      pattern: 'SHADOW_DASH',
+      patternViz: ['me', 'hit:⤴', 'mv:🧬'],
+      baseDmg: 2,
+      baseCd: 2,
+      desc: 'Atravessa inimigos à frente causando dano e pousa atrás das costas deles!',
+    },
+    LINGUA: {
+      id: 'LINGUA',
+      kind: 'ORGAN',
+      name: 'Língua',
+      icon: '🐸',
+      color: '#e879f9',
+      shapeLabel: '2×1',
+      cells: [[0, 0], [1, 0]],
+      stars: [],
+      pattern: 'GRAPPLE',
+      patternViz: ['me', 'sp:⬅', 'hit'],
+      baseDmg: 2,
+      baseCd: 2,
+      desc: 'Acerta o 1º inimigo à frente e PUXA até encostar em você.',
+    },
+    FERRAO_CURVO: {
+      id: 'FERRAO_CURVO',
+      kind: 'ORGAN',
+      name: 'Ferrão Curvo',
+      icon: '🗡️',
+      color: '#facc15',
+      shapeLabel: 'L (3)',
+      cells: [[0, 0], [1, 0], [1, 1]],
+      stars: [],
+      pattern: 'SHADOW_KAMA',
+      patternViz: ['me', '·', 'hit'],
+      baseDmg: 3,
+      baseCd: 2,
+      desc: 'Pula a casa adjacente e espeta exatamente a 2ª casa à frente (ignora Escudo Frontal!).',
+    },
+    PINCA: {
+      id: 'PINCA',
+      kind: 'ORGAN',
+      name: 'Pinça Colossal',
+      icon: '🦀',
+      color: '#f97316',
+      shapeLabel: '2×2',
+      cells: [[0, 0], [1, 0], [0, 1], [1, 1]],
+      stars: [],
+      pattern: 'SPEAR_2',
+      patternViz: ['me', 'hit', 'hit'],
+      baseDmg: 3,
+      baseCd: 3,
+      desc: 'Perfura 2 casas seguidas à frente com força brutal!',
+    },
+
+    // --- VARIAÇÕES / MUTAÇÕES (com Estrelas Direcionais ★) ---
+    OSSO: {
+      id: 'OSSO',
+      kind: 'VARIATION',
+      name: 'Osso',
+      icon: '🪨',
+      color: '#d6d3d1',
+      shapeLabel: 'L (3) · ★ quina',
+      cells: [[0, 0], [0, 1], [1, 1]],
+      stars: [[1, 0], [0, -1], [2, 1]],
+      modId: 'OSSO',
+      shortEffect: '+1 Dano + Empurra (Colisão +2!)',
+      bossEffect: '+3 PV Máx & Empurra você ao atacar',
+      desc: '★ na quina interna e pontas: +1 Dano e EMPURRA o alvo (colisão causa +2 dano e expõe gene).',
+    },
+    TENDAO: {
+      id: 'TENDAO',
+      kind: 'VARIATION',
+      name: 'Tendão',
+      icon: '🧲',
+      color: '#f43f5e',
+      shapeLabel: '1×1 · ★ ◀ ▶',
+      cells: [[0, 0]],
+      stars: [[-1, 0], [1, 0]],
+      modId: 'TENDAO',
+      shortEffect: 'Gira 180° (melee) / Troca Lugar (alcance)',
+      bossEffect: 'Chefe ganha contra-giro (difícil de flanquear)',
+      desc: '★ em lados opostos: ataques melee GIRAM o inimigo 180°; ataques à distância TROCAM DE LUGAR!',
+    },
+    PECONHA: {
+      id: 'PECONHA',
+      kind: 'VARIATION',
+      name: 'Peçonha',
+      icon: '🧪',
+      color: '#a3e635',
+      shapeLabel: '2×1 · ★ ▲ ▲',
+      cells: [[0, 0], [1, 0]],
+      stars: [[0, -1], [1, -1]],
+      modId: 'PECONHA',
+      shortEffect: '+2 Veneno + Poça Ácida (ignora escudo)',
+      bossEffect: 'Chefe deixa Poças Ácidas quando ataca',
+      desc: '★ na face superior: aplica +2 Veneno (ignora Escudo Frontal!) e cria 🧪 Poça Ácida no piso.',
+    },
+    NERVO: {
+      id: 'NERVO',
+      kind: 'VARIATION',
+      name: 'Nervo',
+      icon: '⚡',
+      color: '#facc15',
+      shapeLabel: '1×1 · ★ ▲ ▶',
+      cells: [[0, 0]],
+      stars: [[0, -1], [1, 0]],
+      modId: 'NERVO',
+      shortEffect: 'Choque vizinhos + Cancela Mira',
+      bossEffect: 'Chefe ganha +1 Dano Elétrico em seus golpes',
+      desc: '★ em quina (▲ ▶): dispara +1 dano elétrico nos vizinhos e CANCELA a ⚠️ Mira preparada do alvo!',
+    },
+    REPIQUE: {
+      id: 'REPIQUE',
+      kind: 'VARIATION',
+      name: 'Repique',
+      icon: '⚔️',
+      color: '#c084fc',
+      shapeLabel: '1×1 · ★ ▶',
+      cells: [[0, 0]],
+      stars: [[1, 0]],
+      modId: 'REPIQUE',
+      shortEffect: 'Golpe Duplo 2× (+1 CD)',
+      bossEffect: 'Chefe ganha Escudo Frontal (bloqueia -2 pela frente)',
+      desc: '★ em 1 única direção: o Órgão apontado executa o golpe 2 VEZES seguidas (+1 CD)!',
+    },
+    ADRENALINA: {
+      id: 'ADRENALINA',
+      kind: 'VARIATION',
+      name: 'Adrenalina',
+      icon: '⏱️',
+      color: '#2dd4bf',
+      shapeLabel: 'T (4) · ★ 3 lados',
+      cells: [[0, 0], [1, 0], [2, 0], [1, 1]],
+      stars: [[0, 1], [2, 1], [1, -1]],
+      modId: 'ADRENALINA',
+      shortEffect: '-1 Recarga (CD) + +1 Dano em Combo',
+      bossEffect: 'Chefe começa a luta já ARMADO (PRIMED)!',
+      desc: '★ nos 2 bolsos e topo: reduz -1 Recarga (mín. 0) e dá +1 Dano no 2º ou 3º slot da Fila!',
+    },
+  };
+
+  // ==================== GEOMETRIA & ROTAÇÃO 90° HORÁRIA ====================
+  function rotatePointCW(x, y, rot) {
+    let rx = x, ry = y;
+    const steps = ((rot % 4) + 4) % 4;
+    for (let i = 0; i < steps; i++) {
+      const nx = -ry;
+      const ny = rx;
+      rx = nx;
+      ry = ny;
+    }
+    return [rx, ry];
+  }
+
+  function getPieceGeometry(pieceId, rot = 0) {
+    const def = PIECES[pieceId];
+    if (!def) throw new Error(`Peça desconhecida: ${pieceId}`);
+    const rCells = def.cells.map(([x, y]) => rotatePointCW(x, y, rot));
+    const minX = Math.min(...rCells.map(c => c[0]));
+    const minY = Math.min(...rCells.map(c => c[1]));
+    const cells = rCells.map(([x, y]) => [x - minX, y - minY]);
+    const stars = (def.stars || []).map(([x, y]) => {
+      const [rx, ry] = rotatePointCW(x, y, rot);
+      return [rx - minX, ry - minY];
+    });
+    const w = Math.max(...cells.map(c => c[0])) + 1;
+    const h = Math.max(...cells.map(c => c[1])) + 1;
+    return { cells, stars, w, h };
+  }
+
+  function getPlacedCells(placed) {
+    const geo = getPieceGeometry(placed.pieceId, placed.rot);
+    return {
+      cells: geo.cells.map(([cx, cy]) => [placed.x + cx, placed.y + cy]),
+      stars: geo.stars.map(([sx, sy]) => [placed.x + sx, placed.y + sy]),
+      w: geo.w,
+      h: geo.h,
+    };
+  }
+
+  function canPlaceOnGrid(gridPieces, pieceId, x, y, rot, ignoreUid = null) {
+    const geo = getPieceGeometry(pieceId, rot);
+    const absCells = geo.cells.map(([cx, cy]) => [x + cx, y + cy]);
+    for (const [ax, ay] of absCells) {
+      if (ax < 0 || ax >= GRID_W || ay < 0 || ay >= GRID_H) {
+        return { ok: false, reason: 'Fora dos limites da grade 5×4.' };
+      }
+    }
+    const occupied = new Set();
+    for (const p of gridPieces) {
+      if (p.uid === ignoreUid) continue;
+      for (const [ox, oy] of getPlacedCells(p).cells) {
+        occupied.add(`${ox},${oy}`);
+      }
+    }
+    for (const [ax, ay] of absCells) {
+      if (occupied.has(`${ax},${ay}`)) {
+        return { ok: false, reason: 'Sobrepõe outra peça no organismo.' };
+      }
+    }
+    return { ok: true, cells: absCells, stars: geo.stars.map(([sx, sy]) => [x + sx, y + sy]) };
+  }
+
+  // ==================== SÍNTESE AO VIVO: GRADE 5×4 → ARMAS SHOGUN ====================
+  function buildWeaponName(organDef, modIds) {
+    if (modIds.length === 0) return organDef.name;
+    const isMasc = organDef.id === 'ESPINHO' || organDef.id === 'FERRAO_CURVO';
+    const prefixMap = isMasc
+      ? { OSSO: 'Ósseo', TENDAO: 'Giratório', PECONHA: 'Ácido', NERVO: 'Voltaico', REPIQUE: 'Duplo', ADRENALINA: 'Veloz' }
+      : { OSSO: 'Óssea', TENDAO: 'Giratória', PECONHA: 'Ácida', NERVO: 'Voltaica', REPIQUE: 'Dupla', ADRENALINA: 'Veloz' };
+    if (organDef.id === 'ESPINHO' && modIds.includes('TENDAO') && modIds.length === 1) return 'Espinho Troca-Lugar';
+    if (organDef.id === 'MANDIBULA' && modIds.includes('OSSO') && modIds.length === 1) return 'Clava Mandibular';
+    if (organDef.id === 'CAUDA' && modIds.includes('OSSO') && modIds.length === 1) return 'Chicote Sísmico';
+    if (organDef.id === 'PATAS' && modIds.includes('NERVO') && modIds.length === 1) return 'Salto Relâmpago';
+    if (organDef.id === 'LINGUA' && modIds.includes('TENDAO') && modIds.length === 1) return 'Troca Quimérica';
+    const suffixes = modIds.slice(0, 2).map(m => prefixMap[m] || m).join(' ');
+    return `${organDef.name} ${suffixes}${modIds.length > 2 ? ' ★' : ''}`;
+  }
+
+  function computeGeneratedAttacks(state) {
+    const cellToOrgan = new Map();
+    const organs = state.gridPieces.filter(p => PIECES[p.pieceId].kind === 'ORGAN');
+    const variations = state.gridPieces.filter(p => PIECES[p.pieceId].kind === 'VARIATION');
+
+    for (const org of organs) {
+      for (const [cx, cy] of getPlacedCells(org).cells) {
+        cellToOrgan.set(`${cx},${cy}`, org.uid);
+      }
+    }
+
+    const organMods = new Map();
+    const activeStarLinks = [];
+    for (const org of organs) organMods.set(org.uid, new Set());
+
+    for (const v of variations) {
+      const def = PIECES[v.pieceId];
+      const { cells: vCells, stars } = getPlacedCells(v);
+      const vCenter = {
+        x: vCells.reduce((s, c) => s + c[0], 0) / vCells.length,
+        y: vCells.reduce((s, c) => s + c[1], 0) / vCells.length,
+      };
+      for (const [sx, sy] of stars) {
+        if (sx < 0 || sx >= GRID_W || sy < 0 || sy >= GRID_H) continue;
+        const targetUid = cellToOrgan.get(`${sx},${sy}`);
+        if (targetUid) {
+          organMods.get(targetUid).add(def.modId);
+          activeStarLinks.push({
+            varUid: v.uid,
+            organUid: targetUid,
+            fromX: vCenter.x,
+            fromY: vCenter.y,
+            x: sx,
+            y: sy,
+            modId: def.modId,
+            color: def.color,
+          });
+        }
+      }
+    }
+
+    const weapons = organs.map(org => {
+      const def = PIECES[org.pieceId];
+      const mods = Array.from(organMods.get(org.uid) || []);
+      const has = m => mods.includes(m);
+
+      let dmg = def.baseDmg + (has('OSSO') ? 1 : 0);
+      let cdMax = Math.max(0, def.baseCd + (has('REPIQUE') ? 1 : 0) - (has('ADRENALINA') ? 1 : 0));
+      const hits = has('REPIQUE') ? 2 : 1;
+      const isRangedOrMove = def.pattern === 'ARROW' || def.pattern === 'GRAPPLE' || def.pattern === 'SHADOW_DASH';
+      const push = has('OSSO') ? 1 : 0;
+      const flip180 = has('TENDAO') && !isRangedOrMove;
+      const swapTarget = has('TENDAO') && isRangedOrMove;
+      const poison = has('PECONHA') ? 2 : 0;
+      const acidPool = has('PECONHA');
+      const shockChain = has('NERVO');
+      const comboBonus = has('ADRENALINA') ? 1 : 0;
+      const level = 1 + mods.length;
+
+      const tags = [];
+      if (push) tags.push('💥Empurra');
+      if (flip180) tags.push('🔄Gira 180°');
+      if (swapTarget) tags.push('⇄Troca');
+      if (poison) tags.push('🧪Ácido');
+      if (shockChain) tags.push('⚡Choque');
+      if (hits > 1) tags.push('⚔️2×');
+      if (comboBonus) tags.push('⏱️-1CD/+1');
+
+      const curCd = Math.min(cdMax, state.weaponCds[org.uid] || 0);
+
+      return {
+        uid: org.uid,
+        pieceId: org.pieceId,
+        icon: def.icon,
+        color: def.color,
+        name: buildWeaponName(def, mods),
+        level,
+        mods,
+        pattern: def.pattern,
+        patternViz: def.patternViz,
+        dmg,
+        hits,
+        cdMax,
+        cd: curCd,
+        push,
+        flip180,
+        swapTarget,
+        poison,
+        acidPool,
+        shockChain,
+        comboBonus,
+        tags,
+        desc: def.desc,
+      };
+    });
+
+    // Lista de partes ativas para renderização procedural da Quimera (Spore!)
+    const activePartIds = Array.from(new Set(state.gridPieces.map(p => p.pieceId)));
+    const activeModIds = Array.from(new Set(activeStarLinks.map(l => l.modId)));
+
+    return { weapons, activeStarLinks, activePartIds, activeModIds };
+  }
+
+  // ==================== ONDAS & ARQUÉTIPOS ÚNICOS ====================
+  // trait: 'FRONT_SHIELD' (bloqueia -2 pela frente) | 'EXPLOSIVE' (explode 3 dano nos vizinhos ao morrer)
+  // attackType: 'MELEE_1' | 'SPEAR_2' | 'ARROW' | 'SWIRL' | 'CHARGE' (avança até bater!)
+  const WAVES = [
+    {
+      stage: 1,
+      name: 'Onda 1 · Emboscada Explosiva',
+      hint: 'Truque: Encaixe 🧲 Tendão no 5×4 OU clique direto no inimigo adjacente para usar ⚡ TROCA RÁPIDA! Estoure o 💣 Esporo perto do Escorpião!',
+      playerPos: 2,
+      playerDir: 1,
+      acidTiles: [],
+      enemies: [
+        {
+          id: 'w1_esporo', name: 'Esporo Volátil', icon: '💣', pos: 4, dir: -1, hp: 4, maxHp: 4,
+          attackType: 'MELEE_1', dmg: 2, trait: 'EXPLOSIVE', traitLabel: '💥 Explode (3)',
+          lootPieceId: 'PECONHA', state: 'IDLE',
+        },
+        {
+          id: 'w1_escorp', name: 'Escorpião Atirador', icon: '🦂', pos: 6, dir: -1, hp: 5, maxHp: 5,
+          attackType: 'ARROW', dmg: 3, trait: null, traitLabel: '🎯 Tiro Reto',
+          lootPieceId: 'NERVO', state: 'IDLE',
+        },
+      ],
+      draftOptions: ['PECONHA', 'LINGUA'],
+    },
+    {
+      stage: 2,
+      name: 'Onda 2 · Escudo & Atropelo',
+      hint: '🛡️ Besouro bloqueia -2 pela frente (use ⚡ Troca Rápida ou 🔄 Giro 180°)! 🦏 Javali atropela a fila inteira — faça ele atropelar o aliado!',
+      playerPos: 2,
+      playerDir: 1,
+      acidTiles: [4],
+      enemies: [
+        {
+          id: 'w2_escudeiro', name: 'Besouro Escudeiro', icon: '🛡️', pos: 4, dir: -1, hp: 6, maxHp: 6,
+          attackType: 'SPEAR_2', dmg: 3, trait: 'FRONT_SHIELD', traitLabel: '🛡️ Escudo Frontal',
+          lootPieceId: 'FERRAO_CURVO', state: 'IDLE',
+        },
+        {
+          id: 'w2_javali', name: 'Javali Investida', icon: '🦏', pos: 0, dir: 1, hp: 5, maxHp: 5,
+          attackType: 'CHARGE', dmg: 3, trait: null, traitLabel: '💨 Atropela Linha',
+          lootPieceId: 'PATAS', state: 'PRIMED',
+        },
+        {
+          id: 'w2_esporo2', name: 'Esporo Volátil', icon: '💣', pos: 6, dir: -1, hp: 3, maxHp: 3,
+          attackType: 'MELEE_1', dmg: 2, trait: 'EXPLOSIVE', traitLabel: '💥 Explode (3)',
+          lootPieceId: 'REPIQUE', state: 'IDLE',
+        },
+      ],
+      draftOptions: ['REPIQUE', 'PATAS'],
+    },
+    {
+      stage: 3,
+      name: 'Onda 3 · Cerco Voltaico',
+      hint: 'Cercado! Combine ⚔️ Repique ou ⚡ Nervo na 🦂 Cauda e use Combo Kill (2 abates juntos = recarrega armas +2 PV)!',
+      playerPos: 3,
+      playerDir: 1,
+      acidTiles: [1, 5],
+      enemies: [
+        {
+          id: 'w3_louva', name: 'Louva-a-Deus', icon: '🦗', pos: 1, dir: 1, hp: 5, maxHp: 5,
+          attackType: 'SWIRL', dmg: 3, trait: null, traitLabel: '⚔️ Frente+Trás',
+          lootPieceId: 'ADRENALINA', state: 'IDLE',
+        },
+        {
+          id: 'w3_esporo3', name: 'Esporo Volátil', icon: '💣', pos: 4, dir: -1, hp: 4, maxHp: 4,
+          attackType: 'MELEE_1', dmg: 2, trait: 'EXPLOSIVE', traitLabel: '💥 Explode (3)',
+          lootPieceId: 'NERVO', state: 'IDLE',
+        },
+        {
+          id: 'w3_javali2', name: 'Javali Blindado', icon: '🦏', pos: 6, dir: -1, hp: 6, maxHp: 6,
+          attackType: 'CHARGE', dmg: 3, trait: 'FRONT_SHIELD', traitLabel: '🛡️ Escudo+Carga',
+          lootPieceId: 'PINCA', state: 'PRIMED',
+        },
+      ],
+      draftOptions: ['ADRENALINA', 'PINCA'],
+    },
+    {
+      stage: 4,
+      name: 'Onda 4 · CHEFE: Quimera Soberana',
+      hint: 'CHEFE ADAPTATIVO! Ela absorveu os genes que você rejeitou! Empurre o 💣 Esporo contra ela e encadeie combos de 3 golpes!',
+      playerPos: 1,
+      playerDir: 1,
+      acidTiles: [3],
+      enemies: [
+        {
+          id: 'w4_esporo', name: 'Esporo Guardião', icon: '💣', pos: 3, dir: -1, hp: 4, maxHp: 4,
+          attackType: 'MELEE_1', dmg: 2, trait: 'EXPLOSIVE', traitLabel: '💥 Explode (3)',
+          lootPieceId: 'TENDAO', state: 'IDLE',
+        },
+        {
+          id: 'w4_boss', name: 'Quimera Soberana', icon: '👑', pos: 5, dir: -1, hp: 14, maxHp: 14,
+          attackType: 'SPEAR_2', dmg: 4, trait: null, traitLabel: '👑 Chefe',
+          lootPieceId: 'PINCA', state: 'IDLE', isBoss: true,
+        },
+        {
+          id: 'w4_atirador', name: 'Escorpião Real', icon: '🦂', pos: 6, dir: -1, hp: 5, maxHp: 5,
+          attackType: 'ARROW', dmg: 3, trait: null, traitLabel: '🎯 Tiro Reto',
+          lootPieceId: 'OSSO', state: 'PRIMED',
+        },
+      ],
+      draftOptions: [],
+    },
+  ];
+
+  // ==================== CRIAÇÃO DE ESTADO ====================
+  function makeUid(state, prefix = 'p') {
+    state.uidCounter += 1;
+    return `${prefix}_${state.uidCounter}`;
+  }
+
+  function pushEvent(state, ev) {
+    state.lastEvents.push(ev);
+  }
+
+  function applyBossMutations(boss, bossMutations) {
+    if (!boss || !bossMutations || bossMutations.length === 0) return;
+    const labels = ['👑'];
+    for (const pid of bossMutations) {
+      if (pid === 'OSSO' || pid === 'PINCA') { boss.maxHp += 3; boss.hp += 3; labels.push('🪨+3PV'); }
+      else if (pid === 'PECONHA') { boss.leavesAcid = true; labels.push('🧪Ácido'); }
+      else if (pid === 'NERVO' || pid === 'LINGUA') { boss.dmg += 1; labels.push('⚡+1Dano'); }
+      else if (pid === 'REPIQUE') { boss.trait = 'FRONT_SHIELD'; labels.push('🛡️Escudo'); }
+      else if (pid === 'ADRENALINA' || pid === 'PATAS') { boss.state = 'PRIMED'; labels.push('⚡Rápido'); }
+    }
+    boss.traitLabel = labels.join(' ');
+  }
+
+  function loadWaveIntoState(state, waveIndex) {
+    const wave = WAVES[waveIndex];
+    state.waveIndex = waveIndex;
+    state.waveName = wave.name;
+    state.waveHint = wave.hint;
+    state.phase = 'COMBAT'; // 'COMBAT' | 'WAVE_CLEAR' | 'VICTORY' | 'DEFEAT'
+    state.turn = 1;
+    state.player.pos = wave.playerPos;
+    state.player.dir = wave.playerDir;
+    state.player.shield = 0;
+    state.player.swapCd = 0;
+    state.queue = [];
+    state.weaponCds = {};
+    state.recombinesLeft = 1;
+    state.pendingDraft = null;
+    state.acidTiles = [...wave.acidTiles];
+    state.enemies = wave.enemies.map(e => ({
+      ...e,
+      poison: 0,
+      exposed: false,
+      disarmed: false,
+      leavesAcid: false,
+    }));
+    const boss = state.enemies.find(e => e.isBoss);
+    if (boss) applyBossMutations(boss, state.bossMutations);
+    state.lastEvents = [];
+    state.log.unshift(`⚔️ ${wave.name} começou!`);
+  }
+
+  function createInitialState() {
+    const state = {
+      version: VERSION,
+      uidCounter: 0,
+      waveIndex: 0,
+      waveName: '',
+      waveHint: '',
+      phase: 'COMBAT',
+      turn: 1,
+      player: {
+        pos: 2,
+        dir: 1,
+        hp: 14,
+        maxHp: 14,
+        shield: 0,
+        swapCd: 0, // Movimento Assinatura: Troca Rápida (CD 3)
+        swapCdMax: 3,
+      },
+      gridPieces: [],
+      reservePieces: [],
+      bossMutations: [], // Genes rejeitados no draft vão para a Quimera Soberana!
+      pendingDraft: null, // [pieceIdA, pieceIdB] durante WAVE_CLEAR
+      weaponCds: {},
+      queue: [],
+      recombinesLeft: 1,
+      acidTiles: [],
+      enemies: [],
+      lastEvents: [],
+      log: [],
+    };
+
+    state.gridPieces = [
+      { uid: makeUid(state, 'org'), pieceId: 'MANDIBULA', x: 0, y: 0, rot: 0 },
+      { uid: makeUid(state, 'var'), pieceId: 'OSSO', x: 0, y: 1, rot: 0 },
+      { uid: makeUid(state, 'org'), pieceId: 'ESPINHO', x: 2, y: 2, rot: 0 },
+      { uid: makeUid(state, 'org'), pieceId: 'CAUDA', x: 3, y: 0, rot: 0 },
+    ];
+    state.reservePieces = [
+      { uid: makeUid(state, 'var'), pieceId: 'TENDAO', rot: 0 },
+    ];
+
+    loadWaveIntoState(state, 0);
+    return state;
+  }
+
+  function cloneState(state) {
+    return JSON.parse(JSON.stringify(state));
+  }
+
+  // ==================== GESTÃO DE INVENTÁRIO 5×4 ====================
+  function canRecombine(state) {
+    if (state.phase === 'WAVE_CLEAR') return true;
+    if (state.phase !== 'COMBAT') return false;
+    return state.recombinesLeft > 0;
+  }
+
+  function consumeRecombine(state) {
+    if (state.phase === 'COMBAT') {
+      state.recombinesLeft = Math.max(0, state.recombinesLeft - 1);
+    }
+  }
+
+  function placePieceOnGrid(state, uid, x, y, rot) {
+    if (!canRecombine(state)) {
+      return { ok: false, reason: 'Sem ajustes restantes neste turno (renova no próximo turno ou entre ondas).' };
+    }
+    const inGridIdx = state.gridPieces.findIndex(p => p.uid === uid);
+    const inResIdx = state.reservePieces.findIndex(p => p.uid === uid);
+    if (inGridIdx === -1 && inResIdx === -1) return { ok: false, reason: 'Peça não encontrada.' };
+
+    const piece = inGridIdx !== -1 ? state.gridPieces[inGridIdx] : state.reservePieces[inResIdx];
+    const check = canPlaceOnGrid(state.gridPieces, piece.pieceId, x, y, rot, uid);
+    if (!check.ok) return check;
+
+    const normRot = ((rot % 4) + 4) % 4;
+    if (inGridIdx !== -1 && piece.x === x && piece.y === y && piece.rot === normRot) {
+      return { ok: true, noop: true };
+    }
+
+    if (inResIdx !== -1) {
+      state.reservePieces.splice(inResIdx, 1);
+      state.gridPieces.push({ uid: piece.uid, pieceId: piece.pieceId, x, y, rot: normRot });
+    } else {
+      state.gridPieces[inGridIdx].x = x;
+      state.gridPieces[inGridIdx].y = y;
+      state.gridPieces[inGridIdx].rot = normRot;
+    }
+
+    consumeRecombine(state);
+    const def = PIECES[piece.pieceId];
+    state.log.unshift(`🧬 Organismo recombinado: ${def.icon} ${def.name} encaixado em (${x + 1},${y + 1}).`);
+    return { ok: true };
+  }
+
+  function movePieceToReserve(state, uid) {
+    if (!canRecombine(state)) return { ok: false, reason: 'Sem ajustes restantes neste turno.' };
+    const idx = state.gridPieces.findIndex(p => p.uid === uid);
+    if (idx === -1) return { ok: false, reason: 'Peça não está na grade.' };
+    const piece = state.gridPieces[idx];
+    if (PIECES[piece.pieceId].kind === 'ORGAN') {
+      const organCount = state.gridPieces.filter(p => PIECES[p.pieceId].kind === 'ORGAN').length;
+      if (organCount <= 1) return { ok: false, reason: 'Mantenha pelo menos 1 Órgão ativo no organismo!' };
+    }
+
+    state.gridPieces.splice(idx, 1);
+    state.reservePieces.push({ uid: piece.uid, pieceId: piece.pieceId, rot: piece.rot });
+    state.queue = state.queue.filter(qid => qid !== uid);
+    consumeRecombine(state);
+    const def = PIECES[piece.pieceId];
+    state.log.unshift(`📦 ${def.icon} ${def.name} guardado na Bandeja.`);
+    return { ok: true };
+  }
+
+  function chooseDraftLoot(state, chosenPieceId) {
+    if (state.phase !== 'WAVE_CLEAR' || !state.pendingDraft) {
+      return { ok: false, reason: 'Nenhum draft pendente.' };
+    }
+    if (!state.pendingDraft.includes(chosenPieceId)) {
+      return { ok: false, reason: 'Escolha inválida.' };
+    }
+    const rejected = state.pendingDraft.filter(id => id !== chosenPieceId);
+    const def = PIECES[chosenPieceId];
+    const uid = makeUid(state, def.kind === 'ORGAN' ? 'org' : 'var');
+    state.reservePieces.push({ uid, pieceId: chosenPieceId, rot: 0 });
+    for (const rej of rejected) {
+      state.bossMutations.push(rej);
+      const rDef = PIECES[rej];
+      state.log.unshift(`👑 A Quimera Soberana absorveu [${rDef.icon} ${rDef.name}] que você rejeitou!`);
+    }
+    state.pendingDraft = null;
+    state.log.unshift(`🎁 Você coletou [${def.icon} ${def.name}] na Bandeja! Recombine no 5×4.`);
+    return { ok: true, uid, pieceId: chosenPieceId };
+  }
+
+  // ==================== HELPERS DE COMBATE 1D ====================
+  function enemyAt(state, pos) {
+    return state.enemies.find(e => e.hp > 0 && e.pos === pos) || null;
+  }
+
+  function actorAt(state, pos) {
+    if (state.player.pos === pos) return { type: 'PLAYER', ref: state.player };
+    const e = enemyAt(state, pos);
+    if (e) return { type: 'ENEMY', ref: e };
+    return null;
+  }
+
+  function firstEnemyInDir(state, fromPos, dir) {
+    for (let p = fromPos + dir; p >= 0 && p < STRIP_LEN; p += dir) {
+      const e = enemyAt(state, p);
+      if (e) return e;
+    }
+    return null;
+  }
+
+  function firstActorInDir(state, fromPos, dir) {
+    for (let p = fromPos + dir; p >= 0 && p < STRIP_LEN; p += dir) {
+      const a = actorAt(state, p);
+      if (a) return a;
+    }
+    return null;
+  }
+
+  function getEnemyThreatTiles(state, enemy) {
+    if (!enemy || enemy.hp <= 0 || enemy.state !== 'PRIMED') return [];
+    const d = enemy.dir;
+    const tiles = [];
+    if (enemy.attackType === 'MELEE_1') {
+      const t = enemy.pos + d;
+      if (t >= 0 && t < STRIP_LEN) tiles.push(t);
+    } else if (enemy.attackType === 'SPEAR_2') {
+      for (let s = 1; s <= 2; s++) {
+        const t = enemy.pos + d * s;
+        if (t >= 0 && t < STRIP_LEN) tiles.push(t);
+      }
+    } else if (enemy.attackType === 'SWIRL') {
+      if (enemy.pos - 1 >= 0) tiles.push(enemy.pos - 1);
+      if (enemy.pos + 1 < STRIP_LEN) tiles.push(enemy.pos + 1);
+    } else if (enemy.attackType === 'ARROW' || enemy.attackType === 'CHARGE') {
+      const hit = firstActorInDir(state, enemy.pos, d);
+      if (hit) {
+        const end = hit.type === 'PLAYER' ? state.player.pos : hit.ref.pos;
+        if (enemy.attackType === 'CHARGE') {
+          for (let p = enemy.pos + d; p !== end + d; p += d) tiles.push(p);
+        } else {
+          tiles.push(end);
+        }
+      } else {
+        for (let p = enemy.pos + d; p >= 0 && p < STRIP_LEN; p += d) tiles.push(p);
+      }
+    }
+    return tiles;
+  }
+
+  function damagePlayer(state, amount, sourceText, label = null) {
+    if (amount <= 0) return 0;
+    let rem = amount;
+    if (state.player.shield > 0) {
+      const abs = Math.min(state.player.shield, rem);
+      state.player.shield -= abs;
+      rem -= abs;
+    }
+    if (rem > 0) state.player.hp = Math.max(0, state.player.hp - rem);
+    pushEvent(state, {
+      type: 'HIT_PLAYER',
+      pos: state.player.pos,
+      dmg: rem,
+      blocked: amount - rem,
+      text: label || (rem > 0 ? `-${rem} ❤️` : `🛡️ BLOQ!`),
+      shake: rem >= 2,
+    });
+    state.log.unshift(`💢 ${sourceText} causou ${rem} de dano${amount - rem > 0 ? ` (${amount - rem} bloqueado)` : ''}!`);
+    return rem;
+  }
+
+  function damageEnemy(state, enemy, amount, reason = '', opts = {}) {
+    if (!enemy || enemy.hp <= 0 || amount <= 0) return { dealt: 0, killed: false };
+    const { expose = false, fromDir = null, ignoreFrontShield = false, popupText = null, shake = false } = opts;
+
+    let finalDmg = amount;
+    let shieldBlocked = false;
+    // Escudo Frontal: se golpe veio de frente (direção oposta ao facing do inimigo), bloqueia -2!
+    if (enemy.trait === 'FRONT_SHIELD' && !ignoreFrontShield && fromDir !== null && fromDir === -enemy.dir) {
+      finalDmg = Math.max(0, finalDmg - 2);
+      shieldBlocked = true;
+    }
+
+    enemy.hp = Math.max(0, enemy.hp - finalDmg);
+    pushEvent(state, {
+      type: shieldBlocked && finalDmg === 0 ? 'BLOCKED' : 'HIT_ENEMY',
+      pos: enemy.pos,
+      dmg: finalDmg,
+      id: enemy.id,
+      text: popupText || (shieldBlocked ? (finalDmg === 0 ? '🛡️ BLOQ!' : `-${finalDmg} 🛡️`) : `-${finalDmg}`),
+      shake: shake || finalDmg >= 3,
+    });
+
+    if (expose && enemy.hp > 0 && !enemy.disarmed && enemy.lootPieceId) {
+      enemy.exposed = true;
+    }
+    if (reason) {
+      state.log.unshift(shieldBlocked ? `${reason} (🛡️ Escudo Frontal reduziu -2!)` : reason);
+    }
+
+    let killed = false;
+    if (enemy.hp <= 0) {
+      killed = true;
+      pushEvent(state, { type: 'KILL', pos: enemy.pos, text: '☠️ ABATE!', shake: true });
+      state.log.unshift(`💀 ${enemy.icon} ${enemy.name} foi abatido!`);
+
+      // Arquétipo 💣 Esporo Volátil: explode nos dois vizinhos!
+      if (enemy.trait === 'EXPLOSIVE') {
+        const boomPos = enemy.pos;
+        pushEvent(state, { type: 'EXPLODE', pos: boomPos, text: '💥 BOOM 3!', shake: true });
+        state.log.unshift(`💣 EXPLOSÃO VOLÁTIL! ${enemy.name} detonou causando 3 de dano nos vizinhos!`);
+        for (const adj of [boomPos - 1, boomPos + 1]) {
+          if (adj < 0 || adj >= STRIP_LEN) continue;
+          if (state.player.pos === adj) {
+            damagePlayer(state, 3, 'Explosão do Esporo Volátil', '💥 -3');
+          } else {
+            const other = enemyAt(state, adj);
+            if (other && other.id !== enemy.id) {
+              damageEnemy(state, other, 3, `💥 Explosão atingiu ${other.icon} ${other.name} por 3 de dano (EXPÕE gene)!`, {
+                expose: true, ignoreFrontShield: true, popupText: '💥 -3!', shake: true,
+              });
+            }
+          }
+        }
+      }
+    }
+    return { dealt: finalDmg, killed };
+  }
+
+  function pushEnemy(state, enemy, dir, dist = 1) {
+    if (!enemy || enemy.hp <= 0) return;
+    for (let step = 0; step < dist; step++) {
+      const next = enemy.pos + dir;
+      if (next < 0 || next >= STRIP_LEN) {
+        damageEnemy(state, enemy, 2, `💥 COLISÃO NA PAREDE! ${enemy.icon} ${enemy.name} sofre +2 dano e EXPÕE gene!`, {
+          expose: true, ignoreFrontShield: true, popupText: '💥 PAREDE -2!', shake: true,
+        });
+        break;
+      }
+      const blocker = actorAt(state, next);
+      if (blocker) {
+        damageEnemy(state, enemy, 2, `💥 COLISÃO! ${enemy.icon} ${enemy.name} bateu (+2 dano & EXPÕE)!`, {
+          expose: true, ignoreFrontShield: true, popupText: '💥 COLISÃO -2!', shake: true,
+        });
+        if (blocker.type === 'ENEMY') {
+          damageEnemy(state, blocker.ref, 2, `💥 ${blocker.ref.icon} ${blocker.ref.name} levou +2 da colisão!`, {
+            expose: true, ignoreFrontShield: true, popupText: '💥 -2!', shake: true,
+          });
+        } else {
+          damagePlayer(state, 1, `Colisão com ${enemy.name}`, '💥 -1');
+        }
+        break;
+      }
+      const from = enemy.pos;
+      enemy.pos = next;
+      pushEvent(state, { type: 'PUSH', from, to: next, pos: next, text: dir > 0 ? '➔ EMPURROU!' : '⬅ EMPURROU!' });
+      if (state.acidTiles.includes(next)) {
+        damageEnemy(state, enemy, 1, `🧪 ${enemy.icon} ${enemy.name} caiu no Ácido (+1 & EXPÕE)!`, {
+          expose: true, ignoreFrontShield: true, popupText: '🧪 -1!',
+        });
+      }
+    }
+  }
+
+  // ==================== CIRURGIA EM VIDA ====================
+  function extractExposedGene(state, enemyId) {
+    if (state.phase !== 'COMBAT') return { ok: false, reason: 'Só durante o combate.' };
+    const enemy = state.enemies.find(e => e.id === enemyId && e.hp > 0);
+    if (!enemy || !enemy.exposed || enemy.disarmed || !enemy.lootPieceId) {
+      return { ok: false, reason: 'Inimigo não tem gene exposto.' };
+    }
+    const pieceDef = PIECES[enemy.lootPieceId];
+    const newUid = makeUid(state, pieceDef.kind === 'ORGAN' ? 'org' : 'var');
+    state.reservePieces.push({ uid: newUid, pieceId: enemy.lootPieceId, rot: 0 });
+    enemy.exposed = false;
+    enemy.disarmed = true;
+    enemy.state = 'IDLE';
+    enemy.trait = null; // Arrancar o gene remove também o Escudo Frontal ou Explosivo!
+    enemy.dmg = Math.max(1, enemy.dmg - 1);
+    state.player.hp = Math.min(state.player.maxHp, state.player.hp + 2);
+    state.recombinesLeft = Math.max(1, state.recombinesLeft);
+    pushEvent(state, { type: 'EXTRACT', pos: enemy.pos, text: `✂️ ROUBOU ${pieceDef.icon}!`, shake: true });
+    state.log.unshift(`✂️ CIRURGIA EM VIDA! Arrancou [${pieceDef.icon} ${pieceDef.name}] de ${enemy.name} (desarmado +2 PV! Encaixe já no 5×4!)`);
+    return { ok: true, uid: newUid, pieceId: enemy.lootPieceId };
+  }
+
+  // ==================== EXECUÇÃO DE 1 ARMA GERADA ====================
+  function executeSingleWeapon(state, weapon, comboIndex) {
+    const p = state.player;
+    const totalDmg = weapon.dmg + (comboIndex > 0 ? weapon.comboBonus : 0);
+
+    const applyHitEffects = (target, strikeDir, bypassShield = false) => {
+      if (!target || target.hp <= 0) return;
+      const isBackstab = target.dir === strikeDir;
+      const dealt = totalDmg + (isBackstab ? 1 : 0);
+      damageEnemy(
+        state,
+        target,
+        dealt,
+        `${weapon.icon} ${weapon.name} acerta ${target.icon} ${target.name}${isBackstab ? ' pelas COSTAS (+1 & EXPÕE!)' : ''}!`,
+        {
+          expose: isBackstab,
+          fromDir: strikeDir,
+          ignoreFrontShield: bypassShield || isBackstab || weapon.poison > 0,
+          popupText: isBackstab ? `🗡️ -${dealt}!` : `-${dealt}`,
+          shake: isBackstab || dealt >= 3,
+        }
+      );
+
+      if (target.hp > 0 && weapon.poison > 0) {
+        target.poison += weapon.poison;
+        pushEvent(state, { type: 'ACID', pos: target.pos, text: `🧪 +${weapon.poison}` });
+        state.log.unshift(`🧪 ${target.name} recebeu +${weapon.poison} Veneno!`);
+      }
+      if (weapon.acidPool && !state.acidTiles.includes(target.pos)) {
+        state.acidTiles.push(target.pos);
+      }
+      if (weapon.shockChain) {
+        if (target.hp > 0 && target.state === 'PRIMED') {
+          target.state = 'IDLE';
+          pushEvent(state, { type: 'SHOCK', pos: target.pos, text: '⚡ CANCELOU!' });
+          state.log.unshift(`⚡ ${target.name} levou choque e PERDEU a mira!`);
+        }
+        for (const adj of [target.pos - 1, target.pos + 1]) {
+          const near = enemyAt(state, adj);
+          if (near && near.id !== target.id) {
+            damageEnemy(state, near, 1, `⚡ Choque em cadeia atingiu ${near.name} (+1)!`, {
+              ignoreFrontShield: true, popupText: '⚡ -1',
+            });
+          }
+        }
+      }
+      if (target.hp > 0 && weapon.flip180) {
+        target.dir *= -1;
+        target.exposed = !target.disarmed && !!target.lootPieceId;
+        pushEvent(state, { type: 'FLIP', pos: target.pos, text: '🔄 VIROU 180°!' });
+        state.log.unshift(`🔄 ${target.icon} ${target.name} foi GIRADO 180°!`);
+      }
+      if (target.hp > 0 && weapon.push > 0) {
+        pushEnemy(state, target, strikeDir, weapon.push);
+      }
+    };
+
+    for (let hitNum = 0; hitNum < weapon.hits; hitNum++) {
+      if (weapon.pattern === 'MELEE_1') {
+        const t = enemyAt(state, p.pos + p.dir);
+        if (t) applyHitEffects(t, p.dir);
+      } else if (weapon.pattern === 'SPEAR_2') {
+        const t1 = enemyAt(state, p.pos + p.dir);
+        const t2 = enemyAt(state, p.pos + p.dir * 2);
+        const list = weapon.push > 0 ? [t2, t1] : [t1, t2];
+        for (const t of list) if (t && t.hp > 0) applyHitEffects(t, p.dir);
+      } else if (weapon.pattern === 'SWIRL') {
+        const tf = enemyAt(state, p.pos + p.dir);
+        const tb = enemyAt(state, p.pos - p.dir);
+        if (tf) applyHitEffects(tf, p.dir);
+        if (tb) applyHitEffects(tb, -p.dir);
+      } else if (weapon.pattern === 'SHADOW_KAMA') {
+        const t = enemyAt(state, p.pos + p.dir * 2);
+        if (t) applyHitEffects(t, p.dir, true); // Pula a frente -> ignora escudo frontal!
+      } else if (weapon.pattern === 'ARROW') {
+        const t = firstEnemyInDir(state, p.pos, p.dir);
+        if (t) {
+          pushEvent(state, { type: 'PROJECTILE', from: p.pos, to: t.pos, pos: t.pos, text: '🎯' });
+          if (weapon.swapTarget) {
+            const oldP = p.pos;
+            p.pos = t.pos;
+            t.pos = oldP;
+            pushEvent(state, { type: 'SWAP', from: oldP, to: p.pos, pos: t.pos, text: '⇄ TROCA!' });
+            state.log.unshift(`⇄ TROCA DE LUGAR com ${t.icon} ${t.name}!`);
+            applyHitEffects(t, -p.dir);
+          } else {
+            applyHitEffects(t, p.dir);
+          }
+        }
+      } else if (weapon.pattern === 'GRAPPLE') {
+        const t = firstEnemyInDir(state, p.pos, p.dir);
+        if (t) {
+          if (weapon.swapTarget) {
+            const oldP = p.pos;
+            p.pos = t.pos;
+            t.pos = oldP;
+            pushEvent(state, { type: 'SWAP', from: oldP, to: p.pos, pos: t.pos, text: '⇄ TROCA!' });
+            state.log.unshift(`⇄ TROCA QUIMÉRICA com ${t.icon} ${t.name}!`);
+            applyHitEffects(t, -p.dir);
+          } else {
+            const dest = p.pos + p.dir;
+            if (dest !== t.pos && !actorAt(state, dest)) {
+              const oldPos = t.pos;
+              t.pos = dest;
+              pushEvent(state, { type: 'PUSH', from: oldPos, to: dest, pos: dest, text: '🐸 PUXOU!' });
+              state.log.unshift(`🐸 ${t.name} foi PUXADO para a casa ${dest + 1}!`);
+              if (state.acidTiles.includes(dest)) {
+                damageEnemy(state, t, 1, `🧪 ${t.name} caiu no Ácido (+1 & EXPÕE)!`, { expose: true, ignoreFrontShield: true });
+              }
+            }
+            applyHitEffects(t, p.dir);
+          }
+        }
+      } else if (weapon.pattern === 'SHADOW_DASH') {
+        const passed = [];
+        let cursor = p.pos + p.dir;
+        while (cursor >= 0 && cursor < STRIP_LEN) {
+          const e = enemyAt(state, cursor);
+          if (e) { passed.push(e); cursor += p.dir; } else break;
+        }
+        if (weapon.swapTarget && passed.length > 0) {
+          const target = passed[0];
+          const oldP = p.pos;
+          p.pos = target.pos;
+          target.pos = oldP;
+          pushEvent(state, { type: 'SWAP', from: oldP, to: p.pos, pos: target.pos, text: '⇄ TROCA!' });
+          state.log.unshift(`⇄ Salto com Troca em ${target.name}!`);
+          applyHitEffects(target, -p.dir, true);
+        } else if (cursor >= 0 && cursor < STRIP_LEN && !actorAt(state, cursor)) {
+          const oldP = p.pos;
+          p.pos = cursor;
+          pushEvent(state, { type: 'DASH', from: oldP, to: cursor, pos: cursor, text: '🦗 ATRAVESSOU!' });
+          state.log.unshift(`🦗 Patas atravessaram para a casa ${cursor + 1}!`);
+          for (const e of passed) applyHitEffects(e, p.dir, true);
+        } else if (passed.length > 0) {
+          applyHitEffects(passed[0], p.dir);
+        }
+      }
+    }
+  }
+
+  // ==================== FASE DOS INIMIGOS & AVANÇO DE TURNO ====================
+  function resolveEnemyPhase(state) {
+    for (const e of state.enemies) {
+      if (e.hp > 0 && e.poison > 0) {
+        damageEnemy(state, e, 1, `☠️ ${e.name} sofre 1 de Veneno.`, { ignoreFrontShield: true, popupText: '🧪 -1' });
+        e.poison = Math.max(0, e.poison - 1);
+      }
+    }
+
+    const ordered = state.enemies.filter(e => e.hp > 0).sort((a, b) => a.pos - b.pos);
+    for (const e of ordered) {
+      if (e.hp <= 0 || state.player.hp <= 0) continue;
+
+      if (e.state === 'PRIMED') {
+        if (e.attackType === 'CHARGE') {
+          // Investida total até bater no 1º ator (ou borda)!
+          const hit = firstActorInDir(state, e.pos, e.dir);
+          if (hit) {
+            const targetPos = hit.type === 'PLAYER' ? state.player.pos : hit.ref.pos;
+            const stopPos = targetPos - e.dir;
+            e.pos = stopPos;
+            pushEvent(state, { type: 'DASH', pos: stopPos, text: '🦏 CARGA!' });
+            if (hit.type === 'PLAYER') {
+              damagePlayer(state, e.dmg, `${e.icon} ${e.name} (Investida)`, `🦏 -${e.dmg}!`);
+            } else {
+              damageEnemy(
+                state,
+                hit.ref,
+                e.dmg,
+                `💥 FOGO AMIGO! ${e.icon} ${e.name} atropelou ${hit.ref.icon} ${hit.ref.name} por ${e.dmg} (EXPÕE)!`,
+                { expose: true, ignoreFrontShield: true, popupText: `💥 FOGO AMIGO -${e.dmg}!`, shake: true }
+              );
+            }
+          } else {
+            e.pos = e.dir > 0 ? STRIP_LEN - 1 : 0;
+            state.log.unshift(`💨 ${e.icon} ${e.name} atravessou no vazio!`);
+          }
+          e.state = 'IDLE';
+        } else {
+          const threat = getEnemyThreatTiles(state, e);
+          let hitSomething = false;
+          for (const tPos of threat) {
+            if (e.leavesAcid && !state.acidTiles.includes(tPos)) state.acidTiles.push(tPos);
+            if (state.player.pos === tPos) {
+              damagePlayer(state, e.dmg, `${e.icon} ${e.name}`);
+              hitSomething = true;
+            } else {
+              const ally = enemyAt(state, tPos);
+              if (ally && ally.id !== e.id) {
+                damageEnemy(
+                  state,
+                  ally,
+                  e.dmg,
+                  `💥 FOGO AMIGO! ${e.icon} ${e.name} acertou ${ally.icon} ${ally.name} por ${e.dmg} (gene EXPOSTO)!`,
+                  { expose: true, ignoreFrontShield: true, popupText: `💥 FOGO AMIGO -${e.dmg}!`, shake: true }
+                );
+                hitSomething = true;
+              }
+            }
+          }
+          if (!hitSomething) state.log.unshift(`💨 ${e.icon} ${e.name} atacou o ar!`);
+          e.state = 'IDLE';
+        }
+      } else {
+        const dist = state.player.pos - e.pos;
+        const facingPlayer = (dist > 0 && e.dir === 1) || (dist < 0 && e.dir === -1);
+        const absDist = Math.abs(dist);
+        const inRange =
+          (e.attackType === 'SWIRL' && absDist === 1) ||
+          (facingPlayer && e.attackType === 'MELEE_1' && absDist === 1) ||
+          (facingPlayer && e.attackType === 'SPEAR_2' && absDist <= 2) ||
+          (facingPlayer && (e.attackType === 'ARROW' || e.attackType === 'CHARGE'));
+
+        if (inRange) {
+          e.state = 'PRIMED';
+          state.log.unshift(`⚠️ ${e.icon} ${e.name} preparou ataque (${e.dmg} dano)!`);
+        } else if (!facingPlayer && dist !== 0) {
+          e.dir = dist > 0 ? 1 : -1;
+        } else {
+          const stepPos = e.pos + e.dir;
+          if (stepPos >= 0 && stepPos < STRIP_LEN && !actorAt(state, stepPos)) {
+            e.pos = stepPos;
+            if (state.acidTiles.includes(stepPos)) {
+              damageEnemy(state, e, 1, `🧪 ${e.name} pisou no Ácido (+1 & EXPÕE)!`, { expose: true, ignoreFrontShield: true });
+            }
+          }
+        }
+      }
+    }
+
+    if (state.player.hp <= 0) {
+      state.phase = 'DEFEAT';
+      state.log.unshift('💀 Seu organismo sucumbiu!');
+      return;
+    }
+
+    const alive = state.enemies.filter(e => e.hp > 0);
+    if (alive.length === 0) {
+      if (state.waveIndex + 1 >= WAVES.length) {
+        state.phase = 'VICTORY';
+        state.log.unshift('🏆 VITÓRIA SUPREMA! Você dominou a Quimera Soberana!');
+      } else {
+        const wave = WAVES[state.waveIndex];
+        state.player.hp = Math.min(state.player.maxHp, state.player.hp + 4);
+        state.phase = 'WAVE_CLEAR';
+        state.pendingDraft = [...wave.draftOptions];
+        state.queue = [];
+        state.weaponCds = {};
+        state.log.unshift(`🎉 ${wave.name} vencida! (+4 PV) Escolha 1 Loot — o que rejeitar fortalece o Chefe Final!`);
+      }
+      return;
+    }
+
+    state.turn += 1;
+    state.player.shield = 0;
+    state.recombinesLeft = 1;
+    if (state.player.swapCd > 0) state.player.swapCd -= 1;
+    for (const uid of Object.keys(state.weaponCds)) {
+      if (state.weaponCds[uid] > 0) state.weaponCds[uid] -= 1;
+    }
+  }
+
+  // ==================== AÇÕES DO JOGADOR ====================
+  function movePlayer(state, delta) {
+    if (state.phase !== 'COMBAT') return { ok: false, reason: 'Fora de combate.' };
+    const target = state.player.pos + delta;
+    if (target < 0 || target >= STRIP_LEN) return { ok: false, reason: 'Limite da arena.' };
+
+    const adjEnemy = enemyAt(state, target);
+    if (adjEnemy) {
+      // MOVIMENTO ASSINATURA (Shogun Wanderer): ⚡ TROCA RÁPIDA ao avançar sobre inimigo adjacente!
+      if (state.player.swapCd > 0) {
+        return { ok: false, reason: `⚡ Troca Rápida em recarga (${state.player.swapCd}t).` };
+      }
+      state.lastEvents = [];
+      const oldP = state.player.pos;
+      state.player.pos = adjEnemy.pos;
+      adjEnemy.pos = oldP;
+      state.player.swapCd = state.player.swapCdMax + 1;
+      pushEvent(state, { type: 'SWAP', from: oldP, to: state.player.pos, pos: adjEnemy.pos, text: '⚡ TROCA RÁPIDA!' });
+      state.log.unshift(`⚡ TROCA RÁPIDA! Você trocou de lugar com ${adjEnemy.icon} ${adjEnemy.name}!`);
+      if (state.acidTiles.includes(adjEnemy.pos)) {
+        damageEnemy(state, adjEnemy, 1, `🧪 ${adjEnemy.name} caiu no Ácido (+1 & EXPÕE)!`, { expose: true, ignoreFrontShield: true });
+      }
+      resolveEnemyPhase(state);
+      return { ok: true, swapped: true };
+    }
+
+    state.lastEvents = [];
+    state.player.pos = target;
+    state.player.dir = delta > 0 ? 1 : -1;
+    state.log.unshift(`👣 Moveu para a casa ${target + 1}.`);
+    resolveEnemyPhase(state);
+    return { ok: true };
+  }
+
+  function turnPlayer(state) {
+    if (state.phase !== 'COMBAT') return { ok: false, reason: 'Fora de combate.' };
+    state.lastEvents = [];
+    state.player.dir *= -1;
+    state.log.unshift(`🔄 Virou para a ${state.player.dir > 0 ? 'DIREITA ▶' : 'ESQUERDA ◀'}.`);
+    resolveEnemyPhase(state);
+    return { ok: true };
+  }
+
+  function waitPlayer(state) {
+    if (state.phase !== 'COMBAT') return { ok: false, reason: 'Fora de combate.' };
+    state.lastEvents = [];
+    state.player.shield += 2;
+    if (state.player.swapCd > 0) state.player.swapCd -= 1;
+    for (const uid of Object.keys(state.weaponCds)) {
+      if (state.weaponCds[uid] > 0) state.weaponCds[uid] -= 1;
+    }
+    state.log.unshift('🛡️ Aguardou em Guarda (+2 Escudo e -1 Recarga extra).');
+    resolveEnemyPhase(state);
+    return { ok: true };
+  }
+
+  function queueWeapon(state, organUid) {
+    if (state.phase !== 'COMBAT') return { ok: false, reason: 'Fora de combate.' };
+    if (state.queue.length >= 3) return { ok: false, reason: 'Fila cheia (máx. 3 armas).' };
+    if (state.queue.includes(organUid)) return { ok: false, reason: 'Arma já está na Fila.' };
+    const { weapons } = computeGeneratedAttacks(state);
+    const w = weapons.find(x => x.uid === organUid);
+    if (!w) return { ok: false, reason: 'Arma não está equipada na grade 5×4.' };
+    if (w.cd > 0) return { ok: false, reason: `Em recarga (${w.cd}t).` };
+
+    state.lastEvents = [];
+    state.queue.push(organUid);
+    state.log.unshift(`📥 [${w.icon} ${w.name}] preparado na Fila (${state.queue.length}/3).`);
+    resolveEnemyPhase(state);
+    return { ok: true };
+  }
+
+  function removeQueuedWeapon(state, organUid) {
+    const idx = state.queue.indexOf(organUid);
+    if (idx === -1) return { ok: false };
+    state.queue.splice(idx, 1);
+    return { ok: true };
+  }
+
+  function executeQueue(state) {
+    if (state.phase !== 'COMBAT') return { ok: false, reason: 'Fora de combate.' };
+    if (state.queue.length === 0) return { ok: false, reason: 'Prepare pelo menos 1 arma na Fila!' };
+
+    state.lastEvents = [];
+    const aliveBefore = state.enemies.filter(e => e.hp > 0).length;
+    const { weapons } = computeGeneratedAttacks(state);
+    const toRun = [...state.queue];
+    state.queue = [];
+
+    toRun.forEach((uid, idx) => {
+      const w = weapons.find(x => x.uid === uid);
+      if (!w) return;
+      executeSingleWeapon(state, w, idx);
+      state.weaponCds[uid] = w.cdMax > 0 ? w.cdMax + 1 : 0;
+    });
+
+    // COMBO KILL (Shogun magic): matar 2+ inimigos no mesmo disparo recarrega -2 CD e cura +2 PV!
+    const aliveAfter = state.enemies.filter(e => e.hp > 0).length;
+    const kills = aliveBefore - aliveAfter;
+    if (kills >= 2) {
+      state.player.hp = Math.min(state.player.maxHp, state.player.hp + 2);
+      for (const uid of Object.keys(state.weaponCds)) {
+        state.weaponCds[uid] = Math.max(0, state.weaponCds[uid] - 2);
+      }
+      pushEvent(state, { type: 'COMBO_KILL', pos: state.player.pos, text: `🔥 COMBO ×${kills}! +2PV`, shake: true });
+      state.log.unshift(`🔥 COMBO KILL ×${kills}! Todas as armas recarregaram -2 CD e você curou +2 PV!`);
+    }
+
+    resolveEnemyPhase(state);
+    return { ok: true, kills };
+  }
+
+  function startNextWave(state) {
+    if (state.phase !== 'WAVE_CLEAR') return { ok: false, reason: 'Onda atual ainda não terminou.' };
+    if (state.pendingDraft) return { ok: false, reason: 'Escolha 1 dos 2 Loots antes de avançar!' };
+    const organCount = state.gridPieces.filter(p => PIECES[p.pieceId].kind === 'ORGAN').length;
+    if (organCount === 0) return { ok: false, reason: 'Encaixe pelo menos 1 Órgão na grade 5×4!' };
+    loadWaveIntoState(state, state.waveIndex + 1);
+    return { ok: true };
+  }
+
+  function previewExecuteQueue(state) {
+    if (state.phase !== 'COMBAT' || state.queue.length === 0) return null;
+    const sim = cloneState(state);
+    const { weapons } = computeGeneratedAttacks(sim);
+    const toRun = [...sim.queue];
+    sim.queue = [];
+    toRun.forEach((uid, idx) => {
+      const w = weapons.find(x => x.uid === uid);
+      if (w) executeSingleWeapon(sim, w, idx);
+    });
+    return {
+      playerPos: sim.player.pos,
+      playerDir: sim.player.dir,
+      enemies: sim.enemies.map(e => ({
+        id: e.id, pos: e.pos, dir: e.dir, hp: e.hp, exposed: e.exposed, state: e.state,
+      })),
+    };
+  }
+
+  return {
+    VERSION,
+    GRID_W,
+    GRID_H,
+    STRIP_LEN,
+    PIECES,
+    WAVES,
+    getPieceGeometry,
+    getPlacedCells,
+    canPlaceOnGrid,
+    computeGeneratedAttacks,
+    createInitialState,
+    cloneState,
+    canRecombine,
+    placePieceOnGrid,
+    movePieceToReserve,
+    chooseDraftLoot,
+    getEnemyThreatTiles,
+    extractExposedGene,
+    movePlayer,
+    turnPlayer,
+    waitPlayer,
+    queueWeapon,
+    removeQueuedWeapon,
+    executeQueue,
+    startNextWave,
+    previewExecuteQueue,
+  };
+});
+
+</script>
+  <script>
+/* O Enxerto v7.5 · Quimera Viva (Shogun 1D Cinético + Lootbound 5×4 Sináptico + Spore) */
+(function () {
+  'use strict';
+
+  const E = window.EnxertoV7;
+  if (!E) throw new Error('EnxertoV7 engine não carregado.');
+
+  let state = E.createInitialState();
+  let soundOn = true;
+  let audioCtx = null;
+
+  let held = null; // { uid, pieceId, rot, fromGrid } | null
+  let hoverCell = null; // { x, y } | null
+  let previewFire = false;
+
+  // ==================== WEB AUDIO SFX ====================
+  function playTone(freq, dur, type = 'triangle', vol = 0.08, endFreq = null) {
+    if (!soundOn) return;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!audioCtx) audioCtx = new AC();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      if (endFreq) osc.frequency.exponentialRampToValueAtTime(endFreq, audioCtx.currentTime + dur);
+      gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + dur);
+    } catch (_) {}
+  }
+
+  const sfx = {
+    click: () => playTone(460, 0.055, 'sine', 0.05, 540),
+    rotate: () => playTone(520, 0.065, 'triangle', 0.06, 700),
+    graft: () => { playTone(380, 0.08, 'triangle', 0.08, 640); setTimeout(() => playTone(680, 0.12, 'sine', 0.08, 920), 65); },
+    error: () => playTone(170, 0.12, 'sawtooth', 0.07, 110),
+    hit: () => playTone(230, 0.13, 'sawtooth', 0.09, 85),
+    boom: () => { playTone(130, 0.24, 'sawtooth', 0.12, 42); setTimeout(() => playTone(95, 0.2, 'square', 0.08, 38), 55); },
+    swap: () => { playTone(340, 0.09, 'sine', 0.07, 720); setTimeout(() => playTone(720, 0.09, 'sine', 0.07, 360), 75); },
+    shock: () => playTone(920, 0.11, 'square', 0.06, 420),
+    step: () => playTone(290, 0.05, 'sine', 0.05, 220),
+    combo: () => { [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => playTone(f, 0.15, 'triangle', 0.09), i * 65)); },
+    win: () => { [440, 554, 659, 880].forEach((f, i) => setTimeout(() => playTone(f, 0.16, 'triangle', 0.08), i * 80)); },
+  };
+
+  // ==================== DOM REFS ====================
+  const elCombatPanel = document.getElementById('combat-panel');
+  const elHudWave = document.getElementById('hud-wave');
+  const elHudHp = document.getElementById('hud-hp');
+  const elHudShield = document.getElementById('hud-shield');
+  const elHudRecomb = document.getElementById('hud-recomb');
+  const elHudBoss = document.getElementById('hud-boss');
+  const elHudSwapCd = document.getElementById('hud-swap-cd');
+  const elWaveTitle = document.getElementById('wave-title');
+  const elTurnLabel = document.getElementById('turn-label');
+  const elWaveBanner = document.getElementById('wave-banner-slot');
+  const elWaveHint = document.getElementById('wave-hint');
+  const elCombatStrip = document.getElementById('combat-strip');
+  const elQueueSlots = document.getElementById('queue-slots');
+  const elWeaponsGrid = document.getElementById('weapons-grid');
+  const elCombatLog = document.getElementById('combat-log');
+  const elInvModeBadge = document.getElementById('inv-mode-badge');
+  const elChimeraSvgWrap = document.getElementById('chimera-svg-wrap');
+  const elChimeraTitle = document.getElementById('chimera-title');
+  const elChimeraDesc = document.getElementById('chimera-desc');
+  const elHoldingBar = document.getElementById('holding-bar');
+  const elOrgGrid = document.getElementById('organism-grid');
+  const elSynapseSvg = document.getElementById('synapse-svg');
+  const elReserveCount = document.getElementById('reserve-count');
+  const elReserveGrid = document.getElementById('reserve-grid');
+
+  const btnLeft = document.getElementById('btn-left');
+  const btnFlip = document.getElementById('btn-flip');
+  const btnRight = document.getElementById('btn-right');
+  const btnWait = document.getElementById('btn-wait');
+  const btnFire = document.getElementById('btn-fire');
+  const btnRotate = document.getElementById('btn-rotate');
+  const btnToReserve = document.getElementById('btn-to-reserve');
+  const btnCancelHold = document.getElementById('btn-cancel-hold');
+  const btnSound = document.getElementById('btn-sound');
+  const btnRestart = document.getElementById('btn-restart');
+
+  // ==================== PROCEDURAL SPORE CHIMERA SVG ====================
+  function renderChimeraSVG(activePartIds, activeModIds) {
+    const has = id => activePartIds.includes(id);
+    const mod = id => activeModIds.includes(id);
+
+    const bodyFill = mod('PECONHA') ? '#2c4d1f' : mod('NERVO') ? '#2b3b4e' : mod('TENDAO') ? '#3f1e2e' : '#1f3b2e';
+    const bodyStroke = mod('OSSO') ? '#e7e5e4' : mod('NERVO') ? '#facc15' : '#a3e635';
+
+    let svg = `<svg viewBox="0 0 110 76" width="90" height="62" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Quimera Viva">`;
+
+    // Aura de Repique (eco duplo)
+    if (mod('REPIQUE')) {
+      svg += `<ellipse cx="55" cy="40" rx="34" ry="24" fill="none" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.8"/>`;
+    }
+    // Cauda de Escorpião
+    if (has('CAUDA')) {
+      svg += `<path d="M 33 44 Q 14 40 16 20 Q 19 11 29 14" fill="none" stroke="${mod('OSSO') ? '#e7e5e4' : '#f472b6'}" stroke-width="5" stroke-linecap="round"/>`;
+      svg += `<polygon points="28,10 36,14 29,18" fill="${mod('PECONHA') ? '#a3e635' : '#fb7185'}"/>`;
+    }
+    // Patas Saltadoras (Louva-a-Deus)
+    if (has('PATAS')) {
+      svg += `<path d="M 42 52 L 32 67 L 44 69 M 66 52 L 77 67 L 65 69" fill="none" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+    } else {
+      svg += `<path d="M 44 54 L 41 66 M 64 54 L 67 66" fill="none" stroke="#6ee7b7" stroke-width="3.5" stroke-linecap="round"/>`;
+    }
+    // Espinhos Dorsais
+    if (has('ESPINHO') || has('FERRAO_CURVO')) {
+      svg += `<polygon points="44,23 49,9 54,23" fill="#38bdf8" stroke="#0c1914" stroke-width="1"/>`;
+      svg += `<polygon points="54,22 61,7 65,23" fill="${has('FERRAO_CURVO') ? '#facc15' : '#38bdf8'}" stroke="#0c1914" stroke-width="1"/>`;
+    }
+    // Corpo Principal + Placas Ósseas
+    svg += `<ellipse cx="55" cy="40" rx="23" ry="17" fill="${bodyFill}" stroke="${bodyStroke}" stroke-width="${mod('OSSO') ? 3.2 : 2}"/>`;
+    if (mod('OSSO')) {
+      svg += `<path d="M 41 34 Q 55 25 69 34" fill="none" stroke="#e7e5e4" stroke-width="3" stroke-linecap="round"/>`;
+    }
+    // Bolsas Ácidas
+    if (mod('PECONHA')) {
+      svg += `<circle cx="44" cy="42" r="4.5" fill="#a3e635" opacity="0.9"/><circle cx="53" cy="47" r="3.5" fill="#bef264" opacity="0.9"/>`;
+    }
+    // Pinça Colossal
+    if (has('PINCA')) {
+      svg += `<path d="M 73 46 Q 91 54 96 42 Q 89 44 84 40 Q 92 38 96 31 Q 84 31 74 37" fill="#f97316" stroke="#fed7aa" stroke-width="1.3"/>`;
+    }
+    // Mandíbulas
+    if (has('MANDIBULA')) {
+      svg += `<path d="M 74 33 L 91 27 L 82 37 Z" fill="#fb923c" stroke="#fff" stroke-width="0.9"/>`;
+      svg += `<path d="M 74 45 L 91 50 L 82 41 Z" fill="#fb923c" stroke="#fff" stroke-width="0.9"/>`;
+    }
+    // Língua Chicote
+    if (has('LINGUA')) {
+      svg += `<path d="M 77 39 Q 94 37 104 30" fill="none" stroke="#e879f9" stroke-width="3" stroke-linecap="round"/>`;
+      svg += `<circle cx="104" cy="30" r="3.2" fill="#f0abfc"/>`;
+    }
+    // Olho Biológico
+    svg += `<circle cx="66" cy="35" r="4.2" fill="#070c0a"/><circle cx="67.2" cy="34.2" r="1.8" fill="${mod('TENDAO') ? '#fb7185' : '#facc15'}"/>`;
+
+    // Tendões Rubros
+    if (mod('TENDAO')) {
+      svg += `<path d="M 38 48 Q 55 58 72 48" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="3 2"/>`;
+    }
+    // Arcos Voltaicos
+    if (mod('NERVO')) {
+      svg += `<polyline points="35,24 41,17 44,22 50,14" fill="none" stroke="#facc15" stroke-width="2"/>`;
+      svg += `<polyline points="68,22 75,15 78,20 85,13" fill="none" stroke="#facc15" stroke-width="2"/>`;
+    }
+
+    svg += `</svg>`;
+    return svg;
+  }
+
+  // ==================== KINETIC PLAYBACK (POPUPS + SHAKE + SFX) ====================
+  function triggerShake() {
+    elCombatPanel.classList.remove('shake');
+    void elCombatPanel.offsetWidth;
+    elCombatPanel.classList.add('shake');
+  }
+
+  function spawnCellPopup(pos, text, styleCls = '') {
+    const cell = elCombatStrip.querySelector(`.strip-cell[data-strip="${pos}"]`);
+    if (!cell) return;
+    const pop = document.createElement('div');
+    pop.className = `float-popup ${styleCls}`;
+    pop.textContent = text;
+    cell.appendChild(pop);
+    setTimeout(() => pop.remove(), 980);
+  }
+
+  function playKineticEvents(events) {
+    if (!events || events.length === 0) return;
+    events.forEach((ev, idx) => {
+      setTimeout(() => {
+        const cell = typeof ev.pos === 'number'
+          ? elCombatStrip.querySelector(`.strip-cell[data-strip="${ev.pos}"]`)
+          : null;
+        if (ev.shake) triggerShake();
+
+        if (ev.type === 'EXPLODE') {
+          sfx.boom();
+          if (cell) { cell.classList.add('flash-boom'); setTimeout(() => cell.classList.remove('flash-boom'), 320); }
+        } else if (ev.type === 'COMBO_KILL') {
+          sfx.combo();
+        } else if (ev.type === 'SWAP') {
+          sfx.swap();
+        } else if (ev.type === 'SHOCK') {
+          sfx.shock();
+        } else if (ev.type === 'HIT_ENEMY' || ev.type === 'HIT_PLAYER' || ev.type === 'KILL') {
+          sfx.hit();
+          if (cell) { cell.classList.add('flash-hit'); setTimeout(() => cell.classList.remove('flash-hit'), 240); }
+        }
+
+        if (typeof ev.pos === 'number' && ev.text) {
+          const cls = (ev.type === 'HIT_PLAYER' || ev.type === 'HIT_ENEMY' || ev.type === 'EXPLODE')
+            ? 'dmg'
+            : (ev.type === 'COMBO_KILL' || ev.type === 'EXTRACT' || ev.type === 'SWAP') ? 'good' : '';
+          spawnCellPopup(ev.pos, ev.text, cls);
+        }
+      }, idx * 145);
+    });
+  }
+
+  // ==================== HELPERS DE UI ====================
+  function renderMiniShapeHTML(pieceId, rot = 0) {
+    const def = E.PIECES[pieceId];
+    const geo = E.getPieceGeometry(pieceId, rot);
+    const allPts = [...geo.cells, ...geo.stars];
+    const minX = Math.min(...allPts.map(p => p[0]));
+    const maxX = Math.max(...allPts.map(p => p[0]));
+    const minY = Math.min(...allPts.map(p => p[1]));
+    const maxY = Math.max(...allPts.map(p => p[1]));
+    const cols = maxX - minX + 1;
+
+    const cellSet = new Set(geo.cells.map(([x, y]) => `${x},${y}`));
+    const starSet = new Set(geo.stars.map(([x, y]) => `${x},${y}`));
+
+    let html = `<div class="mini-shape" style="grid-template-columns:repeat(${cols}, 14px);">`;
+    for (let y = minY; y <= maxY; y++) {
+      for (let x = minX; x <= maxX; x++) {
+        const k = `${x},${y}`;
+        if (cellSet.has(k)) html += `<div class="ms-cell ${def.kind === 'ORGAN' ? 'fill-organ' : 'fill-var'}"></div>`;
+        else if (starSet.has(k)) html += `<div class="ms-cell star">★</div>`;
+        else html += `<div class="ms-cell"></div>`;
+      }
+    }
+    html += `</div>`;
+    return html;
+  }
+
+  function renderPatternMini(patternViz) {
+    return `<div class="wc-mini">${patternViz.map(code => {
+      if (code === 'me') return `<span class="wm-box me">🧬</span>`;
+      if (code === '·') return `<span class="wm-box" style="color:#4b6d5e">·</span>`;
+      const [kind, lbl] = code.includes(':') ? code.split(':') : [code, ''];
+      if (kind === 'hit') return `<span class="wm-box hit">${lbl || '■'}</span>`;
+      if (kind === 'mv') return `<span class="wm-box mv">${lbl || '➔'}</span>`;
+      if (kind === 'sp') return `<span class="wm-box sp">${lbl || '★'}</span>`;
+      return `<span class="wm-box">${code}</span>`;
+    }).join('')}</div>`;
+  }
+
+  function flashMessage(msg) {
+    state.log.unshift(`ℹ️ ${msg}`);
+    renderCombatLog();
+  }
+
+  // ==================== RENDER: HUD, DRAFT & BANNERS ====================
+  function renderTopHud() {
+    elHudWave.textContent = `Onda ${state.waveIndex + 1}/${E.WAVES.length}`;
+    elHudHp.textContent = `❤️ ${state.player.hp}/${state.player.maxHp}`;
+    elHudShield.textContent = `🛡️ ${state.player.shield}`;
+    elHudBoss.textContent = `👑 Chefe: ${state.bossMutations.length > 0 ? state.bossMutations.map(id => E.PIECES[id].icon).join('') : 'Base'}`;
+    elHudSwapCd.textContent = state.player.swapCd === 0
+      ? '⚡ Troca Rápida: PRONTA'
+      : `⚡ Troca Rápida: ⏳${state.player.swapCd}t`;
+
+    if (state.phase === 'WAVE_CLEAR') {
+      elHudRecomb.textContent = '🧬 Ajustes: ∞ (Livre!)';
+      elInvModeBadge.textContent = '∞ Recombinação LIVRE entre ondas!';
+    } else {
+      elHudRecomb.textContent = `🧬 Ajustes: ${state.recombinesLeft}/1`;
+      elInvModeBadge.textContent = state.recombinesLeft > 0
+        ? '1 ajuste grátis disponível neste turno!'
+        : 'Ajuste usado (renova no próximo turno)';
+    }
+
+    elWaveTitle.textContent = `⚔️ ${state.waveName}`;
+    elTurnLabel.textContent = `Turno ${state.turn}`;
+    elWaveHint.textContent = `💡 ${state.waveHint}`;
+
+    if (state.phase === 'WAVE_CLEAR') {
+      if (state.pendingDraft && state.pendingDraft.length > 0) {
+        const cardsHtml = state.pendingDraft.map(pid => {
+          const def = E.PIECES[pid];
+          const otherId = state.pendingDraft.find(x => x !== pid);
+          const otherDef = E.PIECES[otherId];
+          return `
+            <button class="draft-card" data-draft="${pid}">
+              <div class="res-head">
+                <span style="font-weight:900; font-size:0.9rem;">${def.icon} ${def.name}</span>
+                <span class="res-kind ${def.kind === 'ORGAN' ? 'organ' : 'variation'}">${def.kind === 'ORGAN' ? 'Órgão' : 'Variação'}</span>
+              </div>
+              ${renderMiniShapeHTML(pid, 0)}
+              <div style="font-size:0.75rem; color:#d2eae0;">${def.kind === 'ORGAN' ? def.desc : def.shortEffect}</div>
+              <div class="draft-boss-warn">👑 Se você escolher este, o Chefe Final absorve <strong>${otherDef.icon} ${otherDef.name}</strong>!</div>
+            </button>
+          `;
+        }).join('');
+
+        elWaveBanner.innerHTML = `
+          <div class="wave-banner">
+            <div style="font-weight:900; color:#bef264; font-size:0.95rem;">🎁 ONDA VENCIDA (+4 PV)! DILEMA DO ENXERTO (Estilo Lootbound)</div>
+            <div style="font-size:0.77rem; color:var(--text);">Escolha <strong>1 Peça</strong> para sua Bandeja — a peça <strong>rejeitada</strong> será enxertada na 👑 Quimera Soberana!</div>
+            <div class="draft-grid">${cardsHtml}</div>
+          </div>
+        `;
+        elWaveBanner.querySelectorAll('[data-draft]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const res = E.chooseDraftLoot(state, btn.dataset.draft);
+            if (!res.ok) { sfx.error(); return; }
+            held = { uid: res.uid, pieceId: res.pieceId, rot: 0, fromGrid: false };
+            sfx.graft();
+            renderAll();
+          });
+        });
+      } else {
+        elWaveBanner.innerHTML = `
+          <div class="wave-banner" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;">
+            <div>
+              <div style="font-weight:900; color:#bef264;">🧬 Recombine seu Organismo 5×4 à vontade!</div>
+              <div style="font-size:0.77rem;">Quando sua Quimera estiver pronta, avance para a próxima onda.</div>
+            </div>
+            <button class="btn primary" id="btn-next-wave">⚔️ Iniciar Onda ${state.waveIndex + 2} ➔</button>
+          </div>
+        `;
+        document.getElementById('btn-next-wave').addEventListener('click', () => {
+          const res = E.startNextWave(state);
+          if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
+          held = null;
+          sfx.graft();
+          renderAll();
+        });
+      }
+    } else if (state.phase === 'VICTORY') {
+      elWaveBanner.innerHTML = `
+        <div class="wave-banner" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;">
+          <div>
+            <div style="font-weight:900; color:#fde047; font-size:1.05rem;">🏆 VITÓRIA SUPREMA! A Quimera Soberana caiu!</div>
+            <div style="font-size:0.8rem;">Sobreviveu às 4 ondas com ${state.player.hp}/${state.player.maxHp} PV!</div>
+          </div>
+          <button class="btn primary" id="btn-play-again">🔄 Jogar Novamente</button>
+        </div>
+      `;
+      document.getElementById('btn-play-again').addEventListener('click', restartGame);
+    } else if (state.phase === 'DEFEAT') {
+      elWaveBanner.innerHTML = `
+        <div class="wave-banner" style="border-color:var(--danger); background:rgba(251,113,133,0.14); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px;">
+          <div>
+            <div style="font-weight:900; color:#fecdd3; font-size:1.05rem;">💀 ORGANISMO ABATIDO NA ONDA ${state.waveIndex + 1}</div>
+            <div style="font-size:0.79rem;">Dica: clique no inimigo adjacente para usar ⚡ Troca Rápida e jogue inimigos na mira do 🦏 Javali ou 💣 Esporo!</div>
+          </div>
+          <button class="btn primary" id="btn-retry">🔄 Tentar Novamente</button>
+        </div>
+      `;
+      document.getElementById('btn-retry').addEventListener('click', restartGame);
+    } else {
+      elWaveBanner.innerHTML = '';
+    }
+  }
+
+  // ==================== RENDER: FAIXA 1D ====================
+  function renderCombatStrip() {
+    const threatByCell = new Map();
+    for (const e of state.enemies) {
+      if (e.hp <= 0 || e.state !== 'PRIMED') continue;
+      for (const t of E.getEnemyThreatTiles(state, e)) {
+        threatByCell.set(t, (threatByCell.get(t) || 0) + e.dmg);
+      }
+    }
+
+    const preview = previewFire ? E.previewExecuteQueue(state) : null;
+    const previewChangedPos = new Set();
+    if (preview) {
+      for (const pe of preview.enemies) {
+        const cur = state.enemies.find(x => x.id === pe.id);
+        if (cur && (pe.hp < cur.hp || pe.pos !== cur.pos || pe.dir !== cur.dir)) previewChangedPos.add(cur.pos);
+      }
+    }
+
+    let html = '';
+    for (let i = 0; i < E.STRIP_LEN; i++) {
+      const isPlayer = state.player.pos === i;
+      const enemy = state.enemies.find(e => e.hp > 0 && e.pos === i);
+      const isAcid = state.acidTiles.includes(i);
+      const threatDmg = threatByCell.get(i) || 0;
+      const distToPlayer = Math.abs(state.player.pos - i);
+      const isAdjEmpty = state.phase === 'COMBAT' && !enemy && distToPlayer === 1;
+      const isAdjSwap = state.phase === 'COMBAT' && !!enemy && distToPlayer === 1 && state.player.swapCd === 0;
+
+      const cls = ['strip-cell'];
+      if (isPlayer) cls.push('player-cell');
+      if (threatDmg > 0) cls.push('threat');
+      if (isAcid) cls.push('acid');
+      if (previewChangedPos.has(i)) cls.push('preview-hit');
+      if (isAdjEmpty) cls.push('clickable-step');
+      if (isAdjSwap) cls.push('clickable-swap');
+
+      const topLeft = `<span>${i + 1}${isAcid ? ' 🧪' : ''}</span>`;
+      const topRight = threatDmg > 0 ? `<span class="intent-tag">⚠️${threatDmg}</span>` : `<span></span>`;
+
+      let body = `<div style="color:#304f41; font-size:1.1rem;">·</div>`;
+      let bottom = `<div style="font-size:0.6rem; color:var(--muted);">${isAdjEmpty ? '👣 Andar' : '—'}</div>`;
+
+      if (isPlayer) {
+        const arrow = state.player.dir > 0 ? '▶' : '◀';
+        body = `
+          <div class="actor-sprite">
+            ${state.player.dir < 0 ? `<span class="facing-arrow">${arrow}</span>` : ''}
+            <span>🧬</span>
+            ${state.player.dir > 0 ? `<span class="facing-arrow">${arrow}</span>` : ''}
+          </div>
+          <div class="actor-name">QUIMERA</div>
+        `;
+        bottom = `<div class="hp-badge" style="color:#bef264;">${state.player.hp}♥${state.player.shield > 0 ? ` +${state.player.shield}🛡️` : ''}</div>`;
+      } else if (enemy) {
+        const arrow = enemy.dir > 0 ? '▶' : '◀';
+        const atkTag = enemy.state === 'PRIMED' ? `⚠️${enemy.dmg}` : `${enemy.dmg}⚔`;
+        const lootDef = enemy.lootPieceId && !enemy.disarmed ? E.PIECES[enemy.lootPieceId] : null;
+        const prevE = preview ? preview.enemies.find(pe => pe.id === enemy.id) : null;
+        const hpPreview = prevE && prevE.hp < enemy.hp ? `→${prevE.hp <= 0 ? '☠️' : `${prevE.hp}♥`}` : '';
+        const traitCls = enemy.trait === 'EXPLOSIVE' ? 'trait-chip boom' : enemy.trait === 'FRONT_SHIELD' ? 'trait-chip shield' : 'trait-chip';
+
+        body = `
+          <div class="actor-sprite">
+            ${enemy.dir < 0 ? `<span class="facing-arrow">${arrow}</span>` : ''}
+            <span>${enemy.icon}</span>
+            ${enemy.dir > 0 ? `<span class="facing-arrow">${arrow}</span>` : ''}
+          </div>
+          <div class="actor-name">${enemy.name}</div>
+          ${enemy.traitLabel ? `<div class="${traitCls}">${enemy.traitLabel}</div>` : ''}
+        `;
+
+        if (enemy.exposed && lootDef) {
+          bottom = `
+            <div class="hp-badge" style="color:#fecdd3;">${enemy.hp}♥${hpPreview}${enemy.poison > 0 ? ` 🧪${enemy.poison}` : ''}</div>
+            <button class="extract-btn" data-extract="${enemy.id}">✂️ Arrancar ${lootDef.icon}</button>
+          `;
+        } else {
+          bottom = `
+            <div class="hp-badge" style="color:#fecdd3;">${enemy.hp}♥${hpPreview} · ${atkTag}${enemy.poison > 0 ? ` 🧪${enemy.poison}` : ''}</div>
+            ${isAdjSwap ? `<div class="swap-hint">⚡ Clique p/ Trocar</div>` : (lootDef ? `<div style="font-size:0.56rem; color:#93b5a6;">Loot: ${lootDef.icon}</div>` : '')}
+          `;
+        }
+      }
+
+      html += `
+        <div class="${cls.join(' ')}" data-strip="${i}">
+          <div class="s-top">${topLeft}${topRight}</div>
+          ${body}
+          ${bottom}
+        </div>
+      `;
+    }
+    elCombatStrip.innerHTML = html;
+
+    elCombatStrip.querySelectorAll('.clickable-step, .clickable-swap').forEach(cell => {
+      cell.addEventListener('click', () => {
+        const idx = Number(cell.dataset.strip);
+        const delta = idx - state.player.pos;
+        if (Math.abs(delta) === 1) doMove(delta);
+      });
+    });
+
+    elCombatStrip.querySelectorAll('[data-extract]').forEach(btn => {
+      btn.addEventListener('click', ev => {
+        ev.stopPropagation();
+        const res = E.extractExposedGene(state, btn.dataset.extract);
+        if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
+        held = { uid: res.uid, pieceId: res.pieceId, rot: 0, fromGrid: false };
+        sfx.graft();
+        renderAll(true);
+      });
+    });
+  }
+
+  // ==================== RENDER: FILA & ARMAS ====================
+  function renderQueueAndWeapons() {
+    const inCombat = state.phase === 'COMBAT';
+    const { weapons } = E.computeGeneratedAttacks(state);
+
+    const leftEnemy = state.enemies.find(e => e.hp > 0 && e.pos === state.player.pos - 1);
+    const rightEnemy = state.enemies.find(e => e.hp > 0 && e.pos === state.player.pos + 1);
+    btnLeft.disabled = !inCombat || state.player.pos === 0 || (!!leftEnemy && state.player.swapCd > 0);
+    btnRight.disabled = !inCombat || state.player.pos === E.STRIP_LEN - 1 || (!!rightEnemy && state.player.swapCd > 0);
+    btnLeft.textContent = leftEnemy && state.player.swapCd === 0 ? '⚡ Trocar ⬅' : '⬅ Andar';
+    btnRight.textContent = rightEnemy && state.player.swapCd === 0 ? '➡ Trocar ⚡' : 'Andar ➡';
+    btnLeft.className = leftEnemy && state.player.swapCd === 0 ? 'btn cyan' : 'btn';
+    btnRight.className = rightEnemy && state.player.swapCd === 0 ? 'btn cyan' : 'btn';
+
+    btnFlip.disabled = !inCombat;
+    btnWait.disabled = !inCombat;
+    btnFire.disabled = !inCombat || state.queue.length === 0;
+
+    let qHtml = '';
+    for (let i = 0; i < 3; i++) {
+      const uid = state.queue[i];
+      const w = uid ? weapons.find(x => x.uid === uid) : null;
+      if (w) qHtml += `<div class="q-slot filled" data-unqueue="${uid}" title="Clique para remover da fila">${i + 1}. ${w.icon} ${w.name}</div>`;
+      else qHtml += `<div class="q-slot">Slot ${i + 1}</div>`;
+      if (i < 2) qHtml += `<span style="color:var(--muted); font-weight:900;">➔</span>`;
+    }
+    elQueueSlots.innerHTML = qHtml;
+    elQueueSlots.querySelectorAll('[data-unqueue]').forEach(slot => {
+      slot.addEventListener('click', () => {
+        E.removeQueuedWeapon(state, slot.dataset.unqueue);
+        sfx.click();
+        renderAll(false);
+      });
+    });
+
+    elWeaponsGrid.innerHTML = weapons.map(w => {
+      const isQueued = state.queue.includes(w.uid);
+      const canQueue = inCombat && !isQueued && w.cd === 0 && state.queue.length < 3;
+      const cls = ['weapon-card'];
+      if (w.mods.length > 0) cls.push('mutated');
+      if (isQueued) cls.push('queued');
+      if (!canQueue && !isQueued) cls.push('disabled');
+
+      const dmgText = w.hits > 1 ? `${w.hits}× ${w.dmg} dano` : `${w.dmg} dano`;
+      const cdText = w.cd > 0 ? `⏳ ${w.cd}t` : `CD ${w.cdMax}`;
+
+      return `
+        <button class="${cls.join(' ')}" data-wuid="${w.uid}" ${!canQueue ? 'disabled' : ''}>
+          <div class="wc-head">
+            <span class="wc-name">${w.icon} ${w.name}</span>
+            <span class="wc-lvl">Nv.${w.level}</span>
+          </div>
+          ${renderPatternMini(w.patternViz)}
+          <div class="wc-stats">
+            <span class="wc-dmg">⚔️ ${dmgText}</span>
+            <span class="wc-cd">⏱️ ${cdText}</span>
+            ${isQueued ? `<span style="color:var(--gold)">★ FILA</span>` : ''}
+          </div>
+          <div class="wc-tags">
+            ${w.tags.length > 0
+              ? w.tags.map(t => `<span class="tag-chip">${t}</span>`).join('')
+              : `<span style="font-size:0.65rem; color:var(--muted);">${w.desc}</span>`}
+          </div>
+        </button>
+      `;
+    }).join('');
+
+    elWeaponsGrid.querySelectorAll('[data-wuid]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const res = E.queueWeapon(state, btn.dataset.wuid);
+        if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
+        sfx.click();
+        renderAll(true);
+      });
+    });
+  }
+
+  function renderCombatLog() {
+    elCombatLog.innerHTML = state.log.slice(0, 12).map(line => `<div>${line}</div>`).join('');
+  }
+
+  // ==================== RENDER: QUIMERA + ORGANISMO 5×4 + SINAPSES SVG ====================
+  function updateGridGhostPreview() {
+    const ghostCellSet = new Set();
+    const ghostStarSet = new Set();
+    let ghostOk = false;
+    if (held && hoverCell) {
+      const check = E.canPlaceOnGrid(state.gridPieces, held.pieceId, hoverCell.x, hoverCell.y, held.rot, held.uid);
+      ghostOk = check.ok;
+      const geo = E.getPieceGeometry(held.pieceId, held.rot);
+      for (const [cx, cy] of geo.cells) ghostCellSet.add(`${hoverCell.x + cx},${hoverCell.y + cy}`);
+      for (const [sx, sy] of geo.stars) ghostStarSet.add(`${hoverCell.x + sx},${hoverCell.y + sy}`);
+    }
+
+    elOrgGrid.querySelectorAll('.g-cell').forEach(cell => {
+      const k = `${cell.dataset.gx},${cell.dataset.gy}`;
+      cell.classList.remove('ghost-ok', 'ghost-bad');
+      const existingGhostStar = cell.querySelector('.star-ghost-badge');
+      if (existingGhostStar) existingGhostStar.remove();
+
+      if (ghostCellSet.has(k)) cell.classList.add(ghostOk ? 'ghost-ok' : 'ghost-bad');
+      if (ghostStarSet.has(k)) {
+        const sp = document.createElement('span');
+        sp.className = 'star-ghost-badge';
+        sp.textContent = '★';
+        cell.appendChild(sp);
+      }
+    });
+  }
+
+  function renderOrganismGrid() {
+    const { weapons, activeStarLinks, activePartIds, activeModIds } = E.computeGeneratedAttacks(state);
+    const linkedSet = new Set(activeStarLinks.map(l => `${l.x},${l.y}`));
+
+    // Atualiza Avatar Procedural da Quimera (Spore!)
+    elChimeraSvgWrap.innerHTML = renderChimeraSVG(activePartIds, activeModIds);
+    const maxLvl = weapons.length > 0 ? Math.max(...weapons.map(w => w.level)) : 1;
+    elChimeraTitle.textContent = `Quimera Nv.${maxLvl} · ${weapons.length} Órgão(s) · ${activeStarLinks.length} Sinapse(s) ★`;
+    elChimeraDesc.textContent = activeModIds.length > 0
+      ? `Mutações ativas: ${activeModIds.map(id => `${E.PIECES[id].icon} ${E.PIECES[id].name}`).join(' · ')}`
+      : 'Encaixe Variações com ★ apontando para um Órgão para mutar sua Quimera!';
+
+    // Desenha conduítes sinápticos SVG brilhando entre Variações e Órgãos!
+    const toSvgX = gx => gx * 100 + 50;
+    const toSvgY = gy => gy * 100 + 50;
+    elSynapseSvg.innerHTML = activeStarLinks.map(l => `
+      <line class="synapse-line" x1="${toSvgX(l.fromX)}" y1="${toSvgY(l.fromY)}" x2="${toSvgX(l.x)}" y2="${toSvgY(l.y)}" stroke="${l.color || '#facc15'}" />
+      <circle cx="${toSvgX(l.x)}" cy="${toSvgY(l.y)}" r="6" fill="#facc15" opacity="0.9"/>
+    `).join('');
+
+    const cellMap = new Map();
+    const projectedStarSet = new Set();
+    for (const p of state.gridPieces) {
+      const { cells, stars } = E.getPlacedCells(p);
+      for (const [cx, cy] of cells) cellMap.set(`${cx},${cy}`, p);
+      for (const [sx, sy] of stars) {
+        if (sx >= 0 && sx < E.GRID_W && sy >= 0 && sy < E.GRID_H) projectedStarSet.add(`${sx},${sy}`);
+      }
+    }
+
+    btnRotate.disabled = !held;
+    btnToReserve.disabled = !held || !held.fromGrid || !E.canRecombine(state);
+    btnCancelHold.disabled = !held;
+
+    if (held) {
+      const def = E.PIECES[held.pieceId];
+      elHoldingBar.innerHTML = `
+        <span>🖐️ Segurando <strong>${def.icon} ${def.name}</strong> (${def.shapeLabel}) — Clique na grade ou aperte <strong>R</strong> para girar!</span>
+        ${renderMiniShapeHTML(held.pieceId, held.rot)}
+      `;
+    } else {
+      elHoldingBar.innerHTML = `
+        <span>👆 Clique em qualquer peça da Grade ou Bandeja para recombinar ao vivo. Alinhe as estrelas <strong>★</strong> nos Órgãos!</span>
+      `;
+    }
+
+    let html = '';
+    for (let y = 0; y < E.GRID_H; y++) {
+      for (let x = 0; x < E.GRID_W; x++) {
+        const k = `${x},${y}`;
+        const placed = cellMap.get(k);
+        const def = placed ? E.PIECES[placed.pieceId] : null;
+        const isHeldPiece = held && placed && placed.uid === held.uid;
+        const isLinked = linkedSet.has(k);
+        const isProjected = projectedStarSet.has(k);
+
+        const cls = ['g-cell'];
+        if (def) {
+          cls.push(def.kind === 'ORGAN' ? 'organ' : 'variation');
+          // Fusão visual de bordas entre células da mesma peça!
+          if (cellMap.get(`${x + 1},${y}`)?.uid === placed.uid) cls.push('join-r');
+          if (cellMap.get(`${x - 1},${y}`)?.uid === placed.uid) cls.push('join-l');
+          if (cellMap.get(`${x},${y + 1}`)?.uid === placed.uid) cls.push('join-b');
+          if (cellMap.get(`${x},${y - 1}`)?.uid === placed.uid) cls.push('join-t');
+        }
+        if (isHeldPiece) cls.push('selected-piece');
+        if (isLinked) cls.push('star-linked');
+        else if (isProjected) cls.push('star-projected');
+
+        let inner = def
+          ? `<div class="g-icon">${def.icon}</div><div class="g-lbl">${def.name}</div>`
+          : `<div style="font-size:0.58rem; color:#2b473a;">${x + 1},${y + 1}</div>`;
+        if (isLinked) inner += `<span class="star-badge" title="Sinapse conectada!">★</span>`;
+        else if (isProjected) inner += `<span class="star-badge" style="opacity:0.6;" title="Alcance ★">☆</span>`;
+
+        html += `<div class="${cls.join(' ')}" data-gx="${x}" data-gy="${y}">${inner}</div>`;
+      }
+    }
+    elOrgGrid.innerHTML = html;
+
+    elOrgGrid.querySelectorAll('.g-cell').forEach(cell => {
+      const gx = Number(cell.dataset.gx);
+      const gy = Number(cell.dataset.gy);
+
+      cell.addEventListener('mouseenter', () => {
+        if (held) { hoverCell = { x: gx, y: gy }; updateGridGhostPreview(); }
+      });
+
+      cell.addEventListener('contextmenu', ev => {
+        ev.preventDefault();
+        if (held) rotateHeld();
+      });
+
+      cell.addEventListener('click', () => {
+        const clickedPiece = cellMap.get(`${gx},${gy}`);
+        if (!held) {
+          if (clickedPiece) {
+            if (!E.canRecombine(state)) {
+              sfx.error();
+              flashMessage('Sem ajustes restantes neste turno (renova no próximo turno!).');
+              return;
+            }
+            held = { uid: clickedPiece.uid, pieceId: clickedPiece.pieceId, rot: clickedPiece.rot, fromGrid: true };
+            hoverCell = { x: clickedPiece.x, y: clickedPiece.y };
+            sfx.click();
+            renderOrganismGrid();
+            renderReserve();
+          }
+          return;
+        }
+
+        const res = E.placePieceOnGrid(state, held.uid, gx, gy, held.rot);
+        if (!res.ok) {
+          if (clickedPiece && clickedPiece.uid !== held.uid) {
+            held = { uid: clickedPiece.uid, pieceId: clickedPiece.pieceId, rot: clickedPiece.rot, fromGrid: true };
+            hoverCell = { x: clickedPiece.x, y: clickedPiece.y };
+            sfx.click();
+            renderOrganismGrid();
+            renderReserve();
+            return;
+          }
+          sfx.error();
+          flashMessage(res.reason);
+          return;
+        }
+        held = null;
+        hoverCell = null;
+        sfx.graft();
+        renderAll(false);
+      });
+    });
+
+    updateGridGhostPreview();
+  }
+
+  function renderReserve() {
+    elReserveCount.textContent = `${state.reservePieces.length} peça(s)`;
+    if (state.reservePieces.length === 0) {
+      elReserveGrid.innerHTML = `<div style="font-size:0.74rem; color:var(--muted); grid-column:1/-1;">Bandeja vazia. Vença ondas ou ✂️ arranque genes expostos dos inimigos para coletar mais peças!</div>`;
+      return;
+    }
+
+    elReserveGrid.innerHTML = state.reservePieces.map(p => {
+      const def = E.PIECES[p.pieceId];
+      const active = held && held.uid === p.uid;
+      return `
+        <button class="res-card ${active ? 'active' : ''}" data-ruid="${p.uid}">
+          <div class="res-head">
+            <span class="res-name">${def.icon} ${def.name}</span>
+            <span class="res-kind ${def.kind === 'ORGAN' ? 'organ' : 'variation'}">${def.kind === 'ORGAN' ? 'Órgão' : 'Variação'}</span>
+          </div>
+          ${renderMiniShapeHTML(p.pieceId, active ? held.rot : p.rot)}
+          <div class="res-desc">${def.kind === 'ORGAN' ? def.desc : def.shortEffect}</div>
+        </button>
+      `;
+    }).join('');
+
+    elReserveGrid.querySelectorAll('[data-ruid]').forEach(card => {
+      card.addEventListener('click', () => {
+        const uid = card.dataset.ruid;
+        const p = state.reservePieces.find(x => x.uid === uid);
+        if (!p) return;
+        if (!E.canRecombine(state)) { sfx.error(); flashMessage('Sem ajustes restantes neste turno.'); return; }
+        if (held && held.uid === uid) { rotateHeld(); return; }
+        held = { uid: p.uid, pieceId: p.pieceId, rot: p.rot, fromGrid: false };
+        hoverCell = null;
+        sfx.click();
+        renderOrganismGrid();
+        renderReserve();
+      });
+    });
+  }
+
+  // ==================== AÇÕES ====================
+  function rotateHeld() {
+    if (!held) return;
+    held.rot = (held.rot + 1) % 4;
+    sfx.rotate();
+    renderOrganismGrid();
+    renderReserve();
+  }
+
+  function doMove(delta) {
+    const res = E.movePlayer(state, delta);
+    if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
+    if (res.swapped) sfx.swap();
+    else sfx.step();
+    if (state.phase === 'WAVE_CLEAR' || state.phase === 'VICTORY') sfx.win();
+    renderAll(true);
+  }
+
+  function restartGame() {
+    state = E.createInitialState();
+    held = null;
+    hoverCell = null;
+    previewFire = false;
+    sfx.click();
+    renderAll(false);
+  }
+
+  // ==================== LISTENERS ====================
+  btnLeft.addEventListener('click', () => doMove(-1));
+  btnRight.addEventListener('click', () => doMove(1));
+  btnFlip.addEventListener('click', () => {
+    const res = E.turnPlayer(state);
+    if (res.ok) { sfx.step(); renderAll(true); }
+  });
+  btnWait.addEventListener('click', () => {
+    const res = E.waitPlayer(state);
+    if (res.ok) { sfx.click(); renderAll(true); }
+  });
+  btnFire.addEventListener('mouseenter', () => { previewFire = true; renderCombatStrip(); });
+  btnFire.addEventListener('mouseleave', () => { previewFire = false; renderCombatStrip(); });
+  btnFire.addEventListener('click', () => {
+    previewFire = false;
+    const res = E.executeQueue(state);
+    if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
+    if (state.phase === 'WAVE_CLEAR' || state.phase === 'VICTORY') sfx.win();
+    renderAll(true);
+  });
+
+  btnRotate.addEventListener('click', rotateHeld);
+  btnToReserve.addEventListener('click', () => {
+    if (!held || !held.fromGrid) return;
+    const res = E.movePieceToReserve(state, held.uid);
+    if (!res.ok) { sfx.error(); flashMessage(res.reason); return; }
+    held = null;
+    hoverCell = null;
+    sfx.click();
+    renderAll(false);
+  });
+  btnCancelHold.addEventListener('click', () => {
+    held = null;
+    hoverCell = null;
+    renderOrganismGrid();
+    renderReserve();
+  });
+
+  btnSound.addEventListener('click', () => {
+    soundOn = !soundOn;
+    btnSound.textContent = soundOn ? '🔊 Som' : '🔇 Mudo';
+  });
+  btnRestart.addEventListener('click', restartGame);
+
+  window.addEventListener('keydown', ev => {
+    if (ev.target && (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA')) return;
+    const k = ev.key.toLowerCase();
+    if (k === 'r' && held) { ev.preventDefault(); rotateHeld(); }
+    else if (k === 'escape' && held) { held = null; hoverCell = null; renderOrganismGrid(); renderReserve(); }
+    else if ((k === 'a' || ev.key === 'ArrowLeft') && !btnLeft.disabled) { ev.preventDefault(); doMove(-1); }
+    else if ((k === 'd' || ev.key === 'ArrowRight') && !btnRight.disabled) { ev.preventDefault(); doMove(1); }
+    else if (k === 'f' && !btnFlip.disabled) { ev.preventDefault(); btnFlip.click(); }
+    else if (k === 'w' && !btnWait.disabled) { ev.preventDefault(); btnWait.click(); }
+    else if ((k === ' ' || ev.key === 'Enter') && !btnFire.disabled) { ev.preventDefault(); btnFire.click(); }
+  });
+
+  function renderAll(animateEvents = false) {
+    renderTopHud();
+    renderCombatStrip();
+    renderQueueAndWeapons();
+    renderCombatLog();
+    renderOrganismGrid();
+    renderReserve();
+    if (animateEvents && state.lastEvents && state.lastEvents.length > 0) {
+      playKineticEvents(state.lastEvents);
+    }
+  }
+
+  renderAll(false);
+})();
+
+</script>
+</body>
+</html>
