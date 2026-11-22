@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O Enxerto · De/Para Didático das 42 Armas de Shogun Showdown</title>
+  <style>
+    :root {
+      --bg: #080d0b;
+      --panel: #0f1915;
+      --panel-2: #15241e;
+      --border: #243d32;
+      --border-hi: #386350;
+      --text: #e8f5ef;
+      --muted: #93b5a6;
+      --accent: #a3e635;
+      --gold: #facc15;
+      --danger: #fb7185;
+      --cyan: #38bdf8;
+      --orange: #fb923c;
+      --purple: #c084fc;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 20% 0%, #10241b 0%, var(--bg) 60%);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    header.topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(8, 13, 11, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand h1 { margin: 0; font-size: 1.06rem; font-weight: 800; }
+    .brand .sub { font-size: 0.78rem; color: var(--muted); }
+
+    .top-nav { display: flex; flex-wrap: wrap; gap: 8px; }
+    .nav-btn {
+      border: 1px solid var(--border-hi);
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 7px 12px;
+      border-radius: 9px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover { border-color: var(--accent); background: #1a3027; }
+    .nav-btn.primary { border-color: var(--gold); color: var(--gold); }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 18px 16px 56px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .panel-title {
+      margin: 0 0 6px;
+      font-size: 1.04rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-sub {
+      margin: 0 0 14px;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    /* Interactive 1D Demo Stage */
+    .stage-box {
+      background: linear-gradient(145deg, #11221a 0%, #0b1410 100%);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .stage-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .stage-de {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stage-name {
+      font-size: 1.32rem;
+      font-weight: 900;
+      margin: 2px 0 4px;
+    }
+    .stage-para {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      background: rgba(163, 230, 53, 0.12);
+      border: 1px solid rgba(163, 230, 53, 0.35);
+      border-radius: 9px;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #d9f99d;
+    }
+
+    .strip-wrap {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin: 12px 0;
+    }
+    @media (max-width: 600px) {
+      .strip-wrap { gap: 3px; }
+      .strip-cell { min-height: 64px; padding: 4px 2px; }
+      .cell-actor { font-size: 1.15rem; }
+      .cell-idx { font-size: 0.56rem; }
+      .cell-tag { font-size: 0.54rem; padding: 1px 2px; }
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+    .strip-cell {
+      min-width: 0;
+      overflow: hidden;
+      background: #0b1511;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      min-height: 78px;
+      padding: 6px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.25s ease;
+      text-align: center;
+    }
+    .strip-cell.hit {
+      background: rgba(251, 113, 133, 0.16);
+      border-color: var(--danger);
+      box-shadow: inset 0 0 12px rgba(251, 113, 133, 0.22);
+    }
+    .strip-cell.move-dest {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: var(--cyan);
+      box-shadow: inset 0 0 12px rgba(56, 189, 248, 0.22);
+    }
+    .strip-cell.special {
+      background: rgba(250, 204, 21, 0.14);
+      border-color: var(--gold);
+    }
+    .cell-idx {
+      font-size: 0.65rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .cell-actor {
+      font-size: 1.55rem;
+      line-height: 1;
+      transition: transform 0.25s ease;
+    }
+    .cell-tag {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 5px;
+      background: rgba(0, 0, 0, 0.45);
+      color: var(--text);
+      white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cell-tag.dmg { color: #fda4af; }
+    .cell-tag.ok { color: #bef264; }
+    .cell-tag.warn { color: #fde047; }
+
+    .stage-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .stage-desc {
+      font-size: 0.88rem;
+      color: #d6ece3;
+      flex: 1;
+      min-width: 240px;
+    }
+    .sim-btn {
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #07120c;
+      font-weight: 900;
+      font-size: 0.84rem;
+      padding: 8px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+    .sim-btn:hover { transform: scale(1.03); }
+    .sim-btn.secondary {
+      background: var(--panel-2);
+      color: var(--text);
+      border-color: var(--border-hi);
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+    .legend span {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 7px;
+    }
+
+    /* Category Pills + Search */
+    .cat-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+    .cat-pill {
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--muted);
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 0.79rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.14s ease;
+    }
+    .cat-pill:hover { color: var(--text); border-color: var(--border-hi); }
+    .cat-pill.active {
+      background: var(--accent);
+      color: #07120c;
+      border-color: var(--accent);
+      font-weight: 800;
+    }
+
+    .search-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .search-input {
+      flex: 1;
+      min-width: 220px;
+      background: #0b1410;
+      border: 1px solid var(--border-hi);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 0.85rem;
+    }
+    .count-pill {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--accent);
+      background: rgba(163, 230, 53, 0.1);
+      border: 1px solid rgba(163, 230, 53, 0.3);
+      padding: 5px 10px;
+      border-radius: 999px;
+    }
+
+    /* De/Para Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 12px;
+    }
+    .w-card {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.12s ease;
+    }
+    .w-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .w-card.selected {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.45);
+    }
+    .w-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .w-num {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--muted);
+    }
+    .w-title {
+      font-size: 1rem;
+      font-weight: 900;
+      margin: 1px 0 0;
+    }
+    .badge {
+      font-size: 0.69rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--border-hi);
+      background: rgba(255,255,255,0.04);
+      white-space: nowrap;
+    }
+    .badge.free { border-color: var(--cyan); color: #7dd3fc; }
+    .badge.cat { border-color: var(--purple); color: #e9d5ff; }
+    .badge.gold { border-color: var(--gold); color: #fde047; }
+
+    /* Mini 7-cell pattern inside card */
+    .mini-strip {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+      background: #08100c;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px;
+    }
+    .m-cell {
+      height: 28px;
+      border-radius: 5px;
+      background: #101c17;
+      border: 1px solid #1e332a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+    .m-cell.me { background: #183628; border-color: var(--accent); }
+    .m-cell.hit { background: rgba(251, 113, 133, 0.25); border-color: var(--danger); color: #fecdd3; }
+    .m-cell.mv { background: rgba(56, 189, 248, 0.22); border-color: var(--cyan); color: #bae6fd; }
+    .m-cell.sp { background: rgba(250, 204, 21, 0.2); border-color: var(--gold); color: #fef08a; }
+
+    .w-rule {
+      font-size: 0.81rem;
+      color: #cbe3d8;
+      margin: 0;
+    }
+    .w-para-box {
+      background: rgba(163, 230, 53, 0.08);
+      border: 1px solid rgba(163, 230, 53, 0.28);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 0.78rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .w-para-lbl {
+      font-size: 0.67rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+    }
+    .w-para-val {
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    /* Enchantments grid */
+    .ench-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 10px;
+    }
+    .ench-card {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px;
+    }
+    .ench-card h4 { margin: 0 0 4px; font-size: 0.92rem; color: var(--gold); }
+    .ench-card p { margin: 0 0 6px; font-size: 0.79rem; color: #cbe3d8; }
+    .ench-gene { font-size: 0.78rem; font-weight: 800; color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div style="font-size:1.5rem">🎴</div>
+      <div>
+        <h1>De / Para Didático · 42 Armas de Shogun Showdown → O Enxerto</h1>
+        <div class="sub">Clique em qualquer arma para ver exatamente como ela ataca na faixa 1D e qual combinação de genes (estilo Spore) a gera</div>
+      </div>
+    </div>
+    <nav class="top-nav">
+      <a class="nav-btn" href="./combinacoes.html">🧬 Matriz 36 Fusões</a>
+      <a class="nav-btn primary" href="./arena.html">🎮 Arena Jogável (v6.0)</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- SIMULADOR VISUAL 1D NO TOPO -->
+    <section class="panel">
+      <h2 class="panel-title">🎬 Laboratório Visual 1D (Veja o Ataque Acontecer)</h2>
+      <p class="panel-sub">
+        Você é <strong>🧬</strong> olhando para a direita (<strong>▶</strong>). Clique em <strong>▶ Simular Golpe</strong> para ver o antes e depois na linha de 7 casas, ou clique em qualquer uma das 42 cartas abaixo!
+      </p>
+
+      <div class="stage-box" id="stage-box">
+        <div class="stage-top">
+          <div>
+            <div class="stage-de" id="st-cat">CORPO-A-CORPO</div>
+            <div class="stage-name" id="st-name">#1 · Katana</div>
+          </div>
+          <div class="stage-para" id="st-para">🧬 Spore / O Enxerto: 🦷 Mandíbula → Mordida Rápida</div>
+        </div>
+
+        <div class="strip-wrap" id="stage-strip"></div>
+
+        <div class="stage-footer">
+          <div class="stage-desc" id="st-desc"></div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="sim-btn" id="btn-sim">▶ Simular Golpe</button>
+            <button class="sim-btn secondary" id="btn-reset">↺ Antes do Golpe</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <span>🧬 = Você (olhando ▶)</span>
+        <span>🦂 = Inimigo</span>
+        <span style="color:#fda4af">🟥 = Casa atingida</span>
+        <span style="color:#7dd3fc">🟦 = Movimento / Destino</span>
+        <span style="color:#fde047">🟨 = Armadilha / Giro / Troca / Especial</span>
+      </div>
+    </section>
+
+    <!-- FILTROS & TODAS AS 42 ARMAS -->
+    <section class="panel">
+      <h2 class="panel-title">📚 Todas as 42 Armas de Shogun Showdown 1.0 (De → Para)</h2>
+      <div class="cat-bar" id="cat-bar"></div>
+      <div class="search-row">
+        <input type="text" class="search-input" id="search-input" placeholder="Buscar por arma do Shogun, efeito (ex: empurra, troca, gira, atravessa, trás, 2x) ou gene..." />
+        <span class="count-pill" id="cards-count">42 / 42 armas</span>
+      </div>
+      <div class="cards-grid" id="cards-grid"></div>
+    </section>
+
+    <!-- OS 7 ENCANTAMENTOS -->
+    <section class="panel">
+      <h2 class="panel-title">✨ Bônus: Os 7 Encantamentos de Shogun → 7 Mutações Alquímicas de O Enxerto</h2>
+      <p class="panel-sub">No Shogun, você pode encantar qualquer uma das 42 armas com efeitos extras. Em <strong>O Enxerto</strong>, isso equivale a enxertar um <strong>2º ou 3º Gene Mutante</strong> na arma (evolução estilo <em>Spore</em> Nível 1 → 2 → 3).</p>
+      <div class="ench-grid" id="ench-grid"></div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const CATS = [
+        { id: 'ALL', label: 'Todas (42)' },
+        { id: 'MELEE', label: '⚔️ Corpo-a-Corpo & Formatos (13)' },
+        { id: 'RANGED', label: '🎯 Projéteis & Alcance (9)' },
+        { id: 'DISPLACE', label: '💥 Empurrão, Puxão & Giro (5)' },
+        { id: 'MOVE', label: '💨 Movimento, Troca & Dash (9)' },
+        { id: 'SPECIAL', label: '✨ Teleporte, Armadilha & Debuff (5)' },
+        { id: 'SIG', label: '🧬 Assinatura (1)' },
+      ];
+
+      // Cada arma tem: id, cat, shogun, tag, rule, genes, enxerto,
+      // mini: array de 7 posições [0..6] com códigos: '' | 'me' | 'hit' | 'mv' | 'sp' + ícone curto
+      // sim: { before: { p, dir, enemies:[{pos,dir,hp,tag}], traps:[] }, after: { p, dir, enemies, traps, hits:[], moves:[], specials:[] } }
+      const WEAPONS = [
+        // ===== 1. CORPO-A-CORPO & FORMATOS (13) =====
+        {
+          id: 1, cat: 'MELEE', shogun: 'Katana', tag: 'CD 0',
+          rule: 'Acerta exatamente 1 casa à frente. Recarga 0 (ataque confiável sempre pronto).',
+          genes: '🦷 Mandíbula (pura)', enxerto: 'Mordida Rápida',
+          mini: ['','','','me','hit','',''],
+          sim: {
+            before: { p: 2, enemies: [{pos:3, hp:'4♥'}, {pos:5, hp:'4♥'}] },
+            after:  { p: 2, enemies: [{pos:3, hp:'2♥', tag:'-2'}, {pos:5, hp:'4♥'}], hits: [3] }
+          }
+        },
+        {
+          id: 2, cat: 'MELEE', shogun: 'Tetsubo', tag: 'Alto Dano',
+          rule: 'Acerta 1 casa à frente com dano pesadíssimo (4+ base), porém recarga longa.',
+          genes: '🦀 Pinça + 🪨 Osso', enxerto: 'Clava Óssea',
+          mini: ['','','','me','hit:💥','',''],
+          sim: {
+            before: { p: 2, enemies: [{pos:3, hp:'5♥'}] },
+            after:  { p: 2, enemies: [{pos:3, hp:'1♥', tag:'-4 💥'}], hits: [3] }
+          }
+        },
+        {
+          id: 3, cat: 'MELEE', shogun: 'Sai', tag: '2× Contra-Ataque',
+          rule: 'Acerta 1 casa à frente. Causa DOBRO DE DANO se o inimigo estiver preparado para atacar!',
+          genes: '🐾 Garra + ⚡ Nervo', enxerto: 'Contra-Estocada',
+          mini: ['','','','me','hit:2×','',''],
+          sim: {
+            before: { p: 2, enemies: [{pos:3, hp:'6♥', tag:'⚠️ATK'}] },
+            after:  { p: 2, enemies: [{pos:3, hp:'2♥', tag:'-4 (2×!)'}], hits: [3] }
+          }
+        },
+        {
+          id: 4, cat: 'MELEE', shogun: 'Blade of Patience', tag: '+1/turno na fila',
+          rule: 'Acerta 1 casa à frente. Começa com 0 de dano e ganha +1 de dano a cada turno que fica carregando na fila.',
+          genes: '🦷 Mandíbula + 🩸 Adrenalina', enxerto: 'Bote Contido',
+          mini: ['','','','me','sp:⏳+','',''],
+          sim: {
+            before: { p: 2, enemies: [{pos:3, hp:'6♥'}] },
+            after:  { p: 2, enemies: [{pos:3, hp:'1♥', tag:'-5 (⏳)'}], hits: [3] }
+          }
+        },
+        {
+          id: 5, cat: 'MELEE', shogun: 'Hookblade', tag: 'Cadeia ao Matar',
+          rule: 'Acerta 1 casa à frente. Se MATAR, avança automaticamente e ataca o próximo com -1 dano em cadeia!',
+          genes: '🐾 Garra + ⚔️ Duplicação', enxerto: 'Frenesi Carniceiro',
+          mini: ['','','me','hit:☠','mv:➔','hit',''],
+          sim: {
+            before: { p: 2, enemies: [{pos:3, hp:'2♥'}, {pos:4, hp:'3♥'}] },
+            after:  { p: 3, enemies: [{pos:4, hp:'2♥', tag:'-1 🔗'}], hits: [3,4], moves: [3] }
+          }
+        },
+        {
+          id: 6, cat: 'MELEE', shogun: 'Back Strike', tag: 'Sem Virar',
+          rule: 'Acerta 1 casa ATRÁS de você sem gastar turno virando de costas para a frente.',
+          genes: '🦂 Cauda (pura)', enxerto: 'Açoite Traseiro',
+          mini: ['','','hit','me','','',''],
+          sim: {
+            before: { p: 3, enemies: [{pos:2, hp:'4♥'}, {pos:4, hp:'4♥'}] },
+            after:  { p: 3, enemies: [{pos:2, hp:'1♥', tag:'-3'}, {pos:4, hp:'4♥'}], hits: [2] }
+          }
+        },
+        {
+          id: 7, cat: 'MELEE', shogun: 'Swirl', tag: 'Frente + Trás',
+          rule: 'Acerta a casa à frente E a casa atrás ao mesmo tempo (perfeito quando cercado!).',
+          genes: '🦂 Cauda + ⚔️ Duplicação', enxerto: 'Giro de Garras',
+          mini: ['','','hit','me','hit','',''],
+          sim: {
+            before: { p: 3, enemies: [{pos:2, hp:'4♥'}, {pos:4, hp:'4♥'}] },
+            after:  { p: 3, enemies: [{pos:2, hp:'2♥', tag:'-2'}, {pos:4, hp:'2♥', tag:'-2'}], hits: [2,4] }
+          }
+        },
+        {
+          id: 8, cat: 'MELEE', shogun: 'Spear', tag: '2 Casas à Frente',
+          rule: 'Perfura as 2 casas consecutivas à sua frente ao mesmo tempo.',
+          genes: '🦀 Chifre + 🎯 Espinho', enxerto: 'Lança Quitina',
+          mini: ['','','me','hit','hit','',''],
+          sim: {
+            before: { p: 2, enemies: [{pos:3, hp:'4♥'}, {pos:4, hp:'4♥'}] },
+            after:  { p: 2, enemies: [{pos:3, hp:'2♥', tag:'-2'}, {pos:4, hp:'2♥', tag:'-2'}], hits: [3,4] }
+          }
+        },
+        {
+          id: 9, cat: 'MELEE', shogun: 'Shadow Kama', tag: 'Exato Alcance 2',
+          rule: 'PULA a 1ª casa adjacente e acerta exatamente a 2ª casa à frente.',
+          genes: '🦂 Cauda + 🧲 Tendão', enxerto: 'Ferrão Curvo',
+          mini: ['','','me','·','hit','',''],
+          sim: {
+            before: { p: 2, enemies: [{pos:3, hp:'4♥'}, {pos:4, hp:'4♥'}] },
+            after:  { p: 2, enemies: [{pos:3, hp:'4♥'}, {pos:4, hp:'1♥', tag:'-3'}], hits: [4] }
+          }
+        },
+        {
+          id: 10, cat: 'MELEE', shogun: 'Earth Impale', tag: 'Distância 2 (2 Lados)',
+          rule: 'Pula as casas adjacentes e espeta a 2ª casa à frente E a 2ª casa atrás.',
+          genes: '🪨 Osso + 🦂 Cauda', enxerto: 'Espigão Sísmico',
+          mini: ['','hit','·','me','·','hit',''],
+          sim: {
+            before: { p: 3, enemies: [{pos:1, hp:'4♥'}, {pos:5, hp:'4♥'}] },
+            after:  { p: 3, enemies: [{pos:1, hp:'2♥', tag:'-2'}, {pos:5, hp:'2♥', tag:'-2'}], hits: [1,5] }
+          }
+        },
+        {
+          id: 11, cat: 'MELEE', shogun: 'Nagiboku', tag: '4 Casas (Não Mata)',
+          rule: 'Varre 2 casas à frente E 2 casas atrás (até 4 alvos!), mas deixa todo inimigo com no mínimo 1 PV.',
+          genes: '🧪 Glândula + 🦂 Cauda', enxerto: 'Onda Corrosiva',
+          mini: ['','hit','hit','me','hit','hit',''],
+          sim: {
+            before: { p: 3, enemies: [{pos:1, hp:'3♥'}, {pos:2, hp:'2♥'}, {pos:4, hp:'4♥'}, {pos:5, hp:'3♥'}] },
+            after:  { p: 3, enemies: [{pos:1, hp:'1♥', tag:'mín 1'}, {pos:2, hp:'1♥', tag:'mín 1'}, {pos:4, hp:'2♥', tag:'-2'}, {pos:5, hp:'1♥', tag:'mín 1'}], hits: [1,2,4,5] }
+          }
+        },
+        {
+          id: 12, cat: 'MELEE', shogun: 'Meteor Hammer', tag: 'Rebate p/ Trás',
+          rule: 'Acerta um alvo próximo à frente e o impacto REBATE atingindo a casa adjacente atrás de você.',
+          genes: '🐸 Língua + 🪨 Osso', enxerto: 'Chicote Pêndulo',
+          mini: ['','','hit:↩','me','hit','hit',''],
+          sim: {
+            before: { p: 3, enemies: [{pos:2, hp:'4♥'}, {pos:5, hp:'4♥'}] },
+            after:  { p: 3, enemies: [{pos:2, hp:'2♥', tag:'↩ -2'}, {pos:5, hp:'2♥', tag:'-2'}], hits: [2,5] }
+          }
+        },
+        {
+          id: 13, cat: 'MELEE', shogun: 'Scar Strike', tag: 'Global em Feridos',
+          rule: 'Atinge TODOS os inimigos na arena inteira que já estejam com PV abaixo do máximo!',
+          genes: '🦇 Sanguessuga + ⚡ Nervo', enxerto: 'Faro de Sangue',
+          mini: ['hit:🩸','','','me','','hit:🩸',''],
+          sim: {
+            before: { p: 3, enemies: [{pos:0, hp:'2/4♥'}, {pos:4, hp:'4/4♥'}, {pos:6, hp:'1/4♥'}] },
+            after:  { p: 3, enemies: [{pos:0, hp:'☠️', tag:'-2'}, {pos:4, hp:'4/4♥', tag:'ileso'}, {pos:6, hp:'☠️', tag:'-2'}], hits: [0,6] }
+          }
+        },
+
+        // ===== 2. PROJÉTEIS & LONGO ALCANCE (9) =====
+        {
+          id: 14, cat: 'RANGED', shogun: 'Arrow', tag: '1º à Frente',
+          rule: 'Dispara projétil em linha reta acertando o 1º inimigo na direção que você olha.',
+          genes: '🎯 Espinho (puro)', enxerto: 'Espinho Balístico',
+          mini: ['','me','·','·','hit','',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:4, hp:'4♥'}, {pos:6, hp:'4♥'}] },
+            after:  { p: 1, enemies: [{pos:4, hp:'2♥', tag:'-2'}, {pos:6, hp:'4♥'}], hits: [4] }
+          }
+        },
+        {
+          id: 15, cat: 'RANGED', shogun: 'Shuriken', tag: 'Leve / Rápido',
+          rule: 'Projétil rápido de dano leve e recarga curta no 1º inimigo à frente.',
+          genes: '🎯 Espinho + 🦗 Patas', enxerto: 'Agulha Rápida',
+          mini: ['','me','·','hit','','',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:5, hp:'2♥'}] },
+            after:  { p: 1, enemies: [{pos:5, hp:'1♥', tag:'-1'}], hits: [5] }
+          }
+        },
+        {
+          id: 16, cat: 'RANGED', shogun: 'Kunai', tag: 'Multi-Dardo N×1',
+          rule: 'Lança N dardos de 1 dano; se matar o 1º inimigo, os dardos restantes continuam e acertam o de trás!',
+          genes: '🎯 Espinho + ⚔️ Duplicação', enxerto: 'Rajada de Cerdas',
+          mini: ['','me','·','hit:×1','hit:×1','',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:3, hp:'1♥'}, {pos:5, hp:'3♥'}] },
+            after:  { p: 1, enemies: [{pos:5, hp:'1♥', tag:'-2 sobrou'}], hits: [3,5] }
+          }
+        },
+        {
+          id: 17, cat: 'RANGED', shogun: 'Crossbow', tag: 'Perfura 2 · Recarrega',
+          rule: 'Disparo perfurante que atravessa os 2 primeiros inimigos à frente. Precisa recarregar após usar.',
+          genes: '🎯 Espinho + 🪨 Osso', enxerto: 'Arpão Perfurante',
+          mini: ['','me','·','hit','·','hit',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:3, hp:'4♥'}, {pos:5, hp:'4♥'}] },
+            after:  { p: 1, enemies: [{pos:3, hp:'1♥', tag:'-3'}, {pos:5, hp:'1♥', tag:'-3'}], hits: [3,5] }
+          }
+        },
+        {
+          id: 18, cat: 'RANGED', shogun: 'Tanegashima', tag: 'Tiro + Recuo',
+          rule: 'Tiro pesadíssimo no 1º alvo à frente. TANTO VOCÊ quanto o alvo sofrem recuo de 1 casa!',
+          genes: '🧪 Glândula + 🪨 Osso', enxerto: 'Canhão de Pressão',
+          mini: ['mv:⬅','me','·','·','hit','sp:➔',''],
+          sim: {
+            before: { p: 2, enemies: [{pos:4, hp:'5♥'}] },
+            after:  { p: 1, enemies: [{pos:5, hp:'1♥', tag:'-4 ➔'}], hits: [4], moves: [1], specials: [5] }
+          }
+        },
+        {
+          id: 19, cat: 'RANGED', shogun: 'Mon', tag: 'Custa Recurso',
+          rule: 'Projétil fortíssimo à distância que consome 1 moeda/biomassa a cada disparo.',
+          genes: '🧪 Glândula + 🩸 Biomassa', enxerto: 'Disparo Metabólico',
+          mini: ['','me','·','·','hit:🪙','',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:5, hp:'5♥'}] },
+            after:  { p: 1, enemies: [{pos:5, hp:'1♥', tag:'-4'}], hits: [5] }
+          }
+        },
+        {
+          id: 20, cat: 'RANGED', shogun: 'Lightning', tag: 'Mais Distante',
+          rule: 'Cai do céu no inimigo MAIS DISTANTE à sua frente, ignorando completamente quem está na frente!',
+          genes: '⚡ Nervo + 🎯 Espinho', enxerto: 'Descarga Dorsal',
+          mini: ['','me','·','·','·','·','hit:⚡'],
+          sim: {
+            before: { p: 1, enemies: [{pos:2, hp:'4♥'}, {pos:6, hp:'4♥'}] },
+            after:  { p: 1, enemies: [{pos:2, hp:'4♥'}, {pos:6, hp:'2♥', tag:'⚡ -2'}], hits: [6] }
+          }
+        },
+        {
+          id: 21, cat: 'RANGED', shogun: 'Blazing Suisei', tag: 'Explode ao Matar',
+          rule: 'Projétil à distância que EXPLODE atingindo os vizinhos se matar o alvo!',
+          genes: '🧪 Glândula + 🧪 Peçonha', enxerto: 'Esporo Explosivo',
+          mini: ['','me','·','sp:💥','hit:☠','sp:💥',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:4, hp:'2♥'}, {pos:5, hp:'4♥'}] },
+            after:  { p: 1, enemies: [{pos:5, hp:'2♥', tag:'💥 -2'}], hits: [4,5] }
+          }
+        },
+        {
+          id: 22, cat: 'RANGED', shogun: 'Chakram', tag: '2 Lados · +1/Abate',
+          rule: 'Acerta o 1º inimigo à frente E o 1º atrás. Ganha +1 de dano por cada inimigo morto antes de disparar.',
+          genes: '🦂 Cauda + 🦇 Sanguessuga', enxerto: 'Lâmina Carniceira',
+          mini: ['hit','·','','me','','·','hit'],
+          sim: {
+            before: { p: 3, enemies: [{pos:0, hp:'4♥'}, {pos:6, hp:'4♥'}] },
+            after:  { p: 3, enemies: [{pos:0, hp:'1♥', tag:'-3'}, {pos:6, hp:'1♥', tag:'-3'}], hits: [0,6] }
+          }
+        },
+
+        // ===== 3. EMPURRÃO, PUXÃO & GIRO (5) =====
+        {
+          id: 23, cat: 'DISPLACE', shogun: 'Dragon Punch', tag: 'Empurra até Bater',
+          rule: 'Acerta o adjacente à frente e ARREMESSA até o fim da linha (causa colisão se bater em outro inimigo!).',
+          genes: '🦀 Pinça + 🦗 Patas', enxerto: 'Aríete Colossal',
+          mini: ['','me','hit','sp:➔','sp:➔','hit:💥',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:2, hp:'4♥'}, {pos:5, hp:'4♥'}] },
+            after:  { p: 1, enemies: [{pos:4, hp:'2♥', tag:'💥-2'}, {pos:5, hp:'3♥', tag:'💥-1'}], hits: [4,5], specials: [2,3] }
+          }
+        },
+        {
+          id: 24, cat: 'DISPLACE', shogun: 'Ki Push', tag: 'Empurrão Puro (0 Dano)',
+          rule: '0 dano direto, mas empurra o inimigo à frente o mais longe possível para gerar colisões ou abrir espaço.',
+          genes: '🛡️ Carapaça + 🪨 Osso', enxerto: 'Onda de Choque',
+          mini: ['','me','sp:➔','sp:➔','sp:➔','hit:💥',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:2, hp:'4♥'}, {pos:6, hp:'4♥'}] },
+            after:  { p: 1, enemies: [{pos:5, hp:'3♥', tag:'💥-1'}, {pos:6, hp:'3♥', tag:'💥-1'}], specials: [2,3,4], hits: [5,6] }
+          }
+        },
+        {
+          id: 25, cat: 'DISPLACE', shogun: 'Twin Tessen', tag: 'Empurra 2 Lados',
+          rule: 'Acerta e EMPURRA inimigos adjacentes tanto na frente quanto atrás ao mesmo tempo!',
+          genes: '🛡️ Carapaça + ⚔️ Duplicação', enxerto: 'Expulsão Dupla',
+          mini: ['','sp:⬅','hit','me','hit','sp:➔',''],
+          sim: {
+            before: { p: 3, enemies: [{pos:2, hp:'4♥'}, {pos:4, hp:'4♥'}] },
+            after:  { p: 3, enemies: [{pos:1, hp:'3♥', tag:'⬅ -1'}, {pos:5, hp:'3♥', tag:'-1 ➔'}], hits: [1,5] }
+          }
+        },
+        {
+          id: 26, cat: 'DISPLACE', shogun: 'Grappling Hook', tag: 'Puxa p/ Perto',
+          rule: 'Acerta o 1º inimigo à frente e PUXA ele até encostar na casa logo à sua frente.',
+          genes: '🐸 Língua (pura)', enxerto: 'Língua Chicote',
+          mini: ['','me','sp:⬅','sp:⬅','hit','',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:5, hp:'4♥'}] },
+            after:  { p: 1, enemies: [{pos:2, hp:'3♥', tag:'⬅ -1'}], hits: [2], specials: [3,4,5] }
+          }
+        },
+        {
+          id: 27, cat: 'DISPLACE', shogun: 'Bo', tag: 'Gira 180° (Fogo Amigo!)',
+          rule: 'Acerta o adjacente à frente e GIRA o inimigo em 180° — fazendo a mira dele acertar o próprio aliado!',
+          genes: '🦀 Pinça + 🧲 Tendão', enxerto: 'Chave de Articulação',
+          mini: ['','','me','sp:🔄','hit:💥','',''],
+          sim: {
+            before: { p: 2, enemies: [{pos:3, hp:'4♥', tag:'◀ ⚠️'}, {pos:4, hp:'4♥'}] },
+            after:  { p: 2, enemies: [{pos:3, hp:'3♥', tag:'▶ VIROU!'}, {pos:4, hp:'4♥', tag:'⚠️ALVO'}], specials: [3] }
+          }
+        },
+
+        // ===== 4. MOVIMENTO OFENSIVO, TROCA & DASH (9) =====
+        {
+          id: 28, cat: 'MOVE', shogun: 'Charge', tag: 'Avança e Bate',
+          rule: 'Corre em linha reta para frente até encostar no 1º inimigo e desfere um golpe.',
+          genes: '🦗 Patas + 🦀 Pinça', enxerto: 'Investida Predatória',
+          mini: ['','me','mv:➔','mv:➔','hit','',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:5, hp:'4♥'}] },
+            after:  { p: 4, enemies: [{pos:5, hp:'3♥', tag:'-1'}], moves: [2,3,4], hits: [5] }
+          }
+        },
+        {
+          id: 29, cat: 'MOVE', shogun: 'Back Charge', tag: 'Recua e Bate',
+          rule: 'Avança de costas para trás até encostar no 1º inimigo atrás de você e golpeia.',
+          genes: '🦗 Patas + 🦂 Cauda', enxerto: 'Coice em Recuo',
+          mini: ['','hit','mv:⬅','mv:⬅','me','',''],
+          sim: {
+            before: { p: 5, enemies: [{pos:1, hp:'4♥'}] },
+            after:  { p: 2, enemies: [{pos:1, hp:'3♥', tag:'-1'}], moves: [4,3,2], hits: [1] }
+          }
+        },
+        {
+          id: 30, cat: 'MOVE', shogun: 'Shadow Dash', tag: 'Atravessa Inimigos',
+          rule: 'ATRAVESSA todos os inimigos seguidos à frente causando dano e pousa na 1ª casa vazia além deles!',
+          genes: '🦗 Patas + ⚡ Nervo', enxerto: 'Salto Fantasma',
+          mini: ['','me','hit:⤴','hit:⤴','mv:🧬','',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:2, hp:'4♥'}, {pos:3, hp:'4♥'}] },
+            after:  { p: 4, enemies: [{pos:2, hp:'3♥', tag:'-1'}, {pos:3, hp:'3♥', tag:'-1'}], hits: [2,3], moves: [4] }
+          }
+        },
+        {
+          id: 31, cat: 'MOVE', shogun: 'Back Shadow Dash', tag: 'Atravessa p/ Trás',
+          rule: 'Atravessa inimigos atrás de você sem precisar virar, pousando seguro na 1ª casa vazia além.',
+          genes: '🦗 Patas + 🦇 Sanguessuga', enxerto: 'Fuga Espectral',
+          mini: ['','mv:🧬','hit:⤴','hit:⤴','me','',''],
+          sim: {
+            before: { p: 5, enemies: [{pos:4, hp:'4♥'}, {pos:3, hp:'4♥'}] },
+            after:  { p: 2, enemies: [{pos:4, hp:'3♥', tag:'-1'}, {pos:3, hp:'3♥', tag:'-1'}], hits: [3,4], moves: [2] }
+          }
+        },
+        {
+          id: 32, cat: 'MOVE', shogun: 'Smoke Bomb', tag: 'Troca à Frente',
+          rule: 'TROCA DE LUGAR com o 1º inimigo à frente (1 dano, mantém a direção dos dois).',
+          genes: '🐸 Língua + 🧲 Tendão', enxerto: 'Troca Quimérica',
+          mini: ['','me','sp:⇄','sp:⇄','mv:⇄','',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:4, hp:'4♥', tag:'◀'}] },
+            after:  { p: 4, enemies: [{pos:1, hp:'3♥', tag:'⇄ -1'}], moves: [4], specials: [1] }
+          }
+        },
+        {
+          id: 33, cat: 'MOVE', shogun: 'Back Smoke Bomb', tag: 'Troca Atrás',
+          rule: 'TROCA DE LUGAR com o 1º inimigo atrás de você (escape instantâneo sem virar!).',
+          genes: '🦂 Cauda + 🧲 Tendão', enxerto: 'Recuo Elástico',
+          mini: ['','mv:⇄','sp:⇄','sp:⇄','me','',''],
+          sim: {
+            before: { p: 5, enemies: [{pos:2, hp:'4♥'}] },
+            after:  { p: 2, enemies: [{pos:5, hp:'3♥', tag:'⇄ -1'}], moves: [2], specials: [5] }
+          }
+        },
+        {
+          id: 34, cat: 'MOVE', shogun: 'Sharp Turn', tag: 'Freeplay · Vira + Bate',
+          rule: 'FREEPLAY (não gasta turno p/ enfileirar): Vira 180° e golpeia as casas adjacentes na frente e atrás!',
+          genes: '🦗 Patas + ⚔️ Duplicação', enxerto: 'Giro Instintivo',
+          mini: ['','','hit','sp:🔄','hit','',''],
+          sim: {
+            before: { p: 3, enemies: [{pos:2, hp:'4♥'}, {pos:4, hp:'4♥'}] },
+            after:  { p: 3, enemies: [{pos:2, hp:'3♥', tag:'-1'}, {pos:4, hp:'3♥', tag:'-1'}], hits: [2,4], specials: [3] }
+          }
+        },
+        {
+          id: 35, cat: 'MOVE', shogun: 'Swap Toss', tag: 'Freeplay · Troca 2 Inimigos',
+          rule: 'FREEPLAY: Você fica parado no meio e TROCA o inimigo da sua frente com o inimigo de trás!',
+          genes: '🐸 Língua + ⚔️ Duplicação', enxerto: 'Arremesso Cruzado',
+          mini: ['','','sp:⇄A','me','sp:⇄B','',''],
+          sim: {
+            before: { p: 3, enemies: [{pos:2, hp:'4♥', tag:'A ▶'}, {pos:4, hp:'2♥', tag:'B ◀'}] },
+            after:  { p: 3, enemies: [{pos:2, hp:'2♥', tag:'B ◀'}, {pos:4, hp:'4♥', tag:'A ▶'}], specials: [2,4] }
+          }
+        },
+        {
+          id: 36, cat: 'MOVE', shogun: 'Dash', tag: 'Freeplay · Corrida',
+          rule: 'FREEPLAY: Avança o máximo possível por casas vazias à frente sem atacar.',
+          genes: '🦗 Patas (puras)', enxerto: 'Arrancada',
+          mini: ['','me','mv:➔','mv:➔','mv:🧬','',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:5, hp:'4♥'}] },
+            after:  { p: 4, enemies: [{pos:5, hp:'4♥'}], moves: [2,3,4] }
+          }
+        },
+
+        // ===== 5. TELEPORTE, ARMADILHA & DEBUFF (5) =====
+        {
+          id: 37, cat: 'SPECIAL', shogun: 'Origin of Symmetry', tag: 'Freeplay · Vai p/ Centro',
+          rule: 'FREEPLAY: Teleporta direto para a casa CENTRAL da arena (trocando se houver alguém lá).',
+          genes: '⚡ Nervo + 🧲 Tendão', enxerto: 'Âncora Central',
+          mini: ['me','','','mv:★','','',''],
+          sim: {
+            before: { p: 0, enemies: [{pos:3, hp:'4♥'}] },
+            after:  { p: 3, enemies: [{pos:0, hp:'4♥', tag:'⇄'}], moves: [3], specials: [0] }
+          }
+        },
+        {
+          id: 38, cat: 'SPECIAL', shogun: 'Mirror', tag: 'Freeplay · Espelha Posição',
+          rule: 'FREEPLAY: Teleporta para a casa ESPELHADA do outro lado do centro e inverte sua direção!',
+          genes: '⚡ Nervo + 🦗 Patas', enxerto: 'Salto Espelhado',
+          mini: ['','me','','·','','mv:🪞',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:4, hp:'4♥'}] },
+            after:  { p: 5, enemies: [{pos:4, hp:'4♥'}], moves: [5], specials: [1] }
+          }
+        },
+        {
+          id: 39, cat: 'SPECIAL', shogun: 'Trap', tag: 'Armadilha no Chão',
+          rule: 'Planta uma armadilha na casa vazia à frente. Dispara (3 dano) se alguém andar, for empurrado ou puxado sobre ela!',
+          genes: '🧪 Glândula + 🦷 Mandíbula', enxerto: 'Poça-Armadilha',
+          mini: ['','','me','sp:🪤','','',''],
+          sim: {
+            before: { p: 2, enemies: [{pos:4, hp:'4♥'}] },
+            after:  { p: 2, enemies: [{pos:4, hp:'4♥'}], traps: [3], specials: [3] }
+          }
+        },
+        {
+          id: 40, cat: 'SPECIAL', shogun: 'Thorns', tag: 'Obstáculo c/ Espinhos',
+          rule: 'Cria um obstáculo vivo (1 PV) na casa vazia à frente que devolve dano a quem atacar ou colidir nele.',
+          genes: '🛡️ Carapaça + 🎯 Espinho', enxerto: 'Muralha de Espinhos',
+          mini: ['','','me','sp:🌵','','',''],
+          sim: {
+            before: { p: 2, enemies: [{pos:4, hp:'4♥'}] },
+            after:  { p: 2, enemies: [{pos:4, hp:'4♥'}], traps: [3], specials: [3] }
+          }
+        },
+        {
+          id: 41, cat: 'SPECIAL', shogun: 'Curse', tag: 'Freeplay · Próximo 2×',
+          rule: 'FREEPLAY: Amaldiçoa o 1º inimigo à frente — o próximo golpe ou colisão que ele sofrer causa DOBRO de dano!',
+          genes: '🧪 Peçonha + 🦇 Sanguessuga', enxerto: 'Marca Corrosiva',
+          mini: ['','me','·','·','sp:💀2×','',''],
+          sim: {
+            before: { p: 1, enemies: [{pos:4, hp:'6♥'}] },
+            after:  { p: 1, enemies: [{pos:4, hp:'6♥', tag:'💀2× DANO'}], specials: [4] }
+          }
+        },
+
+        // ===== 6. ASSINATURA (1) =====
+        {
+          id: 42, cat: 'SIG', shogun: 'Signature Move', tag: 'Habilidade da Linhagem',
+          rule: 'Coloca na fila a habilidade especial única da sua espécie (ex: Trocar, Empurrar, Atravessar ou Jogar por Cima).',
+          genes: '🧬 Núcleo da Espécie', enxerto: 'Instinto Primordial',
+          mini: ['','','sp:★','me','sp:★','',''],
+          sim: {
+            before: { p: 3, enemies: [{pos:2, hp:'4♥'}, {pos:4, hp:'4♥'}] },
+            after:  { p: 3, enemies: [{pos:1, hp:'3♥', tag:'★'}, {pos:5, hp:'3♥', tag:'★'}], specials: [1,3,5] }
+          }
+        },
+      ];
+
+      const ENCHANTMENTS = [
+        { shogun: 'Double Strike', desc: 'Executa o ataque 2 vezes seguidas (+CD).', gene: '⚔️ Gene Repique' },
+        { shogun: 'Shockwave', desc: 'Dispara choque em cadeia nos inimigos adjacentes ao alvo (+CD).', gene: '⚡ Gene Voltaico' },
+        { shogun: 'Poison', desc: 'Aplica Veneno contínuo por 3 turnos no alvo atingido.', gene: '🧪 Gene Peçonha' },
+        { shogun: 'Ice', desc: 'Congela / paralisa o alvo por 3 turnos.', gene: '❄️ Gene Neurotoxina' },
+        { shogun: 'Curse', desc: 'Aplica Maldição (próximo golpe causa 2× dano).', gene: '🩸 Gene Corrosivo' },
+        { shogun: 'Perfect Strike', desc: 'Matar com dano EXATO zera a recarga da arma na hora!', gene: '🎯 Gene Predador' },
+        { shogun: 'Freeplay', desc: 'Colocar a arma na fila não consome o seu turno (+CD).', gene: '⚡ Gene Reflexo' },
+      ];
+
+      let activeCat = 'ALL';
+      let selectedId = 1;
+      let simAfter = false;
+
+      const catBar = document.getElementById('cat-bar');
+      const searchInput = document.getElementById('search-input');
+      const cardsGrid = document.getElementById('cards-grid');
+      const cardsCount = document.getElementById('cards-count');
+      const stageStrip = document.getElementById('stage-strip');
+      const stCat = document.getElementById('st-cat');
+      const stName = document.getElementById('st-name');
+      const stPara = document.getElementById('st-para');
+      const stDesc = document.getElementById('st-desc');
+      const btnSim = document.getElementById('btn-sim');
+      const btnReset = document.getElementById('btn-reset');
+      const enchGrid = document.getElementById('ench-grid');
+
+      function catLabel(cid) {
+        const c = CATS.find(x => x.id === cid);
+        return c ? c.label : cid;
+      }
+
+      function renderStage() {
+        const w = WEAPONS.find(x => x.id === selectedId) || WEAPONS[0];
+        const snap = simAfter ? w.sim.after : w.sim.before;
+        stCat.textContent = `${catLabel(w.cat)} · ${w.tag}`;
+        stName.textContent = `#${w.id} · ${w.shogun}`;
+        stPara.textContent = `🧬 O Enxerto (Spore): ${w.genes} → ${w.enxerto}`;
+        stDesc.innerHTML = `<strong>Como ataca:</strong> ${w.rule}`;
+
+        const hits = new Set(snap.hits || []);
+        const moves = new Set(snap.moves || []);
+        const specials = new Set(snap.specials || []);
+        const traps = new Set(snap.traps || []);
+
+        let html = '';
+        for (let i = 0; i < 7; i++) {
+          const enemy = (snap.enemies || []).find(e => e.pos === i);
+          const isPlayer = snap.p === i;
+          const isTrap = traps.has(i);
+          let cls = 'strip-cell';
+          if (hits.has(i)) cls += ' hit';
+          else if (moves.has(i)) cls += ' move-dest';
+          else if (specials.has(i)) cls += ' special';
+
+          let actor = '';
+          let tag = '';
+          let tagCls = 'cell-tag';
+
+          if (isPlayer) {
+            actor = '🧬';
+            tag = simAfter ? 'VOCÊ ▶' : 'VOCÊ ▶';
+            tagCls += ' ok';
+          } else if (enemy) {
+            actor = '🦂';
+            tag = enemy.tag ? `${enemy.hp} ${enemy.tag}` : enemy.hp;
+            tagCls += hits.has(i) ? ' dmg' : (specials.has(i) ? ' warn' : '');
+          } else if (isTrap) {
+            actor = w.shogun === 'Thorns' ? '🌵' : '🪤';
+            tag = w.shogun === 'Thorns' ? 'Espinhos' : 'Armadilha';
+            tagCls += ' warn';
+          } else if (hits.has(i)) {
+            actor = '💥';
+            tag = 'ATINGIDO';
+            tagCls += ' dmg';
+          } else if (moves.has(i)) {
+            actor = '💨';
+            tag = 'TRAJETO';
+          }
+
+          html += `
+            <div class="${cls}">
+              <div class="cell-idx">Casa ${i + 1}</div>
+              <div class="cell-actor">${actor || '·'}</div>
+              <div class="${tagCls}">${tag || '—'}</div>
+            </div>
+          `;
+        }
+        stageStrip.innerHTML = html;
+      }
+
+      function renderMini(arr) {
+        return `<div class="mini-strip">${arr.map(code => {
+          if (!code || code === '·') return `<div class="m-cell" style="color:#4a6b5d">·</div>`;
+          if (code === 'me') return `<div class="m-cell me">🧬</div>`;
+          const [kind, lbl] = code.includes(':') ? code.split(':') : [code, ''];
+          if (kind === 'hit') return `<div class="m-cell hit">${lbl || '■'}</div>`;
+          if (kind === 'mv') return `<div class="m-cell mv">${lbl || '➔'}</div>`;
+          if (kind === 'sp') return `<div class="m-cell sp">${lbl || '★'}</div>`;
+          return `<div class="m-cell">${code}</div>`;
+        }).join('')}</div>`;
+      }
+
+      function renderCats() {
+        catBar.innerHTML = CATS.map(c => `
+          <button class="cat-pill ${c.id === activeCat ? 'active' : ''}" data-cat="${c.id}">${c.label}</button>
+        `).join('');
+        catBar.querySelectorAll('[data-cat]').forEach(b => {
+          b.addEventListener('click', () => {
+            activeCat = b.dataset.cat;
+            renderCats();
+            renderCards();
+          });
+        });
+      }
+
+      function renderCards() {
+        const q = searchInput.value.trim().toLowerCase();
+        const list = WEAPONS.filter(w => {
+          if (activeCat !== 'ALL' && w.cat !== activeCat) return false;
+          if (q) {
+            const hay = `${w.shogun} ${w.tag} ${w.rule} ${w.genes} ${w.enxerto}`.toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        cardsCount.textContent = `${list.length} / ${WEAPONS.length} armas`;
+        cardsGrid.innerHTML = list.map(w => `
+          <article class="w-card ${w.id === selectedId ? 'selected' : ''}" data-wid="${w.id}">
+            <div class="w-head">
+              <div>
+                <div class="w-num">DE · SHOGUN SHOWDOWN #${w.id}</div>
+                <div class="w-title">${w.shogun}</div>
+              </div>
+              <span class="badge ${w.tag.includes('Freeplay') ? 'free' : 'gold'}">${w.tag}</span>
+            </div>
+            ${renderMini(w.mini)}
+            <p class="w-rule">${w.rule}</p>
+            <div class="w-para-box">
+              <span class="w-para-lbl">PARA · O ENXERTO (COMBINAÇÃO SPORE)</span>
+              <span class="w-para-val">${w.genes} → ${w.enxerto}</span>
+            </div>
+          </article>
+        `).join('');
+
+        cardsGrid.querySelectorAll('[data-wid]').forEach(card => {
+          card.addEventListener('click', () => {
+            selectedId = Number(card.dataset.wid);
+            simAfter = true;
+            renderStage();
+            renderCards();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        });
+      }
+
+      enchGrid.innerHTML = ENCHANTMENTS.map(e => `
+        <div class="ench-card">
+          <h4>✨ ${e.shogun}</h4>
+          <p>${e.desc}</p>
+          <div class="ench-gene">→ ${e.gene}</div>
+        </div>
+      `).join('');
+
+      btnSim.addEventListener('click', () => { simAfter = true; renderStage(); });
+      btnReset.addEventListener('click', () => { simAfter = false; renderStage(); });
+      searchInput.addEventListener('input', renderCards);
+
+      renderCats();
+      renderStage();
+      renderCards();
+    })();
+  </script>
+</body>
+</html>
